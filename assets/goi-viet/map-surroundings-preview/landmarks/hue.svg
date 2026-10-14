@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 96" role="img" aria-labelledby="name"><title id="name">Ngọ Môn và lầu Ngũ Phụng, Huế — minh họa</title>
+<defs><linearGradient id="wall" x2="0" y2="1"><stop stop-color="#e9d7aa"/><stop offset="1" stop-color="#b19e7b"/></linearGradient><linearGradient id="gold" x2="0" y2="1"><stop stop-color="#efc763"/><stop offset="1" stop-color="#b37631"/></linearGradient><linearGradient id="green" x2="0" y2="1"><stop stop-color="#5b8d74"/><stop offset="1" stop-color="#315d4f"/></linearGradient></defs>
+<ellipse cx="80" cy="91" rx="75" ry="4" fill="#345d4d" opacity=".25"/>
+<g stroke="#795d40" stroke-width=".8" stroke-linejoin="round">
+<path d="M5 89V54L31 49H129L155 54V89H5Z" fill="url(#wall)"/>
+<path d="M5 54L31 49V89H5ZM129 49L155 54V89H129" fill="#aa9875"/>
+<path d="M8 53H152V59H8M29 50H131V56H29M2 87H158V91H2" fill="#eee0b9"/>
+<g fill="#35493b"><path d="M44 88V74Q44 66 49 66Q54 66 54 74V88ZM72 88V71Q72 60 80 60Q88 60 88 71V88ZM106 88V74Q106 66 111 66Q116 66 116 74V88Z"/><path d="M15 87V75Q15 69 19 69Q23 69 23 75V87ZM137 87V75Q137 69 141 69Q145 69 145 75V87Z"/></g>
+<path d="M12 51V36H148V51ZM56 33V19H104V33" fill="#ae5137"/>
+<path d="M58 19H102V32H58" fill="#a14a31"/>
+<g stroke="#edce86" stroke-width="1.8"><path d="M18 38V51M29 38V51M40 38V51M51 38V51M62 38V51M73 38V51M86 38V51M97 38V51M108 38V51M119 38V51M130 38V51M141 38V51M62 21V33M74 21V33M86 21V33M98 21V33"/><path d="M14 47H146M58 28H102" stroke-width=".9"/></g>
+<path d="M48 18Q57 20 65 10H95Q103 20 112 18L107 23H53Z" fill="url(#gold)"/>
+<path d="M50 35Q58 39 66 29H94Q102 39 110 35L106 40H54Z" fill="url(#gold)"/>
+<path d="M7 36Q14 38 22 29H35Q42 38 49 36L46 41H10ZM111 36Q118 38 125 29H138Q146 38 153 36L150 41H114Z" fill="url(#green)"/>
+<path d="M14 25Q20 27 26 19H35Q42 27 48 25L45 29H17ZM112 25Q119 27 125 19H134Q140 27 146 25L143 29H115Z" fill="url(#green)"/>
+<path d="M22 29V27H42V35H18V29M118 29V27H138V35H142V29" fill="#ad573c"/>
+<path d="M8 36Q15 38 22 29H35Q42 38 49 36M111 36Q118 38 125 29H138Q145 38 152 36" fill="none" stroke="#c7cc9b" stroke-width="1"/>
+<g stroke="#ffe7ab" stroke-width=".65"><path d="M62 16L59 21M70 12L68 21M78 12V21M86 12V21M94 13L97 21M101 17L104 21M61 34L59 39M71 32V39M80 32V39M89 32V39M99 34L102 39"/></g>
+<path d="M65 10Q67 7 72 9H88Q93 7 95 10M26 19Q30 17 35 19M125 19Q130 17 134 19" fill="none" stroke="#a28a4b"/>
+<path d="M71 88H89V92H71M40 87H58M102 87H120" stroke="#f9edcf" stroke-width="2"/>
+</g></svg>

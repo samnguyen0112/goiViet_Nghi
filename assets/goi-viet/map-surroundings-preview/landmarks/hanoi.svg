@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 96" role="img" aria-labelledby="name"><title id="name">Tháp Rùa, Hà Nội — minh họa</title>
+<defs><linearGradient id="stone" x2=".9" y2="1"><stop stop-color="#fff2d1"/><stop offset=".6" stop-color="#ddcca4"/><stop offset="1" stop-color="#a48f6c"/></linearGradient><pattern id="masonry" width="10" height="6" patternUnits="userSpaceOnUse"><path d="M0 6H10M5 0V6" fill="none" stroke="#887456" stroke-width=".35" opacity=".35"/></pattern></defs>
+<ellipse cx="36" cy="91" rx="31" ry="4" fill="#345e4b" opacity=".25"/><path d="M5 92Q15 85 36 88Q57 85 67 92Z" fill="#72845a"/>
+<g stroke="#735f46" stroke-width=".8" stroke-linejoin="round">
+<path d="M12 88V58H60V88ZM17 55V32H55V55ZM26 29V16H46V29Z" fill="url(#stone)"/><path d="M12 88V58H60V88ZM17 55V32H55V55Z" fill="url(#masonry)"/>
+<path d="M54 58H60V88H54M49 32H55V55H49M42 16H46V29H42" fill="#a5906d" opacity=".45"/>
+<g fill="#344d43"><path d="M17 87V73Q17 62 22 62Q27 62 27 73V87ZM31 87V73Q31 62 36 62Q41 62 41 73V87ZM45 87V73Q45 62 50 62Q55 62 55 73V87Z"/><path d="M22 53V44Q22 36 25 36Q28 36 28 44V53ZM33 53V44Q33 36 36 36Q39 36 39 44V53ZM44 53V44Q44 36 47 36Q50 36 50 44V53Z"/><path d="M31 27V22Q31 18 34 18Q37 18 37 22V27ZM40 27V22Q40 19 42 19Q44 19 44 22V27Z"/></g>
+<g fill="#eee0b8"><path d="M9 57H63V61H9ZM14 30H58V34H14ZM23 14H49V17H23ZM10 86H62V90H10Z"/></g>
+<g fill="#586552"><path d="M11 57Q16 58 19 54H53Q56 58 61 57L59 59H13ZM14 30Q19 32 23 27H49Q53 32 58 30L55 33H17ZM21 14Q26 16 29 10Q36 8 43 10Q46 16 51 14L47 17H25Z"/></g>
+<path d="M29 10L31 7H41L43 10M33 7V4H39V7M32 4L36 1L40 4" fill="#bfa679"/>
+<g stroke="#fff3d3" stroke-width="1" fill="none"><path d="M16 87V73Q16 61 22 61Q28 61 28 73V87M30 87V73Q30 61 36 61Q42 61 42 73V87M44 87V73Q44 61 50 61Q56 61 56 73V87"/><path d="M21 52V43Q21 35 25 35Q29 35 29 43V52M32 52V43Q32 35 36 35Q40 35 40 43V52M43 52V43Q43 35 47 35Q51 35 51 43V52"/></g>
+</g><path d="M4 94Q18 91 36 93T68 93" fill="none" stroke="#e1dec0" stroke-width="1"/>
+</svg>

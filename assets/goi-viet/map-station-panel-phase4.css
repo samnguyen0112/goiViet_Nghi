@@ -1,0 +1,182 @@
+/* Phase 4: station panel only. Exterior geometry, rendering and home stay intact.
+   Interior alignment follows the existing 18px / mobile 16px card inset. */
+:where(body:has(#introScreen.intro-hidden)) #stationPanel {
+  --gv4-surface: #FFFDF2;
+  --gv4-warm: #FBF1D8;
+  --gv4-inset: #F4EAD1;
+  --gv4-ink: #143F35;
+  --gv4-secondary: #365247;
+  --gv4-muted: #645540;
+  --gv4-red: #BB322B;
+  --gv4-red-deep: #8E251F;
+  --gv4-red-hover: #AB2C27;
+  --gv4-red-hover-deep: #7C211C;
+  --gv4-on-red: #FFFDF2;
+  --gv4-red-text: #9F2C2C;
+  --gv4-red-soft: #FBE8DE;
+  --gv4-teal-deep: #143F35;
+  --gv4-on-teal: #FFFDF2;
+  --gv4-teal-text: #205967;
+  --gv4-teal-soft: #E6EFE5;
+  --gv4-gold: #B48843;
+  --gv4-border: #957337;
+  --gv4-trim: #D7BD8E;
+  --gv4-focus: #125448;
+  --gv4-disabled-surface: #EEE7D7;
+  --gv4-disabled-ink: #766B5D;
+  --gv4-disabled-border: #C5B99D;
+  --gv4-warning-text: #80500E;
+  --gv4-warning-surface: #F9EAC9;
+  --gv4-panel-shadow: 0 4px 14px rgba(20, 63, 53, .10);
+  --gv4-action-shadow: inset 0 1px 0 rgba(255, 253, 242, .22), 0 3px 8px rgba(142, 37, 31, .16);
+  --gv4-card-inset: 18px;
+  /* Local aliases cover existing inline labels and generated tracker content. */
+  --paper-bg: var(--gv4-surface);
+  --paper-elevated: var(--gv4-surface);
+  --paper-warm: var(--gv4-warm);
+  --paper-deep: var(--gv4-inset);
+  --ink-primary: var(--gv4-ink);
+  --ink-secondary: var(--gv4-secondary);
+  --ink-muted: var(--gv4-muted);
+  --wood-border: var(--gv4-trim);
+  --wood-border-strong: var(--gv4-border);
+  --son-red: var(--gv4-red-text);
+  --son-red-soft: var(--gv4-red-soft);
+  --com-green: var(--gv4-teal-text);
+  --com-green-soft: var(--gv4-teal-soft);
+  --cham-indigo: var(--gv4-teal-text);
+  --cham-indigo-soft: var(--gv4-teal-soft);
+  --nghe-gold-text: var(--gv4-warning-text);
+  --focus-ring: var(--gv4-focus);
+  background: var(--gv4-surface);
+  color: var(--gv4-ink);
+  border-color: var(--gv4-trim);
+  box-shadow: inset 0 0 0 1px var(--gv4-trim), var(--gv4-panel-shadow);
+  scroll-padding-block: 8px;
+}
+:where([data-theme="dark"] body:has(#introScreen.intro-hidden), body[data-theme="dark"]:has(#introScreen.intro-hidden)) #stationPanel {
+  --gv4-surface: #233C30;
+  --gv4-warm: #304334;
+  --gv4-inset: #1B3027;
+  --gv4-ink: #FFF7E2;
+  --gv4-secondary: #EEE9D5;
+  --gv4-muted: #CBC6B0;
+  --gv4-red: #B43A30;
+  --gv4-red-hover: #A52D26;
+  --gv4-on-red: #FFF7E2;
+  --gv4-red-text: #FFCFAB;
+  --gv4-red-soft: #42352D;
+  --gv4-on-teal: #FFF7E2;
+  --gv4-teal-text: #ADD2C7;
+  --gv4-teal-soft: #2B463B;
+  --gv4-gold: #C7AC77;
+  --gv4-border: #AE9870;
+  --gv4-trim: #756B4D;
+  --gv4-focus: #E8C477;
+  --gv4-disabled-surface: #29382D;
+  --gv4-disabled-ink: #AAA794;
+  --gv4-disabled-border: #5C6654;
+  --gv4-warning-text: #FFD590;
+  --gv4-warning-surface: #42352D;
+  --gv4-panel-shadow: 0 4px 14px rgba(0, 0, 0, .28);
+  --gv4-action-shadow: inset 0 1px 0 rgba(255, 247, 226, .14), 0 3px 8px rgba(0, 0, 0, .28);
+}
+@media (max-width: 600px) {
+  :where(body:has(#introScreen.intro-hidden)) #stationPanel { --gv4-card-inset: 16px; }
+}
+
+/* Filters keep their original hit sizes, typography and horizontal scrolling. */
+:where(body:has(#introScreen.intro-hidden)) #stationPanel .panel-filters { background: var(--gv4-surface); border-color: var(--gv4-trim); }
+:where(body:has(#introScreen.intro-hidden)) #stationPanel .scope-tabs { background: var(--gv4-warm); border-color: var(--gv4-trim); }
+:where(body:has(#introScreen.intro-hidden)) #stationPanel :is(.scope-tab, .topic-btn, .small-wood-btn) {
+  background: var(--gv4-surface);
+  color: var(--gv4-ink);
+  border-color: var(--gv4-border);
+  box-shadow: none;
+}
+:where(body:has(#introScreen.intro-hidden)) #stationPanel :is(.scope-tab, .topic-btn, .small-wood-btn):hover { background: var(--gv4-warm); }
+:where(body:has(#introScreen.intro-hidden)) #stationPanel :is(.scope-tab, .topic-btn).active {
+  background: var(--gv4-red-soft);
+  color: var(--gv4-red-text);
+  border-color: var(--gv4-red-text);
+}
+:where(body:has(#introScreen.intro-hidden)) #stationPanel .prov-search-input { background: var(--gv4-surface); color: var(--gv4-ink); border-color: var(--gv4-border); }
+:where(body:has(#introScreen.intro-hidden)) #stationPanel .prov-search-input::placeholder { color: var(--gv4-muted); opacity: 1; }
+:where(body:has(#introScreen.intro-hidden)) #stationPanel .prov-search-input:focus { border-color: var(--gv4-focus); }
+
+/* One inner alignment line for ribbon, title, body and compact cards. */
+:where(body:has(#introScreen.intro-hidden)) #stationPanel :is(.station-board-ribbon, .place-hero-overlay, .place-body-inner, .place-compact-row) { padding-inline: var(--gv4-card-inset); }
+:where(body:has(#introScreen.intro-hidden)) #stationPanel .station-board-ribbon {
+  background: var(--gv4-teal-deep);
+  color: var(--gv4-on-teal);
+  border-color: var(--gv4-trim);
+  box-shadow: none;
+}
+:where(body:has(#introScreen.intro-hidden)) #stationPanel .station-board-name { color: var(--gv4-on-teal); text-shadow: none; }
+:where(body:has(#introScreen.intro-hidden)) #stationPanel .station-board-name svg { fill: currentColor; }
+:where(body:has(#introScreen.intro-hidden)) #stationPanel .station-board-action,
+:where(body:has(#introScreen.intro-hidden)) #stationPanel .station-board-action:hover,
+:where(body:has(#introScreen.intro-hidden)) #stationPanel .station-board-action:active {
+  background: var(--gv4-surface);
+  color: var(--gv4-ink);
+  border-color: var(--gv4-border);
+  box-shadow: none;
+  text-shadow: none;
+  transform: none;
+}
+:where(body:has(#introScreen.intro-hidden)) #stationPanel .station-board-action:hover { background: var(--gv4-warm); }
+:where(body:has(#introScreen.intro-hidden)) #stationPanel .place-region-pill { background: var(--gv4-teal-soft); color: var(--gv4-teal-text); border-color: var(--gv4-teal-text); }
+:where(body:has(#introScreen.intro-hidden)) #stationPanel :is(.place-deck-pill, .place-compact-badge) { background: var(--gv4-warm); color: var(--gv4-muted); border-color: var(--gv4-trim); }
+:where(body:has(#introScreen.intro-hidden)) #stationPanel :is(.place-deck-pill, .place-compact-badge).explored { background: var(--gv4-teal-soft); color: var(--gv4-teal-text); border-color: var(--gv4-teal-text); }
+:where(body:has(#introScreen.intro-hidden)) #stationPanel .place-hero-banner:hover .place-hero-img { filter: none; }
+:where(body:has(#introScreen.intro-hidden)) #stationPanel .highlight-kicker { color: var(--gv4-teal-text); }
+
+/* A single red primary action, without the old moving lacquer-button relief. */
+:where(body:has(#introScreen.intro-hidden)) #stationPanel .quick-deck-btn,
+:where(body:has(#introScreen.intro-hidden)) #stationPanel .quick-deck-btn:hover,
+:where(body:has(#introScreen.intro-hidden)) #stationPanel .quick-deck-btn:active {
+  background: linear-gradient(135deg, var(--gv4-red), var(--gv4-red-deep));
+  color: var(--gv4-on-red);
+  border-color: var(--gv4-red-deep);
+  box-shadow: var(--gv4-action-shadow);
+  text-shadow: none;
+  transform: none;
+  filter: none;
+}
+:where(body:has(#introScreen.intro-hidden)) #stationPanel .quick-deck-btn:hover { background: linear-gradient(135deg, var(--gv4-red-hover), var(--gv4-red-hover-deep)); }
+:where(body:has(#introScreen.intro-hidden)) #stationPanel .quick-deck-btn:active { background: var(--gv4-red-deep); box-shadow: none; }
+:where(body:has(#introScreen.intro-hidden)) #stationPanel .quick-deck-sub { opacity: 1; }
+
+/* Read actions align to one right-hand column; longer titles wrap naturally. */
+:where(body:has(#introScreen.intro-hidden)) #stationPanel .story-item-btn { grid-template-columns: minmax(0px, 1fr) 68px; }
+:where(body:has(#introScreen.intro-hidden)) #stationPanel .story-item-cta { text-align: right; }
+:where(body:has(#introScreen.intro-hidden)) #stationPanel .story-item-btn:hover { background: var(--gv4-warm); border-color: var(--gv4-border); }
+:where(body:has(#introScreen.intro-hidden)) #stationPanel .story-topic-pill { background: var(--gv4-teal-soft); color: var(--gv4-teal-text); border-color: var(--gv4-teal-text); box-shadow: none; }
+:where(body:has(#introScreen.intro-hidden)) #stationPanel .story-topic-pill.t-amthuc { background: var(--gv4-warning-surface); color: var(--gv4-warning-text); border-color: var(--gv4-warning-text); }
+:where(body:has(#introScreen.intro-hidden)) #stationPanel .story-topic-pill.t-nghethuat { background: var(--gv4-red-soft); color: var(--gv4-red-text); border-color: var(--gv4-red-text); }
+:where(body:has(#introScreen.intro-hidden)) #stationPanel :is(.tracker-box, .seal-slot) { background: var(--gv4-warm); }
+:where(body:has(#introScreen.intro-hidden)) #stationPanel .seal-slot.stamped { background: var(--gv4-red-soft); }
+
+:where(body:has(#introScreen.intro-hidden)) #stationPanel :is(button, input, [role="button"]) {
+  transition: background-color 160ms, border-color 160ms, color 160ms, box-shadow 160ms;
+  scroll-margin-block: 8px;
+}
+:where(body:has(#introScreen.intro-hidden)) #stationPanel .topic-filter-bar { scroll-padding-inline: 6px; }
+:where(body:has(#introScreen.intro-hidden)) #stationPanel .topic-btn { scroll-margin-inline: 6px; }
+:where(body:has(#introScreen.intro-hidden)) #stationPanel :is(.scope-tab, .topic-btn, .small-wood-btn, .story-item-btn, .station-board-action):active { background: var(--gv4-inset); }
+:where(body:has(#introScreen.intro-hidden)) #stationPanel :is(button, input, [role="button"]):focus-visible { box-shadow: 0 0 0 2px var(--gv4-surface); }
+/* These controls touch clipping edges. An inset ring stays fully visible. */
+:where(body:has(#introScreen.intro-hidden)) #stationPanel :is(.topic-btn, .place-hero-banner, .place-compact-row):focus-visible {
+  outline-offset: -5px !important;
+  box-shadow: inset 0 0 0 2px var(--gv4-surface);
+}
+:where(body:has(#introScreen.intro-hidden)) #stationPanel button:disabled {
+  background: var(--gv4-disabled-surface) !important;
+  color: var(--gv4-disabled-ink) !important;
+  border-color: var(--gv4-disabled-border) !important;
+  box-shadow: none !important;
+}
+:where(body.reduced-motion:has(#introScreen.intro-hidden)) #stationPanel :is(button, input, [role="button"]) { transition: none !important; }
+@media (prefers-reduced-motion: reduce) {
+  :where(body:has(#introScreen.intro-hidden)) #stationPanel :is(button, input, [role="button"]) { transition: none !important; }
+}

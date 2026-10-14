@@ -1,0 +1,99 @@
+/* Phase 5: fixed, noninteractive frame below the map canvas.
+   Every rule targets the new frame; homepage and control geometry stay intact. */
+#mapScene > .gv-map-frame {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  contain: paint;
+  pointer-events: none;
+  user-select: none;
+}
+#mapScene > .gv-map-frame,
+#mapScene > .gv-map-frame * { pointer-events: none !important; }
+:where(body:has(#introScreen.intro-hidden)) #mapScene > .gv-map-frame {
+  display: block;
+  --gv5-gold: #A6864B;
+  --gv5-gold-light: #D4BD8C;
+  --gv5-paper: #F5ECD7;
+  --gv5-mist: #D7DFC9;
+  --gv5-jade-back: #A1B49A;
+  --gv5-jade-middle: #658E77;
+  --gv5-jade-front: #345F50;
+  --gv5-jade-ink: #204D40;
+  --gv5-art-opacity: 1;
+  --gv5-mist-opacity: .38;
+  --gv5-trim-opacity: .50;
+}
+:where([data-theme="dark"] body:has(#introScreen.intro-hidden), body[data-theme="dark"]:has(#introScreen.intro-hidden)) #mapScene > .gv-map-frame {
+  --gv5-gold: #AE9463;
+  --gv5-gold-light: #C4AD79;
+  --gv5-paper: #53614B;
+  --gv5-mist: #354F40;
+  --gv5-jade-back: #3C5A48;
+  --gv5-jade-middle: #304F40;
+  --gv5-jade-front: #244536;
+  --gv5-jade-ink: #1B352D;
+  --gv5-art-opacity: .74;
+  --gv5-mist-opacity: .22;
+  --gv5-trim-opacity: .46;
+}
+#mapScene > .gv-map-frame::before,
+#mapScene > .gv-map-frame::after {
+  content: '';
+  position: absolute;
+  border: 1px solid var(--gv5-gold);
+  border-radius: 18px;
+  opacity: var(--gv5-trim-opacity);
+}
+#mapScene > .gv-map-frame::before { inset: 5px; }
+#mapScene > .gv-map-frame::after { inset: 9px; border-color: var(--gv5-gold-light); opacity: .28; }
+#mapScene > .gv-map-frame .gv-frame-mountains {
+  position: absolute;
+  left: 0;
+  bottom: var(--gv5-art-bottom, 0px);
+  width: min(clamp(380px, 36vw, 640px), var(--gv5-art-limit, 640px));
+  height: auto;
+  aspect-ratio: 300 / 164.0625;
+  opacity: var(--gv5-art-opacity);
+}
+#mapScene > .gv-map-frame[data-art-room="tight"] .gv-frame-mountains { display: none; }
+#mapScene > .gv-map-frame .gv-frame-upper-mist { opacity: var(--gv5-mist-opacity); }
+#mapScene > .gv-map-frame .gv-frame-flourish {
+  position: absolute;
+  width: 31px;
+  height: 31px;
+  color: var(--gv5-gold);
+  opacity: .68;
+}
+#mapScene > .gv-map-frame .gv-frame-flourish[data-corner="tl"] { left: 12px; top: 12px; }
+#mapScene > .gv-map-frame .gv-frame-flourish[data-corner="tr"] { right: 12px; top: 12px; transform: rotate(90deg); }
+#mapScene > .gv-map-frame .gv-frame-flourish[data-corner="br"] { right: 12px; bottom: 12px; transform: rotate(180deg); }
+#mapScene > .gv-map-frame .gv-frame-flourish[data-corner="bl"] { left: 12px; bottom: 12px; transform: rotate(270deg); }
+@media (max-width: 1080px) {
+  #mapScene > .gv-map-frame .gv-frame-mountains { width: min(clamp(200px, 22vw, 250px), var(--gv5-art-limit, 250px)); }
+}
+@media (max-width: 768px) {
+  #mapScene > .gv-map-frame { --gv5-art-opacity: .88; }
+  :where([data-theme="dark"] body:has(#introScreen.intro-hidden), body[data-theme="dark"]:has(#introScreen.intro-hidden)) #mapScene > .gv-map-frame { --gv5-art-opacity: .68; }
+  #mapScene > .gv-map-frame .gv-frame-mountains { width: min(clamp(160px, 46vw, 220px), var(--gv5-art-limit, 220px)); }
+  #mapScene > .gv-map-frame .gv-frame-flourish { width: 20px; height: 20px; opacity: .46; }
+  #mapScene > .gv-map-frame::before { inset: 3px; border-radius: 15px; }
+  #mapScene > .gv-map-frame::after { inset: 6px; border-radius: 13px; opacity: .19; }
+}
+@media (max-height: 640px) {
+  #mapScene > .gv-map-frame .gv-frame-mountains { width: min(clamp(240px, 30vw, 420px), var(--gv5-art-limit, 420px)); }
+}
+@media (max-width: 1080px) and (max-height: 640px) {
+  #mapScene > .gv-map-frame .gv-frame-mountains { width: min(clamp(200px, 22vw, 250px), var(--gv5-art-limit, 250px)); }
+}
+@media (max-height: 480px) {
+  #mapScene > .gv-map-frame .gv-frame-mountains { display: none; }
+}
+@media (prefers-contrast: more) {
+  #mapScene > .gv-map-frame .gv-frame-mountains { opacity: .25; }
+}
+@media (forced-colors: active) {
+  #mapScene > .gv-map-frame { display: none; }
+}

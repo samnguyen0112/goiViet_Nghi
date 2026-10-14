@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 54 86">
+  <defs>
+    <linearGradient id="plaster" x2="1" y2=".2"><stop stop-color="#faf0ce"/><stop offset=".5" stop-color="#d3bd88"/><stop offset="1" stop-color="#bca576"/></linearGradient>
+    <linearGradient id="arch" x2=".4" y2="1"><stop stop-color="#293b37"/><stop offset="1" stop-color="#74674b"/></linearGradient>
+    <pattern id="stone" width="8" height="5" patternUnits="userSpaceOnUse"><path d="M0 5H8M4 0V5" fill="none" stroke="#826e49" stroke-width=".25" opacity=".35"/></pattern>
+  </defs>
+  <ellipse cx="27" cy="83" rx="26" ry="3" fill="#79805a" opacity=".65"/>
+  <g stroke="#776347" stroke-width=".55" stroke-linejoin="round">
+    <path d="M6 82V52H48V82ZM11 50V28H43V50ZM19 26V13H35V26" fill="url(#plaster)"/>
+    <path d="M40 53H48V82H40ZM36 29H43V50H36ZM31 13H35V26H31" fill="#a78e61" opacity=".6"/>
+    <path d="M6 82V52H48V82ZM11 50V28H43V50ZM19 26V13H35V26" fill="url(#stone)"/>
+    <g fill="url(#arch)">
+      <path d="M10 81V68Q10 56 15 56Q20 56 20 68V81ZM22 81V68Q22 56 27 56Q32 56 32 68V81ZM34 81V68Q34 56 39 56Q44 56 44 68V81Z"/>
+      <path d="M15 47V38Q15 31 18 31Q21 31 21 38V47ZM24 47V38Q24 31 27 31Q30 31 30 38V47ZM33 47V38Q33 31 36 31Q39 31 39 38V47Z"/>
+      <path d="M22 24V19Q22 15 24 15Q26 15 26 19V24ZM28 24V19Q28 15 30 15Q32 15 32 19V24Z"/>
+    </g>
+    <g fill="none" stroke="#f6e7bd" stroke-width=".9"><path d="M9 81V68Q9 55 15 55Q21 55 21 68V81M21 81V68Q21 55 27 55Q33 55 33 68V81M33 81V68Q33 55 39 55Q45 55 45 68V81"/><path d="M14 47V38Q14 30 18 30Q22 30 22 38V47M23 47V38Q23 30 27 30Q31 30 31 38V47M32 47V38Q32 30 36 30Q40 30 40 38V47"/></g>
+    <g fill="#ddc996"><path d="M4 51H50V55H4ZM9 26H45V30H9ZM17 12H37V15H17Z"/><path d="M5 78H49V81H5"/></g>
+    <g fill="#4b6354"><path d="M4 50Q9 51 11 46H43Q45 51 50 50L48 53H6ZM9 25Q14 27 17 22H37Q40 27 45 25L42 28H12Z"/><path d="M15 12Q18 13 21 8Q24 11 27 7Q30 11 33 8Q36 13 39 12L35 15H19Z"/></g>
+    <path d="M23 8L24 4L27 2L30 4L31 8" fill="#a69166"/>
+    <path d="M27 2V0M14 54V58M27 54V58M40 54V58M17 30V33M27 30V33M37 30V33" fill="none"/>
+    <g stroke="#ddcc9d" stroke-width=".45"><path d="M7 59H10M20 60H23M32 60H35M44 59H47M7 73H10M20 74H23M32 74H35M44 73H47"/><path d="M12 42H15M21 42H24M30 42H33M39 42H42"/></g>
+  </g>
+  <path d="M0 83Q8 79 16 82T34 82T54 83" stroke="#5d7656" stroke-width="1" fill="none"/>
+</svg>

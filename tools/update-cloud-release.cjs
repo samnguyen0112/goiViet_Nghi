@@ -1,0 +1,10 @@
+const fs=require('node:fs/promises'),path=require('node:path');
+const root=path.resolve(__dirname,'..'),lab=path.join(root,'exports/landscape-layers-lab-20261012');
+(async()=>{
+ for(const name of ['index.html','assets/goi-viet/homepage-layered-scene.js','exports/landscape-layers-lab-20261012/index.html']){const p=path.join(root,name),s=await fs.readFile(p,'utf8');await fs.writeFile(p,s.replaceAll('staggered-depth-v9','cloud-restored-v11').replaceAll('cloud-restored-v10','cloud-restored-v11'));}
+ const readme=path.join(lab,'README.md');let s=await fs.readFile(readme,'utf8');s=s.replace(/Các lớp mây[^\r\n]*/,'Các lớp mây được kiểm tra riêng trên nền trong suốt.');
+ s=s.split('\n## Phục dựng mây bị khuyết')[0];
+ s+='\n## Phục dựng mây bị khuyết\n\nĐã rà soát đủ 18 cụm mây và phục dựng 7 asset bị đứt, mang vết khuyết của vật che hoặc chỉ còn mẩu đuôi: cloud-06, cloud-09, cloud-10, cloud-13, cloud-14, cloud-15 và cloud-18. Các ảnh phục dựng dùng ImageGen tích hợp, giữ phong cách kem/vàng hoặc sương trắng xanh nhạt, có alpha thật theo vật thể. Không giữ lỗ hình lá, cây hay núi trong asset đang trôi. Dải sương sát cầu bị che bởi đường viền địa hình cố định trong bộ vẽ; phần che không trôi theo mây. Dải mây phía dưới bờ sông được xếp sau địa hình để phần thân đã phục dựng không nổi lên giữa mặt nước. Độ rõ của mây sát nước và mây tiền cảnh được giảm nhẹ để giữ cân bằng với cầu và tàu.\n\nẢnh đầu vào phục dựng nằm tại reference/cloud-*-restored-generated.png. Prompt đầy đủ: reference/cloud-restoration-prompts.json, reference/cloud-restoration-extra-prompts.json và reference/cloud-15-palette-prompt.json. Kết quả đăng ký và ảnh so sánh nằm trong verification/cloud-refinement-20261014 ở thư mục dự án. PNG/WebP, gói 2K/4K, ảnh dự phòng và bản Canvas độc lập cùng sử dụng bộ mây đã sửa. Nhịp núi xa → giữa → gần, cầu hiện tại chỗ và thời lượng mở đầu 10 giây được giữ.\n';
+ await fs.writeFile(readme,s);
+ console.log('Updated cloud release and documentation.');
+})().catch(e=>{console.error(e);process.exitCode=1;});

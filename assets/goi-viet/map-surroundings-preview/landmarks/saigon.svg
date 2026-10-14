@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 100" role="img" aria-labelledby="name"><title id="name">Tháp đồng hồ cửa Nam chợ Bến Thành, TP.HCM — minh họa</title>
+<defs><linearGradient id="plaster" x2=".9" y2="1"><stop stop-color="#fff3d1"/><stop offset=".5" stop-color="#e9d6a5"/><stop offset="1" stop-color="#b39a70"/></linearGradient><linearGradient id="tile" x2="0" y2="1"><stop stop-color="#bf7955"/><stop offset="1" stop-color="#80583f"/></linearGradient></defs>
+<ellipse cx="60" cy="95" rx="57" ry="4" fill="#365e4b" opacity=".25"/>
+<g stroke="#806b4d" stroke-width=".8" stroke-linejoin="round">
+<path d="M6 94V64H114V94Z" fill="url(#plaster)"/><path d="M2 64L19 48H44V65ZM76 65V48H101L118 64Z" fill="url(#tile)"/>
+<path d="M44 93V26L53 22H71L79 27V93Z" fill="url(#plaster)"/>
+<path d="M71 23L79 27V93H71Z" fill="#c2ac7d"/><path d="M41 27V21H52V16H70V21H82V28L71 24H53Z" fill="#f1e2bb"/>
+<path d="M50 16V11H73V16M47 11L54 6H68L76 11Z" fill="#b9a076"/>
+<path d="M48 29H70V54H48Z" fill="#dac596"/>
+<circle cx="59" cy="41" r="9.5" fill="#fffae8" stroke="#547d73" stroke-width="1.7"/>
+<path d="M59 34V41L64 44" fill="none" stroke="#375b51" stroke-width="1.5"/>
+<path d="M59 32V34M59 48V50M50 41H52M66 41H68" stroke="#6a7e62" stroke-width=".8"/>
+<ellipse cx="75" cy="42" rx="2.4" ry="8.5" fill="#ecdfb9" stroke="#628371" stroke-width=".7"/>
+<path d="M43 56H80V61H43M3 65H43M81 65H117" fill="none" stroke="#f8e9c1" stroke-width="2.5"/>
+<path d="M49 62H69V70H49Z" fill="#758168"/>
+<path d="M51 66H67" stroke="#f6eac9" stroke-width="1.2"/>
+<g fill="#3c594b"><path d="M50 93V80Q50 72 59 72Q68 72 68 80V93Z"/><path d="M12 93V77H21V93ZM26 93V77H35V93ZM85 93V77H94V93ZM99 93V77H108V93Z"/></g>
+<path d="M49 93V80Q49 71 59 71Q69 71 69 80V93" fill="none" stroke="#fff0cc" stroke-width="1.5"/>
+<path d="M6 94H114M43 28H71M48 55H70" stroke="#f6e4bc" stroke-width="1.5"/>
+<g fill="none" stroke="#e4b88d" stroke-width=".65"><path d="M13 61L24 50M23 62L34 50M33 62L42 53M81 53L88 62M86 50L98 62M96 50L108 62"/></g>
+</g></svg>

@@ -1,0 +1,22 @@
+Use case: precise-object-edit.
+Asset type: full Vietnamese illustrated homepage artwork including all existing UI components.
+Input image 1 is the exact edit target.
+Primary request: Faithfully restore and enhance the supplied complete image for 4K export. Increase clarity, clean JPEG artifacts and refine fine existing details, while preserving the exact original full image aspect ratio and framing. Target a 3840-pixel-wide image (3840 x 2378 preserving the 1594:987 ratio). Do not crop or stretch.
+Critical invariants: Preserve the precise composition and the positions, sizes, colors, shapes and relative proportions of ALL components. Preserve the Gói Việt calligraphic logo and conical hat, both white flying cranes, all falling leaves and petals, the mountains and curling ivory clouds, trees, villages, three historical buildings, the original large red train with exactly three carriages (teal, red, green) on the stone arch bridge, all THREE station pill buttons, the entire large lower cream information panel, its badge, headline, body text, feature chips, and BOTH bottom action buttons. Do not replace this image with a scenery-only variant. Preserve the same warm peach/cream and jade/sage palette, delicate watercolor/paper texture, soft atmosphere and vintage Vietnamese illustration style. Sharpen existing ink edges gently without halos or excessive contrast. Do not redraw the brand lettering into a different typeface. All wording, Vietnamese tone marks, capitalization, icons, punctuation, line breaks, label alignment and button placement must stay exactly as in the input. Keep the full bottom panel and both birds visible.
+Text to preserve verbatim (use the input for exact visual placement and typography):
+Gói Việt
+“ Một đoàn tàu đi dọc ba miền đất nước
+Mỗi tỉnh thành là một ga dừng nghỉ để cả nhà cùng nghe chuyện xưa và sẻ chia ký ức.”
+GA MIỀN BẮC · HÀ NỘI
+GA MIỀN TRUNG · CỐ ĐÔ HUẾ
+GA MIỀN NAM · TP.HCM
+SÂN GA ĐOÀN VIÊN · LỜI MỜI KHỞI HÀNH XUYÊN VIỆT
+Cùng gia đình khám phá văn hóa Việt Nam
+Chọn một địa điểm, đọc câu chuyện và rút lá bài để cùng chia sẻ kỷ niệm.
+Cả nhà dùng chung một thiết bị, không cần đăng nhập.
+36 Ga Dừng Di Sản & Hải Đảo
+Thẻ Bài Văn Hóa & Lắng Nghe 60 Giây
+Chơi Chung 1 Thiết Bị · Không Chấm Điểm
+Bắt đầu khám phá →
+Xem cách chơi
+Avoid: changed spelling or tone marks, changed logo lettering, missing UI, moving components, new objects, new text, watermarks, borders, redesign, saturation changes or altered train proportions. This is restoration only.

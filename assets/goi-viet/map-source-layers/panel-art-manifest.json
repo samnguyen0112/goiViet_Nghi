@@ -1,0 +1,115 @@
+{
+  "heroSourceRegion": [
+    1108,
+    395,
+    450,
+    176
+  ],
+  "heroOriginal": "hanoi-illustration-source.png",
+  "missingMask": "hanoi-illustration-missing.mask.png",
+  "displayFile": "hanoi-illustration-with-occlusion-repair.png",
+  "repairIsOriginal": false,
+  "note": "Visible painting pixels unchanged. Only original badge/text occlusions filled approximately; live DOM labels cover those locations. No claim of exact hidden artwork.",
+  "icons": [
+    {
+      "file": "filter-all.png",
+      "sourceRegion": [
+        1117,
+        278,
+        1137,
+        303
+      ],
+      "mask": "pigment/foreground contrast; source RGB unchanged"
+    },
+    {
+      "file": "filter-food.png",
+      "sourceRegion": [
+        1201,
+        279,
+        1220,
+        302
+      ],
+      "mask": "pigment/foreground contrast; source RGB unchanged"
+    },
+    {
+      "file": "filter-art.png",
+      "sourceRegion": [
+        1302,
+        279,
+        1326,
+        303
+      ],
+      "mask": "pigment/foreground contrast; source RGB unchanged"
+    },
+    {
+      "file": "filter-festival.png",
+      "sourceRegion": [
+        1399,
+        278,
+        1420,
+        303
+      ],
+      "mask": "pigment/foreground contrast; source RGB unchanged"
+    },
+    {
+      "file": "filter-craft.png",
+      "sourceRegion": [
+        1484,
+        279,
+        1507,
+        305
+      ],
+      "mask": "pigment/foreground contrast; source RGB unchanged"
+    },
+    {
+      "file": "island-heading.png",
+      "sourceRegion": [
+        41,
+        270,
+        85,
+        297
+      ],
+      "mask": "pigment/foreground contrast; source RGB unchanged"
+    },
+    {
+      "file": "turn.png",
+      "sourceRegion": [
+        748,
+        45,
+        775,
+        73
+      ],
+      "mask": "pigment/foreground contrast; source RGB unchanged"
+    },
+    {
+      "file": "ticket.png",
+      "sourceRegion": [
+        1108,
+        48,
+        1129,
+        70
+      ],
+      "mask": "pigment/foreground contrast; source RGB unchanged"
+    },
+    {
+      "file": "postcard.png",
+      "sourceRegion": [
+        1310,
+        48,
+        1333,
+        69
+      ],
+      "mask": "pigment/foreground contrast; source RGB unchanged"
+    },
+    {
+      "file": "region.png",
+      "sourceRegion": [
+        1133,
+        412,
+        1151,
+        434
+      ],
+      "mask": "pigment/foreground contrast; source RGB unchanged"
+    }
+  ]
+}

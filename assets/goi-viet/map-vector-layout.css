@@ -1,0 +1,85 @@
+/* Camera layers never scale native controls or their text. */
+#mapScene { font-family:'Be Vietnam Pro',sans-serif; font-synthesis:none; }
+#mapScene .map-source-labels [hidden] { display:none; }
+#mapScene .map-source-labels { touch-action:none; }
+#mapScene .source-map-label { font-family:'Be Vietnam Pro',sans-serif; font-weight:500; }
+#mapScene .source-province-label { pointer-events:none; font-size:12px; line-height:18px; }
+#mapScene .source-province-label:focus-visible { pointer-events:auto; }
+#mapScene .place-highlights-grid { min-width:0; }
+#mapScene .highlight-chip-box { min-width:0; height:auto; padding:10px 10px 40px; }
+#mapScene .highlight-kicker { display:block; white-space:normal; overflow-wrap:anywhere; line-height:1.4; }
+#mapScene .highlight-val { display:block; overflow-wrap:anywhere; line-height:1.5; }
+#mapScene .place-hero-top-row { min-width:0; gap:6px; }
+#mapScene .place-region-pill { min-width:0; max-width:70%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+#mapScene .place-deck-pill { min-width:0; flex-shrink:0; }
+#mapScene .station-board-name { min-width:0; overflow-wrap:anywhere; }
+#mapScene .place-stories>summary { flex-wrap:wrap; gap:6px; }
+#mapScene #currentTurnLabel { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+#mapScene .source-island-note { border-radius:10px; }
+@media(min-width:1081px) {
+  #mapScene .top-header { width:auto; right:calc(var(--map-offset-x) + 20 * var(--map-unit)); transform:none; flex-wrap:wrap; gap:8px; min-height:68px; padding:8px 10px; }
+  #mapScene .session-strip { flex:1 1 420px; margin:0; gap:8px; }
+  #mapScene .turn-banner { flex:1 1 auto; width:auto; min-width:0; font:500 14px/22px 'Be Vietnam Pro',sans-serif; border-radius:28px; padding:8px 12px; }
+  #mapScene .turn-banner>span { min-width:0; }
+  #mapScene .turn-banner .small-wood-btn { flex:none; font:500 14px/20px 'Be Vietnam Pro',sans-serif; gap:5px; border:0; background:transparent; }
+  #mapScene .progress-banner { width:auto; flex:none; font:500 14px/22px 'Be Vietnam Pro',sans-serif; padding:10px 12px; border-radius:25px; }
+  #mapScene .header-actions { flex:0 1 auto; gap:8px; }
+  #mapScene .header-actions>.craft-btn-red,#mapScene .header-actions>.craft-btn-green,#mapScene #headerSettings>summary { width:auto; font:500 14px/22px 'Be Vietnam Pro',sans-serif; padding:8px 12px; }
+  #mapScene .SidePanel { transform:none; width:clamp(330px,30.6vw,490px); top:max(calc(var(--map-offset-y) + 120 * var(--map-unit)),var(--header-offset,100px)); bottom:auto; max-height:calc(100dvh - max(calc(var(--map-offset-y) + 120 * var(--map-unit)),var(--header-offset,100px)) - 22px); padding:12px; overflow-y:auto; overflow-x:hidden; scrollbar-gutter:stable; scrollbar-width:thin; }
+  #mapScene .SidePanel { height:min(773px,calc(100dvh - max(calc(var(--map-offset-y) + 120 * var(--map-unit)),var(--header-offset,100px)) - 22px)); overflow:hidden; }
+  #mapScene .SidePanel>.panel-filters { flex:none; }
+  #mapScene .SidePanel>.panel-sec:has(#demoPlaceList) { flex:1 1 auto; min-height:0; overflow-y:auto; overflow-x:hidden; scrollbar-width:thin; padding-right:4px!important; }
+  #mapScene .SidePanel>.journey-ledger { flex:none; max-height:35%; overflow:auto; }
+  #mapScene .scope-tabs { height:auto; }
+  #mapScene .scope-tab { min-height:52px; font-size:14px; }
+  #mapScene #tabScopeAll { padding:7px; }
+  #mapScene .prov-search-input { font-size:14px; }
+  #mapScene .topic-filter-bar { height:auto; gap:4px; }
+  #mapScene .topic-btn { min-height:48px; font-size:12px; line-height:17px; padding:5px 3px; }
+  #mapScene .topic-btn::before { width:17px; flex-basis:17px; height:22px; }
+  #mapScene .station-board-ribbon { height:auto; min-height:48px; padding:8px 10px; }
+  #mapScene .station-board-name { font:500 14px/20px 'Be Vietnam Pro',sans-serif; }
+  #mapScene .station-board-action { font:400 12px/20px 'Be Vietnam Pro',sans-serif; padding:4px 9px; }
+  #mapScene .place-hero-banner { height:170px; min-height:170px; }
+  #mapScene .place-hero-title { font:700 23px/1.25 'Playfair Display',serif; }
+  #mapScene .place-hero-caption { font-size:13px; }
+  #mapScene .place-region-pill,#mapScene .place-deck-pill { height:auto; min-height:30px; font-size:12px; }
+  #mapScene .place-body-inner { padding:12px 10px 0; gap:12px; }
+  #mapScene .place-tagline { font:700 16px/24px 'Playfair Display',serif; }
+  #mapScene .place-highlights-grid { gap:7px; }
+  #mapScene .highlight-kicker { font-size:12px; }
+  #mapScene .highlight-val { font-size:13px; }
+  #mapScene .quick-deck-btn { font-size:15px; height:auto; }
+  #mapScene .place-stories .place-section-heading,#mapScene .story-disclosure-label { font-size:13px; }
+  #mapScene .left-helper { transform:none; width:clamp(235px,21vw,336px); padding:18px; min-height:0; }
+  #mapScene .island-helper-heading h2 { font-size:20px; line-height:26px; }
+  #mapScene .island-helper-note,#mapScene .map-legend summary { font:400 15px/24px 'Be Vietnam Pro',sans-serif; }
+  #mapScene .island-shortcuts button { font:500 14px/22px 'Be Vietnam Pro',sans-serif; }
+  #mapScene .bottom-dock { transform:none; }
+}
+@media(min-width:1081px) and (max-width:1450px) {
+  #mapScene .turn-banner { font-size:13px; }
+  #mapScene .turn-banner .small-wood-btn { font-size:13px; }
+  #mapScene .progress-banner { font-size:13px; padding:8px; }
+  #mapScene .header-actions>.craft-btn-red,#mapScene .header-actions>.craft-btn-green,#mapScene #headerSettings>summary { font-size:13px; padding:8px; }
+  #mapScene .session-strip { flex-basis:310px; }
+}
+@media(max-width:768px) {
+  #mapScene .highlight-chip-box { display:grid; grid-template-columns:68px minmax(0,1fr); padding:9px 0; }
+  #mapScene .place-region-pill { max-width:100%; white-space:normal; }
+  #mapScene .source-map-label { font-size:15px; }
+  #mapScene .turn-banner,#mapScene .turn-banner .small-wood-btn { font-size:12px; }
+  #mapScene .prov-search-input { font-size:16px; }
+}
+@media(max-width:1080px) {
+  #mapScene .SidePanel { height:calc(100dvh - var(--header-offset,100px) - 76px); overflow:hidden; }
+  #mapScene .SidePanel>.panel-filters { flex:none; }
+  #mapScene .SidePanel>.panel-sec:has(#demoPlaceList) { flex:1 1 auto; min-height:0; overflow-y:auto; overflow-x:hidden; scrollbar-width:thin; }
+  #mapScene .SidePanel>.journey-ledger { flex:none; max-height:35%; overflow:auto; }
+}
+@media(max-width:768px) {
+  #mapScene .SidePanel { height:calc(100dvh - var(--header-offset,122px) - 126px); }
+}
+[data-theme="dark"] #mapScene .top-header,[data-theme="dark"] #mapScene .left-helper,[data-theme="dark"] #mapScene .SidePanel { background-color:var(--paper-bg); }
+[data-theme="dark"] #mapScene .turn-banner,[data-theme="dark"] #mapScene .turn-banner .small-wood-btn { background:var(--paper-elevated); color:var(--ink-primary); }
+[data-theme="dark"] #mapScene .place-tagline,[data-theme="dark"] #mapScene .highlight-val { color:var(--ink-primary); }

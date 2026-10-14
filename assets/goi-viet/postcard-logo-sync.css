@@ -1,0 +1,2 @@
+/* Shared map identity, scoped to the postcard modal only. */
+#postcardModal .gv-postcard-logo { height: auto; object-fit: contain; object-position: left center; background: transparent; border: 0; box-shadow: none; filter: none; }

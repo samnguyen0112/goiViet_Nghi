@@ -1,0 +1,103 @@
+{
+  "created": "2026-10-14",
+  "license": "Public domain",
+  "termsURL": "https://www.naturalearthdata.com/about/terms-of-use/",
+  "attribution": "Made with Natural Earth.",
+  "sources": [
+    {
+      "role": "land",
+      "dataset": "ne_10m_land",
+      "scale": "1:10,000,000",
+      "version": "5.1.1",
+      "pageURL": "https://www.naturalearthdata.com/downloads/10m-physical-vectors/10m-land/",
+      "downloadURL": "https://naturalearth.s3.amazonaws.com/10m_physical/ne_10m_land.zip",
+      "localPath": "sources/ne_10m_land.zip",
+      "bytes": 3269070,
+      "sha256": "e547d749445eaa0964aba76738090ec88f5e63c4585122170f98c67a7ea922dc"
+    },
+    {
+      "role": "countries",
+      "dataset": "ne_10m_admin_0_countries",
+      "scale": "1:10,000,000",
+      "version": "5.1.1",
+      "pageURL": "https://www.naturalearthdata.com/downloads/10m-cultural-vectors/10m-admin-0-countries/",
+      "downloadURL": "https://naturalearth.s3.amazonaws.com/10m_cultural/ne_10m_admin_0_countries.zip",
+      "localPath": "sources/ne_10m_admin_0_countries.zip",
+      "bytes": 4930492,
+      "sha256": "ce1ac7036499a0edd641fbc093cd209a98f96a49d2eca8480aaacad35138a7f6"
+    },
+    {
+      "role": "coastline",
+      "dataset": "ne_10m_coastline",
+      "scale": "1:10,000,000",
+      "version": "5.0.0-pre9",
+      "pageURL": "https://www.naturalearthdata.com/downloads/10m-physical-vectors/10m-coastline/",
+      "downloadURL": "https://naturalearth.s3.amazonaws.com/10m_physical/ne_10m_coastline.zip",
+      "localPath": "sources/ne_10m_coastline.zip",
+      "bytes": 3069451,
+      "sha256": "bfa04cdbcbef07ef90dfca1dabb48062eca29900a113df0f389303e255484017"
+    }
+  ],
+  "worldTransform": {
+    "lonOrigin": 101.5,
+    "latOrigin": 23.8,
+    "xPerDegree": 60,
+    "yPerDegree": 62.5
+  },
+  "geographicBounds": [
+    75,
+    -12,
+    140,
+    46
+  ],
+  "navigationGeographicBounds": [
+    95,
+    4,
+    121,
+    29
+  ],
+  "authoritativeVietnam": {
+    "path": "index.html",
+    "sha256": "7fa2fe52b77f74817f340eab0a4ae74dcdb6c9bb647623afe5a775eee1a33e52",
+    "geometrySHA256": "247012016dd6ffc6ccea800a75d2f9bc35c7e1e4239f3a32e4aa91897bc95ee8",
+    "arcCount": 217,
+    "provinceCount": 34
+  },
+  "processing": {
+    "libraryVersions": {
+      "shapely": "2.2.0",
+      "pyshp": "3.1.6"
+    },
+    "simplificationToleranceWorldUnits": 0.7,
+    "coordinatePrecisionWorldUnits": 0.01,
+    "inlandVietnamOverlapWorldUnits": 4.0,
+    "polygons": "Each polygon is array of rings, outer first then explicit holes; Canvas evenodd fill.",
+    "coastline": "Physical coastline with source VN shoreline omitted within six world units.",
+    "borders": "Only LAO/KHM/THA inland boundary lines; existing VN rings replace shared VN boundary.",
+    "policy": "No runtime request. All land outside three named neighbours is merged and anonymous."
+  },
+  "stats": {
+    "landPolygons": 1598,
+    "landPoints": 31018,
+    "landHoles": 122,
+    "countryCount": 3,
+    "countryPoints": 7971,
+    "borderPoints": 1127,
+    "coastlineLines": 790,
+    "coastlinePoints": 18444,
+    "authoritativeVietnamPolygons": 27,
+    "authoritativeVietnamArea": 104832.115,
+    "authoritativeVietnamMissingArea": 0.0,
+    "authoritativeVietnamFullyCovered": true,
+    "namedLabelAnchorsInsideSourceCountries": {
+      "laos": true,
+      "cambodia": true,
+      "thailand": true
+    }
+  },
+  "output": {
+    "path": "regional-geometry.js",
+    "bytes": 1022338,
+    "sha256": "eb816423c7fb4870bcf9b4b7597825a4c1400160d7f37dcc3ca22eb5bdf6cf38"
+  }
+}

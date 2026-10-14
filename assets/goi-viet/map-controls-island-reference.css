@@ -1,0 +1,185 @@
+/* Move map controls away from the painting; style only the island helper and dock.
+   Every existing-element rule is guarded while the map is open. */
+:where(body:has(#introScreen.intro-hidden)) #mapScene .bottom-dock {
+  left: var(--map-center-x, 50%);
+  right: auto;
+  top: auto;
+  bottom: 14px;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: min(calc(100vw - 28px), var(--map-space-width, calc(100vw - 28px)));
+  justify-content: center;
+}
+:where(body:has(#introScreen.intro-hidden)) #mapScene .bottom-dock .control-options {
+  width: min(320px, var(--map-space-width, calc(100vw - 28px)), calc(100vw - 28px));
+  max-width: calc(100vw - 28px);
+  max-height: min(55dvh, var(--gv-camera-menu-height, 420px));
+}
+
+:where(body:has(#introScreen.intro-hidden)) #mapScene .left-helper {
+  --island-paper: #FFF5DF;
+  --island-warm: #FAEDCF;
+  --island-button: #FFFAEF;
+  --island-heading: #A42A20;
+  --island-ink: #653522;
+  --island-red: #B4261E;
+  --island-gold: #D6AB65;
+  --island-trim: #E8C88F;
+  --island-fine: #EDDBB7;
+  --island-selected: #F8DFC0;
+  width: 280px;
+  padding: 14px 16px 10px;
+  gap: 6px;
+  border: 2px solid var(--island-gold);
+  border-radius: 17px;
+  background: linear-gradient(135deg, var(--island-paper), var(--island-warm));
+  box-shadow: inset 0 0 0 2px var(--island-paper), inset 0 0 0 3px var(--island-trim), 0 5px 16px rgba(110,74,32,.13);
+  max-height: calc(100dvh - var(--header-offset, 86px) - 20px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--island-gold) transparent;
+}
+:where([data-theme="dark"] body:has(#introScreen.intro-hidden), body[data-theme="dark"]:has(#introScreen.intro-hidden)) #mapScene .left-helper {
+  --island-paper: #293F32;
+  --island-warm: #24382D;
+  --island-button: #30473A;
+  --island-heading: #F4D2AB;
+  --island-ink: #F3E6CC;
+  --island-red: #FFD0AA;
+  --island-gold: #BEA373;
+  --island-trim: #70684B;
+  --island-fine: #7D7151;
+  --island-selected: #4D4933;
+}
+:where(body:has(#introScreen.intro-hidden)) #mapScene .left-helper .island-helper-heading {
+  gap: 8px;
+  color: var(--island-heading);
+}
+:where(body:has(#introScreen.intro-hidden)) #mapScene .left-helper .island-helper-heading > svg { display: none; }
+:where(body:has(#introScreen.intro-hidden)) #mapScene .left-helper .gv-island-heading-art {
+  display: block;
+  width: 37px;
+  height: 27px;
+  object-fit: contain;
+  flex: 0 0 37px;
+  pointer-events: none;
+}
+:where(body:has(#introScreen.intro-hidden)) #mapScene .left-helper .island-helper-heading h2 {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--island-heading);
+}
+:where(body:has(#introScreen.intro-hidden)) #mapScene .left-helper .island-helper-note {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.4;
+  color: var(--island-ink);
+}
+:where(body:has(#introScreen.intro-hidden)) #mapScene .left-helper .island-shortcuts {
+  gap: 10px;
+  margin-top: 6px;
+}
+:where(body:has(#introScreen.intro-hidden)) #mapScene .left-helper .island-shortcut {
+  min-height: 46px;
+  padding: 9px 8px;
+  border: 1px solid var(--island-fine);
+  border-radius: 9px;
+  background: var(--island-button);
+  color: var(--island-red);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 600;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.5), 0 2px 4px rgba(114,76,30,.06);
+}
+:where(body:has(#introScreen.intro-hidden)) #mapScene .left-helper .island-shortcut:hover {
+  background: var(--island-paper);
+  border-color: var(--island-gold);
+  color: var(--island-red);
+}
+:where(body:has(#introScreen.intro-hidden)) #mapScene .left-helper .island-shortcut[aria-pressed="true"],
+:where(body:has(#introScreen.intro-hidden)) #mapScene .left-helper .island-shortcut:active {
+  background: var(--island-selected);
+  border-color: var(--island-red);
+  color: var(--island-red);
+  box-shadow: inset 0 0 0 1px var(--island-red);
+}
+:where(body:has(#introScreen.intro-hidden)) #mapScene .left-helper .gv-island-divider {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 10px;
+  margin-top: 3px;
+  color: var(--island-gold);
+  pointer-events: none;
+}
+:where(body:has(#introScreen.intro-hidden)) #mapScene .left-helper .gv-island-divider::before,
+:where(body:has(#introScreen.intro-hidden)) #mapScene .left-helper .gv-island-divider::after {
+  content: '';
+  height: 1px;
+  background: var(--island-fine);
+  flex: 1;
+}
+:where(body:has(#introScreen.intro-hidden)) #mapScene .left-helper .gv-island-divider svg {
+  width: 21px;
+  height: 16px;
+  flex: 0 0 21px;
+}
+:where(body:has(#introScreen.intro-hidden)) #mapScene .left-helper .map-legend {
+  border-top: 0;
+  padding-top: 0;
+}
+:where(body:has(#introScreen.intro-hidden)) #mapScene .left-helper .map-legend > summary {
+  min-height: 44px;
+  padding: 0 8px;
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--island-ink);
+}
+:where(body:has(#introScreen.intro-hidden)) #mapScene .left-helper .legend-chevron {
+  width: 10px;
+  height: 10px;
+  margin-right: 2px;
+  font-size: 0;
+  border-right: 1.6px solid currentColor;
+  border-bottom: 1.6px solid currentColor;
+  transform: translateY(-3px) rotate(45deg);
+}
+:where(body:has(#introScreen.intro-hidden)) #mapScene .left-helper .map-legend[open] .legend-chevron {
+  transform: translateY(2px) rotate(225deg);
+}
+:where(body:has(#introScreen.intro-hidden)) #mapScene .left-helper .legend-row { color: var(--island-ink); }
+:where(body:has(#introScreen.intro-hidden)) #mapScene .left-helper .map-legend-content .island-helper-note { font-family: var(--font-sans); font-size: 14px; }
+
+@media (min-width: 769px) and (max-width: 1080px) {
+  :where(body:has(#introScreen.intro-hidden)) #mapScene .bottom-dock { top: var(--header-offset, 86px); bottom: auto; }
+  :where(body:has(#introScreen.intro-hidden)) #mapScene .bottom-dock .control-options {
+    top: calc(100% + 8px);
+    bottom: auto;
+    max-height: min(55dvh, var(--gv-camera-menu-height, max(60px, calc(100dvh - var(--header-offset, 86px) - 130px))));
+  }
+}
+@media (max-width: 768px) {
+  :where(body:has(#introScreen.intro-hidden)) #mapScene .bottom-dock {
+    left: 6px;
+    right: 6px;
+    top: auto;
+    bottom: 6px;
+    width: auto;
+    max-width: none;
+    transform: none;
+  }
+}
+
+/* Optional attribution lives in settings, away from destination shortcuts. */
+#mapScene .map-data-sources { width: 100%; min-width: 0; border-top: 1px solid var(--wood-border); }
+#mapScene .map-data-sources > summary { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 44px; padding: 8px; list-style: none; cursor: pointer; border-radius: 6px; font: 500 14px/1.5 var(--font-sans); color: var(--ink-primary); }
+#mapScene .map-data-sources > summary::-webkit-details-marker { display: none; }
+#mapScene .map-data-sources > summary:focus-visible { outline: 3px solid var(--son-red); outline-offset: -3px; }
+#mapScene .map-data-sources[open] .map-source-chevron { transform: rotate(180deg); }
+#mapScene .map-sources-content { display: flex; flex-direction: column; gap: 12px; padding: 4px 8px 12px; overflow-wrap: anywhere; }
+#mapScene .map-sources-content p, #mapScene .map-sources-content .island-helper-note { margin: 0; font: 400 12px/1.6 var(--font-sans); color: var(--ink-secondary); }
+#mapScene .map-sources-content a { color: var(--cham-indigo); text-decoration: underline; text-underline-offset: 2px; }

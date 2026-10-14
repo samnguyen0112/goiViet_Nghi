@@ -1,0 +1,83 @@
+/* Opening controls and entrance transforms never draw or position the editable copy. */
+#introScreen[data-intro-stage="welcome"][data-home-opening="waiting"] .gv-home-content,
+#introScreen[data-intro-stage="welcome"][data-home-opening="preparing"] .gv-home-content { visibility: hidden; pointer-events: none; }
+#introScreen[data-intro-stage="welcome"]:not([data-home-opening="complete"]) .gv-home-poster { opacity: 0; }
+#introScreen[data-intro-stage="welcome"]:not([data-home-opening="complete"]) .gv-intro-controls { display: none; }
+#introScreen[data-intro-stage="welcome"] .gv-intro-controls { left: max(16px, env(safe-area-inset-left)); right: auto; }
+#introWelcomeStage [data-home-enter] {
+  opacity: var(--home-enter-a, 1);
+  transform: translateY(var(--home-enter-y, 0px));
+  will-change: auto;
+}
+#introScreen[data-home-opening="playing"] [data-home-enter] { will-change: opacity, transform; }
+#introScreen[data-home-opening="waiting"], #introScreen[data-home-opening="preparing"] { overflow: hidden; }
+#introScreen[data-home-opening="playing"] { overflow-y: auto; }
+#introScreen[data-intro-stage="guide"] { overflow-y: auto; }
+#introWelcomeStage .gv-home-opening-gate {
+  position: fixed; inset: 0; width: 100%; height: 100dvh; min-height: 100vh;
+  z-index: 10; padding: 0; margin: 0; border: 0; border-radius: 0; box-shadow: none;
+  display: flex; align-items: flex-end; justify-content: center;
+  background: linear-gradient(135deg, #fae1c6, #fff1cf 45%, #f5e6c8);
+  color: #6b583d; font: 500 14px/1.6 var(--font-sans); cursor: pointer; touch-action: manipulation;
+}
+#introWelcomeStage .gv-home-opening-gate > span { padding: 24px 20px max(30px, env(safe-area-inset-bottom)); text-align: center; }
+#introWelcomeStage .gv-home-opening-gate[hidden] { display: none; }
+#introWelcomeStage .gv-home-opening-gate:focus-visible { outline: 3px solid #125448; outline-offset: -8px; }
+.gv-home-opening-tools {
+  position: fixed; top: max(12px, env(safe-area-inset-top)); right: max(16px, env(safe-area-inset-right));
+  z-index: 25; display: flex; align-items: flex-start; gap: 8px; max-width: calc(100vw - 24px);
+  color: #4f422d; font-family: var(--font-sans);
+}
+.gv-home-opening-tools > button, .gv-home-opening-tools summary {
+  min-height: 44px; box-sizing: border-box; padding: 10px 14px;
+  border: 1px solid #c6b585; border-radius: 12px; background: rgba(255, 250, 231, .96);
+  color: #4f422d; font: 500 13px/1.6 var(--font-sans); cursor: pointer; white-space: normal;
+  box-shadow: 0 3px 12px rgba(65, 57, 30, .08);
+}
+.gv-home-opening-tools > button[hidden] { display: none; }
+.gv-home-opening-tools details { position: relative; }
+.gv-home-opening-tools summary { list-style: none; display: flex; align-items: center; justify-content: center; gap: 10px; }
+.gv-home-opening-tools summary::-webkit-details-marker { display: none; }
+.gv-home-opening-tools summary::after { content: ''; width: 6px; height: 6px; flex-shrink: 0; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: translateY(-2px) rotate(45deg); }
+.gv-home-opening-tools details[open] summary::after { transform: translateY(2px) rotate(225deg); }
+.gv-home-opening-tools button:focus-visible, .gv-home-opening-tools summary:focus-visible,
+.gv-home-music-panel input:focus-visible { outline: 3px solid #125448; outline-offset: 3px; }
+.gv-home-music-panel {
+  position: absolute; top: calc(100% + 10px); right: 0;
+  width: min(352px, calc(100vw - 32px)); max-height: calc(100dvh - 86px); overflow-y: auto;
+  box-sizing: border-box; padding: 20px; background: #fffbed; border: 1px solid #cfbb88; border-radius: 20px;
+  box-shadow: 0 16px 40px rgba(58, 48, 26, .16), 0 3px 8px rgba(58, 48, 26, .05);
+  font-size: 14px; line-height: 1.6; text-align: left; overscroll-behavior: contain;
+}
+.gv-home-music-label { display: block; margin-bottom: 14px; color: #403928; font-size: 16px; font-weight: 700; line-height: 1.5; }
+.gv-home-music-file-button { display: flex; align-items: center; justify-content: center; width: 100%; min-height: 46px; box-sizing: border-box; padding: 10px 14px; border: 1px solid #265747; border-radius: 12px; background: #265747; color: #fffbed; font: 600 14px/1.5 var(--font-sans); cursor: pointer; transition: background .15s ease; }
+.gv-home-music-file-button:hover { background: #1c4437; }
+#homeMusicName { margin: 8px 0 18px; overflow-wrap: anywhere; color: #6c654f; font-size: 12px; line-height: 1.5; }
+.gv-home-music-volume { display: grid; grid-template-columns: 1fr auto; gap: 6px 12px; align-items: center; }
+.gv-home-music-volume label, .gv-home-music-offset > label { font-weight: 500; }
+.gv-home-music-volume output { min-width: 46px; padding: 2px 8px; box-sizing: border-box; border-radius: 7px; background: #f3ecd8; color: #78502d; text-align: center; font-size: 12px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.gv-home-music-volume input { grid-column: 1 / -1; width: 100%; min-height: 28px; margin: 0; accent-color: #9e3027; cursor: pointer; }
+.gv-home-music-offset { display: grid; grid-template-columns: minmax(0, 1fr) 116px; align-items: center; gap: 12px; margin: 14px 0 10px; }
+.gv-home-music-number { display: flex; align-items: center; min-width: 0; height: 44px; box-sizing: border-box; border: 1px solid #c6b585; border-radius: 10px; background: #fffdf6; }
+.gv-home-music-number:focus-within { border-color: #265747; }
+.gv-home-music-number input { width: 100%; min-width: 0; height: 100%; box-sizing: border-box; padding: 8px 4px 8px 12px; border: 0; border-radius: 10px 0 0 10px; background: transparent; color: #403928; font: 500 16px/1.5 var(--font-sans); font-variant-numeric: tabular-nums; }
+.gv-home-music-number span { flex-shrink: 0; padding: 0 12px 0 6px; color: #766a51; font-size: 12px; }
+.gv-home-music-continue { display: flex; align-items: center; gap: 10px; min-height: 44px; font-size: 13px; cursor: pointer; }
+.gv-home-music-continue input { width: 18px; height: 18px; margin: 0; accent-color: #265747; flex-shrink: 0; cursor: pointer; }
+.gv-home-music-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 14px; }
+.gv-home-music-actions button { min-height: 44px; box-sizing: border-box; padding: 10px 12px; border: 1px solid #c6b585; border-radius: 11px; background: #f5eedc; color: #4f422d; font: 500 13px/1.5 var(--font-sans); cursor: pointer; }
+.gv-home-music-actions button:hover:enabled { background: #ece1c5; border-color: #a78e5f; }
+.gv-home-music-actions button:disabled { background: #f8f3e7; border-color: #dfd3b5; color: #948975; cursor: default; }
+.gv-home-music-note { margin: 16px 0 0; padding-top: 14px; border-top: 1px solid #e8dcc0; color: #766a51; font-size: 12px; line-height: 1.6; }
+@media (max-width: 760px) {
+  #introScreen[data-intro-stage="welcome"] .gv-intro-controls { left: 12px; top: 64px; }
+  .gv-home-content { padding-top: max(76px, calc(env(safe-area-inset-top) + 64px)); }
+  .gv-home-opening-tools { right: 12px; left: 12px; justify-content: flex-end; gap: 6px; }
+  .gv-home-opening-tools > button, .gv-home-opening-tools summary { padding: 10px; font-size: 12px; }
+  .gv-home-opening-tools details { position: static; }
+  .gv-home-music-panel { right: 0; width: min(352px, calc(100vw - 24px)); padding: 18px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #introWelcomeStage [data-home-enter] { transform: none !important; will-change: auto !important; }
+}
+body.reduced-motion #introWelcomeStage [data-home-enter] { transform: none !important; will-change: auto !important; }

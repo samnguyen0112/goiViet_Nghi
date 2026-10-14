@@ -1,0 +1,32 @@
+{
+  "downloadedOn": "2026-10-14",
+  "family": "Lora",
+  "role": "Only map island helper typography",
+  "repository": "https://github.com/google/fonts/tree/main/ofl/lora",
+  "files": [
+    {
+      "file": "Lora-Variable.ttf",
+      "url": "https://raw.githubusercontent.com/google/fonts/main/ofl/lora/Lora%5Bwght%5D.ttf",
+      "bytes": 212196,
+      "sha256": "822a6621ccbe8d97d20ac88c1c41f5615c9c2c202eaa75f272cd452aac6475a7"
+    },
+    {
+      "file": "OFL.txt",
+      "url": "https://raw.githubusercontent.com/google/fonts/main/ofl/lora/OFL.txt",
+      "bytes": 4423,
+      "sha256": "1d9a970809ac804b582a6ce7f0ebc4e7fefcbfd7ff6299cad35ee656a21be716"
+    },
+    {
+      "file": "METADATA.pb",
+      "url": "https://raw.githubusercontent.com/google/fonts/main/ofl/lora/METADATA.pb",
+      "bytes": 1349,
+      "sha256": "6d9e38cc8926e903359a1c4c358fd2e71864f422aae9550d0d9a2ae0c62ddb8d"
+    },
+    {
+      "file": "FONTLOG.txt",
+      "url": "https://raw.githubusercontent.com/google/fonts/main/ofl/lora/FONTLOG.txt",
+      "bytes": 2591,
+      "sha256": "9e1799f449c237b91601cbb7f6b9666af30a343f45249efb033d70ffa92d0a2d"
+    }
+  ]
+}

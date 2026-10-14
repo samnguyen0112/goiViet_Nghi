@@ -1,0 +1,59 @@
+/* Preview only: fixed frame, independent content scrolling and a reversible drawer. */
+body[data-regional-preview]:has(#introScreen.intro-hidden) #mapScene { --font-display: 'Goi Viet Island Lora', 'Be Vietnam Pro', sans-serif; font-synthesis: none; }
+body[data-regional-preview]:has(#introScreen.intro-hidden) #mapScene #stationPanel {
+  height: calc(100dvh - var(--header-offset, 86px) - 68px);
+  max-height: calc(100dvh - var(--header-offset, 86px) - 68px);
+  padding: 5px; overflow: hidden; isolation: isolate;
+  transition: transform 340ms cubic-bezier(.22,1,.36,1), opacity 240ms ease, visibility 0s;
+}
+body[data-regional-preview]:has(#introScreen.intro-hidden) .preview-panel-heading { display:flex; align-items:center; justify-content:space-between; gap:8px; flex:0 0 auto; min-height:44px; padding:0 7px 3px 9px; color:var(--gv4-ink); }
+body[data-regional-preview]:has(#introScreen.intro-hidden) .preview-panel-heading h2 { font:600 15px/1.5 'Goi Viet Island Lora', 'Be Vietnam Pro', sans-serif; margin:0; }
+body[data-regional-preview]:has(#introScreen.intro-hidden) .preview-panel-toggle { display:inline-flex; align-items:center; justify-content:center; gap:7px; min-width:44px; min-height:44px; padding:7px 10px; border:1px solid var(--wood-border-strong); border-radius:11px; background:var(--paper-bg); color:var(--ink-primary); font:600 12px/1.4 'Be Vietnam Pro', sans-serif; cursor:pointer; }
+body[data-regional-preview]:has(#introScreen.intro-hidden) .preview-panel-toggle:hover { background:var(--paper-warm); }
+body[data-regional-preview]:has(#introScreen.intro-hidden) .preview-panel-toggle:focus-visible { outline:2px solid var(--focus-ring); outline-offset:-4px; }
+body[data-regional-preview]:has(#introScreen.intro-hidden) .preview-panel-scroll { position:relative; contain:layout paint; min-height:0; flex:1 1 auto; overflow:auto; overscroll-behavior:contain; scrollbar-width:thin; scrollbar-color:var(--wood-border-strong) transparent; scrollbar-gutter:stable; scroll-padding:14px; padding-bottom:18px; border-radius:0 0 10px 10px; }
+body[data-regional-preview]:has(#introScreen.intro-hidden) .preview-panel-foot { flex:0 0 auto; padding:7px 10px 3px; border-top:1px solid var(--wood-border); text-align:center; font:400 11px/1.5 'Be Vietnam Pro',sans-serif; color:var(--ink-muted); }
+body[data-regional-preview]:has(#introScreen.intro-hidden) #stationPanel > .panel-filters { flex:0 0 auto; }
+body[data-regional-preview]:has(#introScreen.intro-hidden) #stationPanel .panel-sec { flex-shrink:0; }
+body[data-regional-preview]:has(#introScreen.intro-hidden) #stationPanel .place-card { flex-shrink:0; }
+body[data-regional-preview]:has(#introScreen.intro-hidden) #mapScene #stationPanel .topic-btn { height:58px; min-height:58px; gap:3px; padding:5px 4px; }
+body[data-regional-preview]:has(#introScreen.intro-hidden) #mapScene #stationPanel .topic-btn > .ui-ref-topic-label { min-height:27px; font-size:11.5px; }
+body[data-regional-preview]:has(#introScreen.intro-hidden) #mapScene #stationPanel .topic-btn .ui-ref-icon { width:19px; height:19px; flex-basis:19px; }
+body[data-regional-preview]:has(#introScreen.intro-hidden) #mapScene #stationPanel .scope-tab { font-family:'Be Vietnam Pro',sans-serif; font-size:13px; }
+body[data-regional-preview]:has(#introScreen.intro-hidden) #mapScene #stationPanel .station-board-name { font-family:'Be Vietnam Pro',sans-serif; font-weight:600; }
+body[data-regional-preview]:has(#introScreen.intro-hidden) #mapScene #stationPanel .ui-ref-station-note { display:none; }
+body[data-regional-preview]:has(#introScreen.intro-hidden) #stationPanel.preview-panel-compact .preview-panel-foot { display:none; }
+body[data-regional-preview]:has(#introScreen.intro-hidden) #mapScene #stationPanel .ui-ref-story-drawer > summary h3::before { content:''; display:inline-block; width:11px; height:11px; margin-right:6px; background:var(--ref-gold); clip-path:polygon(50% 0,62% 35%,100% 50%,62% 65%,50% 100%,38% 65%,0 50%,38% 35%); }
+body[data-regional-preview]:has(#introScreen.intro-hidden) #mapScene #stationPanel .place-tagline { font-size:15.2px; line-height:1.55; font-weight:600; }
+body[data-regional-preview]:has(#introScreen.intro-hidden) #mapScene #stationPanel .place-body-inner { gap:12px; }
+body[data-regional-preview]:has(#introScreen.intro-hidden) #mapScene #stationPanel .place-hero-title { line-height:1.4; font-weight:700; }
+body[data-regional-preview]:has(#introScreen.intro-hidden) #mapScene #stationPanel :is(.ui-ref-art-hero,.ui-ref-photo-hero) .place-hero-overlay { min-height:175px; }
+body[data-regional-preview]:has(#introScreen.intro-hidden) #mapScene #stationPanel .preview-hero-fallback { position:relative; background-color:#28625e; background-repeat:no-repeat; background-size:auto 110px,cover; background-position:right 16px center,center; }
+body[data-regional-preview]:has(#introScreen.intro-hidden) #mapScene #story-hero-hue.preview-hero-fallback { background-image:url('landmarks/hue.svg'),radial-gradient(ellipse at 18% 22%,#b7c7a0 0,transparent 55%),linear-gradient(140deg,#538975,#20545e); }
+body[data-regional-preview]:has(#introScreen.intro-hidden) #mapScene #story-hero-hcm.preview-hero-fallback { background-image:url('landmarks/saigon.svg'),radial-gradient(ellipse at 18% 22%,#b7c7a0 0,transparent 55%),linear-gradient(140deg,#538975,#20545e); }
+body[data-regional-preview]:has(#introScreen.intro-hidden) #mapScene #stationPanel .preview-hero-fallback .place-hero-overlay { min-height:190px; justify-content:space-between; background:linear-gradient(180deg,#143f3508 35%,#143f35ed); }
+body[data-regional-preview]:has(#introScreen.intro-hidden) #mapScene #stationPanel .preview-hero-fallback :is(.place-hero-title,.place-hero-caption) { color:#fff8e8; text-shadow:0 1px 2px #143f35; }
+body[data-regional-preview]:has(#introScreen.intro-hidden) .preview-fallback-note { position:absolute; top:82px; left:18px; font:500 10px/1.4 'Be Vietnam Pro',sans-serif; color:#fff8e8; background:#143f35b8; border-radius:4px; padding:3px 5px; }
+body[data-regional-preview]:has(#introScreen.intro-hidden) #stationPanel .place-compact-title { display:flex; align-items:baseline; gap:6px; line-height:1.55; }
+body[data-regional-preview]:has(#introScreen.intro-hidden) .preview-icon { width:18px; height:18px; flex:0 0 18px; display:inline-block; vertical-align:-3px; pointer-events:none; }
+body[data-regional-preview]:has(#introScreen.intro-hidden) .place-compact-title .preview-icon { width:13px; height:13px; flex-basis:13px; align-self:center; }
+body[data-regional-preview]:has(#introScreen.intro-hidden) #previewPanelOpen { position:fixed; right:14px; top:calc(var(--header-offset, 86px) + 8px); z-index:26; opacity:0; transform:translateX(110%); visibility:hidden; pointer-events:none; box-shadow:0 3px 12px #143f3522; transition:transform 340ms cubic-bezier(.22,1,.36,1),opacity 240ms ease,visibility 0s 340ms; }
+body[data-regional-preview]:has(#introScreen.intro-hidden).preview-panel-collapsed #stationPanel { transform:translateX(calc(100% + 24px)); opacity:0; pointer-events:none; visibility:hidden; transition:transform 340ms cubic-bezier(.22,1,.36,1),opacity 240ms ease,visibility 0s 340ms; }
+body[data-regional-preview]:has(#introScreen.intro-hidden).preview-panel-collapsed #previewPanelOpen { transform:translateX(0); opacity:1; visibility:visible; pointer-events:auto; transition:transform 340ms cubic-bezier(.22,1,.36,1),opacity 240ms ease,visibility 0s; }
+body[data-regional-preview]:has(#introScreen.intro-hidden) #mapScene > .gv-map-frame { z-index:3; }
+body[data-regional-preview]:has(#introScreen.intro-hidden) #mapScene > .gv-map-frame.preview-decorative-underlay { z-index:1; }
+body[data-regional-preview]:has(#introScreen.intro-hidden) .preview-decorative-underlay::before,
+body[data-regional-preview]:has(#introScreen.intro-hidden) .preview-decorative-underlay::after { display:none; }
+body[data-regional-preview]:has(#introScreen.intro-hidden) .regional-crane { transition:opacity 150ms ease; }
+body[data-regional-preview]:has(#introScreen.intro-hidden) .regional-crane[data-obstructed] { opacity:0; }
+body[data-regional-preview]:has(#introScreen.intro-hidden) #mapScene .top-header .map-brand-logo { object-fit:contain; image-rendering:auto; }
+@media(max-width:768px) {
+  body[data-regional-preview]:has(#introScreen.intro-hidden) #mapScene #stationPanel { height:auto; max-height:min(65dvh,calc(100dvh - var(--header-offset,180px) - var(--dock-offset,72px) - 64px)); }
+  body[data-regional-preview]:has(#introScreen.intro-hidden) #stationPanel :is(.preview-panel-heading,.preview-panel-foot) { display:none; }
+  body[data-regional-preview]:has(#introScreen.intro-hidden) #previewPanelOpen { display:none; }
+  body[data-regional-preview]:has(#introScreen.intro-hidden) #mapScene #stationPanel .preview-panel-scroll { flex:1 1 auto; }
+  body[data-regional-preview]:has(#introScreen.intro-hidden).mobile-map-focus #stationPanel { transition:transform 300ms cubic-bezier(.22,1,.36,1),opacity 200ms ease,visibility 0s 300ms; }
+  body[data-regional-preview]:has(#introScreen.intro-hidden) #btnMobileTogglePanel > span { display:flex; align-items:center; justify-content:center; gap:7px; }
+}
+body[data-regional-preview]:has(#introScreen.intro-hidden).reduced-motion :is(#stationPanel,#previewPanelOpen,.regional-crane) { transition:none!important; }
+@media(prefers-reduced-motion:reduce) { body[data-regional-preview]:has(#introScreen.intro-hidden) :is(#stationPanel,#previewPanelOpen,.regional-crane) { transition:none!important; } }

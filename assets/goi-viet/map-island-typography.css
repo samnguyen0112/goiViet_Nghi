@@ -1,0 +1,15 @@
+/* Full Vietnamese font, used only by the island helper while the map is open.
+   Separate family name keeps every homepage font and existing font asset intact. */
+@font-face {
+  font-family: 'Goi Viet Island Lora';
+  src: url('../fonts/island/Lora-Variable.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+}
+:where(body:has(#introScreen.intro-hidden)) #mapScene .left-helper .island-helper-heading h2,
+:where(body:has(#introScreen.intro-hidden)) #mapScene .left-helper > .island-helper-note,
+:where(body:has(#introScreen.intro-hidden)) #mapScene .left-helper .map-legend > summary {
+  font-family: 'Goi Viet Island Lora', 'Be Vietnam Pro', 'Segoe UI', sans-serif;
+  font-synthesis: none;
+}

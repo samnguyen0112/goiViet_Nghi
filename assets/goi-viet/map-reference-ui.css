@@ -1,0 +1,158 @@
+/* Reference refinement is confined to map controls, not the map canvas/home. */
+:where(body:has(#introScreen.intro-hidden)) #mapScene :is(.top-header, #stationPanel) {
+  --ref-paper: #FFF8E8;
+  --ref-warm: #F9E8C8;
+  --ref-ink: #742333;
+  --ref-red: #B81E1B;
+  --ref-red-deep: #8E251F;
+  --ref-on-red: #FFFDF2;
+  --ref-teal: #205967;
+  --ref-teal-deep: #143F35;
+  --ref-gold: #D2A55E;
+  --ref-trim: #E2C08D;
+  --ref-control-border: #957337;
+}
+:where([data-theme="dark"] body:has(#introScreen.intro-hidden)) #mapScene :is(.top-header, #stationPanel) {
+  --ref-paper: #233C30;
+  --ref-warm: #304334;
+  --ref-ink: #FFF7E2;
+  --ref-on-red: #FFF7E2;
+  --ref-gold: #C7AC77;
+  --ref-trim: #756B4D;
+  --ref-control-border: #AE9870;
+}
+:where(body:has(#introScreen.intro-hidden)) #mapScene .ui-ref-icon { width: 16px; height: 16px; flex: 0 0 16px; display: inline-block; vertical-align: middle; pointer-events: none; }
+:where(body:has(#introScreen.intro-hidden)) #mapScene .top-header {
+  background: var(--ref-paper) url('paper.svg');
+  border-color: var(--ref-gold);
+  box-shadow: inset 0 0 0 2px var(--ref-paper), inset 0 0 0 3px var(--ref-trim), var(--shadow-card);
+}
+:where(body:has(#introScreen.intro-hidden)) #mapScene .top-header .turn-banner { position: relative; isolation: isolate; color: var(--ref-ink); }
+:where(body:has(#introScreen.intro-hidden)) #mapScene .top-header .turn-banner::before {
+  content: ''; position: absolute; inset: 0 -8px; z-index: -1; border-radius: 999px;
+  background: var(--ref-paper); box-shadow: 0 2px 6px rgba(114,64,31,.12);
+  pointer-events: none;
+}
+:where(body:has(#introScreen.intro-hidden)) #mapScene .top-header .turn-banner .small-wood-btn {
+  border-color: transparent; border-radius: 999px; background: transparent; color: var(--gv3-red-text);
+}
+:where(body:has(#introScreen.intro-hidden)) #mapScene .top-header .turn-banner .small-wood-btn:hover { background: var(--ref-warm); }
+:where(body:has(#introScreen.intro-hidden)) #mapScene .top-header .progress-banner { border-radius: 999px; background: var(--ref-warm); color: var(--gv3-red-text); }
+:where(body:has(#introScreen.intro-hidden)) #mapScene .top-header .header-actions > .craft-btn-red,
+:where(body:has(#introScreen.intro-hidden)) #mapScene .top-header .header-actions > .craft-btn-red:hover {
+  background: linear-gradient(135deg,var(--ref-red),var(--ref-red-deep)); border-color: var(--ref-gold); color: var(--ref-on-red);
+  box-shadow: inset 0 1px 0 rgba(255,253,242,.24), 0 2px 5px rgba(142,37,31,.18);
+}
+:where(body:has(#introScreen.intro-hidden)) #mapScene .top-header .header-actions > .craft-btn-red:active { background: var(--ref-red-deep); box-shadow: none; }
+:where(body:has(#introScreen.intro-hidden)) #mapScene .top-header .header-actions > .craft-btn-green { border-color: var(--ref-gold); }
+:where(body:has(#introScreen.intro-hidden)) #mapScene .top-header #headerSettings > summary { background: var(--ref-paper); color: var(--ref-ink); border-color: var(--ref-control-border); }
+:where(body:has(#introScreen.intro-hidden)) #mapScene .ui-ref-ticket-full { display: none; }
+@media (min-width:1280px) {
+  :where(body:has(#introScreen.intro-hidden)) #mapScene .ui-ref-ticket-short { display: none; }
+  :where(body:has(#introScreen.intro-hidden)) #mapScene .ui-ref-ticket-full { display: inline; }
+}
+@media (max-width:360px) {
+  :where(body:has(#introScreen.intro-hidden)) #mapScene .top-header .header-actions > :is(.craft-btn-red,.craft-btn-green) { font-size:12px; padding-inline:5px; gap:4px; }
+  :where(body:has(#introScreen.intro-hidden)) #mapScene .top-header .header-actions > :is(.craft-btn-red,.craft-btn-green) .ui-ref-icon { width:14px; height:14px; flex-basis:14px; }
+}
+
+:where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel {
+  container-type: inline-size;
+  --gv4-surface: var(--ref-paper);
+  --gv4-warm: var(--ref-warm);
+  --gv4-trim: var(--ref-trim);
+  --gv4-ink: var(--ref-ink);
+  background: var(--ref-paper) url('paper.svg'); border-color: var(--ref-gold);
+  box-shadow: inset 0 0 0 2px var(--ref-paper), inset 0 0 0 3px var(--ref-trim), 0 4px 14px rgba(114,64,31,.14);
+}
+:where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .panel-filters { background: transparent; }
+:where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .scope-tabs { background: var(--ref-warm); border-color: var(--ref-trim); }
+:where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .scope-tab {
+  min-height: 54px; display: flex; align-items: center; justify-content: center; gap: 6px;
+  font-family: var(--font-display); font-weight: 700; line-height: 1.35; background: transparent; border-color: transparent; color: var(--ref-ink);
+}
+:where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .scope-tab.active,
+:where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .topic-btn.active {
+  background: linear-gradient(135deg,var(--ref-red),var(--ref-red-deep)); color: var(--ref-on-red); border-color: var(--ref-gold);
+  box-shadow: inset 0 1px 0 rgba(255,253,242,.2), 0 2px 4px rgba(142,37,31,.14);
+}
+:where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .prov-search-input { box-shadow: 0 2px 4px rgba(114,64,31,.10); }
+:where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .search-input-icon { color: var(--gv4-red-text); }
+:where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .topic-filter-bar { gap:6px; }
+:where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .topic-btn {
+  min-height:78px; height:78px; display:inline-flex; flex-direction:column; align-items:center; justify-content:center; gap:4px;
+  padding:8px 4px; border-radius:12px; font-size:12px; font-weight:600; line-height:1.35;
+  color:var(--ref-ink); background:var(--gv4-surface); border-color:var(--ref-trim);
+  box-shadow:inset 0 1px 0 rgba(255,253,242,.65); white-space:normal;
+}
+:where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .topic-btn .ui-ref-icon { width:22px; height:22px; flex-basis:22px; color:var(--gv4-red-text); }
+:where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .topic-btn > .ui-ref-topic-label { width:100%; min-width:0; min-height:32px; display:grid; place-items:center; text-align:center; text-wrap:balance; }
+:where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .topic-btn:hover { background:var(--ref-warm); border-color:var(--ref-gold); }
+:where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .topic-btn.active:hover { background:linear-gradient(135deg,var(--ref-red),var(--ref-red-deep)); }
+:where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .topic-btn.active .ui-ref-icon { color:var(--ref-on-red); }
+:where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .place-card { border-color: var(--ref-trim); }
+:where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .place-card.selected { border-color: var(--ref-gold); }
+:where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .station-board-ribbon { background: linear-gradient(135deg,var(--ref-teal),var(--ref-teal-deep)); padding-block:8px; gap:6px 10px; }
+:where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .station-board-name { font-family:var(--font-display); font-size:14px; line-height:1.45; }
+:where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .station-board-action,
+:where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .station-board-action:hover {
+  border-radius:999px; color:var(--gv4-on-teal); background:transparent; border-color:var(--ref-gold); padding:6px 10px;
+}
+:where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .ui-ref-action-short { display:none; }
+:where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .place-hero-title { font-size:24px; line-height:1.25; }
+:where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .place-hero-title > .ui-ref-icon { margin-right:7px; }
+:where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .place-region-pill { background:var(--ref-red-deep); color:var(--ref-on-red); border-color:var(--ref-gold); border-radius:999px; flex-basis:auto; }
+:where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .place-deck-pill { background:var(--ref-paper); color:var(--gv4-red-text); border-radius:999px; }
+:where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .place-deck-pill.explored { background:var(--gv4-teal-soft); color:var(--gv4-teal-text); }
+:where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .place-hero-overlay { gap:12px; }
+:where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel :is(.ui-ref-art-hero,.ui-ref-photo-hero) { position:relative; background-color:var(--ref-teal-deep); }
+:where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .ui-ref-art-hero { background-image:url('map-art/hanoi-lake-illustration.png'); background-size:cover; background-position:70% center; }
+:where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .ui-ref-art-hero .place-hero-media { display:none !important; }
+:where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .ui-ref-photo-hero .place-hero-media { position:absolute; inset:0; }
+:where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .ui-ref-photo-hero .place-hero-img { height:100%; }
+:where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel :is(.ui-ref-art-hero,.ui-ref-photo-hero) .place-hero-overlay {
+  position:relative; min-height:190px; justify-content:space-between;
+  background:linear-gradient(180deg,rgba(20,63,53,.10) 35%,rgba(20,63,53,.90));
+}
+:where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel :is(.ui-ref-art-hero,.ui-ref-photo-hero) :is(.place-hero-title,.place-hero-caption) { color:#FFFDF2; text-shadow:0 1px 2px rgba(0,0,0,.45); }
+:where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .ui-ref-art-hero .place-hero-caption { padding-right:64px; }
+:where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .ui-ref-illustration-label { position:absolute; bottom:12px; right:12px; padding:2px 5px; border-radius:4px; background:rgba(20,63,53,.8); color:#FFFDF2; font-size:10px; line-height:1.4; pointer-events:none; }
+:where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .place-body-inner { gap:14px; }
+:where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .place-overview { padding:0; border:0; background:transparent; gap:14px; }
+:where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .place-overview > h3 { position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); }
+:where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .place-tagline { font-family:var(--font-display); font-size:17px; font-weight:700; line-height:1.5; color:var(--ref-ink); }
+:where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .ui-ref-highlight-art { display:none; pointer-events:none; }
+:where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .highlight-kicker { color:var(--gv4-teal-text); }
+:where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .quick-deck-btn,
+:where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .quick-deck-btn:hover { background:linear-gradient(135deg,var(--ref-red),var(--ref-red-deep)); border-color:var(--ref-gold); padding-inline:12px; gap:10px; }
+:where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .quick-deck-btn > span:first-child { min-width:0; display:flex; align-items:center; gap:7px; flex:1 1 auto; text-align:left; }
+:where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .quick-deck-sub { padding:5px 9px; border-radius:999px; background:rgba(255,253,242,.14); }
+:where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .ui-ref-story-drawer { display:block; padding-top:10px; }
+:where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .ui-ref-story-drawer > summary { list-style:none; min-height:44px; display:flex; align-items:center; justify-content:space-between; gap:10px; margin:0; cursor:pointer; }
+:where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .ui-ref-story-drawer > summary::-webkit-details-marker { display:none; }
+:where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .ui-ref-story-drawer > summary h3 { color:var(--ref-ink); font-family:var(--font-display); font-weight:700; }
+:where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .ui-ref-story-drawer > summary h3::before { content:'✦'; margin-right:6px; color:var(--ref-gold); }
+:where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .ui-ref-story-toggle { white-space:nowrap; font-size:12px; color:var(--ref-ink); }
+:where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .ui-ref-story-close-copy { display:none; }
+:where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .ui-ref-story-drawer[open] .ui-ref-story-open-copy { display:none; }
+:where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .ui-ref-story-drawer[open] .ui-ref-story-close-copy { display:inline; }
+:where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .ui-ref-story-items { display:grid; gap:8px; padding-top:8px; }
+:where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .ui-ref-story-drawer > summary:focus-visible { outline:3px solid var(--gv4-focus); outline-offset:2px; border-radius:6px; }
+
+@container (min-width:376px) {
+  :where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .topic-filter-bar { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); }
+  :where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .place-highlights-grid { grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; }
+  :where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .highlight-chip-box { position:relative; display:flex; flex-direction:column; align-items:stretch; gap:5px; min-height:126px; padding:10px 9px 40px; border:1px solid var(--ref-trim); border-radius:10px; background:var(--ref-warm); }
+  :where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .highlight-kicker { text-transform:uppercase; font-size:12px; font-weight:600; line-height:1.4; }
+  :where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .highlight-val { font-size:13px; line-height:1.45; color:var(--ref-ink); }
+  :where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .highlight-chip-box:nth-child(n+2) .highlight-kicker { color:var(--gv4-red-text); }
+  :where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .ui-ref-highlight-art { position:absolute; right:8px; bottom:6px; width:32px; height:32px; padding:5px; border-radius:50%; color:var(--gv4-teal-text); background:var(--gv4-surface); display:block; }
+  :where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .highlight-chip-box:nth-child(n+2) .ui-ref-highlight-art { color:var(--gv4-red-text); }
+}
+@container (max-width:375px) {
+  :where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .topic-filter-bar { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); }
+  :where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .ui-ref-action-full { display:none; }
+  :where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .ui-ref-action-short { display:inline; }
+  :where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .ui-ref-story-open-copy,
+  :where(body:has(#introScreen.intro-hidden)) #mapScene #stationPanel .ui-ref-story-close-copy { display:none !important; }
+}

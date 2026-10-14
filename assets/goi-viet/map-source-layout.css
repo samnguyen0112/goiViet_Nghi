@@ -1,0 +1,148 @@
+#mapScene.source-painting-ready #mapBackdropCanvas,
+#mapScene.source-painting-ready .map-art-layers,
+#mapScene.source-painting-ready .map-brand-art { visibility:hidden; }
+.map-source-labels { position:absolute;inset:0;z-index:10;pointer-events:none;overflow:hidden; }
+.map-source-labels[hidden] { display:none; }
+.source-painting-ready .map-source-labels { visibility:visible; }
+.source-map-label { position:absolute;pointer-events:auto;transform-origin:top left;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;padding:3px 6px;border-radius:25px;border:1px solid #efd3a6;background:#fff8e9;color:#cd0010;font:600 16px/20px 'Segoe UI',sans-serif;white-space:pre-line;cursor:pointer;box-shadow:0 1px 2px #9b57351a; }
+.source-map-label.selected:not(.source-archipelago) { color:white;background:linear-gradient(#db3034,#c91f28);border-color:#fff6df; }
+.source-label-sub { font-weight:500; }
+.source-label-sub:empty { display:none; }
+.source-island { color:#780020;font-size:14px; }
+.source-archipelago { background:transparent;border:0;color:#fff9df;box-shadow:none;font-size:16px;font-weight:400;line-height:23px;padding:0; }
+.source-archipelago .source-label-sub { font-size:13px;line-height:22px; }
+.source-country-label { position:absolute;transform-origin:top left;color:#a79a7c;font:18px/26px Georgia,serif;text-align:center;white-space:nowrap;pointer-events:none; }
+.source-map-label:focus-visible { outline:3px solid #0a6367;outline-offset:3px; }
+.source-island-note { padding:16px;background:var(--paper-elevated);color:var(--ink-primary);border-bottom:1px solid var(--wood-border); }
+.source-island-note h3 { margin:0 0 8px;font-size:20px; }
+.source-island-note p { font-size:14px;line-height:1.5;margin:8px 0; }
+.source-province-label { position:absolute;transform:translate(-50%,-50%);pointer-events:none;border:1px solid #caa877;border-radius:9px;background:#fff8e9f2;color:#772728;padding:4px 8px;font:600 12px/18px 'Be Vietnam Pro',sans-serif;opacity:0;white-space:nowrap;box-shadow:0 2px 6px #3e34252a;transition:opacity .2s ease,transform .15s ease,background .15s ease,box-shadow .15s ease;user-select:none; }
+.source-province-label.visible,.source-province-label:focus-visible { opacity:1; }
+.source-province-label.selected,.source-province-label[aria-pressed="true"] { background:linear-gradient(180deg,#c92218,#a81710);border-color:#ffd54f;color:#ffffff;font-weight:700;box-shadow:0 3px 12px rgba(184,42,28,.45);transform:translate(-50%,-50%) scale(1.06);z-index:14; }
+.source-province-label:focus-visible { outline:3px solid #08757b;outline-offset:2px; }
+[data-theme="dark"] .source-province-label { background:#263e35;color:#fff1d5;border-color:#486b5c; }
+[data-theme="dark"] .source-province-label.selected,[data-theme="dark"] .source-province-label[aria-pressed="true"] { background:linear-gradient(180deg,#d32f2f,#9a0007);border-color:#ffd54f;color:#ffffff; }
+[data-theme="dark"] .source-country-label { color:#c1b998; }
+[data-theme="dark"] .source-map-label:not(.selected):not(.source-archipelago) { background:#24483e;color:#fff1d1; }
+@media(max-width:1080px) { .source-map-label { min-height:40px; } }
+
+/* Measured native controls over the original painting, never raster panels. */
+#mapScene .source-chip-art { width:auto;height:40px;max-width:57px;right:4px;bottom:5px; }
+#mapScene .place-hero-overlay { background:none; }
+#mapScene .place-hero-img { object-fit:fill; }
+#mapScene .place-hero-title { font:400 27px/1.15 'Times New Roman',serif; }
+#mapScene .place-hero-title span { font:22px 'Segoe UI',sans-serif; }
+#mapScene .place-region-pill::before { content:'';width:18px;height:22px;flex:none;background:url('map-source-layers/region.png') center/contain no-repeat; }
+#mapScene .place-region-pill { display:flex;gap:5px;font-size:16px;font-weight:400; }
+#mapScene .place-deck-pill { font-size:16px;font-weight:600; }
+#mapScene .topic-btn::before { content:'';display:block;width:22px;height:25px;flex:0 0 22px;background:center/contain no-repeat; }
+#mapScene .topic-btn[data-topic="all"]::before { background-image:url('map-source-layers/filter-all.png'); }
+#mapScene .topic-btn[data-topic="Ẩm thực"]::before { background-image:url('map-source-layers/filter-food.png'); }
+#mapScene .topic-btn[data-topic="Nghệ thuật"]::before { background-image:url('map-source-layers/filter-art.png'); }
+#mapScene .topic-btn[data-topic="Lễ hội"]::before { background-image:url('map-source-layers/filter-festival.png'); }
+#mapScene .topic-btn[data-topic="Nghề truyền thống"]::before { background-image:url('map-source-layers/filter-craft.png'); }
+#mapScene .island-helper-heading svg { display:none; }
+#mapScene .island-helper-heading::before { content:'';width:44px;height:27px;flex:none;background:url('map-source-layers/island-heading.png') center/contain no-repeat; }
+#mapScene .island-helper-heading h2 { color:#c9000d;font-family:'Times New Roman',serif;font-size:24px; }
+#mapScene .turn-banner .small-wood-btn { display:flex;align-items:center;gap:10px; }
+#mapScene .turn-banner .small-wood-btn::before { content:'';width:27px;height:28px;flex:none;background:url('map-source-layers/turn.png') center/contain no-repeat; }
+#mapScene .header-actions>.craft-btn>svg { display:none; }
+#mapScene .header-actions>.craft-btn::before { content:'';width:23px;height:23px;flex:none;background:center/contain no-repeat; }
+#mapScene .header-actions>.craft-btn-red::before { background-image:url('map-source-layers/ticket.png'); }
+#mapScene .header-actions>.craft-btn-green::before { background-image:url('map-source-layers/postcard.png'); }
+#mapScene .place-stories .place-section-heading::before { content:'✣ ';color:#d5a970; }
+@media(min-width:1081px) {
+  #mapScene .top-header { left:calc(var(--map-offset-x) + 465 * var(--map-unit));top:calc(var(--map-offset-y) + 24 * var(--map-unit));width:1114px;min-height:70px;padding:9px 11px;display:flex;justify-content:flex-start;align-items:center;gap:0; }
+  #mapScene .session-strip { display:flex;align-items:center;gap:13px;margin-right:71px; }
+  #mapScene .turn-banner { width:394px;flex:none;justify-content:space-between;padding:8px 15px;background:#fef7eb;color:#8a1f18;border:1px solid #cda86e;border-radius:8px;font:700 15px/22px 'Playfair Display',serif; }
+  #mapScene .turn-banner .small-wood-btn { font:700 15px/20px 'Playfair Display',serif;padding:3px 8px;background:#fbf2e3;color:#8a1f18;border:1px solid #cda86e;border-radius:6px; }
+  #mapScene .progress-banner { width:141px;flex:none;justify-content:center;padding:12px 10px;background:#f0d5b0;border:1px solid #caa877;border-radius:8px;color:#962820;font:700 15px/22px 'Playfair Display',serif; }
+  #mapScene .header-actions { display:flex;align-items:center;gap:10px; }
+  #mapScene .header-actions>.craft-btn-red { width:194px;background:linear-gradient(180deg, #b92822, #a61f1a);border:1px solid #8e1a16;border-radius:8px;color:#ffffff;font:700 15px/22px 'Playfair Display',serif; }
+  #mapScene .header-actions>.craft-btn-green { width:133px;background:linear-gradient(180deg, #125e5e, #0c4d4e);border:1px solid #083b3c;border-radius:8px;color:#ffffff;font:700 15px/22px 'Playfair Display',serif; }
+  #mapScene #headerSettings>summary { width:86px;justify-content:center;font:700 15px/22px 'Playfair Display',serif;color:#8a1f18;background:#fbf2e3;border:1px solid #cda86e;border-radius:8px; }
+  #mapScene .left-helper { min-height:226px;padding-left:20px;padding-right:20px; }
+  #mapScene .island-helper-heading { gap:6px; }
+  #mapScene .island-helper-heading h2 { font:700 22px/28px 'Playfair Display',serif;color:#c9000d; }
+  #mapScene .island-shortcuts button { color:#a8261e;font:700 15px/22px 'Playfair Display',serif; }
+  #mapScene .island-helper-note { font:20px/25px 'Times New Roman',serif; }
+  #mapScene .island-shortcuts { margin-top:8px; }
+  #mapScene .map-legend summary { font:20px/28px 'Times New Roman',serif; }
+  #mapScene .SidePanel { width:490px;padding:15px 17px; }
+  #mapScene .scope-tabs { height:64px;padding:0; }
+  #mapScene .scope-tab { font-size:17px;font-weight:500;min-height:61px; }
+  #mapScene #tabScopeFeatured { background:linear-gradient(180deg, #962820, #791b17);color:#ffffff; }
+  #mapScene #tabScopeAll { padding-left:29px;padding-right:29px;white-space:normal;line-height:21px;background:#f2dfc4;color:#772728; }
+  #mapScene .search-input-wrap { margin-bottom:10px!important; }
+  #mapScene .prov-search-input { min-height:43px;height:43px;font-size:17px;font-weight:400;background:#fffdf8; }
+  #mapScene .topic-filter-bar { grid-template-columns:82fr 99fr 90fr 85fr 82fr;gap:4px;padding:0;margin:0;height:53px; }
+  #mapScene .topic-btn { display:flex;flex-direction:row;align-items:center;justify-content:center;min-height:53px;border:0;padding:6px 5px;gap:4px;font-size:14px;line-height:19px;white-space:normal;background:#fffdf8; }
+  #mapScene .topic-btn[aria-pressed="true"] { background:linear-gradient(180deg, #b92822, #a61f1a);color:#ffffff; }
+  #mapScene .panel-filters { padding-bottom:16px!important; }
+  #mapScene .station-board-ribbon { min-height:60px;height:60px;padding:10px 14px;gap:8px;background:#15423a;color:#ffffff; }
+  #mapScene .station-board-name { font:400 18px/23px 'Times New Roman',serif;gap:9px;color:#ffffff; }
+  #mapScene .station-star { font-size:19px;color:#ffd700; }
+  #mapScene .station-board-action { font:16px/22px 'Times New Roman',serif;min-height:35px;padding:4px 15px;background:#11352e;border:1px solid #2d6b5e;color:#f6e3c5; }
+  #mapScene .place-hero-overlay { padding:10px 14px;background:linear-gradient(0deg,rgba(22,43,36,.62),rgba(22,43,36,.1) 36%,transparent 53%); }
+  #mapScene .place-region-pill { height:35px;min-height:35px;min-width:200px;padding:4px 9px;background:#194a3e;color:#ffffff;border:1px solid #e5a93c; }
+  #mapScene .place-deck-pill { height:35px;min-height:35px;min-width:118px;padding:4px 10px;background:#962820;color:#ffffff; }
+  #mapScene .place-body-inner { padding:15px 13px 0;gap:14px; }
+  #mapScene .place-tagline { font:700 17.5px/25px 'Playfair Display',serif;color:#4a1c14; }
+  #mapScene .highlight-chip-box { height:99px;min-height:99px;padding:10px 11px 0; }
+  #mapScene .highlight-val { font-size:16px;line-height:21px; }
+  #mapScene .quick-deck-btn { height:51px;min-height:51px;font:700 16px/24px 'Playfair Display',serif;padding:8px 17px;background:linear-gradient(180deg, #b52820, #961e18);border:1px solid #791b17;color:#fff9df; }
+  #mapScene .quick-deck-pill { background:#791b17;color:#ffe8b5;border-radius:20px;padding:3px 8px;font-size:13px; }
+  #mapScene .place-stories>summary { padding:8px 0 12px;min-height:43px; }
+  #mapScene .place-stories .place-section-heading { font-size:16px;font-weight:500; }
+  #mapScene .story-disclosure-label { font-size:16px;font-weight:500; }
+}
+@media(min-width:1081px) and (max-width:1450px) {
+  #mapScene .turn-banner { width:auto;flex:1 1 auto;font-size:13px; }
+  #mapScene .turn-banner .small-wood-btn { font-size:13px;gap:5px; }
+  #mapScene .progress-banner { width:auto; }
+  #mapScene .header-actions>.craft-btn-red,#mapScene .header-actions>.craft-btn-green,#mapScene #headerSettings>summary { width:auto; }
+}
+@media(max-width:768px) {
+  #mapScene .topic-btn { gap:3px;font-size:11px;padding:5px 2px; }
+  #mapScene .topic-btn::before { width:17px;flex-basis:17px;height:21px; }
+  #mapScene .turn-banner .small-wood-btn::before { width:18px;flex-basis:18px;height:20px; }
+  #mapScene .place-region-pill { min-width:0;font-size:13px; }
+}
+
+/* One bundled font system with complete Vietnamese glyph coverage. */
+#mapScene { font-family:'Be Vietnam Pro',sans-serif;font-synthesis:none;letter-spacing:0; }
+#mapScene button,#mapScene input,#mapScene summary { font-family:'Be Vietnam Pro',sans-serif; }
+#mapScene .source-map-label { font-family:'Be Vietnam Pro',sans-serif;font-weight:500; }
+#mapScene .source-archipelago,#mapScene .source-archipelago .source-label-sub { font-weight:400; }
+#mapScene .source-country-label { font:700 16px/26px 'Playfair Display',serif;letter-spacing:0; }
+#mapScene .place-hero-title { font:700 24px/1.2 'Playfair Display',serif; }
+#mapScene .place-tagline { font:700 17.5px/25px 'Playfair Display',serif; }
+#mapScene .station-board-name { font:500 16px/23px 'Be Vietnam Pro',sans-serif; }
+#mapScene .station-board-action { font:400 14px/22px 'Be Vietnam Pro',sans-serif; }
+#mapScene .quick-deck-btn { font:700 16px/24px 'Playfair Display',serif; }
+#mapScene .island-helper-heading h2 { font:700 22px/28px 'Playfair Display',serif; }
+#mapScene .island-helper-note,#mapScene .map-legend summary { font:400 17px/25px 'Be Vietnam Pro',sans-serif; }
+#mapScene .place-hero-overlay { background:linear-gradient(0deg,rgba(22,43,36,.62),rgba(22,43,36,.1) 36%,transparent 53%); }
+#mapScene .highlight-val { font-size:14.5px;line-height:21px;font-weight:400; }
+#mapScene .header-actions>.craft-btn { font-weight:500; }
+
+/* Scale complete native control groups in the same design coordinate space.
+   Their measured browser rectangles now agree with the artwork at wide sizes. */
+@media(min-width:1081px) {
+  #mapScene .top-header { width:1114px;right:auto;min-height:70px;transform:scale(var(--map-scale,1));transform-origin:top left; }
+  #mapScene .turn-banner { width:394px;flex:none;font-size:15px; }
+  #mapScene .turn-banner .small-wood-btn { font-size:15px;gap:10px; }
+  #mapScene .progress-banner { width:141px; }
+  #mapScene .header-actions>.craft-btn-red { width:194px; }
+  #mapScene .header-actions>.craft-btn-green { width:133px; }
+  #mapScene #headerSettings>summary { width:86px; }
+  #mapScene .SidePanel { width:490px;max-height:773px;transform:scale(var(--map-scale,1));transform-origin:top right; }
+  #mapScene .left-helper { width:336px;transform:scale(var(--map-scale,1));transform-origin:top left; }
+  #mapScene .bottom-dock { transform:scale(var(--map-scale,1));transform-origin:bottom left; }
+}
+@media(max-width:1080px) {
+  #mapScene.source-painting-ready .map-brand-art { visibility:visible; }
+  #mapScene .top-header,#mapScene .SidePanel,#mapScene .left-helper,#mapScene .bottom-dock { transform:none; }
+  #mapScene .place-hero-title { font-size:22px; }
+  #mapScene .place-tagline { font-size:17px;line-height:24px; }
+}

@@ -1,0 +1,2143 @@
+{
+  "version": 2,
+  "width": 3840,
+  "height": 2378,
+  "motionDefaults": {
+    "wind": 0.85,
+    "petals": 10,
+    "leaves": 9
+  },
+  "alphaMethod": "Clouds use individually traced original object contours and source-paint trimming. Trees use ImageGen cutouts and source-color matte decontamination. Mountains use visible original crests and reconstructed hidden crests, with no rectangular/soft zone split. The polished train retains the generated true object alpha, including couplers and wheels. Seven damaged clouds have complete ImageGen contours, preserving true transparent alpha; occlusion by hills is applied only in the renderer.",
+  "backgroundMethod": "Coherent ImageGen terrain reconstruction with original visible outer crest guidance. Buildings, clouds, trees and the visible bridge deck retain original source RGB. Bridge feet are reconstructed and the train is polished as a registered transparent sprite. Reconstructed terrain textures and hidden ridge details can differ from the original.",
+  "trainRegistration": {
+    "sourceBounds": [
+      8,
+      271,
+      2136,
+      202
+    ],
+    "target": [
+      1248,
+      1164,
+      1381,
+      131
+    ],
+    "baseline": 1294
+  },
+  "layers": [
+    {
+      "id": "sky",
+      "label": "Nền trời & giấy",
+      "kind": "sky",
+      "z": 0,
+      "file": "homepage-layered/sky-2k.webp",
+      "rect": [
+        0,
+        0,
+        3840,
+        2378
+      ],
+      "alpha": false
+    },
+    {
+      "id": "mountains-far-left",
+      "label": "Núi xa trái",
+      "kind": "mountain",
+      "z": 10,
+      "file": "homepage-layered/mountains-far-left-2k.webp",
+      "rect": [
+        0,
+        18,
+        1853,
+        1221
+      ],
+      "alpha": true,
+      "depth": "far",
+      "entrance": [
+        0.2,
+        2.2,
+        0
+      ]
+    },
+    {
+      "id": "mountains-far-right",
+      "label": "Núi xa phải",
+      "kind": "mountain",
+      "z": 10.1,
+      "file": "homepage-layered/mountains-far-right-2k.webp",
+      "rect": [
+        2040,
+        56,
+        1800,
+        1188
+      ],
+      "alpha": true,
+      "depth": "far",
+      "entrance": [
+        0.55,
+        2.55,
+        0
+      ]
+    },
+    {
+      "id": "mountains-mid-left",
+      "label": "Núi giữa trái",
+      "kind": "mountain",
+      "z": 20,
+      "file": "homepage-layered/mountains-mid-left-2k.webp",
+      "rect": [
+        0,
+        546,
+        1894,
+        1507
+      ],
+      "alpha": true,
+      "depth": "mid",
+      "entrance": [
+        1.45,
+        3.9,
+        0
+      ]
+    },
+    {
+      "id": "mountains-mid-right",
+      "label": "Núi giữa phải",
+      "kind": "mountain",
+      "z": 20.1,
+      "file": "homepage-layered/mountains-mid-right-2k.webp",
+      "rect": [
+        1899,
+        187,
+        1941,
+        2036
+      ],
+      "alpha": true,
+      "depth": "mid",
+      "entrance": [
+        1.8,
+        4.25,
+        0
+      ]
+    },
+    {
+      "id": "mountains-near-left",
+      "label": "Núi gần trái",
+      "kind": "mountain",
+      "z": 30,
+      "file": "homepage-layered/mountains-near-left-2k.webp",
+      "rect": [
+        0,
+        1918,
+        1063,
+        460
+      ],
+      "alpha": true,
+      "depth": "near",
+      "entrance": [
+        3.1,
+        5.75,
+        0
+      ]
+    },
+    {
+      "id": "mountains-near-right",
+      "label": "Núi gần phải",
+      "kind": "mountain",
+      "z": 30.1,
+      "file": "homepage-layered/mountains-near-right-2k.webp",
+      "rect": [
+        2466,
+        1982,
+        1374,
+        396
+      ],
+      "alpha": true,
+      "depth": "near",
+      "entrance": [
+        3.45,
+        6.1,
+        0
+      ]
+    },
+    {
+      "id": "river-valley",
+      "label": "Dòng sông & thung lũng",
+      "kind": "terrain",
+      "z": 23,
+      "file": "homepage-layered/river-valley-2k.webp",
+      "rect": [
+        0,
+        187,
+        3840,
+        2191
+      ],
+      "alpha": true,
+      "entrance": [
+        1.6,
+        5.75,
+        0
+      ]
+    },
+    {
+      "id": "hanoi",
+      "label": "Công trình miền Bắc",
+      "kind": "fixed",
+      "z": 25,
+      "file": "homepage-layered/hanoi-2k.webp",
+      "rect": [
+        1025,
+        939,
+        217,
+        308
+      ],
+      "alpha": true
+    },
+    {
+      "id": "hue",
+      "label": "Ngọ Môn · nền móng và đường viền đầy đủ",
+      "kind": "fixed",
+      "z": 25,
+      "file": "homepage-layered/hue-2k.webp",
+      "rect": [
+        1722,
+        959,
+        413,
+        297
+      ],
+      "alpha": true
+    },
+    {
+      "id": "saigon",
+      "label": "Công trình miền Nam",
+      "kind": "fixed",
+      "z": 25,
+      "file": "homepage-layered/saigon-2k.webp",
+      "rect": [
+        2569,
+        919,
+        328,
+        248
+      ],
+      "alpha": true
+    },
+    {
+      "id": "train",
+      "label": "Đoàn tàu · thân toa & khớp nối hoàn chỉnh",
+      "kind": "fixed",
+      "z": 27,
+      "file": "homepage-layered/train-2k.webp",
+      "rect": [
+        1245,
+        1161,
+        1387,
+        137
+      ],
+      "alpha": true
+    },
+    {
+      "id": "bridge",
+      "label": "Cầu đá · trụ & đường dẫn vào hai sườn núi",
+      "kind": "fixed",
+      "z": 26,
+      "file": "homepage-layered/bridge-2k.webp",
+      "rect": [
+        0,
+        1274,
+        3840,
+        278
+      ],
+      "alpha": true,
+      "occlusion": [
+        "bridge-foreground"
+      ]
+    },
+    {
+      "id": "cloud-01",
+      "label": "Mây 1 · tầng xa",
+      "kind": "cloud",
+      "z": 5,
+      "file": "homepage-layered/cloud-01-2k.webp",
+      "rect": [
+        1033,
+        236,
+        610,
+        164
+      ],
+      "alpha": true,
+      "clippedEdges": [],
+      "cloudType": "sky",
+      "period": 49,
+      "amplitude": 101.17942283563362,
+      "opacity": 1,
+      "entranceOffset": -72.27101631116687,
+      "entrance": [
+        0.72,
+        2.92,
+        0
+      ],
+      "phase": 0.65
+    },
+    {
+      "id": "cloud-02",
+      "label": "Mây 2 · tầng xa",
+      "kind": "cloud",
+      "z": 12,
+      "file": "homepage-layered/cloud-02-2k.webp",
+      "rect": [
+        2164,
+        85,
+        689,
+        199
+      ],
+      "alpha": true,
+      "clippedEdges": [],
+      "cloudType": "sky",
+      "period": 52,
+      "amplitude": 101.17942283563362,
+      "opacity": 1,
+      "entranceOffset": 72.27101631116687,
+      "entrance": [
+        0.84,
+        3.04,
+        0
+      ],
+      "phase": 1.3
+    },
+    {
+      "id": "cloud-03",
+      "label": "Mây 3 · tầng xa",
+      "kind": "cloud",
+      "z": 5,
+      "file": "homepage-layered/cloud-03-2k.webp",
+      "rect": [
+        3203,
+        25,
+        637,
+        205
+      ],
+      "alpha": true,
+      "clippedEdges": [
+        "right"
+      ],
+      "cloudType": "sky",
+      "period": 55,
+      "amplitude": 101.17942283563362,
+      "opacity": 1,
+      "entranceOffset": -72.27101631116687,
+      "entrance": [
+        0.96,
+        3.1599999999999997,
+        0
+      ],
+      "phase": 1.9500000000000002
+    },
+    {
+      "id": "cloud-04",
+      "label": "Mây 4 · tầng xa",
+      "kind": "cloud",
+      "z": 12,
+      "file": "homepage-layered/cloud-04-2k.webp",
+      "rect": [
+        0,
+        367,
+        583,
+        252
+      ],
+      "alpha": true,
+      "clippedEdges": [
+        "left"
+      ],
+      "cloudType": "sky",
+      "period": 58,
+      "amplitude": 101.17942283563362,
+      "opacity": 1,
+      "entranceOffset": 72.27101631116687,
+      "entrance": [
+        1.08,
+        3.28,
+        0
+      ],
+      "phase": 2.6
+    },
+    {
+      "id": "cloud-05",
+      "label": "Mây 5 · tầng xa",
+      "kind": "cloud",
+      "z": 12,
+      "file": "homepage-layered/cloud-05-2k.webp",
+      "rect": [
+        2577,
+        509,
+        295,
+        122
+      ],
+      "alpha": true,
+      "clippedEdges": [],
+      "cloudType": "sky",
+      "period": 61,
+      "amplitude": 101.17942283563362,
+      "opacity": 1,
+      "entranceOffset": -72.27101631116687,
+      "entrance": [
+        1.2,
+        3.4,
+        0
+      ],
+      "phase": 3.25
+    },
+    {
+      "id": "cloud-06",
+      "label": "Mây 6 · tầng giữa",
+      "kind": "cloud",
+      "z": 22,
+      "file": "homepage-layered/cloud-06-2k.webp",
+      "rect": [
+        -3,
+        782,
+        1008,
+        298
+      ],
+      "alpha": true,
+      "clippedEdges": [],
+      "cloudType": "ridge",
+      "period": 72,
+      "amplitude": 52.99874529485571,
+      "opacity": 1,
+      "entranceOffset": 33.72647427854454,
+      "entrance": [
+        1.6,
+        3.8,
+        0
+      ],
+      "phase": 3.9000000000000004,
+      "repairMethod": "Complete ImageGen cloud contour, including previously occluded parts; largest coherent alpha object retained with antialiased edge.",
+      "illustrationSource": "reference/cloud-06-restored-generated.png"
+    },
+    {
+      "id": "cloud-07",
+      "label": "Mây 7 · tầng giữa",
+      "kind": "cloud",
+      "z": 22,
+      "file": "homepage-layered/cloud-07-2k.webp",
+      "rect": [
+        2932,
+        972,
+        783,
+        196
+      ],
+      "alpha": true,
+      "clippedEdges": [],
+      "cloudType": "ridge",
+      "period": 75,
+      "amplitude": 52.99874529485571,
+      "opacity": 1,
+      "entranceOffset": -33.72647427854454,
+      "entrance": [
+        1.6,
+        3.8,
+        0
+      ],
+      "phase": 4.55
+    },
+    {
+      "id": "cloud-08",
+      "label": "Mây 8 · tầng giữa",
+      "kind": "cloud",
+      "z": 25.5,
+      "file": "homepage-layered/cloud-08-2k.webp",
+      "rect": [
+        0,
+        1291,
+        693,
+        312
+      ],
+      "alpha": true,
+      "clippedEdges": [
+        "left"
+      ],
+      "cloudType": "valley",
+      "period": 96,
+      "amplitude": 24.090338770388957,
+      "opacity": 1,
+      "entrance": [
+        2.6,
+        4.6,
+        0
+      ],
+      "phase": 5.2,
+      "entranceOffset": 0
+    },
+    {
+      "id": "cloud-09",
+      "label": "Mây 9 · tầng giữa",
+      "kind": "cloud",
+      "z": 25.5,
+      "file": "homepage-layered/cloud-09-2k.webp",
+      "rect": [
+        2040,
+        1441,
+        734,
+        157
+      ],
+      "alpha": true,
+      "clippedEdges": [],
+      "cloudType": "valley",
+      "period": 99,
+      "amplitude": 24.090338770388957,
+      "opacity": 0.91,
+      "entrance": [
+        2.6,
+        4.6,
+        0
+      ],
+      "phase": 5.8500000000000005,
+      "entranceOffset": 0,
+      "repairMethod": "Complete ImageGen cloud contour, including previously occluded parts; largest coherent alpha object retained with antialiased edge.",
+      "illustrationSource": "reference/cloud-09-restored-generated.png",
+      "occlusion": [
+        "bridge-foreground"
+      ]
+    },
+    {
+      "id": "cloud-10",
+      "label": "Mây 10 · tiền cảnh",
+      "kind": "cloud",
+      "z": 35,
+      "file": "homepage-layered/cloud-10-2k.webp",
+      "rect": [
+        241,
+        1936,
+        485,
+        187
+      ],
+      "alpha": true,
+      "clippedEdges": [],
+      "cloudType": "foreground",
+      "period": 110,
+      "amplitude": 12.526976160602258,
+      "opacity": 1,
+      "occlusion": [
+        "foreground-left"
+      ],
+      "entrance": [
+        2.6,
+        4.6,
+        0
+      ],
+      "phase": 6.5,
+      "entranceOffset": 0,
+      "repairMethod": "Complete ImageGen cloud contour, including previously occluded parts; largest coherent alpha object retained with antialiased edge.",
+      "illustrationSource": "reference/cloud-10-restored-generated.png"
+    },
+    {
+      "id": "cloud-11",
+      "label": "Mây 11 · tiền cảnh",
+      "kind": "cloud",
+      "z": 35,
+      "file": "homepage-layered/cloud-11-2k.webp",
+      "rect": [
+        2900,
+        1732,
+        940,
+        334
+      ],
+      "alpha": true,
+      "clippedEdges": [
+        "right"
+      ],
+      "cloudType": "foreground",
+      "period": 113,
+      "amplitude": 12.526976160602258,
+      "opacity": 1,
+      "occlusion": [
+        "foreground-right"
+      ],
+      "entrance": [
+        2.6,
+        4.6,
+        0
+      ],
+      "phase": 7.15,
+      "entranceOffset": 0
+    },
+    {
+      "id": "cloud-12",
+      "label": "Mây 12 · tiền cảnh",
+      "kind": "cloud",
+      "z": 35,
+      "file": "homepage-layered/cloud-12-2k.webp",
+      "rect": [
+        0,
+        2113,
+        458,
+        265
+      ],
+      "alpha": true,
+      "clippedEdges": [
+        "left",
+        "bottom"
+      ],
+      "cloudType": "foreground",
+      "period": 116,
+      "amplitude": 12.526976160602258,
+      "opacity": 1,
+      "occlusion": [
+        "foreground-left"
+      ],
+      "entrance": [
+        2.6,
+        4.6,
+        0
+      ],
+      "phase": 7.800000000000001,
+      "entranceOffset": 0
+    },
+    {
+      "id": "cloud-13",
+      "label": "Mây 13 · tiền cảnh",
+      "kind": "cloud",
+      "z": 22.8,
+      "file": "homepage-layered/cloud-13-2k.webp",
+      "rect": [
+        1931,
+        2071,
+        1042,
+        218
+      ],
+      "alpha": true,
+      "clippedEdges": [],
+      "cloudType": "foreground",
+      "period": 119,
+      "amplitude": 12.526976160602258,
+      "opacity": 0.92,
+      "occlusion": [
+        "foreground-right"
+      ],
+      "entrance": [
+        2.6,
+        4.6,
+        0
+      ],
+      "phase": 8.450000000000001,
+      "entranceOffset": 0,
+      "repairMethod": "Complete ImageGen cloud contour, including previously occluded parts; largest coherent alpha object retained with antialiased edge.",
+      "illustrationSource": "reference/cloud-13-restored-generated.png"
+    },
+    {
+      "id": "cloud-14",
+      "label": "Mây 14 · tầng giữa",
+      "kind": "cloud",
+      "z": 25.6,
+      "file": "homepage-layered/cloud-14-2k.webp",
+      "rect": [
+        568,
+        1375,
+        1018,
+        143
+      ],
+      "alpha": true,
+      "clippedEdges": [],
+      "cloudType": "fog",
+      "period": 104,
+      "amplitude": 28.90840652446675,
+      "opacity": 0.91,
+      "entrance": [
+        3,
+        5.1,
+        0
+      ],
+      "phase": 9.1,
+      "entranceOffset": 0,
+      "repairMethod": "Complete ImageGen cloud contour, including previously occluded parts; largest coherent alpha object retained with antialiased edge.",
+      "illustrationSource": "reference/cloud-14-restored-generated.png",
+      "occlusion": [
+        "bridge-foreground"
+      ]
+    },
+    {
+      "id": "cloud-15",
+      "label": "Mây 15 · tầng giữa",
+      "kind": "cloud",
+      "z": 25.6,
+      "file": "homepage-layered/cloud-15-2k.webp",
+      "rect": [
+        1936,
+        1393,
+        967,
+        143
+      ],
+      "alpha": true,
+      "clippedEdges": [],
+      "cloudType": "fog",
+      "period": 106,
+      "amplitude": 28.90840652446675,
+      "opacity": 0.91,
+      "entrance": [
+        3,
+        5.1,
+        0
+      ],
+      "phase": 9.75,
+      "entranceOffset": 0,
+      "repairMethod": "Complete ImageGen cloud contour, including previously occluded parts; largest coherent alpha object retained with antialiased edge.",
+      "illustrationSource": "reference/cloud-15-restored-generated.png",
+      "occlusion": [
+        "bridge-foreground"
+      ]
+    },
+    {
+      "id": "cloud-16",
+      "label": "Mây 16 · tiền cảnh",
+      "kind": "cloud",
+      "z": 34.5,
+      "file": "homepage-layered/cloud-16-2k.webp",
+      "rect": [
+        1341,
+        1588,
+        632,
+        138
+      ],
+      "alpha": true,
+      "clippedEdges": [],
+      "cloudType": "fog",
+      "period": 120,
+      "amplitude": 12.767879548306146,
+      "opacity": 0.95,
+      "occlusion": [],
+      "entrance": [
+        3,
+        5.1,
+        0
+      ],
+      "phase": 10.4,
+      "entranceOffset": 0
+    },
+    {
+      "id": "cloud-17",
+      "label": "Mây 17 · tiền cảnh",
+      "kind": "cloud",
+      "z": 34.5,
+      "file": "homepage-layered/cloud-17-2k.webp",
+      "rect": [
+        2009,
+        1721,
+        1036,
+        329
+      ],
+      "alpha": true,
+      "clippedEdges": [],
+      "cloudType": "fog",
+      "period": 122,
+      "amplitude": 12.767879548306146,
+      "opacity": 0.95,
+      "occlusion": [
+        "foreground-right"
+      ],
+      "entrance": [
+        3,
+        5.1,
+        0
+      ],
+      "phase": 11.05,
+      "entranceOffset": 0
+    },
+    {
+      "id": "cloud-18",
+      "label": "Mây 18 · tiền cảnh",
+      "kind": "cloud",
+      "z": 34.5,
+      "file": "homepage-layered/cloud-18-2k.webp",
+      "rect": [
+        737,
+        1886,
+        1133,
+        438
+      ],
+      "alpha": true,
+      "clippedEdges": [],
+      "cloudType": "fog",
+      "period": 124,
+      "amplitude": 12.767879548306146,
+      "opacity": 0.9,
+      "occlusion": [
+        "foreground-left"
+      ],
+      "entrance": [
+        3,
+        5.1,
+        0
+      ],
+      "phase": 11.700000000000001,
+      "entranceOffset": 0,
+      "repairMethod": "Complete ImageGen cloud contour, including previously occluded parts; largest coherent alpha object retained with antialiased edge.",
+      "illustrationSource": "reference/cloud-18-restored-generated.png"
+    },
+    {
+      "id": "tree-left-bridge-01",
+      "label": "Cây trái · cạnh cầu 1",
+      "kind": "tree",
+      "z": 45,
+      "file": "homepage-layered/tree-left-bridge-01-2k.webp",
+      "rect": [
+        0,
+        969,
+        291,
+        183
+      ],
+      "alpha": true,
+      "clippedEdges": [
+        "left"
+      ],
+      "period": 6.4,
+      "phase": 0,
+      "amplitude": 14.454203262233374,
+      "root": [
+        144,
+        1148
+      ]
+    },
+    {
+      "id": "tree-left-bridge-02",
+      "label": "Cây trái · cạnh cầu 2",
+      "kind": "tree",
+      "z": 45,
+      "file": "homepage-layered/tree-left-bridge-02-2k.webp",
+      "rect": [
+        169,
+        1094,
+        283,
+        136
+      ],
+      "alpha": true,
+      "clippedEdges": [],
+      "period": 6.800000000000001,
+      "phase": 0.6,
+      "amplitude": 14.454203262233374,
+      "root": [
+        310,
+        1226
+      ]
+    },
+    {
+      "id": "tree-left-valley-01",
+      "label": "Cây trái · thung lũng 1",
+      "kind": "tree",
+      "z": 45,
+      "file": "homepage-layered/tree-left-valley-01-2k.webp",
+      "rect": [
+        287,
+        1785,
+        85,
+        70
+      ],
+      "alpha": true,
+      "clippedEdges": [],
+      "period": 7.300000000000001,
+      "phase": 1.7,
+      "amplitude": 14.454203262233374,
+      "root": [
+        329,
+        1851
+      ]
+    },
+    {
+      "id": "tree-left-valley-02",
+      "label": "Cây trái · thung lũng 2",
+      "kind": "tree",
+      "z": 45,
+      "file": "homepage-layered/tree-left-valley-02-2k.webp",
+      "rect": [
+        333,
+        1621,
+        122,
+        91
+      ],
+      "alpha": true,
+      "clippedEdges": [],
+      "period": 7.700000000000001,
+      "phase": 2.3,
+      "amplitude": 14.454203262233374,
+      "root": [
+        394,
+        1708
+      ]
+    },
+    {
+      "id": "tree-left-valley-03",
+      "label": "Cây trái · thung lũng 3",
+      "kind": "tree",
+      "z": 45,
+      "file": "homepage-layered/tree-left-valley-03-2k.webp",
+      "rect": [
+        429,
+        1696,
+        127,
+        118
+      ],
+      "alpha": true,
+      "clippedEdges": [],
+      "period": 8.100000000000001,
+      "phase": 2.9,
+      "amplitude": 14.454203262233374,
+      "root": [
+        492,
+        1810
+      ]
+    },
+    {
+      "id": "tree-right-bridge-01",
+      "label": "Cây phải · cạnh cầu 1",
+      "kind": "tree",
+      "z": 45,
+      "file": "homepage-layered/tree-right-bridge-01-2k.webp",
+      "rect": [
+        3390,
+        1169,
+        135,
+        102
+      ],
+      "alpha": true,
+      "clippedEdges": [],
+      "period": 8.200000000000001,
+      "phase": 3.4,
+      "amplitude": 14.454203262233374,
+      "root": [
+        3457,
+        1267
+      ]
+    },
+    {
+      "id": "tree-right-bridge-02",
+      "label": "Cây phải · cạnh cầu 2",
+      "kind": "tree",
+      "z": 45,
+      "file": "homepage-layered/tree-right-bridge-02-2k.webp",
+      "rect": [
+        3491,
+        1043,
+        349,
+        154
+      ],
+      "alpha": true,
+      "clippedEdges": [
+        "right"
+      ],
+      "period": 8.600000000000001,
+      "phase": 4,
+      "amplitude": 14.454203262233374,
+      "root": [
+        3667,
+        1193
+      ]
+    },
+    {
+      "id": "tree-right-bridge-03",
+      "label": "Cây phải · cạnh cầu 3",
+      "kind": "tree",
+      "z": 45,
+      "file": "homepage-layered/tree-right-bridge-03-2k.webp",
+      "rect": [
+        3674,
+        1197,
+        86,
+        67
+      ],
+      "alpha": true,
+      "clippedEdges": [],
+      "period": 9.000000000000002,
+      "phase": 4.6,
+      "amplitude": 14.454203262233374,
+      "root": [
+        3717,
+        1260
+      ]
+    },
+    {
+      "id": "tree-right-valley-01",
+      "label": "Cây phải · dưới cầu 1",
+      "kind": "tree",
+      "z": 45,
+      "file": "homepage-layered/tree-right-valley-01-2k.webp",
+      "rect": [
+        3449,
+        1497,
+        102,
+        65
+      ],
+      "alpha": true,
+      "clippedEdges": [],
+      "period": 9.100000000000001,
+      "phase": 5.1,
+      "amplitude": 14.454203262233374,
+      "root": [
+        3500,
+        1558
+      ]
+    },
+    {
+      "id": "tree-right-valley-02",
+      "label": "Cây phải · dưới cầu 2",
+      "kind": "tree",
+      "z": 45,
+      "file": "homepage-layered/tree-right-valley-02-2k.webp",
+      "rect": [
+        3519,
+        1318,
+        136,
+        111
+      ],
+      "alpha": true,
+      "clippedEdges": [],
+      "period": 9.500000000000002,
+      "phase": 5.699999999999999,
+      "amplitude": 14.454203262233374,
+      "root": [
+        3587,
+        1425
+      ]
+    },
+    {
+      "id": "tree-right-valley-03",
+      "label": "Cây phải · dưới cầu 3",
+      "kind": "tree",
+      "z": 45,
+      "file": "homepage-layered/tree-right-valley-03-2k.webp",
+      "rect": [
+        3545,
+        1422,
+        97,
+        84
+      ],
+      "alpha": true,
+      "clippedEdges": [],
+      "period": 9.900000000000002,
+      "phase": 6.3,
+      "amplitude": 14.454203262233374,
+      "root": [
+        3593,
+        1502
+      ]
+    },
+    {
+      "id": "bird-one",
+      "label": "Chim 1 · bay sang phải",
+      "kind": "bird",
+      "z": 50,
+      "file": "homepage-layered/bird-one-2k.webp",
+      "rect": [
+        -400,
+        193.7410587639311,
+        436.99999999999994,
+        256.45
+      ],
+      "alpha": true,
+      "direction": 1,
+      "period": 27,
+      "phase": 0.035,
+      "spriteFraming": {
+        "baseRect": [
+          -400,
+          90,
+          380,
+          223
+        ],
+        "scale": 1.15,
+        "flightOffsetY": 120.4660587639311
+      },
+      "entrance": [
+        0.7,
+        3.6,
+        0
+      ],
+      "entryMotion": {
+        "initialSpeed": 0.65,
+        "rampSeconds": 4.5
+      }
+    },
+    {
+      "id": "bird-two",
+      "label": "Chim 2 · bay sang trái",
+      "kind": "bird",
+      "z": 50,
+      "file": "homepage-layered/bird-two-2k.webp",
+      "rect": [
+        3840,
+        236.3660587639311,
+        368,
+        216.2
+      ],
+      "alpha": true,
+      "direction": -1,
+      "period": 31,
+      "phase": 0.032,
+      "spriteFraming": {
+        "baseRect": [
+          3840,
+          130,
+          320,
+          188
+        ],
+        "scale": 1.15,
+        "flightOffsetY": 120.4660587639311
+      },
+      "entrance": [
+        1.5,
+        4.6,
+        0
+      ],
+      "entryMotion": {
+        "initialSpeed": 0.65,
+        "rampSeconds": 4.5
+      }
+    },
+    {
+      "id": "leaf-one",
+      "label": "Lá xanh trái",
+      "kind": "leaf",
+      "z": 48,
+      "file": "homepage-layered/leaf-one-2k.webp",
+      "rect": [
+        120,
+        480,
+        89.69999999999999,
+        58.65
+      ],
+      "alpha": true,
+      "particleType": "leaf",
+      "direction": 1,
+      "phase": 0.12,
+      "period": 22,
+      "opacity": 0.86,
+      "travelX": 330,
+      "travelY": 820,
+      "spriteFraming": {
+        "baseRect": [
+          120,
+          480,
+          78,
+          51
+        ],
+        "scale": 1.15,
+        "flightOffsetY": 0
+      }
+    },
+    {
+      "id": "leaf-two",
+      "label": "Lá xanh phải",
+      "kind": "leaf",
+      "z": 48,
+      "file": "homepage-layered/leaf-two-2k.webp",
+      "rect": [
+        3600,
+        890,
+        87.39999999999999,
+        56.349999999999994
+      ],
+      "alpha": true,
+      "particleType": "leaf",
+      "direction": -1,
+      "phase": 0.5,
+      "period": 24,
+      "opacity": 0.86,
+      "travelX": 350,
+      "travelY": 800,
+      "spriteFraming": {
+        "baseRect": [
+          3600,
+          890,
+          76,
+          49
+        ],
+        "scale": 1.15,
+        "flightOffsetY": 0
+      }
+    },
+    {
+      "id": "leaf-three",
+      "label": "Lá bay trái phía trên",
+      "kind": "leaf",
+      "z": 48,
+      "file": "homepage-layered/leaf-three-2k.webp",
+      "rect": [
+        480,
+        140,
+        75.89999999999999,
+        49.449999999999996
+      ],
+      "alpha": true,
+      "particleType": "leaf",
+      "direction": 1,
+      "phase": 0.35,
+      "period": 26,
+      "opacity": 0.78,
+      "travelX": 400,
+      "travelY": 900,
+      "spriteFraming": {
+        "baseRect": [
+          480,
+          140,
+          66,
+          43
+        ],
+        "scale": 1.15,
+        "flightOffsetY": 0
+      }
+    },
+    {
+      "id": "leaf-four",
+      "label": "Lá bay phải phía trên",
+      "kind": "leaf",
+      "z": 48,
+      "file": "homepage-layered/leaf-four-2k.webp",
+      "rect": [
+        3290,
+        200,
+        78.19999999999999,
+        50.599999999999994
+      ],
+      "alpha": true,
+      "particleType": "leaf",
+      "direction": -1,
+      "phase": 0.78,
+      "period": 28,
+      "opacity": 0.8,
+      "travelX": 420,
+      "travelY": 920,
+      "spriteFraming": {
+        "baseRect": [
+          3290,
+          200,
+          68,
+          44
+        ],
+        "scale": 1.15,
+        "flightOffsetY": 0
+      }
+    },
+    {
+      "id": "leaf-five",
+      "label": "Lá gần trái",
+      "kind": "leaf",
+      "z": 48,
+      "file": "homepage-layered/leaf-five-2k.webp",
+      "rect": [
+        320,
+        1200,
+        105.8,
+        69
+      ],
+      "alpha": true,
+      "particleType": "leaf",
+      "direction": 1,
+      "phase": 0.62,
+      "period": 21,
+      "opacity": 0.9,
+      "travelX": 480,
+      "travelY": 930,
+      "spriteFraming": {
+        "baseRect": [
+          320,
+          1200,
+          92,
+          60
+        ],
+        "scale": 1.15,
+        "flightOffsetY": 0
+      }
+    },
+    {
+      "id": "leaf-six",
+      "label": "Lá gần phải",
+      "kind": "leaf",
+      "z": 48,
+      "file": "homepage-layered/leaf-six-2k.webp",
+      "rect": [
+        3510,
+        1320,
+        98.89999999999999,
+        64.39999999999999
+      ],
+      "alpha": true,
+      "particleType": "leaf",
+      "direction": -1,
+      "phase": 0.24,
+      "period": 23,
+      "opacity": 0.88,
+      "travelX": 440,
+      "travelY": 850,
+      "spriteFraming": {
+        "baseRect": [
+          3510,
+          1320,
+          86,
+          56
+        ],
+        "scale": 1.15,
+        "flightOffsetY": 0
+      }
+    },
+    {
+      "id": "leaf-seven",
+      "label": "Lá thấp trái",
+      "kind": "leaf",
+      "z": 48,
+      "file": "homepage-layered/leaf-seven-2k.webp",
+      "rect": [
+        710,
+        920,
+        82.8,
+        54.05
+      ],
+      "alpha": true,
+      "particleType": "leaf",
+      "direction": 1,
+      "phase": 0.88,
+      "period": 27,
+      "opacity": 0.82,
+      "travelX": 360,
+      "travelY": 860,
+      "spriteFraming": {
+        "baseRect": [
+          710,
+          920,
+          72,
+          47
+        ],
+        "scale": 1.15,
+        "flightOffsetY": 0
+      }
+    },
+    {
+      "id": "leaf-eight",
+      "label": "Lá thấp phải",
+      "kind": "leaf",
+      "z": 48,
+      "file": "homepage-layered/leaf-eight-2k.webp",
+      "rect": [
+        3050,
+        780,
+        85.1,
+        55.199999999999996
+      ],
+      "alpha": true,
+      "particleType": "leaf",
+      "direction": -1,
+      "phase": 0.43,
+      "period": 25,
+      "opacity": 0.84,
+      "travelX": 380,
+      "travelY": 900,
+      "spriteFraming": {
+        "baseRect": [
+          3050,
+          780,
+          74,
+          48
+        ],
+        "scale": 1.15,
+        "flightOffsetY": 0
+      }
+    },
+    {
+      "id": "petal-one",
+      "label": "Cánh hoa trái",
+      "kind": "leaf",
+      "z": 48,
+      "file": "homepage-layered/petal-one-2k.webp",
+      "rect": [
+        600,
+        460,
+        66,
+        43
+      ],
+      "alpha": true,
+      "particleType": "petal",
+      "direction": 1,
+      "phase": 0.66,
+      "period": 31,
+      "opacity": 0.86,
+      "travelX": 210,
+      "travelY": 520
+    },
+    {
+      "id": "petal-two",
+      "label": "Cánh hoa phải",
+      "kind": "leaf",
+      "z": 48,
+      "file": "homepage-layered/petal-two-2k.webp",
+      "rect": [
+        3080,
+        350,
+        62,
+        41
+      ],
+      "alpha": true,
+      "particleType": "petal",
+      "direction": -1,
+      "phase": 0.28,
+      "period": 35,
+      "opacity": 0.84,
+      "travelX": 180,
+      "travelY": 570
+    },
+    {
+      "id": "petal-three",
+      "label": "Cánh hoa xa · trái",
+      "kind": "leaf",
+      "z": 48,
+      "file": "homepage-layered/petal-three-2k.webp",
+      "rect": [
+        1040,
+        200,
+        48,
+        31
+      ],
+      "alpha": true,
+      "particleType": "petal",
+      "direction": 1,
+      "phase": 0.44,
+      "period": 42,
+      "opacity": 0.68,
+      "travelX": 240,
+      "travelY": 620
+    },
+    {
+      "id": "petal-four",
+      "label": "Cánh hoa xa · phải",
+      "kind": "leaf",
+      "z": 48,
+      "file": "homepage-layered/petal-four-2k.webp",
+      "rect": [
+        2750,
+        500,
+        56,
+        37
+      ],
+      "alpha": true,
+      "particleType": "petal",
+      "direction": -1,
+      "phase": 0.82,
+      "period": 38,
+      "opacity": 0.74,
+      "travelX": 220,
+      "travelY": 650
+    },
+    {
+      "id": "petal-five",
+      "label": "Cánh hoa gần · trái",
+      "kind": "leaf",
+      "z": 48,
+      "file": "homepage-layered/petal-five-2k.webp",
+      "rect": [
+        410,
+        1290,
+        74,
+        48
+      ],
+      "alpha": true,
+      "particleType": "petal",
+      "direction": 1,
+      "phase": 0.31,
+      "period": 36,
+      "opacity": 0.88,
+      "travelX": 280,
+      "travelY": 670
+    },
+    {
+      "id": "petal-six",
+      "label": "Cánh hoa gần · phải",
+      "kind": "leaf",
+      "z": 48,
+      "file": "homepage-layered/petal-six-2k.webp",
+      "rect": [
+        3360,
+        1450,
+        70,
+        46
+      ],
+      "alpha": true,
+      "particleType": "petal",
+      "direction": -1,
+      "phase": 0.57,
+      "period": 40,
+      "opacity": 0.86,
+      "travelX": 250,
+      "travelY": 650
+    },
+    {
+      "id": "petal-seven",
+      "label": "Cánh hoa giữa · trái",
+      "kind": "leaf",
+      "z": 48,
+      "file": "homepage-layered/petal-seven-2k.webp",
+      "rect": [
+        790,
+        810,
+        64,
+        42
+      ],
+      "alpha": true,
+      "particleType": "petal",
+      "direction": 1,
+      "phase": 0.14,
+      "period": 26,
+      "opacity": 0.82,
+      "travelX": 340,
+      "travelY": 800
+    },
+    {
+      "id": "petal-eight",
+      "label": "Cánh hoa giữa · phải",
+      "kind": "leaf",
+      "z": 48,
+      "file": "homepage-layered/petal-eight-2k.webp",
+      "rect": [
+        3150,
+        680,
+        62,
+        41
+      ],
+      "alpha": true,
+      "particleType": "petal",
+      "direction": -1,
+      "phase": 0.69,
+      "period": 29,
+      "opacity": 0.82,
+      "travelX": 370,
+      "travelY": 840
+    },
+    {
+      "id": "petal-nine",
+      "label": "Cánh hoa thấp · trái",
+      "kind": "leaf",
+      "z": 48,
+      "file": "homepage-layered/petal-nine-2k.webp",
+      "rect": [
+        180,
+        1560,
+        72,
+        47
+      ],
+      "alpha": true,
+      "particleType": "petal",
+      "direction": 1,
+      "phase": 0.48,
+      "period": 24,
+      "opacity": 0.88,
+      "travelX": 430,
+      "travelY": 720
+    },
+    {
+      "id": "petal-ten",
+      "label": "Cánh hoa thấp · phải",
+      "kind": "leaf",
+      "z": 48,
+      "file": "homepage-layered/petal-ten-2k.webp",
+      "rect": [
+        3660,
+        1490,
+        70,
+        46
+      ],
+      "alpha": true,
+      "particleType": "petal",
+      "direction": -1,
+      "phase": 0.92,
+      "period": 28,
+      "opacity": 0.86,
+      "travelX": 390,
+      "travelY": 760
+    },
+    {
+      "id": "smoke",
+      "label": "Khói ống khói tàu",
+      "kind": "smoke",
+      "z": 29,
+      "file": "homepage-layered/smoke-2k.webp",
+      "rect": [
+        1312.9234629861983,
+        1168.5207700101316,
+        100,
+        70
+      ],
+      "alpha": true
+    },
+    {
+      "id": "leaf-nine",
+      "label": "Lá nhẹ bên sườn trái",
+      "kind": "leaf",
+      "z": 48,
+      "file": "homepage-layered/leaf-nine-2k.webp",
+      "rect": [
+        960,
+        160,
+        75.89999999999999,
+        49.449999999999996
+      ],
+      "alpha": true,
+      "particleType": "leaf",
+      "direction": 1,
+      "phase": 0.41,
+      "period": 29,
+      "opacity": 0.84,
+      "travelX": 360,
+      "travelY": 1902.4,
+      "spriteFraming": {
+        "baseRect": [
+          960,
+          160,
+          66,
+          43
+        ],
+        "scale": 1.15,
+        "flightOffsetY": 0
+      }
+    }
+  ],
+  "occlusionDesign": [
+    1594,
+    987
+  ],
+  "occlusionContours": {
+    "foreground-left": {
+      "parent": "mountains-near-left",
+      "commands": [
+        [
+          "M",
+          0,
+          842
+        ],
+        [
+          "Q",
+          18,
+          816,
+          40,
+          799
+        ],
+        [
+          "Q",
+          50,
+          793,
+          72,
+          810
+        ],
+        [
+          "Q",
+          96,
+          823,
+          108,
+          841
+        ],
+        [
+          "Q",
+          130,
+          850,
+          153,
+          866
+        ],
+        [
+          "Q",
+          184,
+          869,
+          202,
+          885
+        ],
+        [
+          "Q",
+          226,
+          894,
+          246,
+          892
+        ],
+        [
+          "Q",
+          283,
+          902,
+          312,
+          915
+        ],
+        [
+          "Q",
+          342,
+          929,
+          360,
+          947
+        ],
+        [
+          "L",
+          440,
+          987
+        ],
+        [
+          "L",
+          0,
+          987
+        ],
+        [
+          "Z"
+        ]
+      ]
+    },
+    "foreground-right": {
+      "parent": "mountains-near-right",
+      "commands": [
+        [
+          "M",
+          1025,
+          945
+        ],
+        [
+          "Q",
+          1058,
+          930,
+          1090,
+          912
+        ],
+        [
+          "Q",
+          1101,
+          900,
+          1112,
+          884
+        ],
+        [
+          "Q",
+          1123,
+          856,
+          1138,
+          850
+        ],
+        [
+          "Q",
+          1150,
+          836,
+          1167,
+          840
+        ],
+        [
+          "Q",
+          1186,
+          835,
+          1200,
+          850
+        ],
+        [
+          "Q",
+          1227,
+          846,
+          1240,
+          864
+        ],
+        [
+          "Q",
+          1261,
+          860,
+          1274,
+          882
+        ],
+        [
+          "Q",
+          1292,
+          875,
+          1305,
+          892
+        ],
+        [
+          "Q",
+          1385,
+          919,
+          1445,
+          880
+        ],
+        [
+          "Q",
+          1490,
+          860,
+          1540,
+          830
+        ],
+        [
+          "Q",
+          1570,
+          828,
+          1594,
+          824
+        ],
+        [
+          "L",
+          1594,
+          987
+        ],
+        [
+          "L",
+          1025,
+          987
+        ],
+        [
+          "Z"
+        ]
+      ]
+    },
+    "bridge-foreground": {
+      "parent": "river-valley",
+      "commands": [
+        [
+          "M",
+          0,
+          594
+        ],
+        [
+          "Q",
+          28,
+          602,
+          57,
+          638
+        ],
+        [
+          "Q",
+          80,
+          629,
+          100,
+          642
+        ],
+        [
+          "Q",
+          124,
+          665,
+          145,
+          671
+        ],
+        [
+          "Q",
+          188,
+          646,
+          219,
+          622
+        ],
+        [
+          "Q",
+          256,
+          601,
+          291,
+          604
+        ],
+        [
+          "Q",
+          323,
+          617,
+          348,
+          635
+        ],
+        [
+          "Q",
+          393,
+          648,
+          425,
+          619
+        ],
+        [
+          "Q",
+          466,
+          582,
+          488,
+          586
+        ],
+        [
+          "Q",
+          512,
+          579,
+          540,
+          607
+        ],
+        [
+          "Q",
+          590,
+          653,
+          631,
+          678
+        ],
+        [
+          "Q",
+          684,
+          693,
+          731,
+          719
+        ],
+        [
+          "Q",
+          766,
+          727,
+          780,
+          745
+        ],
+        [
+          "Q",
+          789,
+          756,
+          794,
+          776
+        ],
+        [
+          "Q",
+          823,
+          753,
+          834,
+          736
+        ],
+        [
+          "Q",
+          855,
+          704,
+          902,
+          682
+        ],
+        [
+          "Q",
+          939,
+          667,
+          967,
+          645
+        ],
+        [
+          "Q",
+          1011,
+          617,
+          1054,
+          613
+        ],
+        [
+          "Q",
+          1100,
+          586,
+          1130,
+          605
+        ],
+        [
+          "Q",
+          1164,
+          615,
+          1190,
+          653
+        ],
+        [
+          "Q",
+          1219,
+          676,
+          1247,
+          664
+        ],
+        [
+          "Q",
+          1290,
+          646,
+          1334,
+          629
+        ],
+        [
+          "Q",
+          1371,
+          639,
+          1394,
+          636
+        ],
+        [
+          "Q",
+          1429,
+          610,
+          1451,
+          597
+        ],
+        [
+          "Q",
+          1484,
+          590,
+          1517,
+          603
+        ],
+        [
+          "Q",
+          1564,
+          581,
+          1594,
+          594
+        ],
+        [
+          "L",
+          1594,
+          987
+        ],
+        [
+          "L",
+          0,
+          987
+        ],
+        [
+          "Z"
+        ]
+      ]
+    }
+  },
+  "bridgeApproaches": [
+    {
+      "side": "left",
+      "rect": [
+        0,
+        1277,
+        528,
+        275
+      ],
+      "paintedPixels": 86446
+    },
+    {
+      "side": "right",
+      "rect": [
+        3464,
+        1277,
+        376,
+        275
+      ],
+      "paintedPixels": 58363
+    }
+  ],
+  "bridgeSeamRepairs": [
+    {
+      "side": "left",
+      "designRange": [
+        150,
+        254
+      ],
+      "railCourseAnchors": [
+        19,
+        35
+      ],
+      "paintedPixels": 58752
+    },
+    {
+      "side": "right",
+      "designRange": [
+        1416,
+        1525
+      ],
+      "railCourseAnchors": [
+        19,
+        35
+      ],
+      "paintedPixels": 48212
+    }
+  ],
+  "bridgeRailRegistration": {
+    "top": 1277,
+    "bottom": 1319,
+    "donor": [
+      723,
+      265
+    ]
+  },
+  "hueBackgroundRepair": {
+    "crop": [
+      700,
+      365,
+      225,
+      170
+    ],
+    "method": "original architectural contour and RGB; locally reconstructed terrain behind the complete foundation"
+  },
+  "openingMethod": "Staggered depth entrance: far, middle and near mountains reveal separately, with overlapping timing and a slight left-right delay. Normalized mist follows visible ownership from real object alpha, conceals foothill contacts and prevents pale seams. All terrain stays registered with a uniform approach limited to 1.8 percent. Bridge, train and architecture dissolve at final coordinates; independent sprites continue ambient motion.",
+  "cloudRepairs": [
+    {
+      "id": "cloud-06",
+      "rect": [
+        -3,
+        782,
+        1008,
+        298
+      ],
+      "source": "reference/cloud-06-restored-generated.png",
+      "width": 1002,
+      "height": 292
+    },
+    {
+      "id": "cloud-09",
+      "rect": [
+        2040,
+        1441,
+        734,
+        157
+      ],
+      "source": "reference/cloud-09-restored-generated.png",
+      "width": 728,
+      "height": 151
+    },
+    {
+      "id": "cloud-10",
+      "rect": [
+        241,
+        1936,
+        485,
+        187
+      ],
+      "source": "reference/cloud-10-restored-generated.png",
+      "width": 479,
+      "height": 181
+    },
+    {
+      "id": "cloud-13",
+      "rect": [
+        1931,
+        2071,
+        1042,
+        218
+      ],
+      "source": "reference/cloud-13-restored-generated.png",
+      "width": 1036,
+      "height": 212
+    },
+    {
+      "id": "cloud-14",
+      "rect": [
+        568,
+        1375,
+        1018,
+        143
+      ],
+      "source": "reference/cloud-14-restored-generated.png",
+      "width": 1012,
+      "height": 137
+    },
+    {
+      "id": "cloud-15",
+      "rect": [
+        1936,
+        1393,
+        967,
+        143
+      ],
+      "source": "reference/cloud-15-restored-generated.png",
+      "width": 961,
+      "height": 137
+    },
+    {
+      "id": "cloud-18",
+      "rect": [
+        737,
+        1886,
+        1133,
+        438
+      ],
+      "source": "reference/cloud-18-restored-generated.png",
+      "width": 1127,
+      "height": 432
+    }
+  ],
+  "spriteFraming": {
+    "scale": 1.15,
+    "loweringDesignPixels": 50,
+    "birds": 2,
+    "leaves": 9
+  },
+  "ambientEntry": {
+    "initialCraneSpeed": 0.65,
+    "craneRampSeconds": 4.5,
+    "leaves": 9
+  }
+}

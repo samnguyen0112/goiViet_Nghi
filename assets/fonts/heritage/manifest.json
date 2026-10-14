@@ -1,0 +1,82 @@
+{
+  "downloadedOn": "2026-10-06",
+  "repository": "https://github.com/google/fonts",
+  "licenseRevision": "7085eb89a950e85db5b166b7a58d414544b4140c",
+  "cssUrl": "https://fonts.googleapis.com/css?family=Be+Vietnam+Pro:400,500,600,700%7CPhilosopher:700%7CCharm:400%7CTrirong:600%7CLora:600&subset=latin,vietnamese&display=swap",
+  "fonts": [
+    {
+      "family": "Be Vietnam Pro",
+      "weight": 400,
+      "style": "normal",
+      "file": "BeVietnamPro-400.woff",
+      "url": "https://fonts.gstatic.com/s/bevietnampro/v12/QdVPSTAyLFyeg_IDWvOJmVES_Hw4BXw.woff",
+      "sha256": "23f526fc39c0ac5c1de2ae5bc90f8b3f53930f312169997f40dd7e1c79f91fc0",
+      "role": "ui",
+      "active": true
+    },
+    {
+      "family": "Be Vietnam Pro",
+      "weight": 500,
+      "style": "normal",
+      "file": "BeVietnamPro-500.woff",
+      "url": "https://fonts.gstatic.com/s/bevietnampro/v12/QdVMSTAyLFyeg_IDWvOJmVES_HTEJm86Rbs.woff",
+      "sha256": "2316702b08b4d861fadaabd91dc92b5b58d4950bfc475769cf799ba43be92bf6",
+      "role": "ui",
+      "active": true
+    },
+    {
+      "family": "Be Vietnam Pro",
+      "weight": 600,
+      "style": "normal",
+      "file": "BeVietnamPro-600.woff",
+      "url": "https://fonts.gstatic.com/s/bevietnampro/v12/QdVMSTAyLFyeg_IDWvOJmVES_HToIW86Rbs.woff",
+      "sha256": "1f254ec91ac39072cf0653bcdedbeb6a873723acac3d1a74495e9d97a48e7391",
+      "role": "ui",
+      "active": true
+    },
+    {
+      "family": "Be Vietnam Pro",
+      "weight": 700,
+      "style": "normal",
+      "file": "BeVietnamPro-700.woff",
+      "url": "https://fonts.gstatic.com/s/bevietnampro/v12/QdVMSTAyLFyeg_IDWvOJmVES_HSMIG86Rbs.woff",
+      "sha256": "0edfb6a6af8667088923c1c9459d98bbeb508c392343ea31a6361e0a74ceba87",
+      "role": "ui",
+      "active": true
+    },
+    {
+      "family": "Charm",
+      "weight": 400,
+      "style": "normal",
+      "file": "Charm-400.woff",
+      "url": "https://fonts.gstatic.com/s/charm/v14/7cHmv4oii5K0MdYnK-g.woff",
+      "sha256": "16efb686c58bb1db07cd8a469cbb47e59b6695ec0fe41e01040a5c6f36412d45",
+      "role": "accent",
+      "active": false
+    },
+    {
+      "family": "Philosopher",
+      "weight": 700,
+      "style": "normal",
+      "file": "Philosopher-700.woff",
+      "url": "https://fonts.gstatic.com/s/philosopher/v21/vEFI2_5QCwIS4_Dhez5jcWjValgU8tE.woff",
+      "sha256": "f1bdf48a24819886f1367b31b733f4dfd5f590b8ef52bb115505f14d6c1d5eb5",
+      "role": "display",
+      "active": false
+    },
+    {
+      "family": "Playfair Display",
+      "weight": 700,
+      "style": "normal",
+      "file": "PlayfairDisplay-700.woff",
+      "url": "https://fonts.gstatic.com/s/playfairdisplay/v40/nuFvD-vYSZviVYUb_rj3ij__anPXJzDwcbmjWBN2PKeiunDYbtU.woff",
+      "sha256": "902e4302d3a57dcc3b4da4f310e5b1e47f0c2de261ea2b433c3450d0a66ccc89",
+      "role": "display",
+      "active": true,
+      "downloadedOn": "2026-10-11",
+      "licenseRevision": "8b0a1d0f5983c89bc2b93f1b5fb55f9e252744b5",
+      "cssUrl": "https://fonts.googleapis.com/css?family=Playfair+Display:700&subset=latin,vietnamese&display=swap"
+    }
+  ],
+  "selectionUpdatedOn": "2026-10-11"
+}

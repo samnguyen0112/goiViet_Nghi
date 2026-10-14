@@ -1,0 +1,477 @@
+{
+  "source": "verification\\map-reference-20261013\\reference.png",
+  "sourceSha256": "de64948ffaab2dd3a294f9a8200ec437ddb00e68aee64061a265d454fc5d5768",
+  "viewport": [
+    1597,
+    985
+  ],
+  "method": "Lossless PNG crops with explicit alpha masks. No generated images.",
+  "layers": [
+    {
+      "id": "logo",
+      "file": "logo.png",
+      "mask": "logo.mask.png",
+      "sourceRegion": [
+        43,
+        17,
+        341,
+        210
+      ],
+      "position": [
+        43,
+        17
+      ],
+      "size": [
+        341,
+        210
+      ],
+      "z": 31,
+      "role": "Logo and accompanying ribbon/paper decoration",
+      "alpha": "Red-pigment semantic mask plus folded-paper polygon; original RGB preserved; edge matting remains approximate",
+      "occlusion": "Pixels behind original controls/labels are unavailable; excluded, never reconstructed."
+    },
+    {
+      "id": "crane",
+      "file": "crane.png",
+      "mask": "crane.mask.png",
+      "sourceRegion": [
+        173,
+        487,
+        219,
+        183
+      ],
+      "position": [
+        173,
+        487
+      ],
+      "size": [
+        219,
+        183
+      ],
+      "z": 1,
+      "role": "Crane source silhouette",
+      "alpha": "Explicit source polygon; unchanged RGB, no white removal",
+      "occlusion": "Pixels behind original controls/labels are unavailable; excluded, never reconstructed."
+    },
+    {
+      "id": "mountains-left",
+      "file": "mountains-left.png",
+      "mask": "mountains-left.mask.png",
+      "sourceRegion": [
+        0,
+        477,
+        439,
+        508
+      ],
+      "position": [
+        0,
+        477
+      ],
+      "size": [
+        439,
+        508
+      ],
+      "z": 1,
+      "role": "Left mountain, forest and lotus scenery; compass and dock excluded",
+      "alpha": "Explicit source polygon; unchanged RGB, no white removal",
+      "occlusion": "Pixels behind original controls/labels are unavailable; excluded, never reconstructed."
+    },
+    {
+      "id": "mountains-middle",
+      "file": "mountains-middle.png",
+      "mask": "mountains-middle.mask.png",
+      "sourceRegion": [
+        359,
+        477,
+        190,
+        255
+      ],
+      "position": [
+        359,
+        477
+      ],
+      "size": [
+        190,
+        255
+      ],
+      "z": 1,
+      "role": "Unobstructed middle mountain scenery; country labels excluded",
+      "alpha": "Inward 8px erosion / 6px feather, multiplied by the exclusion mask; RGB unchanged",
+      "occlusion": "Pixels behind original controls/labels are unavailable; excluded, never reconstructed."
+    },
+    {
+      "id": "mountains-upper-left",
+      "file": "mountains-upper-left.png",
+      "mask": "mountains-upper-left.mask.png",
+      "sourceRegion": [
+        0,
+        91,
+        405,
+        158
+      ],
+      "position": [
+        0,
+        91
+      ],
+      "size": [
+        405,
+        158
+      ],
+      "z": 1,
+      "role": "Visible upper left mountain and cloud detail",
+      "alpha": "Inward 8px erosion / 6px feather, multiplied by the exclusion mask; RGB unchanged",
+      "occlusion": "Pixels behind original controls/labels are unavailable; excluded, never reconstructed."
+    },
+    {
+      "id": "mountains-right",
+      "file": "mountains-right.png",
+      "mask": "mountains-right.mask.png",
+      "sourceRegion": [
+        1081,
+        892,
+        516,
+        93
+      ],
+      "position": [
+        1081,
+        892
+      ],
+      "size": [
+        516,
+        93
+      ],
+      "z": 1,
+      "role": "Visible right mountain and lotus footer; upper mountain hidden behind panel",
+      "alpha": "Explicit source polygon; unchanged RGB, no white removal",
+      "occlusion": "Pixels behind original controls/labels are unavailable; excluded, never reconstructed."
+    },
+    {
+      "id": "clouds-bottom",
+      "file": "clouds-bottom.png",
+      "mask": "clouds-bottom.mask.png",
+      "sourceRegion": [
+        357,
+        921,
+        761,
+        64
+      ],
+      "position": [
+        357,
+        921
+      ],
+      "size": [
+        761,
+        64
+      ],
+      "z": 1,
+      "role": "Bottom cloud bank",
+      "alpha": "Explicit source polygon; unchanged RGB, no white removal",
+      "occlusion": "Pixels behind original controls/labels are unavailable; excluded, never reconstructed."
+    },
+    {
+      "id": "sea-waves",
+      "file": "sea-waves.png",
+      "mask": "sea-waves.mask.png",
+      "sourceRegion": [
+        843,
+        517,
+        230,
+        112
+      ],
+      "position": [
+        843,
+        517
+      ],
+      "size": [
+        230,
+        112
+      ],
+      "z": 0,
+      "role": "Unobstructed source sea texture sample; repeated texture is approximate",
+      "alpha": "Explicit source polygon; unchanged RGB, no white removal",
+      "occlusion": "Pixels behind original controls/labels are unavailable; excluded, never reconstructed."
+    },
+    {
+      "id": "terrain-texture",
+      "file": "terrain-texture.png",
+      "mask": "terrain-texture.mask.png",
+      "sourceRegion": [
+        508,
+        173,
+        61,
+        45
+      ],
+      "position": [
+        508,
+        173
+      ],
+      "size": [
+        61,
+        45
+      ],
+      "z": 2,
+      "role": "Unobstructed northern terrain pigment sample; clipped to existing province geometry",
+      "alpha": "Explicit source polygon; unchanged RGB, no white removal",
+      "occlusion": "Pixels behind original controls/labels are unavailable; excluded, never reconstructed."
+    },
+    {
+      "id": "landmark-hanoi",
+      "file": "landmark-hanoi.png",
+      "mask": "landmark-hanoi.mask.png",
+      "sourceRegion": [
+        598,
+        167,
+        38,
+        60
+      ],
+      "position": [
+        598,
+        167
+      ],
+      "size": [
+        38,
+        60
+      ],
+      "z": 3,
+      "role": "Tháp Rùa source pixels",
+      "alpha": "Explicit source polygon; unchanged RGB, no white removal",
+      "occlusion": "Pixels behind original controls/labels are unavailable; excluded, never reconstructed."
+    },
+    {
+      "id": "landmark-hue",
+      "file": "landmark-hue.png",
+      "mask": "landmark-hue.mask.png",
+      "sourceRegion": [
+        692,
+        400,
+        88,
+        52
+      ],
+      "position": [
+        692,
+        400
+      ],
+      "size": [
+        88,
+        52
+      ],
+      "z": 3,
+      "role": "Ngọ Môn source pixels",
+      "alpha": "Explicit source polygon; unchanged RGB, no white removal",
+      "occlusion": "Pixels behind original controls/labels are unavailable; excluded, never reconstructed."
+    },
+    {
+      "id": "landmark-saigon",
+      "file": "landmark-saigon.png",
+      "mask": "landmark-saigon.mask.png",
+      "sourceRegion": [
+        706,
+        738,
+        60,
+        51
+      ],
+      "position": [
+        706,
+        738
+      ],
+      "size": [
+        60,
+        51
+      ],
+      "z": 3,
+      "role": "Chợ Bến Thành source pixels",
+      "alpha": "Explicit source polygon; unchanged RGB, no white removal",
+      "occlusion": "Pixels behind original controls/labels are unavailable; excluded, never reconstructed."
+    },
+    {
+      "id": "sailboat",
+      "file": "sailboat.png",
+      "mask": "sailboat.mask.png",
+      "sourceRegion": [
+        906,
+        192,
+        111,
+        120
+      ],
+      "position": [
+        906,
+        192
+      ],
+      "size": [
+        111,
+        120
+      ],
+      "z": 3,
+      "role": "Decorative sailboat",
+      "alpha": "Explicit source polygon; unchanged RGB, no white removal",
+      "occlusion": "Pixels behind original controls/labels are unavailable; excluded, never reconstructed."
+    },
+    {
+      "id": "hanoi-lake",
+      "file": "hanoi-lake.png",
+      "mask": "hanoi-lake.mask.png",
+      "sourceRegion": [
+        1108,
+        395,
+        450,
+        176
+      ],
+      "position": [
+        1108,
+        395
+      ],
+      "size": [
+        450,
+        176
+      ],
+      "z": 1,
+      "role": "Hồ Gươm illustration; original labels removed with explicit missing-pixel alpha",
+      "alpha": "Explicit source polygon; unchanged RGB, no white removal",
+      "occlusion": "Pixels behind original controls/labels are unavailable; excluded, never reconstructed."
+    },
+    {
+      "id": "cuisine",
+      "file": "cuisine.png",
+      "mask": "cuisine.mask.png",
+      "sourceRegion": [
+        1491,
+        704,
+        49,
+        40
+      ],
+      "position": [
+        1491,
+        704
+      ],
+      "size": [
+        49,
+        40
+      ],
+      "z": 1,
+      "role": "Bowl detail from the source highlight chip",
+      "alpha": "Explicit source polygon; unchanged RGB, no white removal",
+      "occlusion": "Pixels behind original controls/labels are unavailable; excluded, never reconstructed."
+    },
+    {
+      "id": "compass",
+      "file": "compass.png",
+      "mask": "compass.mask.png",
+      "sourceRegion": [
+        48,
+        732,
+        123,
+        119
+      ],
+      "position": [
+        48,
+        732
+      ],
+      "size": [
+        123,
+        119
+      ],
+      "z": 4,
+      "role": "Compass ornament source; source letters remain ornament",
+      "alpha": "Explicit source polygon; unchanged RGB, no white removal",
+      "occlusion": "Pixels behind original controls/labels are unavailable; excluded, never reconstructed."
+    },
+    {
+      "id": "hoang-sa",
+      "file": "hoang-sa.png",
+      "mask": "hoang-sa.mask.png",
+      "sourceRegion": [
+        859,
+        359,
+        136,
+        78
+      ],
+      "position": [
+        859,
+        359
+      ],
+      "size": [
+        136,
+        78
+      ],
+      "z": 2,
+      "role": "Visible Hoàng Sa archipelago artwork",
+      "alpha": "Explicit source polygon; unchanged RGB, no white removal",
+      "occlusion": "Pixels behind original controls/labels are unavailable; excluded, never reconstructed."
+    },
+    {
+      "id": "truong-sa",
+      "file": "truong-sa.png",
+      "mask": "truong-sa.mask.png",
+      "sourceRegion": [
+        916,
+        632,
+        148,
+        149
+      ],
+      "position": [
+        916,
+        632
+      ],
+      "size": [
+        148,
+        149
+      ],
+      "z": 2,
+      "role": "Visible Trường Sa archipelago artwork",
+      "alpha": "Explicit source polygon; unchanged RGB, no white removal",
+      "occlusion": "Pixels behind original controls/labels are unavailable; excluded, never reconstructed."
+    },
+    {
+      "id": "compass-rim",
+      "file": "compass-rim.png",
+      "mask": "compass-rim.mask.png",
+      "sourceRegion": [
+        48,
+        732,
+        123,
+        119
+      ],
+      "position": [
+        48,
+        732
+      ],
+      "size": [
+        123,
+        119
+      ],
+      "z": 4,
+      "role": "Compass outer ring; inner dial and labels are live",
+      "alpha": "Explicit source polygon; unchanged RGB, no white removal",
+      "occlusion": "Pixels behind original controls/labels are unavailable; excluded, never reconstructed."
+    },
+    {
+      "id": "compass-needle",
+      "file": "compass-needle.png",
+      "mask": "compass-needle.mask.png",
+      "sourceRegion": [
+        98,
+        765,
+        24,
+        66
+      ],
+      "position": [
+        98,
+        765
+      ],
+      "size": [
+        24,
+        66
+      ],
+      "z": 4,
+      "role": "Source compass needle",
+      "alpha": "Explicit source polygon; unchanged RGB, no white removal",
+      "occlusion": "Pixels behind original controls/labels are unavailable; excluded, never reconstructed."
+    }
+  ],
+  "limitations": [
+    "Original province boundaries and obscured artwork cannot be recovered exactly from this flattened image.",
+    "Scenery masks are manual and need edge refinement.",
+    "Island crops contain surrounding source sea.",
+    "Hanoi label occlusions are transparent; no hidden illustration is invented."
+  ]
+}

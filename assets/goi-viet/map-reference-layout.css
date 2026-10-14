@@ -1,0 +1,48 @@
+/* Measurements from reference.png (1597 × 985); scoped to preserve homepage. */
+#mapScene { --btn-lacquer-red:linear-gradient(180deg,#d72927,#bd1717); --son-red:#c90012; font-family:'Segoe UI',sans-serif; }
+#mapScene button,#mapScene input,#mapScene summary { font-family:inherit; }
+#mapScene .place-tagline { font-family:var(--font-sans); font-size:18px; line-height:1.4; color:#690326; font-weight:600; }
+#mapScene .place-hero-title { font-family:Georgia,'Times New Roman',serif; font-weight:400; }
+#mapScene .scope-tab,#mapScene .station-board-name,#mapScene .topic-btn { font-weight:600; }
+#mapScene .highlight-val { color:#700000; }
+#mapScene .place-stories .place-section-heading,#mapScene .story-disclosure-label { color:#710025; }
+@media(min-width:1081px) {
+  #mapScene .brand-group { left:calc(var(--map-offset-x) + 43 * var(--map-unit)); top:calc(var(--map-offset-y) + 17 * var(--map-unit)); width:calc(341 * var(--map-unit)); height:calc(210 * var(--map-unit)); }
+  #mapScene .SidePanel { width:calc(490 * var(--map-unit)); right:calc(var(--map-offset-x) + 20 * var(--map-unit)); padding:15px 16px; scrollbar-gutter:auto; }
+  #mapScene .scope-tab { min-height:59px; }
+  #mapScene .scope-tabs { margin-bottom:11px!important; }
+  #mapScene .panel-filters { padding-bottom:16px!important; }
+  #mapScene .station-board-name { font-family:Georgia,serif; font-size:17px; }
+  #mapScene .place-hero-banner { height:176px; min-height:176px; }
+  #mapScene .place-hero-caption { font-size:16px; }
+  #mapScene .place-hero-overlay { padding:10px 14px; }
+  #mapScene .place-hero-title { font-size:26px; }
+  #mapScene .place-body-inner { padding:15px 14px 0; gap:14px; }
+  #mapScene .place-highlights-grid { gap:12px; }
+  #mapScene .highlight-kicker { font-size:15px; }
+  #mapScene .highlight-val { font-size:16px; font-weight:500; }
+  #mapScene .highlight-chip-box { min-height:99px; padding:10px 11px 25px; background:#fff0d7; }
+  #mapScene .quick-deck-btn { font-size:18px; font-family:Georgia,serif; font-weight:400; }
+  #mapScene .quick-deck-sub { font:16px 'Segoe UI',sans-serif; }
+  #mapScene .left-helper { padding:21px 20px 16px; }
+  #mapScene .island-helper-heading,#mapScene .island-helper-note,#mapScene .map-legend summary { color:#820505; }
+  #mapScene .island-helper-heading h2 { font:600 22px var(--font-sans); }
+  #mapScene .island-helper-note { font:18px var(--font-sans); }
+  #mapScene .map-legend summary { font:18px var(--font-sans); }
+  #mapScene .turn-banner { min-height:50px; padding:8px 15px; font-size:16px; }
+  #mapScene .progress-banner { min-height:50px; padding:12px 27px; color:#c90012; }
+  #mapScene .craft-btn { min-height:50px; font-size:16px; }
+  #mapScene .bottom-dock { bottom:calc(var(--map-offset-y) + 33 * var(--map-unit)); }
+}
+@media(max-width:768px) { #mapScene .place-tagline { font-size:17px; } }
+[data-theme="dark"] #mapScene .place-tagline,[data-theme="dark"] #mapScene .highlight-val,[data-theme="dark"] #mapScene .story-disclosure-label { color:var(--ink-primary); }
+
+/* Occluded source painting pixels stay transparent. Real badges and a continuous
+   caption backing occupy those areas, without inventing hidden illustration. */
+#mapScene .place-hero-banner { background:#244c43; }
+#mapScene .place-hero-overlay { background:linear-gradient(0deg,#18332cf2 0%,#18332cf2 35%,transparent 45%); }
+#mapScene .place-hero-top-row { justify-content:space-between; }
+@media(min-width:1081px) {
+  #mapScene .place-region-pill { min-width:200px; min-height:36px; justify-content:center; }
+  #mapScene .place-deck-pill { min-width:122px; min-height:36px; justify-content:center; font-size:13px; }
+}

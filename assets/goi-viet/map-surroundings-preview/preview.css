@@ -1,0 +1,52 @@
+/* Scoped to the experimental HTML. No shared stylesheet is changed. */
+body[data-regional-preview] #mapScene { isolation: isolate; }
+body[data-regional-preview]:has(#introScreen.intro-hidden) #mapScene {
+  background: #398c95;
+}
+body[data-regional-preview] .regional-background {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  contain: strict; overflow: hidden;
+}
+body[data-regional-preview] .regional-background canvas {
+  position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none;
+  transform-origin: 0 0;
+}
+body[data-regional-preview] #regionalLandSeaCanvas,
+body[data-regional-preview] #regionalWavesCanvas { will-change: transform; }
+body[data-regional-preview] #mapScene > .gv-map-frame { z-index: 1; }
+body[data-regional-preview] #mainCanvas { position: relative; z-index: 2; touch-action: none; }
+body[data-regional-preview] .regional-crane {
+  position: absolute; left: 28px; top: 49%; width: clamp(130px, 12vw, 195px);
+  height: auto; opacity: .93; pointer-events: none; transform: rotate(-7deg);
+}
+body[data-regional-preview] .regional-wave-option {
+  display: flex; align-items: center; gap: 9px; min-height: 42px; padding: 8px 3px;
+  font: 500 13px/1.4 'Be Vietnam Pro', sans-serif; color: var(--ink-primary);
+  cursor: pointer; border-top: 1px solid var(--wood-border); grid-column: 1 / -1;
+}
+body[data-regional-preview] .regional-wave-option input {
+  width: 18px; height: 18px; margin: 0; accent-color: #27685f; flex: 0 0 auto;
+}
+body[data-regional-preview] .regional-wave-option:focus-within { outline: 2px solid var(--wood-border-strong); outline-offset: 2px; border-radius: 4px; }
+body[data-regional-preview] .regional-wave-option input:disabled { opacity: .5; }
+body[data-regional-preview] .regional-map-help {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+body[data-regional-preview][data-theme="dark"] .regional-crane,
+[data-theme="dark"] body[data-regional-preview] .regional-crane { filter: brightness(.8) saturate(.8); }
+@media (max-width: 1080px) {
+  body[data-regional-preview] .regional-crane { display: none; }
+}
+@media (max-width: 768px) {
+  body[data-regional-preview]:has(#introScreen.intro-hidden) #mapScene .bottom-dock .control-options {
+    bottom: calc(100% + 64px);
+    max-height: min(55dvh, max(64px, calc(100dvh - var(--header-offset, 180px) - var(--dock-offset, 60px) - 84px)));
+  }
+}
+@media (prefers-contrast: more) {
+  body[data-regional-preview] .regional-crane { opacity: .4; }
+}
+@media (forced-colors: active) {
+  body[data-regional-preview] .regional-crane { display: none; }
+}

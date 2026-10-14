@@ -1,0 +1,209 @@
+{
+  "version": 1,
+  "reference": "C:/Users/Uy/.codex/visualizations/2026/10/12/01a1305b-9211-7c81-b9c2-30d7bac91420/goi-viet-map-homepage-palette-demo.png",
+  "referenceDimensions": {
+    "width": 1597,
+    "height": 985
+  },
+  "notes": "Independent decorative images only. No UI, map geometry, text labels, routes or controls baked into the art except brand logo. Dimensions and real alpha bounds inspected without pixel modification. All alpha threshold 1; solid bounds threshold 16. Source rectangles ignore near-invisible alpha speckles but preserve edge padding. Placement is a starting point, refine in live screenshot QA.",
+  "assets": [
+    {
+      "file": "logo-calligraphy-stack.png",
+      "role": "two-line calligraphic brand mark",
+      "width": 1597,
+      "height": 985,
+      "alpha": true,
+      "alphaBounds": {
+        "x": 23,
+        "y": 23,
+        "width": 1554,
+        "height": 962
+      },
+      "solidBounds": {
+        "x": 49,
+        "y": 50,
+        "width": 1513,
+        "height": 912
+      },
+      "sourceRect": {
+        "x": 43,
+        "y": 44,
+        "width": 1525,
+        "height": 925
+      },
+      "placement": {
+        "x": 0.035,
+        "y": 0.018,
+        "width": 0.205,
+        "height": 0.213
+      },
+      "prompt": "Use case: background-extraction. Asset type: independent transparent calligraphic brand logo layer for an editable website. Edit target: the attached approved Gói Việt map reference. Extract ONLY the large red two-line \"Gói Việt\" calligraphy at the extreme upper left, including its flowing red ribbon-like strokes, the red flying-bird/flourish built into the typography and the small tan folded paper package immediately to its upper right. Preserve exactly the original two-line arrangement, Vietnamese spelling and accents, lettering silhouette, brick-red/son red color gradients, flat painterly details, and proportions. Do not redesign, modernize, straighten or substitute the text. Remove ALL background, mountains, cream clouds, map, UI, other objects and labels. Output a tightly cropped individual asset, with small 3% padding and TRUE alpha transparency around and inside the lettering. Full two-line mark, centered, no border, no opaque paper backing, no checkerboard baked into pixels.",
+      "extraction": "approximate generative extraction/reconstruction from approved reference",
+      "generator": "built-in image_gen",
+      "placementUnits": "normalized reference viewport; suggested visible-art box, use sourceRect or equivalent native clip"
+    },
+    {
+      "file": "crane-flight.png",
+      "role": "left center flying crane",
+      "width": 1536,
+      "height": 1024,
+      "alpha": true,
+      "alphaBounds": {
+        "x": 129,
+        "y": 0,
+        "width": 1371,
+        "height": 1024
+      },
+      "solidBounds": {
+        "x": 204,
+        "y": 7,
+        "width": 1172,
+        "height": 1000
+      },
+      "sourceRect": {
+        "x": 198,
+        "y": 1,
+        "width": 1184,
+        "height": 1012
+      },
+      "placement": {
+        "x": 0.113,
+        "y": 0.483,
+        "width": 0.142,
+        "height": 0.189
+      },
+      "prompt": "Use case: background-extraction. Asset type: independent crane illustration with true alpha for an editable website map. Edit target: attached approved Gói Việt map. Extract ONLY the single large white flying crane in the left-center below the island selector panel, around x=185–400 and y=475–650 in the reference. Preserve exactly its pose: flying toward the upper right, head facing right with long dark beak, small red crown, long curved black-and-white neck, left wing swept high toward top-left, right wing extending diagonally down-right, fine ivory/cream feather detail with thin pale gold strokes, black tail feathers, two long dark trailing legs diagonally toward lower-left. Maintain the hand-painted Vietnamese travel illustration style and silhouette. Remove all mountain/cloud/map scenery, UI, lettering and every other object. Output full uncropped crane tightly centered with 4% clear padding on a genuinely transparent background, including transparent spaces between feathers and legs. No white or cream opaque background, no shadow slab, no checkerboard baked in.",
+      "extraction": "approximate generative extraction/reconstruction from approved reference",
+      "generator": "built-in image_gen",
+      "placementUnits": "normalized reference viewport; suggested visible-art box, use sourceRect or equivalent native clip"
+    },
+    {
+      "file": "hanoi-lake-illustration.png",
+      "role": "Hanoi destination card scenic image",
+      "width": 2020,
+      "height": 778,
+      "alpha": false,
+      "sourceRect": {
+        "x": 0,
+        "y": 0,
+        "width": 2020,
+        "height": 778
+      },
+      "placement": {
+        "x": 0.693,
+        "y": 0.402,
+        "width": 0.282,
+        "height": 0.177
+      },
+      "prompt": "Use case: precise-object-edit. Asset type: local illustrated destination thumbnail, separate bitmap without UI/text, for an editable Gói Việt map website. Edit target: approved map demo. Extract/reconstruct ONLY the artwork inside the Hanoi destination card on the right, showing the authentic three-tier pale ochre Tháp Rùa on a small grassy island in Hồ Hoàn Kiếm, surrounded by teal reflective lake water and rounded trees, distant jade misty hills and warm pale ivory sky. Preserve the reference card composition: tower on the right half, lake below, leafy shores on both sides, softly lit storybook travel watercolor/printed-paper texture. Tháp Rùa MUST retain its stone rectangular arched base, multiple upper arched windows, stacked three tiers and small Vietnamese roof crowns as recognizable reference, not a Chinese pagoda. WIDE 2.6:1 image with full landscape cover, 1560×600 preferred. Remove all interface, borders, header, chip badges, headings, icons and every word or number including Hanoi. No UI, no letters, no logo, no watermark. Opaque scenic image; full bleed.",
+      "extraction": "approximate generative extraction/reconstruction from approved reference",
+      "generator": "built-in image_gen",
+      "placementUnits": "normalized reference viewport; suggested visible-art box, use sourceRect or equivalent native clip"
+    },
+    {
+      "file": "mountains-left.png",
+      "role": "left decorative jade mountains and cloud border",
+      "width": 821,
+      "height": 1916,
+      "alpha": true,
+      "alphaBounds": {
+        "x": 0,
+        "y": 9,
+        "width": 821,
+        "height": 1907
+      },
+      "solidBounds": {
+        "x": 0,
+        "y": 65,
+        "width": 821,
+        "height": 1851
+      },
+      "sourceRect": {
+        "x": 0,
+        "y": 59,
+        "width": 821,
+        "height": 1857
+      },
+      "placement": {
+        "x": 0,
+        "y": 0.11,
+        "width": 0.315,
+        "height": 0.89
+      },
+      "prompt": "Use case: background-extraction. Asset type: separate LEFT decorative mountain-and-cloud border artwork for an editable map website, transparent outside its silhouette. Edit target: approved Gói Việt map demo. Isolate/reconstruct ONLY the luminous jade mountain scenery along the left margin and lower-left corner of the reference: many layered rounded steep mountains, dark jade foreground peaks traced by delicate warm-gold contour lines, muted sage/mint middle ridges, occasional small shrubs, ivory curling cloud ribbons, a few pink lotus blossoms at the lower edge. The reference scenery rises at left and falls inward to the right. Preserve the mountain silhouettes, handmade illustration texture, luminous warm ivory light and jade/mint/teal/gold palette. Create a PORTRAIT cutout roughly 600×1400, positioned flush to left and bottom edges, irregular airy mountain silhouette on right, transparent empty right/top areas. Crop art naturally along left/bottom edges like reference. Retain mountains and clouds only: REMOVE logo, crane, compass, control panel, interface, letters, railroads, buildings, maps, neighboring-country land outlines, sea and any flat paper background. True transparent background beyond mountains/clouds, not white. Do not add train tracks, bridges or architecture. Fine grain but avoid noisy speckles.",
+      "extraction": "approximate generative extraction/reconstruction from approved reference",
+      "generator": "built-in image_gen",
+      "placementUnits": "normalized reference viewport; suggested visible-art box, use sourceRect or equivalent native clip"
+    },
+    {
+      "file": "mountains-right.png",
+      "role": "bottom-right jade mountain corner",
+      "width": 1774,
+      "height": 887,
+      "alpha": true,
+      "alphaBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 1774,
+        "height": 887
+      },
+      "solidBounds": {
+        "x": 11,
+        "y": 28,
+        "width": 1763,
+        "height": 859
+      },
+      "sourceRect": {
+        "x": 5,
+        "y": 22,
+        "width": 1769,
+        "height": 865
+      },
+      "placement": {
+        "x": 0.57,
+        "y": 0.73,
+        "width": 0.43,
+        "height": 0.27
+      },
+      "prompt": "Use case: background-extraction. Asset type: independent RIGHT decorative mountain/cloud corner illustration, true alpha, for a layered editable map website. Edit target: approved Gói Việt map reference. Isolate/reconstruct ONLY the mountain scenery that frames the lower-right corner and extreme right margin, behind and beneath the tall card panel: rounded dark jade foreground mountains, thin warm gold ridge outlines, lighter mint/sage slopes behind, creamy ivory curling cloud ribbons sweeping left toward open sea, small pink lotus blossoms and restrained shrubs at bottom right. Preserve the luminous jade homepage palette and hand-painted paper/grain illustration. This is a WIDE bottom-right corner cutout: 1400×700 preferred, mountains highest on RIGHT edge, declining toward LEFT, art anchored flush to right and bottom, irregular rising mountain/cloud silhouette along the top, transparent empty top/left areas. No opaque sky or flat background anywhere outside shapes. Remove entire card panel, UI, text, map islands, mainland, roads, railways, cranes, boats, buildings and logos. Deliver only the decorative foreground landscape; no architecture or bridges. True alpha background; no checkerboard baked in.",
+      "extraction": "approximate generative extraction/reconstruction from approved reference",
+      "generator": "built-in image_gen",
+      "placementUnits": "normalized reference viewport; suggested visible-art box, use sourceRect or equivalent native clip"
+    },
+    {
+      "file": "clouds-bottom.png",
+      "role": "low independent ivory bottom cloud ribbon",
+      "width": 2172,
+      "height": 724,
+      "alpha": true,
+      "alphaBounds": {
+        "x": 0,
+        "y": 55,
+        "width": 2172,
+        "height": 669
+      },
+      "solidBounds": {
+        "x": 0,
+        "y": 385,
+        "width": 2172,
+        "height": 339
+      },
+      "sourceRect": {
+        "x": 0,
+        "y": 379,
+        "width": 2172,
+        "height": 345
+      },
+      "placement": {
+        "x": 0.23,
+        "y": 0.92,
+        "width": 0.57,
+        "height": 0.105
+      },
+      "prompt": "Use case: background-extraction. Asset type: independent low ivory cloud-ribbon border for the bottom edge of a layered editable map website. Edit target: approved Gói Việt map demo. Isolate/reconstruct ONLY the cream-white curling cloud ribbons along the bottom center, between the dark jade mountains, preserving their thin pale warm-gold outlines, elegant spiral curls, paper-painted texture and long flowing wisps. Make a very WIDE 3:1 transparent asset: layered clouds form an irregular LOW bottom border, larger spiral tufts at left and right ends, center dips low and remains open/airy above. Art cropped flush along bottom edge, alpha transparent above and between cloud wisps. Palette ivory #FFF4D8, soft warm-gold linework and pale sage hints only where reference cloud shadows use it. NO mountains, buildings, logos, flowers, birds, maps, sea, text, panel, UI or flat cream rectangular background. Only independent ivory cloud ribbons. No shadows cast on an opaque background, true alpha.",
+      "extraction": "approximate generative extraction/reconstruction from approved reference",
+      "generator": "built-in image_gen",
+      "placementUnits": "normalized reference viewport; suggested visible-art box, use sourceRect or equivalent native clip"
+    }
+  ]
+}

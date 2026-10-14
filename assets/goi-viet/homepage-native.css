@@ -1,0 +1,217 @@
+/* Native animated painting, kept at the original artwork's aspect ratio. */
+#introScreen[data-intro-stage="welcome"] {
+  padding: 0;
+  overflow: hidden;
+  justify-content: center;
+  background: #f8ebd0;
+}
+#introScreen[data-intro-stage="welcome"] .gv-landscape,
+#introScreen[data-intro-stage="welcome"] .intro-ornament-top,
+#introScreen[data-intro-stage="welcome"] #homeTrainPanoramaCard { display: none; }
+#introScreen[data-intro-stage="welcome"] .intro-container {
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  min-height: 0;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  place-items: center;
+}
+#introScreen[data-intro-stage="welcome"] .intro-main-title,
+#introScreen[data-intro-stage="welcome"] .intro-poetic-sub,
+#introScreen[data-intro-stage="welcome"] .gv-stations {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+#introScreen[data-intro-stage="welcome"] #introWelcomeStage {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  opacity: 1;
+  transform: none;
+  animation: none;
+  transition: none;
+}
+.gv-home-film { position: relative; width: 100%; height: 100%; overflow: hidden; }
+.gv-home-edge-art {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+.gv-home-scene-plane {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--home-scene-width, 100%);
+  height: var(--home-scene-height, auto);
+  aspect-ratio: 3840 / 2378;
+  transform: translate(-50%, -50%);
+}
+.gv-home-poster, #homeSceneCanvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  pointer-events: none;
+}
+#homeSceneCanvas { opacity: 0; }
+.gv-home-film[data-clip-ready="true"] #homeSceneCanvas { opacity: 1; }
+.gv-home-film[data-clip-status="error"] #homeSceneCanvas { opacity: 0; }
+#introWelcomeStage .gv-home-hotspot {
+  position: absolute;
+  top: var(--home-hotspot-y);
+  left: var(--home-hotspot-x);
+  width: var(--home-hotspot-width);
+  height: var(--home-hotspot-height);
+  min-height: 44px;
+  min-width: 24px;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  border-radius: 18px;
+  background: transparent;
+  color: transparent;
+  box-shadow: none;
+  transform: translate(-50%, -50%);
+  filter: none;
+  transition: none;
+  cursor: pointer;
+  touch-action: manipulation;
+  outline: none;
+}
+#introWelcomeStage #homeLogoEffect { border-radius: 0; cursor: default; }
+#introWelcomeStage .gv-home-hotspot:focus-visible {
+  outline: 3px solid #124e44;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 3px #fff9e6;
+}
+#introScreen[data-intro-stage="welcome"] .gv-intro-controls:not(:focus-within) {
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+#introScreen[data-intro-stage="welcome"] .gv-intro-controls:focus-within {
+  max-width: calc(100vw - 28px);
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+#btnHomeClipRetry {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  min-height: 44px;
+  padding: 8px 14px;
+  border: 1px solid #80500e;
+  border-radius: 12px;
+  background: #fff9e6;
+  color: #2c2420;
+  cursor: pointer;
+}
+#btnHomeClipRetry[hidden] { display: none; }
+
+/* Copies of the original lettering provide subtle depth without moving hit areas. */
+#introWelcomeStage .gv-home-action-art {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 999px;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(-50%) perspective(700px) translateY(0) rotateX(0) rotateY(0) scale(1);
+  transform-origin: center;
+  transition: transform 180ms cubic-bezier(.2, .8, .2, 1), opacity 120ms ease, box-shadow 180ms ease;
+}
+#introWelcomeStage .gv-home-action-art canvas { display: block; width: 100%; height: auto; }
+#introWelcomeStage #btnProceedToGuide .gv-home-action-art { border-radius: 10% / 27%; }
+#introWelcomeStage .gv-home-logo .gv-home-action-art {
+  border-radius: 0;
+  box-shadow: none !important;
+  transition: transform 180ms cubic-bezier(.2, .8, .2, 1);
+}
+#introWelcomeStage .gv-home-logo .gv-home-action-art::after {
+  mask-image: var(--home-logo-mask);
+  mask-size: 100% 100%;
+  mask-repeat: no-repeat;
+  transform: none;
+  background-size: 220% 100%;
+}
+/* A still fallback already contains the logo: highlight it in place. */
+#introWelcomeStage .gv-home-film:not([data-clip-ready="true"]) .gv-home-logo .gv-home-action-art {
+  transform: translateY(-50%) !important;
+}
+#introWelcomeStage .gv-home-action-art::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 28%, rgba(255, 248, 218, .18) 48%, transparent 68%);
+  opacity: 0;
+  transform: translateX(-110%);
+}
+#introWelcomeStage .gv-home-hotspot[data-home-art-ready="true"]:focus-visible .gv-home-action-art {
+  opacity: 1;
+  transform: translateY(-50%) perspective(700px) translateY(-3px) rotateX(4deg) scale(1.015);
+  box-shadow: 0 7px 12px rgba(83, 41, 20, .24), 0 1px 0 rgba(255, 244, 198, .85);
+}
+@media (hover: hover) and (pointer: fine) {
+  #introWelcomeStage .gv-home-hotspot.is-home-hovered[data-home-art-ready="true"] .gv-home-action-art {
+    opacity: 1;
+    transform: translateY(-50%) perspective(700px) translateY(-4px) rotateX(var(--home-tilt-x, 4deg)) rotateY(var(--home-tilt-y, 0deg)) scale(1.018);
+    box-shadow: 0 9px 15px rgba(83, 41, 20, .27), 0 2px 0 rgba(255, 244, 198, .9);
+  }
+  #introWelcomeStage .gv-home-hotspot.is-home-hovered .gv-home-action-art::after { animation: gv-home-button-sheen 480ms ease-out both; }
+  #introWelcomeStage .gv-home-logo.is-home-hovered .gv-home-action-art::after { animation-name: gv-home-logo-sheen; }
+}
+#introWelcomeStage .gv-home-hotspot[data-home-art-ready="true"]:active .gv-home-action-art {
+  opacity: 1;
+  transform: translateY(-50%) translateY(1px) scale(.99);
+  box-shadow: 0 2px 4px rgba(83, 41, 20, .2);
+  transition-duration: 70ms;
+}
+@keyframes gv-home-button-sheen {
+  0% { opacity: 0; transform: translateX(-110%); }
+  25% { opacity: 1; }
+  100% { opacity: 0; transform: translateX(110%); }
+}
+@keyframes gv-home-logo-sheen {
+  0% { opacity: 0; background-position: 120% 0; }
+  25% { opacity: 1; }
+  100% { opacity: 0; background-position: -120% 0; }
+}
+body.reduced-motion #introWelcomeStage .gv-home-hotspot .gv-home-action-art,
+body.reduced-motion #introWelcomeStage .gv-home-hotspot .gv-home-action-art::after {
+  animation: none !important;
+  transition: none !important;
+  transform: translateY(-50%) !important;
+}
+body.reduced-motion #introWelcomeStage .gv-home-hotspot .gv-home-action-art::after { opacity: 0 !important; }
+@media (prefers-reduced-motion: reduce) {
+  #introWelcomeStage .gv-home-hotspot .gv-home-action-art,
+  #introWelcomeStage .gv-home-hotspot .gv-home-action-art::after {
+    animation: none !important;
+    transition: none !important;
+    transform: translateY(-50%) !important;
+  }
+  #introWelcomeStage .gv-home-hotspot .gv-home-action-art::after { opacity: 0 !important; }
+}

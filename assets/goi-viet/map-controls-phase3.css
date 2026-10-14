@@ -1,0 +1,185 @@
+/* Gói Việt, phase 3. Only map controls; no canvas/root/sidebar/homepage rules.
+   The activation guard preserves the original underlying UI while home is open.
+   The legacy brand remains the sizing content; the new identity is an overlay. */
+#mapScene .map-brand-identity { display: none; }
+
+:where(body:has(#introScreen.intro-hidden)) #mapScene :is(.top-header, .left-helper, .bottom-dock, .mobile-view-switcher) {
+  --gv3-surface: #FFFDF2;
+  --gv3-warm: #FBF1D8;
+  --gv3-inset: #F4EAD1;
+  --gv3-ink: #143F35;
+  --gv3-secondary: #365247;
+  --gv3-muted: #645540;
+  --gv3-red-text: #9F2C2C;
+  --gv3-red-soft: #FBE8DE;
+  --gv3-teal: #205967;
+  --gv3-teal-deep: #143F35;
+  --gv3-teal-hover: #194B57;
+  --gv3-teal-hover-deep: #10392F;
+  --gv3-on-teal: #FFFDF2;
+  --gv3-teal-text: #205967;
+  --gv3-teal-soft: #E6EFE5;
+  --gv3-border: #957337;
+  --gv3-trim: #D7BD8E;
+  --gv3-focus: #125448;
+  --gv3-focus-gap: #FFFDF2;
+  /* Baseline accessibility outlines use this token with !important. */
+  --focus-ring: var(--gv3-focus);
+  --gv3-disabled-surface: #EEE7D7;
+  --gv3-disabled-ink: #766B5D;
+  --gv3-disabled-border: #C5B99D;
+  --gv3-panel-shadow: 0 4px 14px rgba(20, 63, 53, .10);
+  --gv3-button-sheen: inset 0 1px 0 rgba(255, 253, 242, .22);
+}
+:where(body:has(#introScreen.intro-hidden)[data-theme="dark"], [data-theme="dark"] body:has(#introScreen.intro-hidden)) #mapScene :is(.top-header, .left-helper, .bottom-dock, .mobile-view-switcher) {
+  --gv3-surface: #233C30;
+  --gv3-warm: #304334;
+  --gv3-inset: #1B3027;
+  --gv3-ink: #FFF7E2;
+  --gv3-secondary: #EEE9D5;
+  --gv3-muted: #CBC6B0;
+  --gv3-red-text: #FFCFAB;
+  --gv3-red-soft: #42352D;
+  --gv3-on-teal: #FFF7E2;
+  --gv3-teal-text: #ADD2C7;
+  --gv3-teal-soft: #2B463B;
+  --gv3-border: #AE9870;
+  --gv3-trim: #756B4D;
+  --gv3-focus: #E8C477;
+  --gv3-focus-gap: #233C30;
+  --gv3-disabled-surface: #29382D;
+  --gv3-disabled-ink: #AAA794;
+  --gv3-disabled-border: #5C6654;
+  --gv3-panel-shadow: 0 4px 14px rgba(0, 0, 0, .28);
+  --gv3-button-sheen: inset 0 1px 0 rgba(255, 247, 226, .14);
+}
+
+:where(body:has(#introScreen.intro-hidden)) #mapScene :is(.top-header, .left-helper, .bottom-dock),
+:where(body:has(#introScreen.intro-hidden)) #mapScene :is(.top-header, .bottom-dock) .control-options {
+  background: var(--gv3-surface);
+  color: var(--gv3-ink);
+  border-color: var(--gv3-trim);
+  box-shadow: inset 0 0 0 1px var(--gv3-trim), var(--gv3-panel-shadow);
+}
+/* Its higher stacking level casts over the unchanged station panel. Retain
+   the existing outer header shadow to preserve that panel's visible pixels. */
+:where(body:has(#introScreen.intro-hidden)) #mapScene .top-header {
+  box-shadow: inset 0 0 0 1px var(--gv3-trim), var(--shadow-card);
+}
+
+/* Keep all intrinsic legacy measurements, including the 1480px subtitle rule. */
+:where(body:has(#introScreen.intro-hidden)) #mapScene .brand-group { position: relative; }
+:where(body:has(#introScreen.intro-hidden)) #mapScene .brand-group > :is(.lotus-emblem, .map-brand-legacy-copy) { visibility: hidden; }
+:where(body:has(#introScreen.intro-hidden)) #mapScene .map-brand-identity {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  pointer-events: none;
+}
+:where(body:has(#introScreen.intro-hidden)) #mapScene .map-brand-logo {
+  display: block;
+  width: 104px;
+  height: 44px;
+  flex: 0 0 104px;
+  object-fit: contain;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  filter: none;
+}
+:where(body:has(#introScreen.intro-hidden)) #mapScene .map-brand-caption { display: flex; flex-direction: column; min-width: 0; }
+:where(body:has(#introScreen.intro-hidden)) #mapScene .map-brand-caption-title {
+  font-family: var(--font-heading);
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.18;
+  white-space: nowrap;
+  color: var(--gv3-ink);
+}
+:where(body:has(#introScreen.intro-hidden)) #mapScene .map-brand-caption-subtitle {
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--gv3-muted);
+}
+@media (max-width: 1480px) {
+  :where(body:has(#introScreen.intro-hidden)) #mapScene .map-brand-caption-subtitle { display: none; }
+}
+@media (max-width: 768px) {
+  :where(body:has(#introScreen.intro-hidden)) #mapScene .map-brand-identity { justify-content: center; }
+  :where(body:has(#introScreen.intro-hidden)) #mapScene .map-brand-caption { display: none; }
+}
+
+:where(body:has(#introScreen.intro-hidden)) #mapScene .top-header .turn-banner { color: var(--gv3-secondary); }
+:where(body:has(#introScreen.intro-hidden)) #mapScene .top-header .turn-dot { background: var(--gv3-red-text); }
+:where(body:has(#introScreen.intro-hidden)) #mapScene .top-header .progress-banner { background: var(--gv3-warm); color: var(--gv3-red-text); }
+:where(body:has(#introScreen.intro-hidden)) #mapScene .left-helper :is(.island-helper-heading, .island-helper-heading h2, .map-legend > summary) { color: var(--gv3-ink); }
+:where(body:has(#introScreen.intro-hidden)) #mapScene .left-helper .island-helper-note { color: var(--gv3-secondary); }
+:where(body:has(#introScreen.intro-hidden)) #mapScene .left-helper .legend-row { color: var(--gv3-ink); }
+:where(body:has(#introScreen.intro-hidden)) #mapScene .left-helper .map-legend { border-color: var(--gv3-trim); }
+
+/* Only recolor existing buttons; typography, hit area and external border stay. */
+:where(body:has(#introScreen.intro-hidden)) #mapScene :is(.top-header, .left-helper, .bottom-dock, .mobile-view-switcher) :is(.craft-btn, .small-wood-btn, .dock-btn, .island-shortcut) {
+  background: var(--gv3-surface);
+  color: var(--gv3-ink);
+  border-color: var(--gv3-border);
+  box-shadow: none;
+  text-shadow: none;
+  transition: background-color 160ms, border-color 160ms, color 160ms, box-shadow 160ms;
+}
+:where(body:has(#introScreen.intro-hidden)) #mapScene :is(.top-header, .left-helper, .bottom-dock, .mobile-view-switcher) :is(.craft-btn, .small-wood-btn, .dock-btn, .island-shortcut):hover {
+  background: var(--gv3-warm);
+  color: var(--gv3-ink);
+  border-color: var(--gv3-border);
+}
+:where(body:has(#introScreen.intro-hidden)) #mapScene :is(.top-header, .left-helper, .bottom-dock, .mobile-view-switcher) :is(.craft-btn, .small-wood-btn, .dock-btn, .island-shortcut):active {
+  background: var(--gv3-inset);
+  box-shadow: inset 0 1px 2px rgba(20, 63, 53, .12);
+}
+:where(body:has(#introScreen.intro-hidden)) #mapScene .top-header .header-actions > .craft-btn-red { color: var(--gv3-red-text); }
+:where(body:has(#introScreen.intro-hidden)) #mapScene .top-header .header-actions > .craft-btn-green {
+  background: linear-gradient(135deg, var(--gv3-teal), var(--gv3-teal-deep));
+  border-color: var(--gv3-teal-deep);
+  color: var(--gv3-on-teal);
+  box-shadow: var(--gv3-button-sheen);
+}
+:where(body:has(#introScreen.intro-hidden)) #mapScene .top-header .header-actions > .craft-btn-green:hover {
+  background: linear-gradient(135deg, var(--gv3-teal-hover), var(--gv3-teal-hover-deep));
+}
+:where(body:has(#introScreen.intro-hidden)) #mapScene .top-header .header-actions > .craft-btn-green:active {
+  background: var(--gv3-teal-deep);
+  box-shadow: none;
+}
+:where(body:has(#introScreen.intro-hidden)) #mapScene .left-helper .island-shortcut[aria-pressed="true"] {
+  background: var(--gv3-teal-soft);
+  border-color: var(--gv3-teal-text);
+  color: var(--gv3-teal-text);
+}
+:where(body:has(#introScreen.intro-hidden)) #mapScene :is(.bottom-dock .dock-btn.active, .top-header .control-options .craft-btn.active, .mobile-view-switcher .craft-btn-red) {
+  background: var(--gv3-red-soft);
+  border-color: var(--gv3-red-text);
+  color: var(--gv3-red-text);
+}
+:where(body:has(#introScreen.intro-hidden)) #mapScene :is(.bottom-dock .dock-btn.active, .top-header .control-options .craft-btn.active, .mobile-view-switcher .craft-btn-red):active { background: var(--gv3-inset); }
+:where(body:has(#introScreen.intro-hidden)) #mapScene :is(.top-header, .bottom-dock) .control-disclosure[open] > summary,
+:where(body:has(#introScreen.intro-hidden)) #mapScene .left-helper .map-legend > summary:hover { background: var(--gv3-warm); }
+
+:where(body:has(#introScreen.intro-hidden)) #mapScene :is(.top-header, .left-helper, .bottom-dock, .mobile-view-switcher) :is(button, summary):focus-visible {
+  outline: 3px solid var(--gv3-focus);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px var(--gv3-focus-gap);
+}
+:where(body:has(#introScreen.intro-hidden)) #mapScene :is(.top-header, .left-helper, .bottom-dock, .mobile-view-switcher) button:is(.craft-btn, .small-wood-btn, .dock-btn, .island-shortcut):disabled {
+  /* Native disabled takes precedence over active and hovered role variants. */
+  background: var(--gv3-disabled-surface) !important;
+  color: var(--gv3-disabled-ink) !important;
+  border-color: var(--gv3-disabled-border) !important;
+  box-shadow: none !important;
+}
+:where(body.reduced-motion:has(#introScreen.intro-hidden)) #mapScene :is(.top-header, .left-helper, .bottom-dock, .mobile-view-switcher) :is(button, summary) { transition: none !important; }
+@media (prefers-reduced-motion: reduce) {
+  :where(body:has(#introScreen.intro-hidden)) #mapScene :is(.top-header, .left-helper, .bottom-dock, .mobile-view-switcher) :is(button, summary) { transition: none !important; }
+}

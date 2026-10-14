@@ -1,0 +1,598 @@
+{
+  "source": "verification\\map-reference-20261013\\reference.png",
+  "sourceSha256": "de64948ffaab2dd3a294f9a8200ec437ddb00e68aee64061a265d454fc5d5768",
+  "viewport": [
+    1597,
+    985
+  ],
+  "layers": [
+    {
+      "id": "logo-calligraphy",
+      "file": "logo-calligraphy.png",
+      "mask": "logo-calligraphy.mask.png",
+      "sourceRegion": [
+        59,
+        18,
+        321,
+        209
+      ],
+      "x": 59,
+      "y": 18,
+      "width": 321,
+      "height": 209,
+      "z": 20,
+      "space": "fixed",
+      "role": "Calligraphy, ribbon and folded paper",
+      "sourcePixels": true,
+      "missing": "Underlying pixels behind other extracted objects, panels, text, and controls are not present in the source."
+    },
+    {
+      "id": "crane",
+      "file": "crane.png",
+      "mask": "crane.mask.png",
+      "sourceRegion": [
+        173,
+        487,
+        219,
+        183
+      ],
+      "x": 173,
+      "y": 487,
+      "width": 219,
+      "height": 183,
+      "z": 8,
+      "space": "fixed",
+      "role": "Crane silhouette, original feathers and ink",
+      "sourcePixels": true,
+      "missing": "Underlying pixels behind other extracted objects, panels, text, and controls are not present in the source."
+    },
+    {
+      "id": "tower-hanoi",
+      "file": "tower-hanoi.png",
+      "mask": "tower-hanoi.mask.png",
+      "sourceRegion": [
+        596,
+        166,
+        41,
+        62
+      ],
+      "x": 596,
+      "y": 166,
+      "width": 41,
+      "height": 62,
+      "z": 5,
+      "space": "map",
+      "role": "tower-hanoi",
+      "sourcePixels": true,
+      "missing": "Underlying pixels behind other extracted objects, panels, text, and controls are not present in the source."
+    },
+    {
+      "id": "gate-hue",
+      "file": "gate-hue.png",
+      "mask": "gate-hue.mask.png",
+      "sourceRegion": [
+        691,
+        399,
+        92,
+        53
+      ],
+      "x": 691,
+      "y": 399,
+      "width": 92,
+      "height": 53,
+      "z": 5,
+      "space": "map",
+      "role": "gate-hue",
+      "sourcePixels": true,
+      "missing": "Underlying pixels behind other extracted objects, panels, text, and controls are not present in the source."
+    },
+    {
+      "id": "market-saigon",
+      "file": "market-saigon.png",
+      "mask": "market-saigon.mask.png",
+      "sourceRegion": [
+        704,
+        737,
+        65,
+        51
+      ],
+      "x": 704,
+      "y": 737,
+      "width": 65,
+      "height": 51,
+      "z": 5,
+      "space": "map",
+      "role": "market-saigon",
+      "sourcePixels": true,
+      "missing": "Underlying pixels behind other extracted objects, panels, text, and controls are not present in the source."
+    },
+    {
+      "id": "sailboat",
+      "file": "sailboat.png",
+      "mask": "sailboat.mask.png",
+      "sourceRegion": [
+        904,
+        191,
+        115,
+        122
+      ],
+      "x": 904,
+      "y": 191,
+      "width": 115,
+      "height": 122,
+      "z": 5,
+      "space": "map",
+      "role": "sailboat",
+      "sourcePixels": true,
+      "missing": "Underlying pixels behind other extracted objects, panels, text, and controls are not present in the source."
+    },
+    {
+      "id": "islands-hoang-sa",
+      "file": "islands-hoang-sa.png",
+      "mask": "islands-hoang-sa.mask.png",
+      "sourceRegion": [
+        852,
+        354,
+        151,
+        86
+      ],
+      "x": 852,
+      "y": 354,
+      "width": 151,
+      "height": 86,
+      "z": 3,
+      "space": "map",
+      "role": "islands-hoang-sa",
+      "sourcePixels": true,
+      "missing": "Underlying pixels behind other extracted objects, panels, text, and controls are not present in the source."
+    },
+    {
+      "id": "islands-truong-sa",
+      "file": "islands-truong-sa.png",
+      "mask": "islands-truong-sa.mask.png",
+      "sourceRegion": [
+        907,
+        626,
+        162,
+        161
+      ],
+      "x": 907,
+      "y": 626,
+      "width": 162,
+      "height": 161,
+      "z": 3,
+      "space": "map",
+      "role": "islands-truong-sa",
+      "sourcePixels": true,
+      "missing": "Underlying pixels behind other extracted objects, panels, text, and controls are not present in the source."
+    },
+    {
+      "id": "island-phu-quoc",
+      "file": "island-phu-quoc.png",
+      "mask": "island-phu-quoc.mask.png",
+      "sourceRegion": [
+        432,
+        793,
+        60,
+        58
+      ],
+      "x": 432,
+      "y": 793,
+      "width": 60,
+      "height": 58,
+      "z": 3,
+      "space": "map",
+      "role": "island-phu-quoc",
+      "sourcePixels": true,
+      "missing": "Underlying pixels behind other extracted objects, panels, text, and controls are not present in the source."
+    },
+    {
+      "id": "island-con-dao",
+      "file": "island-con-dao.png",
+      "mask": "island-con-dao.mask.png",
+      "sourceRegion": [
+        695,
+        848,
+        43,
+        28
+      ],
+      "x": 695,
+      "y": 848,
+      "width": 43,
+      "height": 28,
+      "z": 3,
+      "space": "map",
+      "role": "island-con-dao",
+      "sourcePixels": true,
+      "missing": "Underlying pixels behind other extracted objects, panels, text, and controls are not present in the source."
+    },
+    {
+      "id": "railway-ink",
+      "file": "railway-ink.png",
+      "mask": "railway-ink.mask.png",
+      "sourceRegion": [
+        481,
+        154,
+        280,
+        722
+      ],
+      "x": 481,
+      "y": 154,
+      "width": 280,
+      "height": 722,
+      "z": 4,
+      "space": "map",
+      "role": "Original railway ink; train samples the traced source centerline",
+      "sourcePixels": true,
+      "missing": "Underlying pixels behind other extracted objects, panels, text, and controls are not present in the source."
+    },
+    {
+      "id": "vietnam-terrain",
+      "file": "vietnam-terrain.png",
+      "mask": "vietnam-terrain.mask.png",
+      "sourceRegion": [
+        403,
+        105,
+        438,
+        806
+      ],
+      "x": 403,
+      "y": 105,
+      "width": 438,
+      "height": 806,
+      "z": 2,
+      "space": "map",
+      "role": "Complete original painted terrain and relief, no synthetic facets",
+      "sourcePixels": true,
+      "missing": "Underlying pixels behind other extracted objects, panels, text, and controls are not present in the source."
+    },
+    {
+      "id": "sea-and-wave-ink",
+      "file": "sea-and-wave-ink.png",
+      "mask": "sea-and-wave-ink.mask.png",
+      "sourceRegion": [
+        475,
+        0,
+        1122,
+        980
+      ],
+      "x": 475,
+      "y": 0,
+      "width": 1122,
+      "height": 980,
+      "z": 0,
+      "space": "scenery",
+      "role": "Original sea and wave strokes at source coordinates",
+      "sourcePixels": true,
+      "missing": "Underlying pixels behind other extracted objects, panels, text, and controls are not present in the source."
+    },
+    {
+      "id": "mountains-right",
+      "file": "mountains-right.png",
+      "mask": "mountains-right.mask.png",
+      "sourceRegion": [
+        1016,
+        891,
+        581,
+        94
+      ],
+      "x": 1016,
+      "y": 891,
+      "width": 581,
+      "height": 94,
+      "z": 1,
+      "space": "fixed",
+      "role": "Right mountain, cloud and lotus painting",
+      "sourcePixels": true,
+      "missing": "Underlying pixels behind other extracted objects, panels, text, and controls are not present in the source."
+    },
+    {
+      "id": "clouds-bottom",
+      "file": "clouds-bottom.png",
+      "mask": "clouds-bottom.mask.png",
+      "sourceRegion": [
+        318,
+        899,
+        755,
+        86
+      ],
+      "x": 318,
+      "y": 899,
+      "width": 755,
+      "height": 86,
+      "z": 2,
+      "space": "fixed",
+      "role": "Bottom cloud bank and its original contours",
+      "sourcePixels": true,
+      "missing": "Underlying pixels behind other extracted objects, panels, text, and controls are not present in the source."
+    },
+    {
+      "id": "mountains-left",
+      "file": "mountains-left.png",
+      "mask": "mountains-left.mask.png",
+      "sourceRegion": [
+        0,
+        165,
+        568,
+        820
+      ],
+      "x": 0,
+      "y": 165,
+      "width": 568,
+      "height": 820,
+      "z": 1,
+      "space": "fixed",
+      "role": "Left mountains, forest, lotus and atmospheric cloud painting",
+      "sourcePixels": true,
+      "missing": "Underlying pixels behind other extracted objects, panels, text, and controls are not present in the source."
+    },
+    {
+      "id": "mountains-middle",
+      "file": "mountains-middle.png",
+      "mask": "mountains-middle.mask.png",
+      "sourceRegion": [
+        284,
+        152,
+        376,
+        600
+      ],
+      "x": 284,
+      "y": 152,
+      "width": 376,
+      "height": 600,
+      "z": 1,
+      "space": "scenery",
+      "role": "Middle mountain ranges and valleys",
+      "sourcePixels": true,
+      "missing": "Underlying pixels behind other extracted objects, panels, text, and controls are not present in the source."
+    },
+    {
+      "id": "paper-land-and-top-clouds",
+      "file": "paper-land-and-top-clouds.png",
+      "mask": "paper-land-and-top-clouds.mask.png",
+      "sourceRegion": [
+        0,
+        0,
+        908,
+        947
+      ],
+      "x": 0,
+      "y": 0,
+      "width": 908,
+      "height": 947,
+      "z": 0,
+      "space": "scenery",
+      "role": "Remaining mainland paper, northern mountains and top cloud ink",
+      "sourcePixels": true,
+      "missing": "Underlying pixels behind other extracted objects, panels, text, and controls are not present in the source."
+    }
+  ],
+  "railCenterline": [
+    [
+      488,
+      156
+    ],
+    [
+      495,
+      188
+    ],
+    [
+      512,
+      210
+    ],
+    [
+      548,
+      226
+    ],
+    [
+      578,
+      235
+    ],
+    [
+      605,
+      238
+    ],
+    [
+      603,
+      270
+    ],
+    [
+      590,
+      291
+    ],
+    [
+      578,
+      309
+    ],
+    [
+      571,
+      330
+    ],
+    [
+      573,
+      350
+    ],
+    [
+      583,
+      365
+    ],
+    [
+      594,
+      376
+    ],
+    [
+      616,
+      395
+    ],
+    [
+      632,
+      415
+    ],
+    [
+      640,
+      440
+    ],
+    [
+      655,
+      460
+    ],
+    [
+      676,
+      471
+    ],
+    [
+      698,
+      474
+    ],
+    [
+      713,
+      494
+    ],
+    [
+      731,
+      517
+    ],
+    [
+      745,
+      542
+    ],
+    [
+      751,
+      563
+    ],
+    [
+      749,
+      590
+    ],
+    [
+      747,
+      615
+    ],
+    [
+      752,
+      642
+    ],
+    [
+      753,
+      668
+    ],
+    [
+      749,
+      691
+    ],
+    [
+      736,
+      715
+    ],
+    [
+      715,
+      740
+    ],
+    [
+      687,
+      761
+    ],
+    [
+      660,
+      777
+    ],
+    [
+      643,
+      793
+    ],
+    [
+      627,
+      810
+    ],
+    [
+      611,
+      832
+    ],
+    [
+      599,
+      850
+    ],
+    [
+      589,
+      872
+    ]
+  ],
+  "excludedUI": [
+    [
+      718,
+      129,
+      841,
+      152
+    ],
+    [
+      439,
+      364,
+      483,
+      387
+    ],
+    [
+      490,
+      530,
+      581,
+      555
+    ],
+    [
+      500,
+      657,
+      616,
+      680
+    ],
+    [
+      634,
+      211,
+      773,
+      265
+    ],
+    [
+      726,
+      452,
+      829,
+      494
+    ],
+    [
+      533,
+      700,
+      665,
+      756
+    ],
+    [
+      404,
+      750,
+      526,
+      790
+    ],
+    [
+      720,
+      874,
+      811,
+      913
+    ],
+    [
+      916,
+      438,
+      1062,
+      507
+    ],
+    [
+      889,
+      788,
+      1051,
+      858
+    ]
+  ],
+  "limitations": [
+    "Source pixels behind extracted objects or UI are unavailable.",
+    "Raster map is original; province ownership is fitted from existing geographic data and must not be mistaken for source vector boundaries."
+  ],
+  "referenceImageIsRuntimeLayer": false,
+  "textOcclusionFill": {
+    "file": "text-occlusion-fill.png",
+    "sourcePixels": false,
+    "role": "Approximate missing background at removed glyphs only; never counted as recovered original pixels."
+  }
+}

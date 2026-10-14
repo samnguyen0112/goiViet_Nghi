@@ -1,0 +1,1157 @@
+{
+  "version": 3,
+  "source": "verification\\map-repair-20261013\\reference.png",
+  "sourceSha256": "de64948ffaab2dd3a294f9a8200ec437ddb00e68aee64061a265d454fc5d5768",
+  "viewport": [
+    1597,
+    985
+  ],
+  "layers": [
+    {
+      "id": "province-hn",
+      "file": "province-hn.png",
+      "x": 525,
+      "y": 218,
+      "width": 82,
+      "height": 37,
+      "sourceRegion": [
+        525,
+        218,
+        82,
+        37
+      ],
+      "mask": "province-hn.mask.png",
+      "space": "map",
+      "z": 2,
+      "role": "Province Thành phố Hà Nội",
+      "occlusionRepair": "Original labels and landmarks removed; their hidden terrain is approximated"
+    },
+    {
+      "id": "province-tq",
+      "file": "province-tq.png",
+      "x": 460,
+      "y": 105,
+      "width": 153,
+      "height": 105,
+      "sourceRegion": [
+        460,
+        105,
+        153,
+        105
+      ],
+      "mask": "province-tq.mask.png",
+      "space": "map",
+      "z": 2,
+      "role": "Province Tỉnh Tuyên Quang",
+      "occlusionRepair": "Original labels and landmarks removed; their hidden terrain is approximated"
+    },
+    {
+      "id": "province-lc",
+      "file": "province-lc.png",
+      "x": 435,
+      "y": 139,
+      "width": 66,
+      "height": 80,
+      "sourceRegion": [
+        435,
+        139,
+        66,
+        80
+      ],
+      "mask": "province-lc.mask.png",
+      "space": "map",
+      "z": 2,
+      "role": "Province Tỉnh Lào Cai",
+      "occlusionRepair": "Original labels and landmarks removed; their hidden terrain is approximated"
+    },
+    {
+      "id": "province-tn",
+      "file": "province-tn.png",
+      "x": 486,
+      "y": 145,
+      "width": 104,
+      "height": 74,
+      "sourceRegion": [
+        486,
+        145,
+        104,
+        74
+      ],
+      "mask": "province-tn.mask.png",
+      "space": "map",
+      "z": 2,
+      "role": "Province Tỉnh Thái Nguyên",
+      "occlusionRepair": "Original labels and landmarks removed; their hidden terrain is approximated"
+    },
+    {
+      "id": "province-pt",
+      "file": "province-pt.png",
+      "x": 478,
+      "y": 199,
+      "width": 114,
+      "height": 66,
+      "sourceRegion": [
+        478,
+        199,
+        114,
+        66
+      ],
+      "mask": "province-pt.mask.png",
+      "space": "map",
+      "z": 2,
+      "role": "Province Tỉnh Phú Thọ",
+      "occlusionRepair": "Original labels and landmarks removed; their hidden terrain is approximated"
+    },
+    {
+      "id": "province-bn",
+      "file": "province-bn.png",
+      "x": 539,
+      "y": 203,
+      "width": 84,
+      "height": 35,
+      "sourceRegion": [
+        539,
+        203,
+        84,
+        35
+      ],
+      "mask": "province-bn.mask.png",
+      "space": "map",
+      "z": 2,
+      "role": "Province Tỉnh Bắc Ninh",
+      "occlusionRepair": "Original labels and landmarks removed; their hidden terrain is approximated"
+    },
+    {
+      "id": "province-hy",
+      "file": "province-hy.png",
+      "x": 587,
+      "y": 237,
+      "width": 117,
+      "height": 31,
+      "sourceRegion": [
+        587,
+        237,
+        117,
+        31
+      ],
+      "mask": "province-hy.mask.png",
+      "space": "map",
+      "z": 2,
+      "role": "Province Tỉnh Hưng Yên",
+      "occlusionRepair": "Original labels and landmarks removed; their hidden terrain is approximated"
+    },
+    {
+      "id": "province-hp",
+      "file": "province-hp.png",
+      "x": 579,
+      "y": 224,
+      "width": 78,
+      "height": 30,
+      "sourceRegion": [
+        579,
+        224,
+        78,
+        30
+      ],
+      "mask": "province-hp.mask.png",
+      "space": "map",
+      "z": 2,
+      "role": "Province Thành phố Hải Phòng",
+      "occlusionRepair": "Original labels and landmarks removed; their hidden terrain is approximated"
+    },
+    {
+      "id": "province-nb",
+      "file": "province-nb.png",
+      "x": 552,
+      "y": 239,
+      "width": 134,
+      "height": 42,
+      "sourceRegion": [
+        552,
+        239,
+        134,
+        42
+      ],
+      "mask": "province-nb.mask.png",
+      "space": "map",
+      "z": 2,
+      "role": "Province Tỉnh Ninh Bình",
+      "occlusionRepair": "Original labels and landmarks removed; their hidden terrain is approximated"
+    },
+    {
+      "id": "province-cb",
+      "file": "province-cb.png",
+      "x": 477,
+      "y": 122,
+      "width": 185,
+      "height": 41,
+      "sourceRegion": [
+        477,
+        122,
+        185,
+        41
+      ],
+      "mask": "province-cb.mask.png",
+      "space": "map",
+      "z": 2,
+      "role": "Province Tỉnh Cao Bằng",
+      "occlusionRepair": "Original labels and landmarks removed; their hidden terrain is approximated"
+    },
+    {
+      "id": "province-ls",
+      "file": "province-ls.png",
+      "x": 550,
+      "y": 159,
+      "width": 169,
+      "height": 59,
+      "sourceRegion": [
+        550,
+        159,
+        169,
+        59
+      ],
+      "mask": "province-ls.mask.png",
+      "space": "map",
+      "z": 2,
+      "role": "Province Tỉnh Lạng Sơn",
+      "occlusionRepair": "Original labels and landmarks removed; their hidden terrain is approximated"
+    },
+    {
+      "id": "province-lc_old",
+      "file": "province-lc_old.png",
+      "x": 425,
+      "y": 141,
+      "width": 46,
+      "height": 44,
+      "sourceRegion": [
+        425,
+        141,
+        46,
+        44
+      ],
+      "mask": "province-lc_old.mask.png",
+      "space": "map",
+      "z": 2,
+      "role": "Province Tỉnh Lai Châu",
+      "occlusionRepair": "Original labels and landmarks removed; their hidden terrain is approximated"
+    },
+    {
+      "id": "province-db",
+      "file": "province-db.png",
+      "x": 403,
+      "y": 152,
+      "width": 62,
+      "height": 93,
+      "sourceRegion": [
+        403,
+        152,
+        62,
+        93
+      ],
+      "mask": "province-db.mask.png",
+      "space": "map",
+      "z": 2,
+      "role": "Province Tỉnh Điện Biên",
+      "occlusionRepair": "Original labels and landmarks removed; their hidden terrain is approximated"
+    },
+    {
+      "id": "province-sl",
+      "file": "province-sl.png",
+      "x": 431,
+      "y": 181,
+      "width": 123,
+      "height": 73,
+      "sourceRegion": [
+        431,
+        181,
+        123,
+        73
+      ],
+      "mask": "province-sl.mask.png",
+      "space": "map",
+      "z": 2,
+      "role": "Province Tỉnh Sơn La",
+      "occlusionRepair": "Original labels and landmarks removed; their hidden terrain is approximated"
+    },
+    {
+      "id": "province-qn",
+      "file": "province-qn.png",
+      "x": 588,
+      "y": 202,
+      "width": 140,
+      "height": 48,
+      "sourceRegion": [
+        588,
+        202,
+        140,
+        48
+      ],
+      "mask": "province-qn.mask.png",
+      "space": "map",
+      "z": 2,
+      "role": "Province Tỉnh Quảng Ninh",
+      "occlusionRepair": "Original labels and landmarks removed; their hidden terrain is approximated"
+    },
+    {
+      "id": "province-th",
+      "file": "province-th.png",
+      "x": 455,
+      "y": 248,
+      "width": 225,
+      "height": 59,
+      "sourceRegion": [
+        455,
+        248,
+        225,
+        59
+      ],
+      "mask": "province-th.mask.png",
+      "space": "map",
+      "z": 2,
+      "role": "Province Tỉnh Thanh Hóa",
+      "occlusionRepair": "Original labels and landmarks removed; their hidden terrain is approximated"
+    },
+    {
+      "id": "province-na",
+      "file": "province-na.png",
+      "x": 524,
+      "y": 278,
+      "width": 124,
+      "height": 78,
+      "sourceRegion": [
+        524,
+        278,
+        124,
+        78
+      ],
+      "mask": "province-na.mask.png",
+      "space": "map",
+      "z": 2,
+      "role": "Province Tỉnh Nghệ An",
+      "occlusionRepair": "Original labels and landmarks removed; their hidden terrain is approximated"
+    },
+    {
+      "id": "province-ht",
+      "file": "province-ht.png",
+      "x": 534,
+      "y": 342,
+      "width": 108,
+      "height": 52,
+      "sourceRegion": [
+        534,
+        342,
+        108,
+        52
+      ],
+      "mask": "province-ht.mask.png",
+      "space": "map",
+      "z": 2,
+      "role": "Province Tỉnh Hà Tĩnh",
+      "occlusionRepair": "Original labels and landmarks removed; their hidden terrain is approximated"
+    },
+    {
+      "id": "province-qt",
+      "file": "province-qt.png",
+      "x": 561,
+      "y": 386,
+      "width": 178,
+      "height": 91,
+      "sourceRegion": [
+        561,
+        386,
+        178,
+        91
+      ],
+      "mask": "province-qt.mask.png",
+      "space": "map",
+      "z": 2,
+      "role": "Province Tỉnh Quảng Trị",
+      "occlusionRepair": "Original labels and landmarks removed; their hidden terrain is approximated"
+    },
+    {
+      "id": "province-hue",
+      "file": "province-hue.png",
+      "x": 629,
+      "y": 453,
+      "width": 119,
+      "height": 36,
+      "sourceRegion": [
+        629,
+        453,
+        119,
+        36
+      ],
+      "mask": "province-hue.mask.png",
+      "space": "map",
+      "z": 2,
+      "role": "Province Thành phố Huế",
+      "occlusionRepair": "Original labels and landmarks removed; their hidden terrain is approximated"
+    },
+    {
+      "id": "province-dn",
+      "file": "province-dn.png",
+      "x": 638,
+      "y": 473,
+      "width": 149,
+      "height": 68,
+      "sourceRegion": [
+        638,
+        473,
+        149,
+        68
+      ],
+      "mask": "province-dn.mask.png",
+      "space": "map",
+      "z": 2,
+      "role": "Province Thành phố Đà Nẵng",
+      "occlusionRepair": "Original labels and landmarks removed; their hidden terrain is approximated"
+    },
+    {
+      "id": "province-qng",
+      "file": "province-qng.png",
+      "x": 660,
+      "y": 518,
+      "width": 144,
+      "height": 74,
+      "sourceRegion": [
+        660,
+        518,
+        144,
+        74
+      ],
+      "mask": "province-qng.mask.png",
+      "space": "map",
+      "z": 2,
+      "role": "Province Tỉnh Quảng Ngãi",
+      "occlusionRepair": "Original labels and landmarks removed; their hidden terrain is approximated"
+    },
+    {
+      "id": "province-gl",
+      "file": "province-gl.png",
+      "x": 683,
+      "y": 554,
+      "width": 136,
+      "height": 83,
+      "sourceRegion": [
+        683,
+        554,
+        136,
+        83
+      ],
+      "mask": "province-gl.mask.png",
+      "space": "map",
+      "z": 2,
+      "role": "Province Tỉnh Gia Lai",
+      "occlusionRepair": "Original labels and landmarks removed; their hidden terrain is approximated"
+    },
+    {
+      "id": "province-dl",
+      "file": "province-dl.png",
+      "x": 677,
+      "y": 603,
+      "width": 150,
+      "height": 93,
+      "sourceRegion": [
+        677,
+        603,
+        150,
+        93
+      ],
+      "mask": "province-dl.mask.png",
+      "space": "map",
+      "z": 2,
+      "role": "Province Tỉnh Đắk Lắk",
+      "occlusionRepair": "Original labels and landmarks removed; their hidden terrain is approximated"
+    },
+    {
+      "id": "province-kh",
+      "file": "province-kh.png",
+      "x": 736,
+      "y": 646,
+      "width": 105,
+      "height": 112,
+      "sourceRegion": [
+        736,
+        646,
+        105,
+        112
+      ],
+      "mask": "province-kh.mask.png",
+      "space": "map",
+      "z": 2,
+      "role": "Province Tỉnh Khánh Hòa",
+      "occlusionRepair": "Original labels and landmarks removed; their hidden terrain is approximated"
+    },
+    {
+      "id": "province-ld",
+      "file": "province-ld.png",
+      "x": 677,
+      "y": 655,
+      "width": 141,
+      "height": 137,
+      "sourceRegion": [
+        677,
+        655,
+        141,
+        137
+      ],
+      "mask": "province-ld.mask.png",
+      "space": "map",
+      "z": 2,
+      "role": "Province Tỉnh Lâm Đồng",
+      "occlusionRepair": "Original labels and landmarks removed; their hidden terrain is approximated"
+    },
+    {
+      "id": "province-hcm",
+      "file": "province-hcm.png",
+      "x": 622,
+      "y": 742,
+      "width": 134,
+      "height": 54,
+      "sourceRegion": [
+        622,
+        742,
+        134,
+        54
+      ],
+      "mask": "province-hcm.mask.png",
+      "space": "map",
+      "z": 2,
+      "role": "Province Thành phố Hồ Chí Minh",
+      "occlusionRepair": "Original labels and landmarks removed; their hidden terrain is approximated"
+    },
+    {
+      "id": "province-dna",
+      "file": "province-dna.png",
+      "x": 645,
+      "y": 685,
+      "width": 93,
+      "height": 105,
+      "sourceRegion": [
+        645,
+        685,
+        93,
+        105
+      ],
+      "mask": "province-dna.mask.png",
+      "space": "map",
+      "z": 2,
+      "role": "Province Tỉnh Đồng Nai",
+      "occlusionRepair": "Original labels and landmarks removed; their hidden terrain is approximated"
+    },
+    {
+      "id": "province-tni",
+      "file": "province-tni.png",
+      "x": 553,
+      "y": 724,
+      "width": 137,
+      "height": 69,
+      "sourceRegion": [
+        553,
+        724,
+        137,
+        69
+      ],
+      "mask": "province-tni.mask.png",
+      "space": "map",
+      "z": 2,
+      "role": "Province Tỉnh Tây Ninh",
+      "occlusionRepair": "Original labels and landmarks removed; their hidden terrain is approximated"
+    },
+    {
+      "id": "province-dt",
+      "file": "province-dt.png",
+      "x": 552,
+      "y": 778,
+      "width": 193,
+      "height": 21,
+      "sourceRegion": [
+        552,
+        778,
+        193,
+        21
+      ],
+      "mask": "province-dt.mask.png",
+      "space": "map",
+      "z": 2,
+      "role": "Province Tỉnh Đồng Tháp",
+      "occlusionRepair": "Original labels and landmarks removed; their hidden terrain is approximated"
+    },
+    {
+      "id": "province-vl",
+      "file": "province-vl.png",
+      "x": 593,
+      "y": 796,
+      "width": 151,
+      "height": 43,
+      "sourceRegion": [
+        593,
+        796,
+        151,
+        43
+      ],
+      "mask": "province-vl.mask.png",
+      "space": "map",
+      "z": 2,
+      "role": "Province Tỉnh Vĩnh Long",
+      "occlusionRepair": "Original labels and landmarks removed; their hidden terrain is approximated"
+    },
+    {
+      "id": "province-ct",
+      "file": "province-ct.png",
+      "x": 565,
+      "y": 793,
+      "width": 105,
+      "height": 109,
+      "sourceRegion": [
+        565,
+        793,
+        105,
+        109
+      ],
+      "mask": "province-ct.mask.png",
+      "space": "map",
+      "z": 2,
+      "role": "Province Thành phố Cần Thơ",
+      "occlusionRepair": "Original labels and landmarks removed; their hidden terrain is approximated"
+    },
+    {
+      "id": "province-ag",
+      "file": "province-ag.png",
+      "x": 526,
+      "y": 780,
+      "width": 76,
+      "height": 67,
+      "sourceRegion": [
+        526,
+        780,
+        76,
+        67
+      ],
+      "mask": "province-ag.mask.png",
+      "space": "map",
+      "z": 2,
+      "role": "Province Tỉnh An Giang",
+      "occlusionRepair": "Original labels and landmarks removed; their hidden terrain is approximated"
+    },
+    {
+      "id": "province-cm",
+      "file": "province-cm.png",
+      "x": 554,
+      "y": 828,
+      "width": 89,
+      "height": 83,
+      "sourceRegion": [
+        554,
+        828,
+        89,
+        83
+      ],
+      "mask": "province-cm.mask.png",
+      "space": "map",
+      "z": 2,
+      "role": "Province Tỉnh Cà Mau",
+      "occlusionRepair": "Original labels and landmarks removed; their hidden terrain is approximated"
+    },
+    {
+      "id": "terrain-relief-edge",
+      "file": "terrain-relief-edge.png",
+      "x": 399,
+      "y": 101,
+      "width": 446,
+      "height": 814,
+      "sourceRegion": [
+        399,
+        101,
+        446,
+        814
+      ],
+      "mask": "terrain-relief-edge.mask.png",
+      "space": "map",
+      "z": 1.8,
+      "role": "Painted relief side and cast shadow",
+      "occlusionRepair": "none"
+    },
+    {
+      "id": "railway-ink",
+      "file": "railway-ink.png",
+      "x": 481,
+      "y": 154,
+      "width": 280,
+      "height": 722,
+      "sourceRegion": [
+        481,
+        154,
+        280,
+        722
+      ],
+      "mask": "railway-ink.mask.png",
+      "space": "map",
+      "z": 4,
+      "role": "railway-ink",
+      "occlusionRepair": "none"
+    },
+    {
+      "id": "tower-hanoi",
+      "file": "tower-hanoi.png",
+      "x": 596,
+      "y": 166,
+      "width": 39,
+      "height": 62,
+      "sourceRegion": [
+        596,
+        166,
+        39,
+        62
+      ],
+      "mask": "tower-hanoi.mask.png",
+      "space": "map",
+      "z": 5,
+      "role": "tower-hanoi",
+      "occlusionRepair": "none"
+    },
+    {
+      "id": "gate-hue",
+      "file": "gate-hue.png",
+      "x": 691,
+      "y": 399,
+      "width": 92,
+      "height": 53,
+      "sourceRegion": [
+        691,
+        399,
+        92,
+        53
+      ],
+      "mask": "gate-hue.mask.png",
+      "space": "map",
+      "z": 5,
+      "role": "gate-hue",
+      "occlusionRepair": "none"
+    },
+    {
+      "id": "market-saigon",
+      "file": "market-saigon.png",
+      "x": 704,
+      "y": 737,
+      "width": 65,
+      "height": 51,
+      "sourceRegion": [
+        704,
+        737,
+        65,
+        51
+      ],
+      "mask": "market-saigon.mask.png",
+      "space": "map",
+      "z": 5,
+      "role": "market-saigon",
+      "occlusionRepair": "none"
+    },
+    {
+      "id": "sailboat",
+      "file": "sailboat.png",
+      "x": 904,
+      "y": 191,
+      "width": 115,
+      "height": 122,
+      "sourceRegion": [
+        904,
+        191,
+        115,
+        122
+      ],
+      "mask": "sailboat.mask.png",
+      "space": "map",
+      "z": 5,
+      "role": "sailboat",
+      "occlusionRepair": "none"
+    },
+    {
+      "id": "islands-hoang-sa",
+      "file": "islands-hoang-sa.png",
+      "x": 861,
+      "y": 360,
+      "width": 116,
+      "height": 81,
+      "sourceRegion": [
+        861,
+        360,
+        116,
+        81
+      ],
+      "mask": "islands-hoang-sa.mask.png",
+      "space": "map",
+      "z": 5,
+      "role": "islands-hoang-sa",
+      "occlusionRepair": "none"
+    },
+    {
+      "id": "islands-truong-sa",
+      "file": "islands-truong-sa.png",
+      "x": 923,
+      "y": 631,
+      "width": 137,
+      "height": 139,
+      "sourceRegion": [
+        923,
+        631,
+        137,
+        139
+      ],
+      "mask": "islands-truong-sa.mask.png",
+      "space": "map",
+      "z": 5,
+      "role": "islands-truong-sa",
+      "occlusionRepair": "none"
+    },
+    {
+      "id": "island-phu-quoc",
+      "file": "island-phu-quoc.png",
+      "x": 431,
+      "y": 792,
+      "width": 62,
+      "height": 60,
+      "sourceRegion": [
+        431,
+        792,
+        62,
+        60
+      ],
+      "mask": "island-phu-quoc.mask.png",
+      "space": "map",
+      "z": 5,
+      "role": "island-phu-quoc",
+      "occlusionRepair": "none"
+    },
+    {
+      "id": "island-con-dao",
+      "file": "island-con-dao.png",
+      "x": 702,
+      "y": 856,
+      "width": 23,
+      "height": 19,
+      "sourceRegion": [
+        702,
+        856,
+        23,
+        19
+      ],
+      "mask": "island-con-dao.mask.png",
+      "space": "map",
+      "z": 5,
+      "role": "island-con-dao",
+      "occlusionRepair": "none"
+    },
+    {
+      "id": "logo-calligraphy",
+      "file": "logo-calligraphy.png",
+      "x": 59,
+      "y": 18,
+      "width": 321,
+      "height": 209,
+      "sourceRegion": [
+        59,
+        18,
+        321,
+        209
+      ],
+      "mask": "logo-calligraphy.mask.png",
+      "space": "fixed",
+      "z": 9,
+      "role": "logo-calligraphy",
+      "occlusionRepair": "none"
+    },
+    {
+      "id": "crane",
+      "file": "crane.png",
+      "x": 176,
+      "y": 487,
+      "width": 217,
+      "height": 189,
+      "sourceRegion": [
+        176,
+        487,
+        217,
+        189
+      ],
+      "mask": "crane.mask.png",
+      "space": "map",
+      "z": 9,
+      "role": "crane",
+      "occlusionRepair": "none"
+    },
+    {
+      "id": "sea-plane",
+      "file": "sea-plane.png",
+      "x": 470,
+      "y": 0,
+      "width": 1127,
+      "height": 985,
+      "sourceRegion": [
+        470,
+        0,
+        1127,
+        985
+      ],
+      "mask": "sea-plane.mask.png",
+      "space": "map",
+      "z": 0,
+      "role": "Continuous sea plane, original waves; hidden regions reconstructed",
+      "occlusionRepair": "Unseen pixels behind UI/map/objects approximated and marked in missing-source.mask.png"
+    },
+    {
+      "id": "mainland-paper-plane",
+      "file": "mainland-paper-plane.png",
+      "x": 0,
+      "y": 0,
+      "width": 908,
+      "height": 985,
+      "sourceRegion": [
+        0,
+        0,
+        908,
+        985
+      ],
+      "mask": "mainland-paper-plane.mask.png",
+      "space": "map",
+      "z": 0,
+      "role": "Continuous mainland paper and distant atmosphere",
+      "occlusionRepair": "Unseen pixels behind extracted objects approximated"
+    },
+    {
+      "id": "mountains-left",
+      "file": "mountains-left.png",
+      "x": 0,
+      "y": 165,
+      "width": 556,
+      "height": 820,
+      "sourceRegion": [
+        0,
+        165,
+        556,
+        820
+      ],
+      "mask": "mountains-left.mask.png",
+      "space": "map",
+      "z": 1,
+      "role": "mountains-left",
+      "occlusionRepair": "Sections originally hidden by controls approximated"
+    },
+    {
+      "id": "mountains-middle",
+      "file": "mountains-middle.png",
+      "x": 283,
+      "y": 162,
+      "width": 373,
+      "height": 626,
+      "sourceRegion": [
+        283,
+        162,
+        373,
+        626
+      ],
+      "mask": "mountains-middle.mask.png",
+      "space": "map",
+      "z": 1,
+      "role": "mountains-middle",
+      "occlusionRepair": "Sections originally hidden by controls approximated"
+    },
+    {
+      "id": "mountains-right",
+      "file": "mountains-right.png",
+      "x": 1017,
+      "y": 0,
+      "width": 580,
+      "height": 985,
+      "sourceRegion": [
+        1017,
+        0,
+        580,
+        985
+      ],
+      "mask": "mountains-right.mask.png",
+      "space": "map",
+      "z": 1,
+      "role": "mountains-right",
+      "occlusionRepair": "Sections originally hidden by controls approximated"
+    },
+    {
+      "id": "clouds-bottom",
+      "file": "clouds-bottom.png",
+      "x": 303,
+      "y": 904,
+      "width": 880,
+      "height": 81,
+      "sourceRegion": [
+        303,
+        904,
+        880,
+        81
+      ],
+      "mask": "clouds-bottom.mask.png",
+      "space": "map",
+      "z": 1,
+      "role": "clouds-bottom",
+      "occlusionRepair": "Sections originally hidden by controls approximated"
+    }
+  ],
+  "railCenterline": [
+    [
+      488,
+      156
+    ],
+    [
+      495,
+      188
+    ],
+    [
+      512,
+      210
+    ],
+    [
+      548,
+      226
+    ],
+    [
+      578,
+      235
+    ],
+    [
+      605,
+      238
+    ],
+    [
+      603,
+      270
+    ],
+    [
+      590,
+      291
+    ],
+    [
+      578,
+      309
+    ],
+    [
+      571,
+      330
+    ],
+    [
+      573,
+      350
+    ],
+    [
+      583,
+      365
+    ],
+    [
+      594,
+      376
+    ],
+    [
+      616,
+      395
+    ],
+    [
+      632,
+      415
+    ],
+    [
+      640,
+      440
+    ],
+    [
+      655,
+      460
+    ],
+    [
+      676,
+      471
+    ],
+    [
+      698,
+      474
+    ],
+    [
+      713,
+      494
+    ],
+    [
+      731,
+      517
+    ],
+    [
+      745,
+      542
+    ],
+    [
+      751,
+      563
+    ],
+    [
+      749,
+      590
+    ],
+    [
+      747,
+      615
+    ],
+    [
+      752,
+      642
+    ],
+    [
+      753,
+      668
+    ],
+    [
+      749,
+      691
+    ],
+    [
+      736,
+      715
+    ],
+    [
+      715,
+      740
+    ],
+    [
+      687,
+      761
+    ],
+    [
+      660,
+      777
+    ],
+    [
+      643,
+      793
+    ],
+    [
+      627,
+      810
+    ],
+    [
+      611,
+      832
+    ],
+    [
+      599,
+      850
+    ],
+    [
+      589,
+      872
+    ]
+  ],
+  "backgroundContinuous": true,
+  "provinceLayerCount": 34,
+  "missingSourceMask": "missing-source.mask.png",
+  "limitations": [
+    "Hidden background/terrain cannot be recovered from a flattened reference; those repaired pixels are explicitly approximate.",
+    "Province geometry is fitted from the existing geographic dataset, not recovered source vectors."
+  ],
+  "referenceImageIsRuntimeLayer": false
+}
