@@ -7,6 +7,16 @@
     const W=manifest.width,H=manifest.height,ctx=canvas.getContext('2d',{alpha:false});
     if(!ctx)throw new Error('Không có Canvas 2D.');
     const images=new Map();await Promise.all(manifest.layers.map(async l=>images.set(l.id,await load(bundle[l.file]||l.file,l.label))));
+    // The palace cutout includes a fragment of the train from the source painting.
+    // Remove that overlap using the train's own alpha, before either layer enters.
+    const palace=manifest.layers.find(l=>l.id==='hue'),trainLayer=manifest.layers.find(l=>l.id==='train');
+    if(palace&&trainLayer){
+      const im=images.get(palace.id),clean=makeCanvas(im.width,im.height),g=clean.getContext('2d');
+      g.drawImage(im,0,0);g.globalCompositeOperation='destination-out';
+      const sx=im.width/palace.rect[2],sy=im.height/palace.rect[3];
+      g.drawImage(images.get('train'),(trainLayer.rect[0]-palace.rect[0])*sx,(trainLayer.rect[1]-palace.rect[1])*sy,trainLayer.rect[2]*sx,trainLayer.rect[3]*sy);
+      images.set(palace.id,clean);
+    }
     const reference=manifest.reference?await load(bundle[manifest.reference]||manifest.reference,'ảnh tham chiếu'):null;
     const outline=manifest.outline?await load(bundle[manifest.outline]||manifest.outline,'đường viền núi'):null;
     const enabled=new Set(manifest.layers.map(l=>l.id));let wind=manifest.motionDefaults?.wind??.85,checker=false,showOutline=false,showReference=false;
@@ -126,7 +136,14 @@
       }
       return partial;
     }
-    const birdCaches=new Map(),treeCaches=new Map();
+    const birdCaches=new Map(),treeCaches=new Map(),spriteSources=new Map();
+    function spriteImage(l){
+      if(spriteSources.has(l.id))return spriteSources.get(l.id);
+      const source=images.get(l.id),width=Math.min(source.width,Math.max(1,Math.ceil(l.rect[2]*canvas.width/W)));
+      if(width===source.width){spriteSources.set(l.id,source);return source;}
+      const scaled=makeCanvas(width,Math.max(1,Math.round(source.height*width/source.width))),g=scaled.getContext('2d');
+      g.imageSmoothingQuality='high';g.drawImage(source,0,0,scaled.width,scaled.height);spriteSources.set(l.id,scaled);return scaled;
+    }
     function triangle(g,im,s,d){
       const [p0,p1,p2]=s,[q0,q1,q2]=d,det=(p1.x-p0.x)*(p2.y-p0.y)-(p2.x-p0.x)*(p1.y-p0.y);
       const a=((q1.x-q0.x)*(p2.y-p0.y)-(q2.x-q0.x)*(p1.y-p0.y))/det;
@@ -147,7 +164,7 @@
       return {canvas:c,padding};
     }
     function treePoint(l,x,y,amount){
-      const im=images.get(l.id),h=Math.max(0,(im.height*.78-y)/(im.height*.78)),bend=h*h;
+      const im=spriteImage(l),h=Math.max(0,(im.height*.78-y)/(im.height*.78)),bend=h*h;
       const smooth=v=>{v=Math.max(0,Math.min(1,v));return v*v*(3-2*v);};
       const edgeWidth=Math.max(30,im.width*.24),edges=l.clippedEdges||[];
       // The cut source border stays at the frame border. Only the intact
@@ -156,21 +173,21 @@
       return {x:x+(l.amplitude||5)*im.width/l.rect[2]*amount*bend*edge,y};
     }
     function tree(l,t){
-      const im=images.get(l.id),phase=t*Math.PI*2/(l.period||7)+(l.phase||0),amount=Math.sin(phase)*wind;
-      const key=Math.round(amount*32),cache=treeCaches.get(l.id)||new Map();treeCaches.set(l.id,cache);
+      const im=spriteImage(l),phase=t*Math.PI*2/(l.period||7)+(l.phase||0),amount=Math.sin(phase)*wind;
+      const key=Math.round(amount*8),cache=treeCaches.get(l.id)||new Map();treeCaches.set(l.id,cache);
       if(cache.has(key))return cache.get(key);
-      const frame=deformSprite(im,(x,y)=>treePoint(l,x,y,key/32),6,12,Math.ceil((l.amplitude||5)*im.width/l.rect[2]*1.5)+6);
-      cache.set(key,frame);if(cache.size>5)cache.delete(cache.keys().next().value);return frame;
+      const frame=deformSprite(im,(x,y)=>treePoint(l,x,y,key/8),6,12,Math.ceil((l.amplitude||5)*im.width/l.rect[2]*1.5)+6);
+      cache.set(key,frame);if(cache.size>25)cache.delete(cache.keys().next().value);return frame;
     }
     function bird(l,t){
-      const im=images.get(l.id),k=Math.floor((((t/(l.flapPeriod||1.3))%1+1)%1)*48),cache=birdCaches.get(l.id)||new Map();birdCaches.set(l.id,cache);
+      const im=spriteImage(l),k=Math.floor((((t/(l.flapPeriod||1.3))%1+1)%1)*24),cache=birdCaches.get(l.id)||new Map();birdCaches.set(l.id,cache);
       if(cache.has(k))return cache.get(k);
-      const flap=Math.sin(k/48*Math.PI*2);
+      const flap=Math.sin(k/24*Math.PI*2);
       const frame=deformSprite(im,(x,y)=>{
         const h=Math.max(0,Math.min(1,(im.height*.64-y)/(im.height*.58))),body=Math.max(0,Math.min(1,(im.width*.74-x)/(im.width*.16))),weight=h*(y>im.height*.48?body:1);
         return {x:x+(x-im.width*.5)*.1*flap*weight,y:y+(im.height*.66-y)*.32*flap*weight};
       },8,8,Math.ceil(Math.max(im.height*.24,im.width*.06))+8);
-      cache.set(k,frame);if(cache.size>5)cache.delete(cache.keys().next().value);return frame;
+      cache.set(k,frame);return frame;
     }
     function birdTravelTime(l,t){
       const duration=l.entryMotion?.rampSeconds??4.5,initial=l.entryMotion?.initialSpeed??.65;
@@ -181,7 +198,7 @@
       return initial*t+(1-initial)*duration*(u*u*u-.5*u*u*u*u);
     }
     function draw(l,t,introTime){
-      if(!enabled.has(l.id))return;const im=images.get(l.id),[x,y,w,h]=l.rect;
+      if(!enabled.has(l.id))return;const im=l.kind==='tree'||l.kind==='bird'?spriteImage(l):images.get(l.id),[x,y,w,h]=l.rect;
       const enter=arrival(l,introTime);if(!enter.a)return;
       ctx.save();
       ctx.globalAlpha=enter.a;
@@ -241,7 +258,7 @@
       drawAtmosphere(introTime);
       if(showOutline&&outline){ctx.save();pose(terrainPose(introTime));ctx.drawImage(outline,0,0,W,H);ctx.restore();}
     }
-    function resolution(w){w=Math.min(W,Math.max(320,Math.round(w)));const h=Math.round(w*H/W);if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h;}}
+    function resolution(w){w=Math.min(W,Math.max(320,Math.round(w)));const h=Math.round(w*H/W);if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h;spriteSources.clear();treeCaches.clear();birdCaches.clear();atmosphere=null;}}
     return {render,resolution,enabled,manifest,images,treePoint,setOcclusion:v=>occlusion=v,setWind:v=>{wind=v;treeCaches.clear();},setChecker:v=>checker=v,setOutline:v=>showOutline=v,setReference:v=>showReference=v,isMoving:l=>motion.includes(l.kind),get cachedFrames(){return [...treeCaches.values(),...birdCaches.values()].reduce((n,c)=>n+c.size,0);}};
   }};
 })();

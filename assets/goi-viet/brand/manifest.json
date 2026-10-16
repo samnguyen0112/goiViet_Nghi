@@ -1,0 +1,16 @@
+{
+  "generator": "built-in image_gen",
+  "width": 1850,
+  "height": 850,
+  "transparent": true,
+  "sourceSha256": "2c5f85cb7aef3f27855642e96f0f4aa47bfd1063ccb07be040bcfc7b25d9658c",
+  "png": "goi-viet-logo.png",
+  "web": "goi-viet-logo.webp",
+  "responsiveWidths": [
+    512,
+    1024,
+    1850
+  ],
+  "webEncoding": "lossless",
+  "offlineExport": "../postcard-logo-data.js"
+}

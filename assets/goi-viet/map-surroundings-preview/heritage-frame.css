@@ -1,0 +1,139 @@
+/* Preview only. Original artwork, rendered as a nine-slice CSS border.
+   Independent safe insets preserve map coordinates and keep controls inside the frame. */
+body[data-regional-preview] #mapScene {
+  --hf-scale: 1;
+  --hf-rail: calc(56px * var(--hf-scale));
+  --hf-gap: 10px;
+  --hf-left: max(var(--hf-rail), env(safe-area-inset-left, 0px));
+  --hf-right: max(var(--hf-rail), env(safe-area-inset-right, 0px));
+  --hf-top: max(calc(54px * var(--hf-scale)), env(safe-area-inset-top, 0px));
+  --hf-bottom: max(calc(53px * var(--hf-scale)), env(safe-area-inset-bottom, 0px));
+  --hf-panel-foot: calc(120px * var(--hf-scale) + var(--hf-gap));
+  --hf-inset-left: calc(var(--hf-left) + var(--hf-gap));
+  --hf-inset-right: calc(var(--hf-right) + var(--hf-gap));
+  --hf-paper: #f5e9cb;
+  --hf-paper-light: #fff6df;
+  --hf-gold: #b68e4e;
+  --hf-gold-light: #e1c58e;
+  --hf-jade: #21584e;
+}
+body[data-regional-preview] #mapScene > .heritage-frame { display: none; }
+body[data-regional-preview]:has(#introScreen.intro-hidden) #mapScene {
+  background: var(--hf-paper);
+}
+body[data-regional-preview]:has(#introScreen.intro-hidden) #mapScene > :is(#mainCanvas,.regional-background,.journey-vehicle-layer) {
+  clip-path: inset(var(--hf-top) var(--hf-right) var(--hf-bottom) var(--hf-left) round 11px);
+}
+body[data-regional-preview]:has(#introScreen.intro-hidden) #mapScene > .heritage-frame {
+  display: block;
+  position: absolute;
+  inset: 0;
+  z-index: 12;
+  overflow: hidden;
+  isolation: isolate;
+  contain: layout paint;
+  pointer-events: none;
+  user-select: none;
+}
+.heritage-frame *, .heritage-frame::before, .heritage-frame::after { pointer-events: none; }
+.hf-original-art {
+  position: absolute;
+  inset: 0;
+  box-sizing: border-box;
+  border-style: solid;
+  border-color: transparent;
+  border-width: calc(104px * var(--hf-scale)) calc(390px * var(--hf-scale)) calc(245px * var(--hf-scale)) calc(600px * var(--hf-scale));
+  border-image-source: url('frame/reference-original.png');
+  border-image-slice: 104 390 245 600;
+  border-image-width: 1;
+  border-image-repeat: stretch;
+}
+/* Transparent measurement regions, shared with the map-label collision system. */
+.hf-rail {
+  position: absolute;
+}
+.hf-rail[data-edge=top] { inset: 0 0 auto; height: var(--hf-top); }
+.hf-rail[data-edge=bottom] { inset: auto 0 0; height: var(--hf-bottom); }
+.hf-rail[data-edge=left] { inset: 0 auto 0 0; width: var(--hf-left); }
+.hf-rail[data-edge=right] { inset: 0 0 0 auto; width: var(--hf-right); }
+.hf-corner { position: absolute; }
+.hf-corner[data-corner=tl] { left: 0; top: 0; width: calc(600px * var(--hf-scale)); height: calc(104px * var(--hf-scale)); }
+.hf-corner[data-corner=tr] { right: 0; top: 0; width: calc(390px * var(--hf-scale)); height: calc(104px * var(--hf-scale)); }
+.hf-corner[data-corner=bl] { left: 0; bottom: 0; width: calc(600px * var(--hf-scale)); height: calc(245px * var(--hf-scale)); }
+.hf-corner[data-corner=br] { right: 0; bottom: 0; width: calc(390px * var(--hf-scale)); height: calc(245px * var(--hf-scale)); }
+
+/* All functional UI sits inside the opening, independently of decorative art. */
+body[data-regional-preview]:has(#introScreen.intro-hidden) #mapScene .top-header {
+  top: calc(var(--hf-top) + var(--hf-gap));
+  left: var(--hf-inset-left);
+  right: var(--hf-inset-right);
+  min-width: 0;
+}
+body[data-regional-preview]:has(#introScreen.intro-hidden) #mapScene .left-helper {
+  left: var(--hf-inset-left);
+  max-height: calc(100dvh - var(--header-offset, 120px) - var(--hf-bottom) - 100px);
+}
+body[data-regional-preview]:has(#introScreen.intro-hidden) #mapScene #stationPanel {
+  right: var(--hf-inset-right);
+  width: clamp(340px, 26vw, 428px);
+  height: calc(100dvh - var(--header-offset, 120px) - var(--hf-panel-foot));
+  max-height: calc(100dvh - var(--header-offset, 120px) - var(--hf-panel-foot));
+}
+body[data-regional-preview]:has(#introScreen.intro-hidden) #mapScene .bottom-dock {
+  bottom: calc(var(--hf-bottom) + var(--hf-gap));
+  max-width: min(var(--map-space-width, 100vw), calc(100vw - var(--hf-left) - var(--hf-right) - 2 * var(--hf-gap)));
+}
+body[data-regional-preview]:has(#introScreen.intro-hidden) #previewPanelOpen {
+  right: var(--hf-inset-right);
+}
+
+/* Reduce the repeated masthead before sacrificing the card's reading space. */
+@media (min-width: 769px) and (max-height: 850px) {
+  body[data-regional-preview]:has(#introScreen.intro-hidden) #mapScene #stationPanel {
+    & .preview-panel-heading { min-height: 79px; padding: 12px 9px 14px; }
+    & .heritage-masthead { align-items: flex-start; padding-right: 92px; text-align: left; }
+    & .heritage-brand-logo { display: none; }
+    & .preview-panel-heading h2 { font-size: 25px; margin-bottom: 3px; }
+    & .heritage-heading-note { font-size: 8px; }
+    & #previewPanelClose { top: 12px; }
+    & .panel-filters { padding-block: 10px 8px !important; }
+    & .scope-tab { min-height: 36px; }
+  }
+}
+@media (min-width: 769px) and (max-width: 1080px) {
+  body[data-regional-preview]:has(#introScreen.intro-hidden) #mapScene .bottom-dock {
+    top: calc(var(--header-offset, 120px) + 6px); bottom: auto;
+  }
+}
+@media (max-width: 768px) {
+  body[data-regional-preview] #mapScene { --hf-gap: 6px; }
+  body[data-regional-preview]:has(#introScreen.intro-hidden) #mapScene #stationPanel {
+    left: var(--hf-inset-left); right: var(--hf-inset-right); width: auto; height: auto;
+    top: auto;
+    max-height: min(57dvh, calc(100dvh - var(--header-offset, 200px) - var(--dock-offset, 90px) - 64px));
+    & .preview-panel-heading { min-height: 67px; padding: 8px 10px 11px; }
+    & .heritage-brand-logo { display: none; }
+    & .preview-panel-heading h2 { font-size: 24px; margin-bottom: 3px; }
+  }
+  body[data-regional-preview]:has(#introScreen.intro-hidden) #mapScene .mobile-view-switcher {
+    left: var(--hf-inset-left); right: var(--hf-inset-right);
+  }
+  body[data-regional-preview]:has(#introScreen.intro-hidden) #mapScene .bottom-dock {
+    left: calc(var(--hf-inset-left) + (100vw - var(--hf-inset-left) - var(--hf-inset-right)) / 2);
+    top: auto; right: auto; bottom: calc(120px * var(--hf-scale) + var(--hf-gap)); width: max-content; transform: translateX(-50%); flex-wrap: nowrap; gap: 3px; padding-inline: 5px;
+    & .dock-btn { font-size: 12px; padding-inline: 8px; }
+  }
+  body[data-regional-preview]:has(#introScreen.intro-hidden) #mapScene .top-header .map-brand-caption-title { font-size: 15px; }
+  body[data-regional-preview]:has(#introScreen.intro-hidden) #mapScene .top-header .map-brand-caption-subtitle { font-size: 6px; }
+}
+@media (max-width: 360px) {
+  body[data-regional-preview]:has(#introScreen.intro-hidden) #mapScene .top-header .map-brand-caption-subtitle { display: none; }
+  body[data-regional-preview]:has(#introScreen.intro-hidden) #mapScene .top-header .map-brand-logo { width: 60px; flex-basis: 60px; }
+}
+[data-theme=dark] body[data-regional-preview] #mapScene {
+  --hf-paper: #34463b; --hf-paper-light: #435343;
+  --hf-gold: #b49b69; --hf-gold-light: #8e825d; --hf-jade: #193f39;
+}
+@media (forced-colors: active) {
+  .hf-original-art { border-image: none; border: 2px solid CanvasText; }
+}

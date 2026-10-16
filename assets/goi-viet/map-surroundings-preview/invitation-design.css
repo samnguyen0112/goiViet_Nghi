@@ -1,0 +1,186 @@
+/* Approved invitation design, implemented as real HTML and independent decorative fragments.
+   Ratios below follow the 1962 × 801 reference. No mockup screenshot is displayed. */
+@font-face {
+  font-family: 'Invitation Display';
+  src: url('../../fonts/heritage/PlayfairDisplay-700.woff') format('woff');
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+body[data-regional-preview] #introWelcomeStage #homepageContent {
+  --inv-paper: #faf6e8;
+  --inv-ink: #073b32;
+  --inv-body: #365c50;
+  --inv-gold: #bc964e;
+  container-type: inline-size;
+  position: relative;
+  isolation: isolate;
+  flex: 0 0 auto;
+  width: min(880px, 92%);
+  max-width: none;
+  padding: 0;
+  border: 0;
+  border-radius: clamp(22px, 3.27vw, 44px);
+  background: radial-gradient(ellipse at 54% 46%, #faf7e8 0, #fbf6e8 61%, #f4ecd5 100%);
+  color: var(--inv-ink);
+  box-shadow: 0 12px 36px #173f3526;
+  text-align: center;
+  overflow: clip;
+}
+body[data-regional-preview] #introWelcomeStage #homepageContent::before { content: none; }
+.gv-invitation-art {
+  position: absolute; inset: 0; z-index: -1;
+  pointer-events: none; user-select: none;
+  overflow: hidden; border-radius: inherit;
+}
+.gv-invitation-art * { pointer-events: none; }
+.gv-invitation-ornament { position: absolute; display: block; }
+.gv-invitation-ornament[data-piece=tl] { left: 0; top: 1.223cqi; width: 14.781%; height: auto; }
+.gv-invitation-ornament[data-piece=tr] { right: 0; top: 1.223cqi; width: 14.475%; height: auto; }
+.gv-invitation-ornament[data-piece=bl] { left: 0; bottom: 0; width: 25.841%; height: auto; }
+.gv-invitation-ornament[data-piece=br] { right: 0; bottom: 0; width: 25.790%; height: auto; }
+.gv-invitation-border {
+  position: absolute; inset: 0;
+  display: grid;
+  grid-template: 3.262cqi minmax(0,1fr) 3.262cqi / 3.262cqi minmax(0,1fr) 3.262cqi;
+}
+.gv-invitation-border img { display: block; width: 100%; height: 100%; min-width: 0; min-height: 0; }
+.gv-invitation-border [data-piece=tl] { grid-area: 1 / 1; }
+.gv-invitation-border [data-piece=top] { grid-area: 1 / 2; }
+.gv-invitation-border [data-piece=tr] { grid-area: 1 / 3; }
+.gv-invitation-border [data-piece=left] { grid-area: 2 / 1; }
+.gv-invitation-border [data-piece=right] { grid-area: 2 / 3; }
+.gv-invitation-border [data-piece=bl] { grid-area: 3 / 1; }
+.gv-invitation-border [data-piece=bottom] { grid-area: 3 / 2; }
+.gv-invitation-border [data-piece=br] { grid-area: 3 / 3; }
+body[data-regional-preview] #introWelcomeStage #homepageContent .gv-invitation-copy {
+  position: relative;
+  padding: 4cqi 0 4.5cqi;
+}
+body[data-regional-preview] #introWelcomeStage #homepageContent .gv-home-kicker {
+  display: flex; align-items: center; justify-content: center; gap: 1cqi;
+  max-width: 83%; margin: 0 auto; padding: 0;
+  border: 0; border-radius: 0; box-shadow: none; background: transparent;
+  color: #a83524;
+  font: 500 clamp(12px, 1.5cqi, 30px)/1.4 'Be Vietnam Pro',sans-serif;
+}
+body[data-regional-preview] #introWelcomeStage #homepageContent .gv-home-kicker::before,
+body[data-regional-preview] #introWelcomeStage #homepageContent .gv-home-kicker::after {
+  content: ''; width: 2.3cqi; height: 1px; flex: 0 0 2.3cqi;
+  background: linear-gradient(90deg,transparent,#cca75e,transparent);
+}
+.gv-invitation-train { width: 2.345cqi; height: 2.243cqi; object-fit: contain; flex: 0 0 auto; }
+body[data-regional-preview] #introWelcomeStage #homepageContent #homepageHeading {
+  max-width: 84%; margin: 2.6cqi auto 0; padding: 0;
+  color: var(--inv-ink); text-shadow: none;
+  font: 700 clamp(25px, 3.66cqi, 75px)/1.206 'Invitation Display',Georgia,serif;
+  letter-spacing: -.005em;
+  text-wrap: balance;
+}
+body[data-regional-preview] #introWelcomeStage #homepageContent .gv-home-description {
+  max-width: 82%; margin: 1.3cqi auto 0;
+  color: var(--inv-body);
+  font: 400 clamp(13px, 1.64cqi, 33px)/1.52 'Be Vietnam Pro',sans-serif;
+}
+body[data-regional-preview] #introWelcomeStage #homepageContent .gv-home-description p { margin: 0; }
+body[data-regional-preview] #introWelcomeStage #homepageContent .gv-home-features {
+  display: grid; grid-template-columns: .92fr 1.05fr 1.2fr;
+  gap: 0; min-height: 5.8cqi;
+  margin: 1.4cqi 5.8% 0 9%; padding: .8cqi 0;
+  list-style: none; box-sizing: border-box;
+  background: #fbf6e5;
+  border: 1px solid #dbc38c99; border-radius: 1.8cqi;
+}
+body[data-regional-preview] #introWelcomeStage #homepageContent .gv-home-features li {
+  position: relative; display: flex; align-items: center; justify-content: center;
+  min-width: 0; padding: 0 1.1cqi; gap: .75cqi;
+  border: 0; border-radius: 0; background: transparent;
+  color: var(--inv-ink);
+  font: 600 clamp(12px, 1.18cqi, 25px)/1.35 'Goi Viet Island Lora',Georgia,serif;
+  text-align: left;
+}
+body[data-regional-preview] #introWelcomeStage #homepageContent .gv-home-features li + li { border-left: 1px solid #d7b87c90; }
+body[data-regional-preview] #introWelcomeStage #homepageContent .gv-home-features li > span { flex: 1 1 auto; min-width: 0; }
+body[data-regional-preview] #introWelcomeStage #homepageContent .gv-home-features li + li::before {
+  content: ''; position: absolute; left: 0; top: 50%; translate: -50% -50%;
+  width: .55cqi; height: .55cqi; rotate: 45deg;
+  border: 1px solid #c5a15c; background: #fbf7e9;
+}
+.gv-invitation-feature-icon { width: 4.7cqi; height: 4.1cqi; object-fit: contain; flex: 0 0 4.7cqi; }
+.gv-invitation-feature-copy { display: flex; flex-direction: column; gap: .2cqi; min-width: 0; }
+.gv-invitation-feature-copy strong { font: inherit; }
+.gv-invitation-feature-copy small { color: #6c7053; font: 400 clamp(11px, 1cqi, 20px)/1.3 'Be Vietnam Pro',sans-serif; text-wrap: pretty; }
+.gv-invitation-feature-phrase { display: inline-block; white-space: nowrap; }
+body[data-regional-preview] #introWelcomeStage #homepageContent .gv-home-actions {
+  display: flex; flex-wrap: nowrap; align-items: center; justify-content: center;
+  gap: 1.53cqi; margin: 2.2cqi auto 0; padding: 0; width: 80%;
+}
+body[data-regional-preview] #introWelcomeStage #homepageContent .gv-home-actions button {
+  position: relative; box-sizing: border-box; display: inline-flex;
+  align-items: center; justify-content: center; flex: 0 0 auto;
+  min-width: 0; min-height: max(48px, 5.7cqi); padding: 0 1.5cqi;
+  border-radius: 1.55cqi;
+  font: 700 clamp(17px, 2.06cqi, 42px)/1.2 'Invitation Display',Georgia,serif;
+  cursor: pointer; touch-action: manipulation;
+  transition: background-color 150ms, filter 150ms;
+}
+body[data-regional-preview] #introWelcomeStage #homepageContent .gv-home-start {
+  width: 29cqi; gap: 2.2cqi;
+  color: #fff8e4;
+  border: max(1px,.13cqi) solid #9d2e23;
+  background: radial-gradient(ellipse at 23% 30%,#c53b2b4d,transparent 70%),linear-gradient(115deg,#b13024,#96271e);
+  box-shadow: inset 0 0 0 .15cqi #f6e1a9,inset 0 0 0 .29cqi #a92c22,0 .4cqi .8cqi #7c30231a;
+}
+body[data-regional-preview] #introWelcomeStage #homepageContent .gv-home-start > span { font: 400 2.2cqi/1 Georgia,serif; }
+body[data-regional-preview] #introWelcomeStage #homepageContent .gv-home-guide {
+  width: 18cqi; color: var(--inv-ink);
+  border: max(1px,.09cqi) solid #bf954a;
+  background: #fffbefaa; box-shadow: none;
+}
+body[data-regional-preview] #introWelcomeStage #homepageContent .gv-home-actions button:hover { filter: brightness(1.04); }
+body[data-regional-preview] #introWelcomeStage #homepageContent .gv-home-actions button:active { filter: brightness(.94); }
+body[data-regional-preview] #introWelcomeStage #homepageContent .gv-home-actions button:focus-visible { outline: 3px solid #246e5b; outline-offset: 4px; }
+
+@media (min-width: 2200px) {
+  body[data-regional-preview] #introWelcomeStage #homepageContent { width: min(1750px,68vw); }
+}
+/* Match the previous invitation's compact footprint on laptop-height screens. */
+@media (min-width: 761px) and (max-height: 760px) {
+  body[data-regional-preview] #introWelcomeStage #homepageContent .gv-invitation-copy { padding-block: 14px 20px; }
+  body[data-regional-preview] #introWelcomeStage #homepageContent .gv-home-kicker { font-size: 12px; }
+  body[data-regional-preview] #introWelcomeStage #homepageContent #homepageHeading { margin-top: 8px; font-size: min(30px,3.2cqi); line-height: 1.18; }
+  body[data-regional-preview] #introWelcomeStage #homepageContent .gv-home-description { margin-top: 6px; font-size: 13px; line-height: 1.45; }
+  body[data-regional-preview] #introWelcomeStage #homepageContent .gv-home-features { min-height: 44px; margin-top: 8px; padding-block: 4px; }
+  body[data-regional-preview] #introWelcomeStage #homepageContent .gv-home-actions { margin-top: 10px; }
+  body[data-regional-preview] #introWelcomeStage #homepageContent .gv-home-actions button { min-height: 48px; }
+  .gv-invitation-ornament { max-height: 52%; object-fit: contain; }
+  .gv-invitation-ornament[data-piece=tl] { object-position: left top; }
+  .gv-invitation-ornament[data-piece=tr] { object-position: right top; }
+  .gv-invitation-ornament[data-piece=bl] { object-position: left bottom; }
+  .gv-invitation-ornament[data-piece=br] { object-position: right bottom; }
+}
+/* Keep native copy, full-size touch targets and readable type on narrow devices. */
+@media (max-width: 760px) {
+  body[data-regional-preview] #introWelcomeStage #homepageContent { width: 100%; border-radius: 24px; }
+  body[data-regional-preview] #introWelcomeStage #homepageContent .gv-invitation-copy { padding: 32px 20px 55px; }
+  body[data-regional-preview] #introWelcomeStage #homepageContent .gv-home-kicker { max-width: 100%; gap: 7px; font-size: 11px; line-height: 1.6; }
+  body[data-regional-preview] #introWelcomeStage #homepageContent .gv-home-kicker::before,
+  body[data-regional-preview] #introWelcomeStage #homepageContent .gv-home-kicker::after { display: none; }
+  .gv-invitation-train { width: 24px; height: 24px; }
+  body[data-regional-preview] #introWelcomeStage #homepageContent #homepageHeading { max-width: 100%; margin-top: 18px; font-size: clamp(27px,6.5vw,37px); line-height: 1.25; letter-spacing: -.02em; }
+  body[data-regional-preview] #introWelcomeStage #homepageContent .gv-home-description { max-width: 100%; margin-top: 15px; font-size: 14px; line-height: 1.7; }
+  body[data-regional-preview] #introWelcomeStage #homepageContent .gv-home-description p + p { margin-top: 5px; }
+  body[data-regional-preview] #introWelcomeStage #homepageContent .gv-home-features { grid-template-columns: 1fr; margin: 20px 0 0; padding: 6px 13px; border-radius: 15px; }
+  body[data-regional-preview] #introWelcomeStage #homepageContent .gv-home-features li { min-height: 64px; justify-content: flex-start; gap: 12px; padding: 11px 0; font-size: 15px; }
+  body[data-regional-preview] #introWelcomeStage #homepageContent .gv-home-features li + li { border-left: 0; border-top: 1px solid #d7b87c80; }
+  body[data-regional-preview] #introWelcomeStage #homepageContent .gv-home-features li + li::before { content: none; }
+  .gv-invitation-feature-icon { flex-basis: 40px; width: 40px; height: 38px; }
+  .gv-invitation-feature-copy { gap: 3px; }
+  .gv-invitation-feature-copy small { font-size: 12px; }
+  body[data-regional-preview] #introWelcomeStage #homepageContent .gv-home-actions { width: 100%; flex-direction: column; gap: 11px; margin-top: 21px; }
+  body[data-regional-preview] #introWelcomeStage #homepageContent .gv-home-actions button { width: 100%; min-height: 54px; border-radius: 14px; padding: 12px 14px; font-size: 21px; }
+  body[data-regional-preview] #introWelcomeStage #homepageContent .gv-home-start { gap: 18px; box-shadow: inset 0 0 0 2px #f6e1a9,inset 0 0 0 3px #a92c22; }
+  body[data-regional-preview] #introWelcomeStage #homepageContent .gv-home-start > span { font-size: 24px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  body[data-regional-preview] #introWelcomeStage #homepageContent .gv-home-actions button { transition: none; }
+}
+body[data-regional-preview].reduced-motion #introWelcomeStage #homepageContent .gv-home-actions button { transition: none; }

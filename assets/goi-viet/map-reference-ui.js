@@ -37,7 +37,8 @@
     setFace(document.querySelector('#mapScene .header-actions > .craft-btn-red'), icon('train')+'<span class="ui-ref-ticket-short">Rút vé</span><span class="ui-ref-ticket-full">Rút vé ngẫu nhiên</span>');
     setFace(document.querySelector('#mapScene .header-actions > .craft-btn-green'), icon('mail')+'<span>Bưu Thiếp</span>');
     setFace(document.getElementById('tabScopeFeatured'), icon('star')+'<span>3 ga khởi đầu</span>');
-    setFace(document.getElementById('tabScopeAll'), '<span>Tất cả 36 ga tỉnh &amp; đảo</span>');
+    const allScope = document.getElementById('tabScopeAll');
+    setFace(allScope, allScope?.dataset.scopeLabel ? '<span>'+escape(allScope.dataset.scopeLabel)+'</span>' : '<span>Tất cả 36 ga tỉnh &amp; đảo</span>');
     const topics = {all:'all','Ẩm thực':'food','Nghệ thuật':'art','Lễ hội':'festival','Nghề truyền thống':'craft'};
     document.querySelectorAll('#stationPanel .topic-btn').forEach(button => {
       const text = button.textContent.trim();

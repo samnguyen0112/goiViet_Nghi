@@ -18,7 +18,7 @@
   host.append(background, waveCanvas, labelCanvas);scene.prepend(host);
   const back = background.getContext('2d');const waves = waveCanvas.getContext('2d');const labels = labelCanvas.getContext('2d');
   const images = new Map();
-  const worldBoxes = new WeakMap();
+  const worldBoxes = new WeakMap(),polygonAreas=new WeakMap();
   const minimumValues = new Map();
   const simplified = new WeakMap();
   let visibleWorld = null;
@@ -34,7 +34,7 @@
   const mapOrigin = () => getMapScreenOrigin(cw, ch);
   function ensureGeometry() {
     if(geometry()||geometryLoading||geometryError)return;
-    geometryLoading=true;const script=document.createElement('script');script.src=new URL('regional-geometry.js?v=1',scriptURL).href;
+    geometryLoading=true;const script=document.createElement('script');script.src=new URL('regional-geometry.js?v=seamless-20261015',scriptURL).href;
     script.onload=()=>{geometryLoading=false;lastKey='';lastWaveKey='';minimumValues.clear();if(active()){syncHeaderOffset();constrainCamera();requestMapRender(3);}};
     script.onerror=()=>{geometryLoading=false;geometryError=true;};document.head.append(script);
   }
@@ -100,7 +100,7 @@
       const item = renderedHitProvinces[i];
       if (!item.topProjectedRings.some(ring => pointInRing2D(x,y,ring))) continue;
       const id=item.prov.id;
-      return normalizePlaceId(state.selectedPlaceId)===id || state.hoveredItem?.id===id ? 36 : ['hn','hue','hcm'].includes(id) || state.exploredPlaceIds.includes(id) ? 24 : 16;
+      return getMapSelectedPlaceId()===id || state.hoveredItem?.id===id ? 36 : ['hn','hue','hcm'].includes(id) || state.exploredPlaceIds.includes(id) ? 24 : 16;
     }
     return 0;
   }
@@ -164,6 +164,9 @@
     for(const polygon of polygons) {
       const rings=Array.isArray(polygon)?polygon:[polygon.outer,...(polygon.holes||[])];
       if(!worldVisible(rings[0])||window.GoiVietNaturalLandscape?.excludeBackgroundIsland(rings))continue;
+      const outer=rings[0];let area=polygonAreas.get(outer);
+      if(area===undefined){area=Math.abs(outer.reduce((sum,p,i)=>{const q=outer[(i+1)%outer.length];return sum+p[0]*q[1]-q[0]*p[1];},0))/2;polygonAreas.set(outer,area);}
+      if(area*camera.zoom*camera.zoom<1.8)continue;
       for(const rawRing of rings) {
       const ring=displayLine(rawRing);
       if(!ring.length)continue;
@@ -175,7 +178,7 @@
   function displayLine(points) {
     if(points.length<7)return points;
     let levels=simplified.get(points);if(!levels){levels=new Map();simplified.set(points,levels);}if(levels.has(detailLevel))return levels.get(detailLevel);
-    const tolerance=[.18,.45,.9,1.6][detailLevel],squared=tolerance*tolerance,keep=new Uint8Array(points.length);keep[0]=keep[points.length-1]=1;
+    const tolerance=[.12,.28,.55,1][detailLevel],squared=tolerance*tolerance,keep=new Uint8Array(points.length);keep[0]=keep[points.length-1]=1;
     const stack=[[0,points.length-1]];
     while(stack.length){const[first,last]=stack.pop(),a=points[first],b=points[last],dx=b[0]-a[0],dy=b[1]-a[1],length=dx*dx+dy*dy;let maximum=squared,index=-1;
       for(let i=first+1;i<last;i++){const p=points[i],t=length?clamp(((p[0]-a[0])*dx+(p[1]-a[1])*dy)/length,0,1):0,x=p[0]-a[0]-t*dx,y=p[1]-a[1]-t*dy,d=x*x+y*y;if(d>maximum){maximum=d;index=i;}}
@@ -195,12 +198,15 @@
     return overlaps(box,visibleWorld);
   }
   function linesPath(lines,camera,width,height) {
-    const path=new Path2D();for(const raw of lines) {if(!worldVisible(raw))continue;const line=displayLine(raw);for(let i=0;i<line.length;i++){const p=planarProject(...line[i]);if(i)path.lineTo(p[0],p[1]);else path.moveTo(p[0],p[1]);}projectionPoints+=line.length;}return path;
+    const path=new Path2D();for(const raw of lines) {if(!worldVisible(raw)||window.GoiVietNaturalLandscape?.excludeBackgroundIsland([raw]))continue;const box=worldBoxes.get(raw);if(box&&Math.hypot(box.right-box.left,box.bottom-box.top)*camera.zoom<2)continue;const line=displayLine(raw);for(let i=0;i<line.length;i++){const p=planarProject(...line[i]);if(i)path.lineTo(p[0],p[1]);else path.moveTo(p[0],p[1]);}projectionPoints+=line.length;}return path;
   }
+  let frameUI=null;
   function visibleUI() {
-    return [...scene.querySelectorAll('.top-header,.left-helper,#stationPanel,.bottom-dock,.mobile-view-switcher')].filter(el=>{
+    if(frameUI)return frameUI.slice();
+    frameUI=[...scene.querySelectorAll('.top-header,.left-helper,#stationPanel,.bottom-dock,.mobile-view-switcher,.journey-route-bar')].filter(el=>{
       const style=getComputedStyle(el);return !el.inert&&el.getAttribute('aria-hidden')!=='true'&&style.display!=='none'&&style.visibility!=='hidden'&&Number(style.opacity)>.1;
-    }).map(el=>{const r=el.getBoundingClientRect();return {left:r.left-7,right:r.right+7,top:r.top-7,bottom:r.bottom+7};});
+    }).map(el=>{const r=el.getBoundingClientRect();return {left:r.left-7,right:r.right+7,top:r.top-7,bottom:r.bottom+7};}).concat(window.GoiVietHeritageFrame?.obstacles()||[]);
+    return frameUI.slice();
   }
   const overlaps = (a,b) => a.left<b.right && a.right>b.left && a.top<b.bottom && a.bottom>b.top;
   const insideScreen = (box,width,height) => box.left>=8 && box.right<=width-8 && box.top>=8 && box.bottom<=height-8;
@@ -211,7 +217,7 @@
     for(const country of source.countries) {
       const anchor=country.label||country.anchor,p=project3D(...anchor,0,camera,width,height),size=clamp(14*Math.sqrt(p[3]/.828),12,20);
       const name=country.name.toLocaleUpperCase('vi-VN');
-      context.font=`600 ${size}px "Goi Viet Island Lora", "Be Vietnam Pro", serif`;
+      context.font=canvasFont(size,600,'ui');
       const labelWidth=context.measureText(name).width+16,box=rect(p[0],p[1],labelWidth,size+14);
       if(!insideScreen(box,width,height)||blocked.some(b=>overlaps(box,b))||countryLabels.some(b=>overlaps(box,b.box)))continue;
       context.textAlign='center';context.textBaseline='middle';context.lineJoin='round';
@@ -220,7 +226,7 @@
       countryLabels.push({id:country.id,text:name,point:[p[0],p[1]],world:anchor,box,size});
     }
     const p=project3D(700,635,0,camera,width,height),size=clamp(17*Math.sqrt(p[3]/.828),13,23);
-    context.font=`500 ${size}px "Goi Viet Island Lora", "Be Vietnam Pro", serif`;
+    context.font=canvasFont(size,500,'ui');
     const name='BIỂN ĐÔNG',box=rect(p[0],p[1],context.measureText(name).width+16,size+16);
     if(insideScreen(box,width,height)&&!blocked.some(b=>overlaps(box,b))) {
       context.textAlign='center';context.textBaseline='middle';context.fillStyle=dark?'#B9D1C5':'#E6E9CA';context.fillText(name,p[0],p[1]);
@@ -233,26 +239,27 @@
     waves.clearRect(-rasterGuard,-rasterGuard,width+2*rasterGuard,height+2*rasterGuard);if(!lastWater)return;
     const extent=viewportWorld(camera,width,height,rasterGuard);if(!extent)return;
     waves.save();waves.clip(lastWater,'evenodd');
-    const spacing=camera.zoom<.4?190:camera.zoom<.8?125:95,span=spacing*3.1;
+    const spacing=camera.zoom<.4?240:camera.zoom<.8?165:130,span=spacing*2.5;
     const path=new Path2D();waveCount=0;
     for(let gy=Math.floor(extent.top/spacing)-1;gy<=Math.ceil(extent.bottom/spacing)+1;gy++){
       for(let gx=Math.floor(extent.left/span)-1;gx<=Math.ceil(extent.right/span)+1;gx++){
         if(waveCount>900)break;
-        const n=hash(gx,gy),shift=(gy%2)*span*.37;
+        const n=hash(gx,gy),shift=(gy%2)*span*.37;if(n<.2)continue;
         const x=gx*span+shift+span*.18*n,y=gy*spacing+(n-.5)*spacing*.38;
-        const drift=moving?Math.sin(now*.00035+n*8)*2.3:0,length=span*(.56+.38*hash(gx+3,gy-1));
+        const drift=moving?Math.sin(now*.00035+n*8)*2.3:0,length=span*(.30+.46*hash(gx+3,gy-1));
         const points=[[x,y+drift],[x+length*.22,y-spacing*.30+drift],[x+length*.46,y+spacing*.29+drift],[x+length*.74,y+drift],[x+length*.91,y-spacing*.08+drift],[x+length,y-spacing*.18+drift]];
         const p=points.map(([wx,wy])=>project3D(wx,wy,0,camera,width,height));
         if(p.every(q=>q[0]<-rasterGuard-20)||p.every(q=>q[0]>width+rasterGuard+20)||p.every(q=>q[1]<-rasterGuard-20)||p.every(q=>q[1]>height+rasterGuard+20))continue;
         path.moveTo(p[0][0],p[0][1]);path.bezierCurveTo(p[1][0],p[1][1],p[2][0],p[2][1],p[3][0],p[3][1]);path.quadraticCurveTo(p[4][0],p[4][1],p[5][0],p[5][1]);
-        if(n>.37){const a=project3D(x+length*.35,y+spacing*.34+drift,0,camera,width,height),b=project3D(x+length*.49,y+spacing*.10+drift,0,camera,width,height),c=project3D(x+length*.64,y+spacing*.39+drift,0,camera,width,height),d=project3D(x+length*.82,y+spacing*.26+drift,0,camera,width,height);path.moveTo(a[0],a[1]);path.bezierCurveTo(b[0],b[1],c[0],c[1],d[0],d[1]);}
+        if(n>.84){const a=project3D(x+length*.35,y+spacing*.34+drift,0,camera,width,height),b=project3D(x+length*.49,y+spacing*.10+drift,0,camera,width,height),c=project3D(x+length*.64,y+spacing*.39+drift,0,camera,width,height),d=project3D(x+length*.82,y+spacing*.26+drift,0,camera,width,height);path.moveTo(a[0],a[1]);path.bezierCurveTo(b[0],b[1],c[0],c[1],d[0],d[1]);}
         waveCount++;
       }
     }
-    waves.lineCap='round';waves.lineJoin='round';waves.strokeStyle=dark?'rgba(171,211,191,.16)':'rgba(235,239,209,.24)';waves.lineWidth=clamp(camera.zoom*.85,.55,1.15);waves.stroke(path);
-    waves.strokeStyle=dark?'rgba(152,203,188,.025)':'rgba(227,239,213,.035)';waves.lineWidth=3;waves.stroke(path);window.GoiVietNaturalLandscape?.coastalWaves(waves,camera,width,height,geometry());waves.restore();waveDraws++;
+    waves.lineCap='round';waves.lineJoin='round';waves.strokeStyle=dark?'rgba(171,211,191,.12)':'rgba(235,239,209,.17)';waves.lineWidth=clamp(camera.zoom*.65,.45,.95);waves.stroke(path);
+    window.GoiVietNaturalLandscape?.coastalWaves(waves,camera,width,height,geometry());waves.restore();waveDraws++;
   }
   function paintBackdrop(camera,width,height,dark,now=performance.now()) {
+    frameUI=null;
     if(!active()){host.hidden=true;return;}
     islandLabels=[];
     host.hidden=false;rasterGuard=width<=768?120:180;
@@ -261,7 +268,7 @@
     const ui=visibleUI();
     const moving=isDraggingMain||isTouchDragging||['zoom','yaw','pitch','panX','panY'].some(k=>Math.abs(camera[k]-camera['target'+k[0].toUpperCase()+k.slice(1)])>.001);
     if(rasterDirty&&!moving&&performance.now()-lastRasterRefine>450){lastKey='';lastWaveKey='';rasterDirty=false;lastRasterRefine=performance.now();}
-    const key=JSON.stringify([width,height,window.devicePixelRatio||1,dark,Boolean(window.GoiVietNaturalLandscape?.inspect().ready),Boolean(window.GoiVietNaturalRegionalRelief?.inspect().ready)]);
+    const key=JSON.stringify([width,height,window.devicePixelRatio||1,dark,Boolean(window.GoiVietNaturalLandscape?.inspect().ready),Boolean(window.GoiVietNaturalRegionalRelief?.inspect().ready),Boolean(window.GoiVietHydrology?.inspect().ready)]);
     const covered=cachedCamera&&applyRasterTransform(camera,width,height);
     const ratio=cachedCamera?camera.zoom/cachedCamera.zoom:1;
     if(key!==lastKey||!covered||ratio<.74||ratio>1.3||Math.abs(camera.pitch-(cachedCamera?.pitch||0))>.12||Math.abs(camera.yaw-(cachedCamera?.yaw||0))>.14) {
@@ -278,11 +285,17 @@
       lastLand=polygonsPath(source.land,camera,width,height);
       lastWater=new Path2D(lastLand);lastWater.rect(-rasterGuard-2,-rasterGuard-2,width+2*rasterGuard+4,height+2*rasterGuard+4);
       const shore=linesPath(source.coastlines,camera,width,height);
-      back.save();back.clip(lastWater,'evenodd');back.strokeStyle=dark?'rgba(122,179,161,.07)':'rgba(188,220,191,.12)';back.lineWidth=clamp(16*camera.zoom,4,28);back.lineJoin='round';back.stroke(shore);back.restore();
+      back.save();back.clip(lastWater,'evenodd');back.strokeStyle=dark?'rgba(122,179,161,.05)':'rgba(188,220,191,.08)';back.lineWidth=clamp(8*camera.zoom,2,15);back.lineJoin='round';back.stroke(shore);back.restore();
       const a=project3D(50,0,0,camera,width,height),b=project3D(220,1050,0,camera,width,height),paper=back.createLinearGradient(a[0],a[1],b[0],b[1]);
       paper.addColorStop(0,dark?'#555A40':'#F0DFB6');paper.addColorStop(.6,dark?'#5E6044':'#E6D3A4');paper.addColorStop(1,dark?'#615E42':'#DCC99A');
       back.fillStyle=paper;back.fill(lastLand,'evenodd');
+      window.GoiVietNaturalRegionalRelief?.paint(back,{id:'context',polygons:source.land},camera,width,height,visibleWorld,dark,lastLand);
       for(const country of source.countries)window.GoiVietNaturalRegionalRelief?.paint(back,country,camera,width,height,visibleWorld,dark,polygonsPath(country.polygons,camera,width,height));
+      // Foreground VN rivers use their province surface, so the ground-level
+      // background must not leave a second, displaced copy beside a raised coast.
+      const hydroExclusion=new Path2D();hydroExclusion.rect(-rasterGuard-2,-rasterGuard-2,width+2*rasterGuard+4,height+2*rasterGuard+4);
+      polygonsPath(source.vietnamOuter,camera,width,height,hydroExclusion);
+      window.GoiVietHydrology?.paint(back,camera,width,height,dark,0,lastLand,null,hydroExclusion);
       back.strokeStyle=dark?'rgba(209,196,135,.20)':'rgba(206,180,123,.45)';back.lineWidth=clamp(camera.zoom*.95,.6,1.2);back.stroke(shore);
       for(const country of source.countries){back.strokeStyle=dark?'rgba(207,192,143,.52)':'rgba(135,112,66,.66)';back.lineWidth=clamp(camera.zoom*.82,.55,1.1);back.stroke(linesPath(country.borders,camera,width,height));}
       backdropDraws++;applyRasterTransform(camera,width,height);
@@ -295,7 +308,7 @@
     {id:'hn',file:'hanoi.svg',width:34,height:46,geo:[105.8523,21.02786]},
     {id:'hue',file:'hue.svg',width:52,height:31,geo:[107.576,16.468]},
     {id:'hcm',file:'saigon.svg',width:44,height:37,geo:[106.698019,10.772521]},
-    {id:'sailboat',file:'sailboat.svg',width:92,height:96,point:[700,250]}
+    {id:'sailboat',file:'sailboat.svg',width:114,height:117,point:[700,250]}
   ];
   function loadArt() {
     for(const spec of landmarkSpecs){
@@ -303,38 +316,41 @@
       const image=new Image();const record={image,ready:false,failed:false};images.set(spec.id,record);image.decoding='async';
       image.onload=()=>{record.ready=true;requestMapRender(3);};image.onerror=()=>{record.failed=true;requestMapRender(2);};
       const vector=window.GoiVietRegionalArt?.[spec.id];
-      image.src=vector?'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(vector):new URL('../map-art/'+spec.file,scriptURL).href;
+      image.src=vector?'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(vector):new URL(spec.id==='sailboat'?spec.file:'../map-art/'+spec.file,scriptURL).href;
     }
   }
   function paintLandmarks(context,camera,width,height,dark) {
     objectBoxes=[];if(!active())return;
     loadArt();const blocked=visibleUI(),overview=getBestOverviewZoom(width,height);
-    const tracks=MAIN_RAIL_SPLINE.pts.map(p=>project3D(p.wx,p.wy,27,camera,width,height));
+    const visibleTracks=window.GoiVietJourneyPreview?.active()?window.GoiVietJourneyPreview.tracks().map(t=>t.curve):[MAIN_RAIL_SPLINE];
+    const tracks=visibleTracks.map(curve=>curve.pts.map(p=>project3D(p.wx,p.wy,27,camera,width,height)));
     const pinBoxes=[];
     for(const id of ['hn','hue','hcm']){
-      const selected=normalizePlaceId(state.selectedPlaceId)===id,province=P34_MAP[id],p=project3D(...province.center,selected?44:34,camera,width,height);
+      const selected=getMapSelectedPlaceId()===id,province=P34_MAP[id],p=project3D(...province.center,selected?44:34,camera,width,height);
       pinBoxes.push(rect(p[0],p[1],44,44));
-      if(!selected){context.save();context.font=canvasFont(13,700);const name=getCleanStationName(CULTURAL_PLACE_MAP[id]);pinBoxes.push(rect(p[0],p[1]-21,context.measureText(name).width+14,24));context.restore();}
+      if(!selected||window.GoiVietJourneyPreview?.active()){context.save();context.font=canvasFont(13,700);const name=getCleanStationName(CULTURAL_PLACE_MAP[id]);pinBoxes.push(rect(p[0],p[1]-21,context.measureText(name).width+14,24));context.restore();}
       else {const pawn=getPlayerPawn(state.currentPlayerIndex);context.save();context.font=canvasFont(12,700);const name=getCleanStationName(CULTURAL_PLACE_MAP[id])+' • '+pawn.roleLabel;pinBoxes.push(rect(p[0],p[1]-33,context.measureText(name).width+40,27));context.restore();}
     }
-    const hitsTrack=box=>tracks.some((p,i)=>{if(!i)return false;const a=tracks[i-1],dx=p[0]-a[0],dy=p[1]-a[1],steps=Math.max(1,Math.ceil(Math.hypot(dx,dy)/4));for(let t=0;t<=steps;t++){const x=a[0]+dx*t/steps,y=a[1]+dy*t/steps;if(x>box.left-6&&x<box.right+6&&y>box.top-6&&y<box.bottom+6)return true;}return false;});
+    const hitsTrack=box=>tracks.some(points=>points.some((p,i)=>{if(!i)return false;const a=points[i-1],dx=p[0]-a[0],dy=p[1]-a[1],steps=Math.max(1,Math.ceil(Math.hypot(dx,dy)/4));for(let t=0;t<=steps;t++){const x=a[0]+dx*t/steps,y=a[1]+dy*t/steps;if(x>box.left-6&&x<box.right+6&&y>box.top-6&&y<box.bottom+6)return true;}return false;}));
     for(const spec of landmarkSpecs){
       const image=images.get(spec.id);if(!image?.ready)continue;
       if(width<=768&&camera.zoom<overview*1.15&&spec.id!=='sailboat')continue;
       const province=P34_MAP[spec.id];
-      const point=spec.point||[(spec.geo[0]-101.5)*60,(23.8-spec.geo[1])*62.5];
-      const z=spec.id==='sailboat'?0:normalizePlaceId(state.selectedPlaceId)===spec.id?36:24;
-      let p=project3D(...point,z,camera,width,height),scale=spec.id==='sailboat'?clamp(p[3],.42,1.6):clamp(Math.sqrt(p[3]),.65,1.12);
+      // These are city emblems, so share the displayed station anchor and height.
+      // Keep the landmark's geographical metadata separate from its map symbol.
+      const point=spec.point||province.center;
+      const z=spec.id==='sailboat'?0:getMapSelectedPlaceId()===spec.id?44:34;
+      let p=project3D(...point,z,camera,width,height),scale=spec.id==='sailboat'?clamp(p[3],.7,1.45):clamp(Math.sqrt(p[3]),.65,1.12);
       let box={left:p[0]-spec.width*scale/2,right:p[0]+spec.width*scale/2,top:p[1]-spec.height*scale,bottom:p[1]+3};
       const anchorScreen=[p[0],p[1]];let displacement=[0,0];
       if(mapCompass)blocked.push(rect(mapCompass.x,mapCompass.y+10,86,110));
       if(province){
         let chosen=null;
-        // Geographical anchor stays fixed at the landmark itself, not the merged
-        // province centroid. A short leader connects displaced artwork when needed.
-        for(const shrink of [1,.85,.7,.6]){
+        // Only try positions in the immediate station cluster. Prefer shrinking
+        // to pushing an emblem into another province; never draw a leader line.
+        for(const shrink of [1,.88,.76]){
           const size=scale*shrink,w=spec.width*size,h=spec.height*size;
-          for(const [dx,dy]of [[0,0],[w/2+24,14],[-w/2-24,14],[w/2+28,26],[-w/2-28,26],[0,h+27],[w/2+25,h+16],[-w/2-25,h+16],[38,-35],[-38,-35],[52,-20],[-52,-20],[0,-55],[52,52],[-52,52],[72,20],[-72,20]]){
+          for(const [dx,dy]of [[w/2+23,h-7],[-w/2-23,h-7],[16,h+23],[-16,h+23],[0,h+23]]){
             const q=[anchorScreen[0]+dx,anchorScreen[1]+dy],b={left:q[0]-w/2,right:q[0]+w/2,top:q[1]-h,bottom:q[1]+3};
             if(!insideScreen(b,width,height)||blocked.some(r=>overlaps(b,r))||pinBoxes.some(r=>overlaps(b,r))||hitsTrack(b))continue;
             chosen={p:q,box:b,scale:size,displacement:[dx,dy]};break;
@@ -342,38 +358,45 @@
           if(chosen)break;
         }
         if(!chosen)continue;({p,box,scale,displacement}=chosen);
-        if(Math.hypot(...displacement)>4){
-          context.save();context.beginPath();context.moveTo(...anchorScreen);context.lineTo(p[0],p[1]);context.strokeStyle=dark?'rgba(223,218,174,.6)':'rgba(52,82,61,.65)';context.lineWidth=.8;context.stroke();context.beginPath();context.arc(...anchorScreen,1.7,0,Math.PI*2);context.fillStyle=dark?'#DFDAB2':'#526746';context.fill();context.restore();
-        }
       }
       if(!insideScreen(box,width,height)||blocked.some(b=>overlaps(box,b)))continue;
       context.save();if(dark)context.filter='brightness(.78) saturate(.8)';
-      if(spec.id==='sailboat'){
-        context.beginPath();context.ellipse(p[0],p[1]+3,spec.width*scale*.55,7*scale,0,0,Math.PI*2);context.strokeStyle='rgba(232,236,200,.48)';context.lineWidth=.8;context.stroke();
-      }
       context.drawImage(image.image,box.left,box.top,box.right-box.left,box.bottom-box.top-3);context.restore();objectBoxes.push({...box,id:spec.id,world:[...point],geo:spec.geo&&[...spec.geo],anchorScreen,displacement,scale});
     }
   }
   function paintIslandLabel(context,island,camera,width,height,isArchipelago) {
     if(!active())return false;
-    const p=project3D(...island.pt,16,camera,width,height),area=mapScreenArea,blocked=visibleUI();
+    const group=island.id==='con-dao'?window.GoiVietNaturalIslands?.groups.find(g=>g.id===island.id):null;
+    const archipelago=isArchipelago?window.GoiVietNaturalLandscape?.inspect().groups?.find(g=>g.id===island.id):null;
+    const p=project3D(...island.pt,group||isArchipelago?0:16,camera,width,height),area=mapScreenArea,blocked=visibleUI();
+    if(mapCompass)blocked.push(rect(mapCompass.x,mapCompass.y+10,86,110));
+    blocked.push(...countryLabels.map(label=>label.box));
     const radius=isArchipelago?75*Math.max(.3,p[3]):15;
-    if(p[0]+radius<area.left||p[0]-radius>area.right||p[1]+radius<area.top||p[1]-radius>area.bottom)return true;
+    if(p[0]+radius<area.left||p[0]-radius>area.right||p[1]+radius<area.top||p[1]-radius>area.bottom){if(isArchipelago)window.GoiVietArchipelagoArt?.positionButton(island.id,null);return true;}
     const lines=isArchipelago?['QUẦN ĐẢO',island.id==='hoang-sa'?'HOÀNG SA':'TRƯỜNG SA']:[island.short];
     const size=isArchipelago?clamp(13*Math.sqrt(p[3]/.828),11.5,17):12;
     context.save();context.font=canvasFont(size,isArchipelago?600:500,'heading');
-    const textWidth=Math.max(...lines.map(line=>context.measureText(line).width))+14;
-    const lineHeight=size*1.35,boxHeight=lines.length*lineHeight+6;
-    const y=p[1]+(isArchipelago?54*Math.max(.45,p[3]):18*Math.max(.6,p[3]));
-    const candidates=[[p[0],y+boxHeight/2],[p[0]-textWidth*.6,y+boxHeight/2],[p[0]+textWidth*.6,y+boxHeight/2],[p[0],p[1]-radius-boxHeight/2-5]];
+    const textWidth=Math.max(isArchipelago?94:0,Math.max(...lines.map(line=>context.measureText(line).width))+14);
+    const lineHeight=size*1.35,labelHeight=lines.length*lineHeight+6,buttonHeight=isArchipelago?(width<=768?44:30):0,boxHeight=labelHeight+(isArchipelago?buttonHeight+5:0);
+    // Keep Con Dao's caption beside its real shoreline, in screen pixels.
+    // A world-space offset made Con Dao's caption drift far south when zoomed in.
+    const shore=group?.islands?.flatMap(item=>{const b=item.bounds;return [[b.left,b.top],[b.right,b.top],[b.right,b.bottom],[b.left,b.bottom]].map(point=>project3D(...point,0,camera,width,height)[1]);});
+    const y=shore?.length?Math.max(...shore)+7:p[1]+(isArchipelago?54*Math.max(.45,p[3]):18*Math.max(.6,p[3]));
+    const bounds=archipelago?.bounds,coast=bounds&&[[bounds.left,bounds.top],[bounds.right,bounds.top],[bounds.right,bounds.bottom],[bounds.left,bounds.bottom]].map(point=>project3D(...point,0,camera,width,height)[1]);
+    // Archipelago captions stay on the same projected meridian as the source
+    // island cluster. Resolve crowding vertically, never by sliding onto land.
+    const below=coast?Math.max(...coast)+9:y,above=coast?Math.min(...coast)-9:p[1]-radius;
+    const candidates=isArchipelago?[[p[0],below+boxHeight/2],[p[0],p[1]+18+boxHeight/2],[p[0],above-boxHeight/2],[p[0],p[1]-18-boxHeight/2],[p[0],p[1]-radius-boxHeight/2-5],[p[0],below+boxHeight/2+18]]:[[p[0],y+boxHeight/2],[p[0]-textWidth*.6,y+boxHeight/2],[p[0]+textWidth*.6,y+boxHeight/2],[p[0],p[1]-radius-boxHeight/2-5]];
     let placement=null;
     for(const[x,cy]of candidates){const box=rect(x,cy,textWidth,boxHeight);if(insideScreen(box,width,height)&&!blocked.some(b=>overlaps(box,b))&&!objectBoxes.some(b=>overlaps(box,b))&&!islandLabels.some(b=>overlaps(box,b.box))){placement={x,y:cy,box};break;}}
     if(placement){
       context.textAlign='center';context.textBaseline='middle';context.lineJoin='round';context.lineWidth=3.4;
       context.strokeStyle=state.theme==='dark'?'rgba(19,49,49,.8)':'rgba(38,99,101,.65)';context.fillStyle=state.theme==='dark'?'#E9DEB4':'#F8EBC8';
-      lines.forEach((line,i)=>{const y=placement.y+(i-(lines.length-1)/2)*lineHeight;context.strokeText(line,placement.x,y);context.fillText(line,placement.x,y);});
-      islandLabels.push({id:island.id,text:lines.join(' '),point:[p[0],p[1]],box:placement.box});
-    }
+      const labelY=placement.box.top+labelHeight/2;
+      lines.forEach((line,i)=>{const y=labelY+(i-(lines.length-1)/2)*lineHeight;context.strokeText(line,placement.x,y);context.fillText(line,placement.x,y);});
+      if(isArchipelago)window.GoiVietArchipelagoArt?.positionButton(island.id,{left:placement.x-47,top:placement.box.top+labelHeight+4});
+      islandLabels.push({id:island.id,text:lines.join(' '),point:[p[0],p[1]],box:placement.box,sourceBounds:bounds&&{...bounds}});
+    }else if(isArchipelago)window.GoiVietArchipelagoArt?.positionButton(island.id,null);
     context.restore();return true;
   }
   function mountCrane() {

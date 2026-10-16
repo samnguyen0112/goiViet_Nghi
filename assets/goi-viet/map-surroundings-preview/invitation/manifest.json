@@ -1,0 +1,169 @@
+{
+  "referenceSize": [
+    1962,
+    801
+  ],
+  "referenceSha256": "6a481e47b6d3422ce444e807a516bc2cb6844f9c44f76838857cf3e18f62988f",
+  "fragments": [
+    {
+      "name": "border-tl",
+      "file": "border-tl.png",
+      "crop": [
+        0,
+        0,
+        64,
+        64
+      ]
+    },
+    {
+      "name": "border-top",
+      "file": "border-top.png",
+      "crop": [
+        64,
+        0,
+        1834,
+        64
+      ]
+    },
+    {
+      "name": "border-tr",
+      "file": "border-tr.png",
+      "crop": [
+        1898,
+        0,
+        64,
+        64
+      ]
+    },
+    {
+      "name": "border-left",
+      "file": "border-left.png",
+      "crop": [
+        0,
+        64,
+        64,
+        673
+      ]
+    },
+    {
+      "name": "border-right",
+      "file": "border-right.png",
+      "crop": [
+        1898,
+        64,
+        64,
+        673
+      ]
+    },
+    {
+      "name": "border-bl",
+      "file": "border-bl.png",
+      "crop": [
+        0,
+        737,
+        64,
+        64
+      ]
+    },
+    {
+      "name": "border-bottom",
+      "file": "border-bottom.png",
+      "crop": [
+        64,
+        737,
+        1834,
+        64
+      ]
+    },
+    {
+      "name": "border-br",
+      "file": "border-br.png",
+      "crop": [
+        1898,
+        737,
+        64,
+        64
+      ]
+    },
+    {
+      "name": "art-tl",
+      "file": "art-tl.png",
+      "crop": [
+        0,
+        24,
+        290,
+        396
+      ]
+    },
+    {
+      "name": "art-tr",
+      "file": "art-tr.png",
+      "crop": [
+        1678,
+        24,
+        284,
+        396
+      ]
+    },
+    {
+      "name": "art-bl",
+      "file": "art-bl.png",
+      "crop": [
+        0,
+        420,
+        507,
+        381
+      ]
+    },
+    {
+      "name": "art-br",
+      "file": "art-br.png",
+      "crop": [
+        1456,
+        420,
+        506,
+        381
+      ]
+    },
+    {
+      "name": "icon-train",
+      "file": "icon-train.png",
+      "crop": [
+        646,
+        91,
+        46,
+        44
+      ]
+    },
+    {
+      "name": "icon-landmark",
+      "file": "icon-landmark.png",
+      "crop": [
+        207,
+        439,
+        99,
+        82
+      ]
+    },
+    {
+      "name": "icon-cards",
+      "file": "icon-cards.png",
+      "crop": [
+        713,
+        445,
+        92,
+        74
+      ]
+    },
+    {
+      "name": "icon-family",
+      "file": "icon-family.png",
+      "crop": [
+        1280,
+        446,
+        88,
+        73
+      ]
+    }
+  ]
+}

@@ -37,7 +37,7 @@
   }
   function sync(canvasRect,dockRect) {
     if(!active()||!dockRect||!mapScreenArea)return;
-    const center=(mapScreenArea.left+mapScreenArea.right)/2;
+    const center=(dockRect.left+dockRect.right)/2-canvasRect.left;
     const header=document.querySelector('.top-header').getBoundingClientRect();
     const tablet=cw>768&&cw<=1080;
     const menuSpace=tablet?ch-(dockRect.bottom-canvasRect.top)-20:dockRect.top-header.bottom-20;
@@ -51,7 +51,6 @@
       const y=tablet?dockRect.top-canvasRect.top+24:dockRect.top-canvasRect.top-72;
       mapCompass=y-34>=header.bottom-canvasRect.top+2?{x,y,radius:36}:null;
     }else mapCompass=null;
-    window.GoiVietMapFrame?.syncSafeArea();
   }
   function mount() {
     if(!active()){

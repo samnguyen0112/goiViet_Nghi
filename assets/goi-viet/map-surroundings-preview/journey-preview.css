@@ -1,0 +1,33 @@
+body[data-regional-preview] .journey-clear { flex:0 0 40px; min-width:40px; width:40px; padding:7px; color:var(--son-red); }
+body[data-regional-preview] .journey-clear svg { display:block; width:20px; height:20px; }
+body[data-regional-preview] .journey-clear[hidden] { display:none!important; }
+body[data-regional-preview] .journey-preview-note { margin:0; padding:9px 16px; font:500 11.5px/1.55 var(--font-sans); color:var(--ink-secondary); background:var(--paper-warm); border-bottom:1px solid var(--wood-border); }
+body[data-regional-preview] .station-board-action:disabled { opacity:.65; cursor:default; }
+body[data-regional-preview] .journey-vehicle-layer { position:absolute; inset:0; width:100%; height:100%; z-index:2; pointer-events:none; }
+body[data-regional-preview] .journey-route-bar { position:absolute; z-index:9; display:flex; align-items:center; gap:12px; min-height:66px; padding:10px 12px 12px; border:1px solid #bda16a; border-radius:13px; background:#fff5df; color:#31584e; box-shadow:inset 0 0 0 3px #fff9eb,0 4px 18px #254e4229; font:500 12px/1.45 var(--font-sans); }
+body[data-regional-preview] .journey-route-bar[hidden] { display:none!important; }
+body[data-regional-preview] .journey-route-info { flex:1; min-width:0; }
+body[data-regional-preview] .journey-route-title { display:flex; align-items:center; gap:8px; font-size:13px; color:#284d43; }
+body[data-regional-preview] .journey-route-title span,body[data-regional-preview] .journey-route-title strong { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+body[data-regional-preview] .journey-route-title strong { font-weight:700; }
+body[data-regional-preview] .journey-route-title svg { flex:0 0 16px; width:16px; height:16px; fill:none; stroke:#9e7843; stroke-width:1.7; }
+body[data-regional-preview] .journey-caption { margin-top:3px; font-size:10.5px; color:#726748; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+body[data-regional-preview] .journey-depart { flex:0 0 auto; max-width:45%; min-height:44px; padding:8px 15px; border:1px solid #8e2e21; border-radius:9px; background:#a83926; color:#fff0cf; font:600 12px/1.35 var(--font-sans); cursor:pointer; box-shadow:inset 0 0 0 2px #e9b97840; }
+body[data-regional-preview] .journey-depart:hover:not(:disabled) { background:#8f2d21; }
+body[data-regional-preview] .journey-depart:disabled { background:#e8ddc4; color:#6a674e; border-color:#c7b78c; cursor:default; box-shadow:none; }
+body[data-regional-preview] .journey-depart:focus-visible { outline:3px solid #d2a03e; outline-offset:3px; }
+body[data-regional-preview] .journey-progress { position:absolute; bottom:4px; left:12px; right:12px; height:2px; border-radius:2px; overflow:hidden; background:#e8dbc1; }
+body[data-regional-preview] .journey-progress-fill { display:block; height:100%; width:100%; background:#4c806b; transform:scaleX(0); transform-origin:left center; transition:transform .2s linear; }
+[data-theme="dark"] body[data-regional-preview] .journey-route-bar { background:#283e36; color:#ecdfbe; border-color:#ad986c; box-shadow:inset 0 0 0 3px #344a3c,0 4px 18px #102b303d; }
+[data-theme="dark"] body[data-regional-preview] .journey-route-title { color:#f0e0ba; }
+[data-theme="dark"] body[data-regional-preview] .journey-caption { color:#c8bea0; }
+[data-theme="dark"] body[data-regional-preview] .journey-depart:disabled { background:#455447; color:#d1c8aa; border-color:#8b8b65; }
+@media(prefers-reduced-motion:reduce) { body[data-regional-preview] .journey-progress-fill { transition:none; } }
+@media(max-width:600px) {
+  body[data-regional-preview] .bottom-dock { max-width:calc(100vw - 20px); gap:4px; }
+  body[data-regional-preview] .bottom-dock .journey-clear { flex-basis:36px; min-width:36px; width:36px; }
+  body[data-regional-preview] .journey-preview-note { padding:7px 12px; font-size:11px; }
+  body[data-regional-preview] .journey-route-bar { gap:8px; padding:8px 10px 11px; min-height:64px; }
+  body[data-regional-preview] .journey-route-title { font-size:12px; gap:5px; }
+  body[data-regional-preview] .journey-depart { padding:7px 10px; font-size:11px; }
+}

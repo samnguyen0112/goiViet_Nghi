@@ -39,36 +39,51 @@
     anchors.set(province,best);return best;
   }
   function drawLabel(context,label) {
-    context.font=canvasFont(label.size,700);context.textAlign='center';context.textBaseline='middle';
-    if(label.priority){
-      if(!label.inside){context.beginPath();context.moveTo(...label.anchorScreen);context.lineTo(label.x,label.y);context.strokeStyle='rgba(20,57,46,.8)';context.lineWidth=1;context.stroke();}
-      context.beginPath();context.roundRect(label.rect.left,label.rect.top,label.rect.right-label.rect.left,label.rect.bottom-label.rect.top,5);context.fillStyle=label.selected?'rgba(253,236,188,.97)':'rgba(255,249,232,.97)';context.fill();context.fillStyle=label.fill;context.fillText(label.text,label.x,label.y+.25);
-    }else drawHaloText(context,label.text,label.x,label.y,label.fill,label.halo,2.8);
+    context.font=label.font;context.textAlign='center';context.textBaseline='middle';
+    label.lines.forEach((line,i)=>drawHaloText(context,line,label.x,label.y+(i-(label.lines.length-1)/2)*label.lineHeight,label.fill,label.halo,2.6));
+  }
+  function labelVariants(context,text,size,weight) {
+    const font=canvasFont(size,weight,'ui'),lineHeight=size*1.32;
+    context.font=font;
+    const variant=lines=>{const widths=lines.map(line=>context.measureText(line).width);return {lines,widths,font,lineHeight,width:Math.max(...widths)+8,height:lines.length*lineHeight+4};};
+    const variants=[variant([text])],words=text.split(/\s+/);
+    if(words.length>1){
+      let best=null,score=Infinity;
+      for(let i=1;i<words.length;i++){
+        const lines=[words.slice(0,i).join(' '),words.slice(i).join(' ')],widths=lines.map(line=>context.measureText(line).width),next=Math.max(...widths)+Math.abs(widths[0]-widths[1])*.2;
+        if(next<score){best=lines;score=next;}
+      }
+      variants.push(variant(best));
+    }
+    return variants;
   }
   function paintLabels(context,cam,width,height) {
     if(!active()){lastLayout=[];lastKey='';return;}
     context.save();
-    const blocked=[...document.querySelectorAll('.top-header,.left-helper,#stationPanel,.bottom-dock,.mobile-view-switcher')].map(el=>el.getBoundingClientRect()).filter(r=>r.width>0&&r.height>0).map(r=>({left:r.left-5,right:r.right+5,top:r.top-5,bottom:r.bottom+5}));
+    const blocked=[...document.querySelectorAll('.top-header,.left-helper,#stationPanel,.bottom-dock,.mobile-view-switcher,.journey-route-bar')].filter(el=>!el.inert&&el.getAttribute('aria-hidden')!=='true'&&getComputedStyle(el).visibility!=='hidden').map(el=>el.getBoundingClientRect()).filter(r=>r.width>0&&r.height>0).map(r=>({left:r.left-5,right:r.right+5,top:r.top-5,bottom:r.bottom+5}));
     blocked.push(...(window.GoiVietRegionalPreview?.labelObstacles() || []));
+    blocked.push(...(window.GoiVietHeritageFrame?.obstacles() || []));
+    blocked.push(...(window.GoiVietJourneyPreview?.labelObstacles() || []));
     for(const pin of renderedHitDemoPins){
       blocked.push(rect(pin.sx,pin.sy,pin.hitR*2+8,pin.hitR*2+8));
-      if(P34_MAP[pin.place.id]&&state.selectedPlaceId!==pin.place.id){context.font=canvasFont(13,700,'heading');const text=getCleanStationName(pin.place);blocked.push(rect(pin.sx,pin.sy-18,context.measureText(text).width+12,22));}
+      if(P34_MAP[pin.place.id]&&(window.GoiVietJourneyPreview?.active()||state.selectedPlaceId!==pin.place.id)){context.font=canvasFont(13,700,'heading');const text=getCleanStationName(pin.place);blocked.push(rect(pin.sx,pin.sy-18,context.measureText(text).width+12,22));}
     }
     for(const mem of state.mentionedPlaces){if(!mem.center)continue;const[x,y]=project3D(...mem.center,36,cam,width,height);context.font=canvasFont(12.5,700,'heading');blocked.push(rect(x,y-10,context.measureText(`✦ ${mem.name} (Ký ức)`).width+14,42));}
-    if(state.railRun?.curve&&Number.isFinite(state.railRun.curWX)){const run=state.railRun,maxStop=Math.max(0,run.curve.totalLen-6),head=run.progress*maxStop;
+    if(!window.GoiVietJourneyPreview?.ownsVehicles&&state.railRun?.curve&&(!window.GoiVietJourneyPreview?.active()||window.GoiVietJourneyPreview.shouldPaintTrain())&&Number.isFinite(state.railRun.curWX)){const run=state.railRun,maxStop=Math.max(0,run.curve.totalLen-6),head=run.progress*maxStop;
       const positions=[head,...getTrainCarDistances(run.curve,head,cam,width,height)].map(d=>{const p=sampleCurveAtDist(run.curve,d);return project3D(p.wx,p.wy,38,cam,width,height);});
       positions.forEach(([x,y])=>blocked.push(rect(x,y-7,40,42)));
     }
-    if(state.railRun?.curve){const destination=P34_MAP[normalizePlaceId(state.selectedPlaceId)]?.center||ISLAND_MAP[state.selectedPlaceId]?.pt;
+    if(state.railRun?.curve&&!window.GoiVietJourneyPreview?.active()){const destination=P34_MAP[normalizePlaceId(state.selectedPlaceId)]?.center||ISLAND_MAP[state.selectedPlaceId]?.pt;
       if(destination){const[x,y]=project3D(...destination,44,cam,width,height),place=CULTURAL_PLACE_MAP[normalizePlaceId(state.selectedPlaceId)]||CULTURAL_PLACES[0],pawn=getPlayerPawn(state.currentPlayerIndex);context.font=canvasFont(12,700);blocked.push(rect(x,y-32,context.measureText(`${getCleanStationName(place)} • ${pawn.roleLabel}`).width+38,34));blocked.push(rect(x,y,36,36));}
     }
-    const key=JSON.stringify([width,height,cam.zoom,cam.yaw,cam.pitch,cam.panX,cam.panY,state.selectedPlaceId,state.hoveredItem?.id,state.theme,state.exploredPlaceIds,state.mentionedPlaces.map(m=>[m.name,m.center]),state.railRun?.progress,state.railRun?.curWX,state.railRun?.curWY,state.currentPlayerIndex,Boolean(window.GoiVietDEM || window.GoiVietNaturalTerrainRenderer?.inspect().ready),document.fonts.check(canvasFont(13,700)),blocked]);
+    const key=JSON.stringify([width,height,cam.zoom,cam.yaw,cam.pitch,cam.panX,cam.panY,getMapSelectedPlaceId(),window.GoiVietJourneyPreview?.revision(),state.hoveredItem?.id,state.theme,state.exploredPlaceIds,state.mentionedPlaces.map(m=>[m.name,m.center]),state.railRun?.progress,state.railRun?.curWX,state.railRun?.curWY,state.currentPlayerIndex,Boolean(window.GoiVietDEM || window.GoiVietNaturalTerrainRenderer?.inspect().ready),[600,700].map(weight=>document.fonts.check(canvasFont(13,weight))),blocked]);
     if(key===lastKey){lastLayout.forEach(label=>drawLabel(context,label));context.restore();return;}
-    const selected=normalizePlaceId(state.selectedPlaceId),hovered=state.hoveredItem?.id,candidates=[];
+    const selected=getMapSelectedPlaceId(),hovered=state.hoveredItem?.id,candidates=[];
     const corridors=[];
-    for(const[curve,z]of[[MAIN_RAIL_SPLINE,27],...(state.railRun?.branchCurves||[]).map(curve=>[curve,28])]){
+    const visibleTracks=window.GoiVietJourneyPreview?.active()?window.GoiVietJourneyPreview.tracks().map(t=>[t.curve,27]):[[MAIN_RAIL_SPLINE,27],...(state.railRun?.branchCurves||[]).map(curve=>[curve,28])];
+    for(const[curve,z]of visibleTracks){
       const points=curve.pts.map(p=>project3D(p.wx,p.wy,z,cam,width,height));
-      for(let i=1;i<points.length;i++){const a=points[i-1],b=points[i],radius=Math.max(4,Math.max(a[3],b[3])*3.6+1);corridors.push({a,b,radius,bounds:{left:Math.min(a[0],b[0])-radius,right:Math.max(a[0],b[0])+radius,top:Math.min(a[1],b[1])-radius,bottom:Math.max(a[1],b[1])+radius}});}
+      for(let i=1;i<points.length;i++){const a=points[i-1],b=points[i],radius=window.GoiVietJourneyPreview?.ownsVehicles?Math.max(6,Math.min(13,7+cam.zoom*3)):Math.max(4,Math.max(a[3],b[3])*3.6+1);corridors.push({a,b,radius,bounds:{left:Math.min(a[0],b[0])-radius,right:Math.max(a[0],b[0])+radius,top:Math.min(a[1],b[1])-radius,bottom:Math.max(a[1],b[1])+radius}});}
     }
     const coversTrack=box=>corridors.some(({a,b,radius,bounds})=>overlaps(box,bounds)&&segmentHitsRect(a,b,{left:box.left-radius,right:box.right+radius,top:box.top-radius,bottom:box.bottom+radius}));
     for(const entry of renderedHitProvinces){
@@ -77,24 +92,45 @@
       const points=entry.topProjectedRings.flat(),xs=points.map(p=>p[0]),ys=points.map(p=>p[1]),visibleWidth=Math.max(0,Math.min(width,Math.max(...xs))-Math.max(0,Math.min(...xs))),visibleHeight=Math.max(0,Math.min(height,Math.max(...ys))-Math.max(0,Math.min(...ys)));
       if(!priority&&(visibleWidth<9||visibleHeight<12))continue;
       const anchor=anchorFor(p),z=priority?36:state.exploredPlaceIds.includes(p.id)?24:16,[x,y]=project3D(...anchor,z+4,cam,width,height);
-      const size=priority?14:cam.zoom>=1.4?13:cam.zoom>=.95?12:11.5,text=(p.short||p.name).replace(/^TP\.?\s*/i,'').replace(/^(Tỉnh|Thành phố)\s+/,'');
-      context.font=canvasFont(size,700);const textWidth=context.measureText(text).width;
-      candidates.push({id:p.id,text,anchor,x,y,size,z,priority,selected:selectedHere,hovered:hoveredHere,width:textWidth+12,height:size+9,area:visibleWidth*visibleHeight,rings:entry.topProjectedRings});
+      const size=priority?13.5:cam.zoom>=1.4?13:12,text=(p.short||p.name).replace(/^TP\.?\s*/i,'').replace(/^(Tỉnh|Thành phố)\s+/,'').normalize('NFC');
+      if(!points.length)continue;
+      candidates.push({id:p.id,text,anchor,x,y,size,z,priority,selected:selectedHere,hovered:hoveredHere,variants:labelVariants(context,text,size,priority?700:600),area:visibleWidth*visibleHeight,rings:entry.topProjectedRings,visible:{left:Math.max(8,Math.min(...xs)),right:Math.min(width-8,Math.max(...xs)),top:Math.max(8,Math.min(...ys)),bottom:Math.min(height-8,Math.max(...ys))}});
     }
     candidates.sort((a,b)=>Number(b.hovered)-Number(a.hovered)||Number(b.selected)-Number(a.selected)||b.area-a.area||a.id.localeCompare(b.id));
     const placed=[];
     for(const label of candidates){
-      const offsets=[[0,0],[-18,-7],[18,7],[0,-16],[0,16],[-32,0],[32,0],[-24,-20],[24,20],[-42,0],[42,0],[0,-34],[0,34]];
-      for(const[dx,dy]of offsets){
-        const x=label.x+dx,y=label.y+dy,box=rect(x,y,label.width,label.height),safe={left:box.left-3,right:box.right+3,top:box.top-3,bottom:box.bottom+3};
-        if(box.left<8||box.right>width-8||box.top<8||box.bottom>height-8||blocked.some(r=>overlaps(safe,r))||placed.some(p=>overlaps(safe,p.rect))||coversTrack(safe))continue;
-        const inside=label.rings.some(r=>pointInRing2D(x,y,r));if(!inside&&!label.priority)continue;
-        const sample=window.GoiVietTerrainRelief?.inspectAt(...label.anchor),rgb=sample?.pixelRGB||[170,175,130],light=(rgb[0]*.2126+rgb[1]*.7152+rgb[2]*.0722)>130;
-        const fill=light?'#173D34':'#FFF8E5',halo=light?'rgba(255,249,231,.96)':'rgba(13,42,35,.93)';
-        placed.push({id:label.id,text:label.text,x,y,size:label.size,anchor:[...label.anchor],anchorScreen:[label.x,label.y],offset:[dx,dy],z:label.z,rect:box,priority:label.priority,selected:label.selected,inside,fill:label.priority?'#173D34':fill,halo});break;
+      const inside=(x,y)=>label.rings.some(r=>pointInRing2D(x,y,r));
+      let chosen=null;
+      // Names occupy the province itself. Try one line, then a balanced two-line
+      // name; hide a crowded name until zoom/hover makes room, never use leaders.
+      const offsets=[[0,0],[-18,-7],[18,7],[0,-16],[0,16],[-32,0],[32,0],[-24,-20],[24,20],[-42,0],[42,0],[0,-34],[0,34]],samples=offsets.map(([dx,dy])=>[label.x+dx,label.y+dy]);
+      const b=label.visible;
+      for(const row of [2,1,3,0,4])for(const col of [3,2,4,1,5,0,6])samples.push([b.left+(col+.5)*(b.right-b.left)/7,b.top+(row+.5)*(b.bottom-b.top)/5]);
+      if(label.priority)for(const row of [4,3,5,2,6,1,7,0,8])for(const col of [4,3,5,2,6,1,7,0,8])samples.push([b.left+(col+.5)*(b.right-b.left)/9,b.top+(row+.5)*(b.bottom-b.top)/9]);
+      // A temporary hovered/selected name can cross the rail if its province
+      // has no clear space. Its anchor still stays inside, with no connector.
+      const variants=label.priority?[...label.variants,{...label.variants[0],allowTrack:true}]:label.variants;
+      for(const variant of variants){
+        if(!label.priority&&variant.width>b.right-b.left+12)continue;
+        for(const [x,y]of samples){
+          const box=rect(x,y,variant.width,variant.height),safe={left:box.left-3,right:box.right+3,top:box.top-3,bottom:box.bottom+3};
+          if(box.left<8||box.right>width-8||box.top<8||box.bottom>height-8||blocked.some(r=>overlaps(safe,r))||placed.some(p=>overlaps(safe,p.rect)))continue;
+          if(!inside(x,y)||(!variant.allowTrack&&coversTrack(safe)))continue;
+          // Keep the centre of every line in its own province. Small glyph
+          // overhang is allowed at an irregular edge, as in printed atlases.
+          // Do not repeatedly measure glyphs while the camera is moving.
+          const fits=label.priority||variant.lines.every((line,i)=>{const cy=y+(i-(variant.lines.length-1)/2)*variant.lineHeight;return inside(x,cy-label.size*.2)&&inside(x,cy+label.size*.2);});
+          if(!fits)continue;
+          chosen={...variant,x,y,box,anchor:window.GoiVietRegionalPreview.inverse(x,y,cam,label.z+4)||label.anchor};break;
+        }
+        if(chosen)break;
+      }
+      if(chosen){
+        const {x,y,box,anchor,lines,font,lineHeight}=chosen;
+        placed.push({id:label.id,text:label.text,lines,font,lineHeight,x,y,size:label.size,anchor:[...anchor],anchorScreen:[x,y],offset:[0,0],z:label.z,rect:box,priority:label.priority,selected:label.selected,callout:false,inside:true,fill:'#FFF6DE',halo:'rgba(17,49,40,.94)'});
       }
     }
     lastLayout=placed;lastKey=key;placed.forEach(label=>drawLabel(context,label));context.restore();
   }
-  window.GoiVietMapLegibility=Object.freeze({active,paintBoundary,paintLabels,inspect:()=>active()?lastLayout.map(label=>({...label,rect:{...label.rect},anchor:[...label.anchor],anchorScreen:[...label.anchorScreen],offset:[...label.offset]})):[]});
+  window.GoiVietMapLegibility=Object.freeze({active,paintBoundary,paintLabels,inspect:()=>active()?lastLayout.map(label=>({...label,lines:[...label.lines],rect:{...label.rect},anchor:[...label.anchor],anchorScreen:[...label.anchorScreen],offset:[...label.offset]})):[]});
 })();

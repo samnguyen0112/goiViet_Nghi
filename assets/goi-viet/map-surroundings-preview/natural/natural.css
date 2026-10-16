@@ -14,4 +14,16 @@ body[data-regional-preview] .natural-detail-map { min-height:60px; flex:1; borde
 body[data-regional-preview] #naturalDetailCanvas { display:block; width:100%; height:100%; touch-action:none; cursor:grab; }
 body[data-regional-preview] #naturalDetailCanvas:active { cursor:grabbing; }
 body[data-regional-preview] .natural-detail-info { font-size:11px; color:var(--ink-muted); line-height:1.5; flex:0 0 auto; }
+body[data-regional-preview] .archipelago-detail-button { position:absolute; z-index:4; width:94px; height:30px; display:flex; align-items:center; justify-content:center; gap:5px; padding:3px 7px; border:1px solid #e5e3b8a6; border-radius:15px; background:#155e68e8; color:#fff4cf; font:600 11px/1.3 var(--font-sans); cursor:pointer; box-shadow:0 1px 3px #173d3540; }
+body[data-regional-preview] .archipelago-detail-button[hidden] { display:none!important; }
+body[data-regional-preview] .archipelago-detail-button svg { width:15px; height:15px; flex:0 0 15px; }
+body[data-regional-preview] .archipelago-detail-button:hover { background:#164d58; border-color:#fff2bd; }
+body[data-regional-preview] .archipelago-detail-button:focus-visible { outline:3px solid #ffdf8e; outline-offset:3px; }
+body[data-regional-preview] .natural-detail-legend { display:flex; align-items:center; flex-wrap:wrap; gap:8px 18px; padding:3px 1px; font:500 11px/1.4 var(--font-sans); color:var(--ink-secondary); flex:0 0 auto; }
+body[data-regional-preview] .natural-detail-legend span { display:inline-flex; align-items:center; gap:6px; }
+body[data-regional-preview] .island-swatch { display:inline-block; width:14px; height:10px; border:1px solid #437e74; border-radius:3px; }
+body[data-regional-preview] .island-swatch.sand { background:#f0ddaa; }
+body[data-regional-preview] .island-swatch.reef { background:#77cbb0; }
+body[data-regional-preview] .island-swatch.lagoon { background:#216881; }
+@media(max-width:768px) { body[data-regional-preview] .archipelago-detail-button { height:44px; border-radius:14px; } }
 @media(max-width:600px){ body[data-regional-preview] .natural-island-modal .modal-header { padding:10px 12px; } body[data-regional-preview] .natural-detail-body { padding:10px 12px; gap:7px; } body[data-regional-preview] .natural-island-tabs { grid-template-columns:repeat(2,minmax(0,1fr)); } body[data-regional-preview] .natural-island-modal h2 { font-size:18px; } body[data-regional-preview] .natural-detail-caption { display:none; } body[data-regional-preview] .natural-detail-controls button:last-child { font-size:11px; padding:6px; } }

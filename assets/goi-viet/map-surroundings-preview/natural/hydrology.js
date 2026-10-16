@@ -1,0 +1,100 @@
+/* Sourced rivers above the terrain, below boundaries, railway and labels. Preview only. */
+(() => {
+  'use strict';
+  const C = window.GoiVietNaturalCore;
+  const active = () => document.getElementById('introScreen')?.classList.contains('intro-hidden');
+  const paths = new Map();
+  const ringBounds = new WeakMap();
+  // Ring/source membership is independent of the camera. Reuse exact candidates
+  // instead of scanning and allocating bounds for every river on every frame.
+  const ringFeatures = new WeakMap();
+  let source = null, promise = null, error = null, cameraKey = '', builds = 0;
+
+  function attribution() {
+    const parent = document.getElementById('mapSourcesContent');
+    if (!parent || parent.querySelector('[data-hydrology]')) return;
+    const note = document.createElement('p');
+    note.dataset.hydrology = 'true';
+    note.innerHTML = 'Sông và hồ trong toàn vùng bản đồ: <a href="https://www.naturalearthdata.com/downloads/10m-physical-vectors/10m-rivers-lake-centerlines/" target="_blank" rel="noopener">Natural Earth 1:10 triệu, v5.0.0</a>, dữ liệu công cộng. Giữ các điểm nối của nguồn; đường nối trong hồ không được vẽ như sông trên mặt hồ. Dữ liệu tổng quát, chưa bao gồm toàn bộ suối và kênh rạch; độ dày nét là ký hiệu, không phải bề rộng đo đạc.';
+    parent.append(note);
+  }
+
+  function ensure() {
+    if (promise) return promise;
+    promise = C.load('hydrology-data.js', 'GoiVietHydrologyData').then(data => {
+      source = data;
+      attribution();
+      requestMapRender(3);
+      return true;
+    }).catch(e => { error = e.message; return false; });
+    return promise;
+  }
+
+  function projected(camera, w, h, z, ring = null) {
+    const key = JSON.stringify([camera.zoom, camera.yaw, camera.pitch, camera.panX, camera.panY, w, h, ...getMapScreenOrigin(w, h)]);
+    if (key !== cameraKey) { cameraKey = key; paths.clear(); }
+    if (!paths.has(z)) paths.set(z, {all: null, rings: new WeakMap(), shapes: new WeakMap(), rivers: 0, lakeCount: 0, networks: new Set()});
+    const plane = paths.get(z), cached = ring ? plane.rings.get(ring) : plane.all;
+    if (cached) return cached;
+    if (ring && !ringBounds.has(ring)) ringBounds.set(ring, C.box(ring));
+    const project = C.projector(camera, w, h, z), extent = ring ? ringBounds.get(ring) : window.GoiVietRegionalPreview.viewportWorld(camera, w, h, 160);
+    const maximumRank = camera.zoom < .6 ? 7 : camera.zoom < 1.15 ? 8 : 12;
+    const result = { major: new Path2D(), minor: new Path2D(), lakes: new Path2D(), rivers: 0, lakeCount: 0 };
+    const visible = item => !extent || item.bounds[0]<extent.right&&item.bounds[2]>extent.left&&item.bounds[1]<extent.bottom&&item.bounds[3]>extent.top;
+    if(ring&&!ringFeatures.has(ring))ringFeatures.set(ring,{rivers:source.rivers.filter(visible),lakes:source.lakes.filter(visible)});
+    const candidates=ring?ringFeatures.get(ring):{rivers:source.rivers.filter(visible),lakes:source.lakes.filter(visible)};
+    for (const river of candidates.rivers) {
+      if (river.kind === 'Lake Centerline' || river.rank > maximumRank) continue;
+      const path = river.rank <= 6 ? result.major : result.minor;
+      let shape=plane.shapes.get(river);
+      if(!shape){shape=new Path2D();river.points.forEach((point,i)=>{const p=project(...point);if(i)shape.lineTo(p[0],p[1]);else shape.moveTo(p[0],p[1]);});plane.shapes.set(river,shape);}
+      path.addPath(shape);
+      if(Number.isFinite(river.network))plane.networks.add(river.network);
+      result.rivers++;
+    }
+    for (const lake of candidates.lakes) {
+      if (lake.rank > maximumRank) continue;
+      let shape=plane.shapes.get(lake);
+      if(!shape){shape=new Path2D();for(const ring of lake.rings){ring.forEach((point,i)=>{const p=project(...point);if(i)shape.lineTo(p[0],p[1]);else shape.moveTo(p[0],p[1]);});shape.closePath();}plane.shapes.set(lake,shape);}
+      result.lakes.addPath(shape);
+      result.lakeCount++;
+    }
+    if (ring) plane.rings.set(ring, result); else plane.all = result;
+    plane.rivers = Math.max(plane.rivers, result.rivers); plane.lakeCount = Math.max(plane.lakeCount, result.lakeCount);
+    builds++;
+    return result;
+  }
+
+  function paint(context, camera, w, h, dark, z = 0, clip = null, ring = null, exclusion = null) {
+    if (!active()) return;
+    ensure();
+    if (!source) return;
+    const p = projected(camera, w, h, z, ring), scale = C.clamp(Math.sqrt(camera.zoom), .65, 1.7);
+    if (!p.rivers && !p.lakeCount) return;
+    context.save();
+    if (clip) context.clip(clip, 'evenodd');
+    if (exclusion) context.clip(exclusion, 'evenodd');
+    context.lineCap = 'round'; context.lineJoin = 'round';
+    // A narrow dark bank separates water from the mottled green land cover.
+    for (const [path, width] of [[p.minor, .85 * scale], [p.major, 1.65 * scale]]) {
+      context.strokeStyle = dark ? 'rgba(14,49,59,.75)' : 'rgba(31,79,80,.8)';
+      context.lineWidth = width + .9; context.stroke(path);
+      context.strokeStyle = dark ? '#75B4C5' : '#8ABFCB';
+      context.lineWidth = width; context.stroke(path);
+    }
+    context.fillStyle = dark ? '#427F8B' : '#71ADBA';
+    context.fill(p.lakes, 'evenodd');
+    context.restore();
+  }
+
+  function paintTop(context, ring, z, camera, w, h, dark) {
+    const clip = new Path2D(), project = C.projector(camera, w, h, z);
+    ring.forEach((point, i) => { const p = project(...point); if (i) clip.lineTo(p[0], p[1]); else clip.moveTo(p[0], p[1]); });
+    clip.closePath();
+    paint(context, camera, w, h, dark, z, clip, ring);
+  }
+
+  window.GoiVietHydrology = Object.freeze({ ensure, paint, paintTop, inspect: () => ({ready: !!source, error, builds, cachePlanes: paths.size, rivers: source?.rivers.length, lakes: source?.lakes.length, visible: [...paths].map(([z, p]) => ({z, rivers: p.rivers, lakes: p.lakeCount,networks:[...p.networks]}))}) });
+  if (active()) ensure();
+  else new MutationObserver(() => { if (active()) ensure(); }).observe(document.getElementById('introScreen'), {attributes: true, attributeFilter: ['class']});
+})();
