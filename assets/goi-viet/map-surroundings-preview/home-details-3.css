@@ -1,0 +1,63 @@
+/* River invitation. The sun is rendered behind terrain in the native canvas. */
+body[data-preview-version="3"] #introWelcomeStage .mc-scroll-cue {
+  bottom: max(18px, env(safe-area-inset-bottom));
+  gap: 9px;
+  padding: 6px 16px;
+  border-radius: 0;
+  background: transparent;
+  color: #244f42;
+  font: 500 clamp(11px, .86vw, 22px)/1.5 'Goi Viet Book', Georgia, serif;
+  letter-spacing: .045em;
+  -webkit-tap-highlight-color: transparent;
+}
+body[data-preview-version="3"] .mc-scroll-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 5px 10px;
+  background: #fcf1dce6;
+  border-radius: 2px;
+}
+body[data-preview-version="3"] .mc-scroll-label::before,
+body[data-preview-version="3"] .mc-scroll-label::after {
+  content: '';
+  width: clamp(14px, 1.7vw, 42px);
+  height: 1px;
+  background: #ac8248;
+}
+body[data-preview-version="3"] #introWelcomeStage .mc-scroll-arrow {
+  display: grid;
+  place-items: center;
+  width: clamp(42px, 3vw, 64px);
+  height: clamp(42px, 3vw, 64px);
+  border: 1px solid #b4935c;
+  border-radius: 50%;
+  background: #fcf1dcf2;
+  color: #8d3929;
+  box-shadow: 0 3px 12px #244f421a, inset 0 0 0 4px #fff7e480;
+  transition: background .2s ease, color .2s ease, transform .2s ease, box-shadow .2s ease;
+}
+body[data-preview-version="3"] .mc-scroll-arrow svg { width: 21px; height: 21px; }
+@media (hover: hover) {
+  body[data-preview-version="3"] .mc-scroll-cue:hover .mc-scroll-arrow {
+    background: #943e2e;
+    color: #fff4dc;
+    transform: translateY(3px);
+    box-shadow: 0 5px 16px #5a382529, inset 0 0 0 4px #fff4dc1a;
+  }
+}
+body[data-preview-version="3"] .mc-scroll-cue:focus-visible { outline: 2px solid #943e2e; outline-offset: 4px; border-radius: 4px; }
+@media (max-width: 1000px) and (orientation: portrait) {
+  body[data-preview-version="3"] #introWelcomeStage .mc-scroll-cue { bottom: max(14px, env(safe-area-inset-bottom)); gap: 7px; font-size: 11px; }
+  body[data-preview-version="3"] .mc-scroll-label { gap: 8px; }
+}
+@media (orientation: landscape) and (max-height: 500px) {
+  body[data-preview-version="3"] #introWelcomeStage .mc-scroll-cue { bottom: 8px; flex-direction: row; gap: 10px; padding: 0 8px; font-size: 10px; }
+  body[data-preview-version="3"] #introWelcomeStage .mc-scroll-arrow { width: 36px; height: 36px; }
+  body[data-preview-version="3"] .mc-scroll-label::before,
+  body[data-preview-version="3"] .mc-scroll-label::after { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  body[data-preview-version="3"] #introWelcomeStage .mc-scroll-arrow { transition: none; }
+}
+body[data-preview-version="3"].reduced-motion #introWelcomeStage .mc-scroll-arrow { transition: none; }

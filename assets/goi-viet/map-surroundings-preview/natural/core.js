@@ -9,9 +9,41 @@
   function projector(camera,w,h,z=0){const [ox,oy]=getMapScreenOrigin(w,h),co=Math.cos(camera.yaw),si=Math.sin(camera.yaw),cp=Math.cos(camera.pitch),sp=Math.sin(camera.pitch);return(x,y)=>{const dx=x-MAP_CENTER_X+camera.panX,dy=y-MAP_CENTER_Y+camera.panY,rx=dx*co-dy*si,ry=dx*si+dy*co,s=camera.zoom*2400/Math.max(450,2400-.52*(ry*sp+z*cp));return [ox+rx*s,oy+(ry*cp-z*sp)*s,s];};}
   function simplified(points,level){if(points.length<8)return points;let entries=lods.get(points);if(!entries){entries=new Map();lods.set(points,entries);}if(entries.has(level))return entries.get(level);const tol=[.16,.045,.012][level]||.012,tol2=tol*tol,keep=new Uint8Array(points.length);keep[0]=keep[points.length-1]=1;const stack=[[0,points.length-1]];while(stack.length){const [a,b]=stack.pop(),p=points[a],q=points[b],dx=q[0]-p[0],dy=q[1]-p[1],length=dx*dx+dy*dy;let best=tol2,index=-1;for(let i=a+1;i<b;i++){const r=points[i],t=length?clamp(((r[0]-p[0])*dx+(r[1]-p[1])*dy)/length):0,d=(r[0]-p[0]-t*dx)**2+(r[1]-p[1]-t*dy)**2;if(d>best){best=d;index=i;}}if(index>=0){keep[index]=1;stack.push([a,index],[index,b]);}}const reduced=points.filter((p,i)=>keep[i]),result=reduced.length>=4?reduced:points;entries.set(level,result);return result;}
   function path(context,rings,project,level=1){context.beginPath();for(const ring of rings){const pts=level<0?ring:simplified(ring,level);for(let i=0;i<pts.length;i++){const p=project(...pts[i]);if(i)context.lineTo(p[0],p[1]);else context.moveTo(p[0],p[1]);}context.closePath();}}
-  function triangle(context,image,source,target){const [a,b,c]=source,[p,q,r]=target,det=a[0]*(b[1]-c[1])+b[0]*(c[1]-a[1])+c[0]*(a[1]-b[1]);if(!det)return;const coefficients=axis=>[(p[axis]*(b[1]-c[1])+q[axis]*(c[1]-a[1])+r[axis]*(a[1]-b[1]))/det,(p[axis]*(c[0]-b[0])+q[axis]*(a[0]-c[0])+r[axis]*(b[0]-a[0]))/det,(p[axis]*(b[0]*c[1]-c[0]*b[1])+q[axis]*(c[0]*a[1]-a[0]*c[1])+r[axis]*(a[0]*b[1]-b[0]*a[1]))/det];const x=coefficients(0),y=coefficients(1),center=[target.reduce((s,p)=>s+p[0],0)/3,target.reduce((s,p)=>s+p[1],0)/3];context.save();context.beginPath();target.forEach((p,i)=>{const dx=p[0]-center[0],dy=p[1]-center[1],length=Math.hypot(dx,dy)||1,q=[p[0]+dx/length*1.1,p[1]+dy/length*1.1];if(i)context.lineTo(...q);else context.moveTo(...q);});context.closePath();context.clip();context.transform(x[0],y[0],x[1],y[1],x[2],y[2]);context.drawImage(image,0,0);context.restore();}
-  function tile(context,image,box,project,w,h){const pts=[[box.left,box.top],[box.right,box.top],[box.right,box.bottom],[box.left,box.bottom]].map(p=>project(...p));if(pts.every(p=>p[0]<-400)||pts.every(p=>p[0]>w+400)||pts.every(p=>p[1]<-400)||pts.every(p=>p[1]>h+400))return false;const uv=[[0,0],[image.width,0],[image.width,image.height],[0,image.height]];for(const indexes of [[0,1,2],[0,2,3]])triangle(context,image,indexes.map(i=>uv[i]),indexes.map(i=>pts[i]));return true;}
+  // Rectangle UVs have closed-form affine coefficients. Keep the same two
+  // triangles and 1.1px seam guard as before, without generic matrix allocation.
+  let affineTiles=0,exactTiles=0,maxAffineError=0;
+  function tile(context,image,box,project,w,h,points,allowAffine=false){
+    const pts=points||[[box.left,box.top],[box.right,box.top],[box.right,box.bottom],[box.left,box.bottom]].map(p=>project(...p));
+    if(pts.every(p=>p[0]<-400)||pts.every(p=>p[0]>w+400)||pts.every(p=>p[1]<-400)||pts.every(p=>p[1]>h+400))return false;
+    if(allowAffine){
+      const dx=pts[0][0]+pts[2][0]-pts[1][0]-pts[3][0],dy=pts[0][1]+pts[2][1]-pts[1][1]-pts[3][1],error=Math.hypot(dx,dy)/4;
+      // Both reference triangles are affine: their difference from this fit is
+      // bounded by the corner residual throughout the tile, not just its centre.
+      if(error<=.15/Math.min(devicePixelRatio||1,2)){
+        const a=((pts[1][0]-pts[0][0])+(pts[2][0]-pts[3][0]))/(2*image.width),b=((pts[1][1]-pts[0][1])+(pts[2][1]-pts[3][1]))/(2*image.width),c=((pts[3][0]-pts[0][0])+(pts[2][0]-pts[1][0]))/(2*image.height),d=((pts[3][1]-pts[0][1])+(pts[2][1]-pts[1][1]))/(2*image.height);
+        context.save();context.transform(a,b,c,d,pts[0][0]-dx/4,pts[0][1]-dy/4);context.drawImage(image,0,0);context.restore();
+        affineTiles++;maxAffineError=Math.max(maxAffineError,error);return true;
+      }
+    }
+    exactTiles++;
+    for(let half=0;half<2;half++){
+      const a=pts[0],b=pts[half?2:1],c=pts[half?3:2];
+      const cx=(a[0]+b[0]+c[0])/3,cy=(a[1]+b[1]+c[1])/3;
+      context.save();context.beginPath();
+      for(let i=0;i<3;i++){
+        const p=i===0?a:i===1?b:c,dx=p[0]-cx,dy=p[1]-cy,length=Math.hypot(dx,dy)||1;
+        if(i)context.lineTo(p[0]+dx/length*1.1,p[1]+dy/length*1.1);
+        else context.moveTo(p[0]+dx/length*1.1,p[1]+dy/length*1.1);
+      }
+      context.closePath();context.clip();
+      const right=half?pts[2]:pts[1],left=half?pts[3]:pts[0],bottom=half?pts[3]:pts[2],top=half?pts[0]:pts[1];
+      context.transform((right[0]-left[0])/image.width,(right[1]-left[1])/image.width,(bottom[0]-top[0])/image.height,(bottom[1]-top[1])/image.height,a[0],a[1]);
+      context.drawImage(image,0,0);context.restore();
+    }
+    return true;
+  }
   const overlaps=(a,b)=>a.left<b.right&&a.right>b.left&&a.top<b.bottom&&a.bottom>b.top;
-  const box=ring=>{let left=Infinity,top=Infinity,right=-Infinity,bottom=-Infinity;for(const [x,y]of ring){left=Math.min(left,x);top=Math.min(top,y);right=Math.max(right,x);bottom=Math.max(bottom,y);}return {left,top,right,bottom};};
-  window.GoiVietNaturalCore=Object.freeze({load,decode,sample,projector,simplified,path,tile,overlaps,box,clamp,base});
+  const boxes=new WeakMap();
+  const box=ring=>{if(boxes.has(ring))return boxes.get(ring);let left=Infinity,top=Infinity,right=-Infinity,bottom=-Infinity;for(const [x,y]of ring){left=Math.min(left,x);top=Math.min(top,y);right=Math.max(right,x);bottom=Math.max(bottom,y);}const b={left,top,right,bottom};boxes.set(ring,b);return b;};
+  window.GoiVietNaturalCore=Object.freeze({load,decode,sample,projector,simplified,path,tile,overlaps,box,clamp,base,performance:()=>({affineTiles,exactTiles,maxAffineError})});
 })();

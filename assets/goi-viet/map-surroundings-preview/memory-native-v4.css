@@ -1,0 +1,101 @@
+/* Individually authored native imagery. Live typography stays above quiet paper/mist. */
+#memoryChapter.mc-native-v4:focus{outline:none!important}
+.mc-native-v4 .mc-content{aspect-ratio:971/1776;background-image:url('../memory-native-v4/paper-grain.webp');background-size:384px 384px}
+.mc-native-v4 .n4-image{image-rendering:auto;object-fit:contain}
+.mc-native-v4 .mc-introduction{top:10.13514%}
+.mc-native-v4 .mc-steps{top:66.15991%}
+.mc-native-v4 .n4-upper-distance{z-index:0;opacity:.32}
+.mc-native-v4 .n4-upper-left,.mc-native-v4 .n4-upper-right{z-index:1}
+.mc-native-v4 .n4-upper-cloud-left,.mc-native-v4 .n4-upper-cloud-right{z-index:2}
+.mc-native-v4 .n4-river-continuous{z-index:3;object-fit:fill;mask-image:linear-gradient(transparent,#000 8%,#000 91%,transparent)}
+.mc-native-v4 .n4-bank-taste,.mc-native-v4 .n4-bank-story,.mc-native-v4 .n4-bank-weaving,.mc-native-v4 .n4-bank-conversation{z-index:4}
+.mc-native-v4 .n4-bank-story,.mc-native-v4 .n4-bank-conversation{transform:scaleX(-1)}
+.mc-native-v4 .mc-memory h3{font-size:clamp(18px,2.06cqw,38px);white-space:normal;text-wrap:balance}
+.mc-native-v4 .mc-memory p{font-size:clamp(13px,1.31cqw,25px);text-wrap:pretty}
+.mc-native-v4 .mc-story .mc-memory-copy{left:66%;width:31%}
+.mc-native-v4 .mc-tradition .mc-memory-copy{left:74%;width:24%}
+.mc-native-v4 .mc-memory-copy{isolation:isolate}
+.mc-native-v4 .mc-memory-copy::before{content:"";position:absolute;z-index:-1;inset:-1cqw -1.5cqw;background:radial-gradient(ellipse,#fcf0d8f5 45%,#fcf0d8d0 63%,transparent 78%);pointer-events:none}
+.mc-native-v4 :is(.n4-bank-taste,.n4-bank-story,.n4-bank-weaving,.n4-bank-conversation){mask-image:linear-gradient(#000 55%,transparent)}
+.mc-native-v4 .n4-steam{position:absolute;left:30%;top:15%;width:9%;height:25%;opacity:.75;filter:blur(.5px)}
+.mc-native-v4 .mc-card-stack{height:auto;aspect-ratio:2/3}
+.mc-native-v4 .mc-card-under{left:16%;top:5%;width:100%;height:100%}
+.mc-native-v4 .mc-card-category{top:38%;font-size:1.24cqw;letter-spacing:.12em}
+.mc-native-v4 .mc-card-question-frame{top:44%;height:31%}
+.mc-native-v4 .mc-card-front,.mc-native-v4 .mc-card-reverse{border-radius:1.1cqw}
+.mc-native-v4 .mc-destination{overflow:hidden;isolation:isolate}
+.mc-native-v4 .mc-exit-world{inset:0;left:0;bottom:0;width:100%;height:100%;transform:none}
+.mc-native-v4 .n4-bay{z-index:0;object-fit:fill;mask-image:linear-gradient(transparent,#000 9%,#000)}
+.mc-native-v4 .n4-vietnam{position:absolute;z-index:1;opacity:.3;mask-image:linear-gradient(#000 60%,transparent)}
+.mc-native-v4 .n4-boat{z-index:1;transform-origin:50% 85%}
+.mc-native-v4 .n4-bay-cloud{z-index:1;opacity:.8}
+.mc-native-v4 .n4-perspective-scene{z-index:0;object-fit:fill;mask-image:linear-gradient(transparent,#000 8%,#000)}
+.mc-native-v4 .n4-station-bounds{position:absolute;pointer-events:none}
+.mc-native-v4 .n4-arriving-train.n4-perspective-train{display:block;bottom:auto;transform:none}
+.mc-native-v4 .n4-painted-train{object-fit:fill}
+.mc.mc-native-v4 .mc-train-group.n4-arriving-train.n4-perspective-train.is-visible{animation:n4-perspective-arrival 6.8s cubic-bezier(.18,.62,.25,1) both}
+.mc-native-v4 .n4-bridge{z-index:2}
+.mc-native-v4 .n4-station-shore{z-index:3;object-fit:fill;clip-path:inset(49% 0 0)}
+.mc-native-v4 .n4-shore-rail{z-index:3;clip-path:inset(0 0 76% 0)}
+.mc-native-v4 .n4-station{z-index:4}
+.mc-native-v4 .n4-arriving-train{position:absolute;top:auto;height:auto;display:flex;align-items:flex-end;gap:0;z-index:5;will-change:auto;transform-origin:50% 100%}
+.mc-native-v4 .n4-train-part{display:block;position:relative;flex:none;object-fit:contain;max-width:none;filter:drop-shadow(0 1px 1px #133c3430)}
+.mc.mc-native-v4 .mc-train-group.n4-arriving-train.is-visible{animation:n4-train-arrival 6.8s cubic-bezier(.18,.62,.25,1) both}
+.mc-native-v4 .n4-foreground-left,.mc-native-v4 .n4-foreground-right,.mc-native-v4 .n4-foreground-cloud{z-index:6}
+.mc-native-v4 .n4-foreground-right{transform:scaleX(-1)}
+.mc-native-v4 .mc-destination-copy{z-index:8;left:16%;top:5.5%;width:68%;padding:1cqw 1.5cqw;text-align:center;isolation:isolate}
+.mc-native-v4 .mc-destination-copy::before{content:"";position:absolute;z-index:-1;inset:-1cqw -4cqw -2cqw;background:radial-gradient(ellipse,#fcf0d8e0 12%,#fcf0d8b8 48%,#fcf0d800 74%);pointer-events:none}
+.mc-native-v4 .mc-destination h2{font-size:clamp(30px,3.3cqw,68px);line-height:1.16;letter-spacing:-.04em;text-wrap:balance}
+.mc-native-v4 .mc-destination h2 br{display:none}
+.mc-native-v4 .mc-destination h2 em{display:block;font-size:.9em;white-space:normal}
+.mc-native-v4 .mc-destination-copy>p{font-size:clamp(14px,1.4cqw,26px);line-height:1.5;margin:1cqw 0 1.2cqw}
+.mc-native-v4 .mc-map-status{margin:.6cqw 0 0!important}
+.mc-transition>div{background-image:url('../memory-native-v4/bay-background.webp')}
+.mc-seam .n4-seam-left,.mc-seam .n4-seam-right{position:absolute;object-fit:contain!important;opacity:.88}
+.mc-seam .n4-seam-left{left:0!important;top:15%!important}
+.mc-seam .n4-seam-right{left:40%!important;top:15%!important}
+@keyframes n4-train-arrival{from{translate:-18cqw 0}to{translate:0 0}}
+@keyframes n4-perspective-arrival{from{translate:-18cqw -2.61cqw}to{translate:0 0}}
+@media(max-width:700px){
+ .mc-native-v4 .mc-content{aspect-ratio:auto}
+ .mc-native-v4 .mc-introduction{top:auto}
+ .mc-native-v4 .mc-world{height:calc(100vw * 1776 / 971)}
+ .mc-native-v4 .mc-world .n4-upper-left,.mc-native-v4 .mc-world .n4-upper-right,.mc-native-v4 .mc-world .n4-upper-distance,.mc-native-v4 .mc-world .n4-upper-cloud-left,.mc-native-v4 .mc-world .n4-upper-cloud-right{display:block}
+ .mc-native-v4 .n4-mobile-river{left:-8%!important;top:125px!important;width:116%!important;height:calc(100% - 850px)!important;opacity:.75;object-fit:fill;mask-image:linear-gradient(transparent,#000 9%,#000 92%,transparent)}
+ .mc-native-v4 .mc-memory h3{font-size:23px}
+ .mc-native-v4 .mc-memory p{font-size:14px}
+ .mc-native-v4 .mc-story .mc-memory-copy{left:auto;width:37%}
+ .mc-native-v4 .mc-tradition .mc-memory-copy{left:auto;width:36%}
+ .mc-native-v4 .mc-conversation-copy{isolation:isolate}
+ .mc-native-v4 .mc-conversation-copy::before{content:"";position:absolute;z-index:-1;inset:-18px -12px;background:radial-gradient(ellipse,#fcf0d8f5 40%,#fcf0d8d0 62%,transparent 80%);pointer-events:none}
+ .mc-native-v4 .mc-story .mc-art-group{right:-10%;width:70%}
+ .mc-native-v4 .mc-card-stack{height:auto;aspect-ratio:2/3}
+ .mc-native-v4 .mc-card-category{font-size:12px}
+ .mc-native-v4 .mc-steps{top:auto}
+ .mc-native-v4 .n4-destination{height:660px!important}
+ .mc-native-v4 .mc-exit-world{inset:auto;left:50%;bottom:0;top:auto;width:760px;height:428px;transform:translateX(-50%)}
+ .mc-native-v4 .n4-vietnam{left:18%!important;top:2%!important;width:15%!important;opacity:.17}
+ .mc-native-v4 .n4-station{left:58.59938%!important;width:17.19876%!important;top:69.59707%!important;bottom:auto}
+ .mc-native-v4 .n4-station-shore{left:44%!important;width:54%!important}
+ .mc-native-v4 .n4-arriving-train{left:3.91349%!important}
+ .mc-native-v4 .n4-bridge{left:-10%!important}
+ .mc-native-v4 .n4-shore-rail{left:46%!important}
+ .mc-native-v4 .n4-boat-far{left:53%!important}
+ .mc-native-v4 .n4-boat-middle{left:68%!important;top:55%!important}
+ .mc-native-v4 .n4-boat-near{display:none}
+ .mc-native-v4 .n4-foreground-right{left:63%!important}
+ .mc-native-v4 .mc-destination-copy{position:relative;left:auto;top:auto;width:100%;padding:48px 20px 0}
+ .mc-native-v4 .mc-destination-copy::before{inset:25px 0 -25px}
+ .mc-native-v4 .mc-destination h2{font-size:30px;line-height:1.18}
+ .mc-native-v4 .mc-destination h2 em{font-size:.89em}
+ .mc-native-v4 .mc-destination-copy>p{font-size:15px;margin:18px 0}
+ .mc-native-v4 .mc-primary.mc-map-ticket{gap:10px;max-width:100%;padding:12px 14px;min-height:64px}
+ .mc-native-v4 .mc-ticket-title{font-size:clamp(15px,4.2vw,18px)}
+ .mc-native-v4 .mc-ticket-seal{width:29px;height:29px}
+ .mc-native-v4 .mc-ticket-arrow{font-size:24px;padding-left:10px}
+ .mc-native-v4 .mc-map-status{margin:8px 0 0!important;font-size:13px!important}
+}
+@media(max-width:700px){.mc-native-v4 .mc-exit-world{left:38%;width:680px;height:382.37px}}
+@media(max-width:360px){.mc-native-v4 .mc-exit-world{left:35%}}
+@media(prefers-reduced-motion:reduce){.mc-native-v4 .n4-arriving-train.is-visible{animation:none!important;translate:0 0}}
+body.reduced-motion .mc-native-v4 .n4-arriving-train.is-visible{animation:none!important;translate:0 0}

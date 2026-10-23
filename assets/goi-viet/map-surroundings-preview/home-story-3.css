@@ -1,0 +1,147 @@
+/* Preview 3: one flowing invitation above the railway and river. */
+@font-face {
+  font-family: 'Goi Viet Book';
+  src: url('../../fonts/island/Lora-Variable.ttf') format('truetype');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+body[data-preview-version="3"] #introScreen[data-intro-stage="welcome"] {
+  overflow: hidden;
+}
+body[data-preview-version="3"] #introWelcomeStage .gv-home-content {
+  --story-unit: min(.0627353vw, .1013171dvh);
+  min-height: 100dvh;
+  height: 100dvh;
+  padding: 0 18px;
+}
+body[data-preview-version="3"] #introWelcomeStage .gv-home-header {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 7dvh;
+  text-align: center;
+}
+body[data-preview-version="3"] #introWelcomeStage .gv-home-header > [data-home-enter] {
+  position: relative;
+  flex: 0 0 auto;
+}
+body[data-preview-version="3"] #introWelcomeStage .gv-home-logo {
+  width: calc(330.4 * var(--story-unit));
+  max-width: 76%;
+  margin: 0;
+}
+body[data-preview-version="3"] #introWelcomeStage .gv-home-logo img,
+body[data-preview-version="3"] #introWelcomeStage .gv-home-logo:hover img {
+  transform: none;
+  filter: none;
+  transition: none;
+}
+body[data-preview-version="3"] #introWelcomeStage .gv-home-tagline {
+  margin: calc(8 * var(--story-unit)) 0 0;
+  width: max-content;
+  color: #895633;
+  font: 400 clamp(12px, calc(20 * var(--story-unit)), 44px)/1.45 'Goi Viet Book', Georgia, serif;
+  font-variant-caps: small-caps;
+  letter-spacing: .065em;
+}
+body[data-preview-version="3"] #introWelcomeStage .gv-home-lettering {
+  width: min(100%, calc(550 * var(--story-unit)));
+  margin: calc(26 * var(--story-unit)) 0 0;
+  line-height: 0;
+}
+body[data-preview-version="3"] #introWelcomeStage .gv-home-lettering img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+/* The red ink is embedded in the SVG image, so file previews need no CSS mask. */
+body[data-preview-version="3"] #introWelcomeStage .gv-home-lettering img { opacity: 1; }
+body[data-preview-version="3"] #introWelcomeStage .gv-home-memory-line {
+  margin: calc(18 * var(--story-unit)) 0 0;
+  width: max-content;
+  max-width: 100%;
+  color: #40675b;
+  font: italic 400 clamp(13px, calc(19 * var(--story-unit)), 42px)/1.5 'Goi Viet Book', Georgia, serif;
+  text-wrap: balance;
+}
+body[data-preview-version="3"] #introWelcomeStage #btnQuickStartWelcome {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .6em;
+  min-height: 44px;
+  min-width: 0;
+  margin: calc(12 * var(--story-unit)) 0 0;
+  padding: 4px 14px;
+  border: 0;
+  border-radius: 0;
+  outline-offset: 3px;
+  background: transparent;
+  box-shadow: none;
+  color: #902e23;
+  font: 500 clamp(17px, calc(22 * var(--story-unit)), 48px)/1.4 'Goi Viet Book', Georgia, serif;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+body[data-preview-version="3"] #introWelcomeStage #btnQuickStartWelcome svg {
+  width: 1em;
+  height: .7em;
+  overflow: visible;
+  transition: translate .18s ease;
+}
+body[data-preview-version="3"] #introWelcomeStage #btnQuickStartWelcome:hover { color: #6e2019; }
+body[data-preview-version="3"] #introWelcomeStage #btnQuickStartWelcome:hover svg { translate: 3px 0; }
+body[data-preview-version="3"] #introWelcomeStage #btnQuickStartWelcome:focus-visible {
+  outline: 2px solid #902e23;
+}
+body[data-preview-version="3"] #introWelcomeStage .gv-home-load-notice { margin: 0; }
+
+@media (max-width: 1000px) and (orientation: portrait) {
+  body[data-preview-version="3"] #introWelcomeStage .gv-home-film { height: 100dvh; }
+  body[data-preview-version="3"] #introWelcomeStage .gv-home-content {
+    padding: 0 16px;
+  }
+  body[data-preview-version="3"] #introWelcomeStage .gv-home-header { padding-top: max(96px, 12dvh); }
+  body[data-preview-version="3"] #introWelcomeStage .gv-home-logo { width: clamp(200.6px, 28.32dvh, 306.8px); }
+  body[data-preview-version="3"] #introWelcomeStage .gv-home-tagline { font-size: 12px; margin-top: 10px; letter-spacing: .035em; }
+  body[data-preview-version="3"] #introWelcomeStage .gv-home-lettering { width: min(540px, 100%); margin-top: clamp(22px, 3.5dvh, 34px); }
+  body[data-preview-version="3"] #introWelcomeStage .gv-home-memory-line { font-size: 13px; margin-top: 18px; }
+  body[data-preview-version="3"] #introWelcomeStage #btnQuickStartWelcome { font-size: 18px; margin-top: 12px; }
+}
+@media (max-width: 760px) and (max-height: 740px) and (orientation: portrait) {
+  body[data-preview-version="3"] #introWelcomeStage .gv-home-content { padding-top: 0; }
+  body[data-preview-version="3"] #introWelcomeStage .gv-home-header { padding-top: 70px; }
+  body[data-preview-version="3"] #introWelcomeStage .gv-home-logo { width: clamp(143.96px, 25.37dvh, 185.26px); }
+  body[data-preview-version="3"] #introWelcomeStage .gv-home-tagline { font-size: 11px; margin-top: 7px; }
+  body[data-preview-version="3"] #introWelcomeStage .gv-home-lettering { width: min(330px, 100%); margin-top: 6px; }
+  body[data-preview-version="3"] #introWelcomeStage .gv-home-memory-line { font-size: 12px; margin-top: 4px; }
+  body[data-preview-version="3"] #introWelcomeStage #btnQuickStartWelcome { font-size: 16px; margin-top: 0; }
+  body[data-preview-version="3"] .mc-shortcut { top: 64px; left: 6px; width: 80px; min-height: 44px; padding: 3px; gap: 3px; font-size: 10px; }
+}
+@media (orientation: landscape) and (max-height: 500px) {
+  body[data-preview-version="3"] #introWelcomeStage .gv-home-content { padding-top: 0; }
+  body[data-preview-version="3"] #introWelcomeStage .gv-home-header { padding-top: 12px; }
+  body[data-preview-version="3"] #introWelcomeStage .gv-home-logo { width: clamp(84.96px, 25.96dvh, 113.28px); }
+  body[data-preview-version="3"] #introWelcomeStage .gv-home-tagline { font-size: 10px; line-height: 1.3; margin-top: 4px; }
+  body[data-preview-version="3"] #introWelcomeStage .gv-home-lettering { width: clamp(150px, 50dvh, 220px); margin-top: 4px; }
+  body[data-preview-version="3"] #introWelcomeStage .gv-home-memory-line { font-size: 11px; line-height: 1.3; margin-top: 4px; }
+  body[data-preview-version="3"] #introWelcomeStage #btnQuickStartWelcome { font-size: 16px; margin-top: 0; }
+  body[data-preview-version="3"] #introWelcomeStage .gv-home-opening-tools { gap: 8px; }
+  body[data-preview-version="3"] #introWelcomeStage .gv-home-opening-tools > button,
+  body[data-preview-version="3"] #introWelcomeStage .gv-home-opening-tools summary { font-size: 11px; gap: 5px; padding: 4px; }
+  body[data-preview-version="3"] #introWelcomeStage .gv-home-tool-icon { width: 18px; height: 18px; flex-basis: 18px; }
+  body[data-preview-version="3"] #introScreen .mc-shortcut { top: 12px; left: 12px; font-size: 11px; padding: 4px 8px; }
+  body[data-preview-version="3"] .mc-scroll-cue { bottom: 8px; flex-direction: row; gap: 10px; padding: 5px 12px; font-size: 10px; }
+  body[data-preview-version="3"] .mc-scroll-cue span:last-child { font-size: 16px; }
+}
+@media (orientation: landscape) and (max-height: 350px) {
+  body[data-preview-version="3"] #introWelcomeStage .gv-home-header { padding-top: 4px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  body[data-preview-version="3"] #introWelcomeStage #btnQuickStartWelcome svg { transition: none; }
+}
+body[data-preview-version="3"].reduced-motion #introWelcomeStage #btnQuickStartWelcome svg { transition: none; }

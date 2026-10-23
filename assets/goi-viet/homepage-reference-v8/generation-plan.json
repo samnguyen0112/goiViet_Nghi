@@ -1,0 +1,163 @@
+{
+  "reference": "references/approved-home.png",
+  "basePack": "../homepage-classic-3/assets-4k.js",
+  "preserve": "All layer transforms, entrance times, order, motion and original alpha contours.",
+  "layers": [
+    {
+      "id": "sky",
+      "rect": [
+        0,
+        0,
+        3840,
+        2378
+      ],
+      "width": 3840,
+      "height": 2378,
+      "alpha": false,
+      "file": "verification/home-reference-v8/original-layers/sky.webp"
+    },
+    {
+      "id": "mountains-far-left",
+      "rect": [
+        0,
+        18,
+        1853,
+        1221
+      ],
+      "width": 1853,
+      "height": 1221,
+      "alpha": true,
+      "file": "verification/home-reference-v8/original-layers/mountains-far-left.webp"
+    },
+    {
+      "id": "mountains-far-right",
+      "rect": [
+        2040,
+        56,
+        1800,
+        1188
+      ],
+      "width": 1800,
+      "height": 1188,
+      "alpha": true,
+      "file": "verification/home-reference-v8/original-layers/mountains-far-right.webp"
+    },
+    {
+      "id": "mountains-mid-left",
+      "rect": [
+        0,
+        546,
+        1894,
+        1507
+      ],
+      "width": 1894,
+      "height": 1507,
+      "alpha": true,
+      "file": "verification/home-reference-v8/original-layers/mountains-mid-left.webp"
+    },
+    {
+      "id": "mountains-mid-right",
+      "rect": [
+        1899,
+        187,
+        1941,
+        2036
+      ],
+      "width": 1941,
+      "height": 2036,
+      "alpha": true,
+      "file": "verification/home-reference-v8/original-layers/mountains-mid-right.webp"
+    },
+    {
+      "id": "mountains-near-left",
+      "rect": [
+        0,
+        1918,
+        1063,
+        460
+      ],
+      "width": 1063,
+      "height": 460,
+      "alpha": true,
+      "file": "verification/home-reference-v8/original-layers/mountains-near-left.webp"
+    },
+    {
+      "id": "mountains-near-right",
+      "rect": [
+        2466,
+        1982,
+        1374,
+        396
+      ],
+      "width": 1374,
+      "height": 396,
+      "alpha": true,
+      "file": "verification/home-reference-v8/original-layers/mountains-near-right.webp"
+    },
+    {
+      "id": "river-valley",
+      "rect": [
+        0,
+        187,
+        3840,
+        2191
+      ],
+      "width": 3840,
+      "height": 2191,
+      "alpha": true,
+      "file": "verification/home-reference-v8/original-layers/river-valley.webp"
+    },
+    {
+      "id": "hanoi",
+      "rect": [
+        1025,
+        939,
+        217,
+        308
+      ],
+      "width": 217,
+      "height": 308,
+      "alpha": true,
+      "file": "verification/home-reference-v8/original-layers/hanoi.webp"
+    },
+    {
+      "id": "hue",
+      "rect": [
+        1722,
+        959,
+        413,
+        297
+      ],
+      "width": 413,
+      "height": 297,
+      "alpha": true,
+      "file": "verification/home-reference-v8/original-layers/hue.webp"
+    },
+    {
+      "id": "saigon",
+      "rect": [
+        2569,
+        919,
+        328,
+        248
+      ],
+      "width": 328,
+      "height": 248,
+      "alpha": true,
+      "file": "verification/home-reference-v8/original-layers/saigon.webp"
+    },
+    {
+      "id": "bridge",
+      "rect": [
+        0,
+        1274,
+        3840,
+        278
+      ],
+      "width": 3840,
+      "height": 278,
+      "alpha": true,
+      "file": "verification/home-reference-v8/original-layers/bridge.webp"
+    }
+  ]
+}

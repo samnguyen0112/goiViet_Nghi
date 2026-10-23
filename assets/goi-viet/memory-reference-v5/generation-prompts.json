@@ -1,0 +1,96 @@
+{
+  "tool": "built-in image_gen",
+  "reference": "references/approved-full.png",
+  "selected": [
+    {
+      "id": "bay-left-shore",
+      "prompt": "Render ONE independent high resolution transparent layer matching only the LEFT shore in the attached Vietnamese bay reference. Tall teal limestone cliff at far upper-left, descending low green hills to the right, rolling rice fields, lush small trees and tiny ivory houses with red roofs near the base. Strict original watercolor-gouache style, warm gold contours and jade colors, fine miniature village details, illustrated not photographic. This group occupies only x0–35%, y8–63% of reference scene. No water plane, no train, no rails, no bridge, no station, no boats, no clouds, no text. Natural irregular mountain silhouette and transparent background, softly misted far ridges, crisp nearer vegetation, isolated whole hill cluster roughly 1792x1152. Preserve exact context and scale relationships; don't invent giant houses or symmetric mountains.",
+      "source": "sources/bay-left-shore.png",
+      "generatedSize": [
+        1564,
+        1006
+      ]
+    },
+    {
+      "id": "bay-right-shore",
+      "prompt": "One independent transparent isolated right bank against references/exit.png: highest steep jade limestone cliffs on right descending left, tiny red roof waterfront village. No bay, boats, bridge, train or station. Native fine Vietnamese gouache details.",
+      "source": "sources/bay-right-shore.png",
+      "generatedSize": [
+        1145,
+        1374
+      ]
+    },
+    {
+      "id": "bay-water",
+      "prompt": "Create ONE landscape illustration background layer faithfully matching the attached Vietnamese bay reference, about 2048x1024. ONLY warm ivory paper sky, very distant pale blue/teal limestone mountain ranges on left and right, calm jade Ha Long bay water, small midwater karst islets with ivory stone bases and green tops, tiny distant red roof shoreline villages, soft reflections. NO train, bridge, track, station, large foreground trees or hills, sailboats, golden scroll clouds, text or UI. Independent foreground and mountains will be layered over this. Preserve scene's viewpoint, open horizon at 48% canvas height, warm ivory quiet opening upper center x25–72%, y0–42% for HTML text. Midwater distinctive taller karst islet x67% y49%, others x43% y54%, x35% y48%, x50% y53%. Water pale jade near horizon, richer luminous turquoise near bottom. Bottom is WATER through y100%, not a land floor. Same fine painterly Vietnamese watercolor-gouache with warm gold contours, distant mist, not a 3D toy or fantasy landscape. Compose to match the original reference bay directly, no unrelated objects.",
+      "source": "sources/bay-water.png",
+      "generatedSize": [
+        1774,
+        887
+      ]
+    },
+    {
+      "id": "bridge-causeway",
+      "prompt": "Create one independent high native detail TRANSPARENT illustration layer of the exact bridge and railway embankment from attached Vietnamese bay reference. Very wide ~2400x650. Only track, stone viaduct and its connected vegetated causeway. NO train, no station building, no sky, no mountains, no boats, no text, no background water. Critical composition: LEFT 60% is stone arch viaduct with SIX SMALL semicircular arch openings, spaced closely and evenly, warm gray sandstone blocks with fine ochre shadows. RIGHT 40% transitions to a low planted stone embankment/causeway supporting the track, with small jade bushes and flowering shrubs below, NOT more large arch openings. A narrow station platform is BEHIND the rail on right side, but no building. Track runs through entire width on a straight gentle downward line from left to right, slope 0.15 units vertical per horizontal unit (8.5 degrees); piers vertical and not simply rotated. Bridge is delicate, piers and arches relatively small as in reference, no huge monumental arches. Background through all arch openings and above irregular vegetation fully transparent. Entire narrow railway top must remain clean and consistent so a separate small right-facing train can sit on it and a separate station can sit behind the right causeway. Exact Vietnamese watercolor/gouache illustration reference palette and viewpoint, warm ivory gray stone, fine textured masonry, jade vegetation and muted gold details. The reference controls arch count, left-right distribution and thin structure.",
+      "source": "sources/bridge-causeway.png",
+      "generatedSize": [
+        2112,
+        745
+      ]
+    },
+    {
+      "id": "chapter-ridges",
+      "prompt": "Independently regenerate only the top mountain panorama against references/chapter.png: high detail transparent jade mountains, low pale center, left village and gold clouds, fade below. No other objects or text.",
+      "source": "sources/chapter-ridges.png",
+      "generatedSize": [
+        1983,
+        793
+      ]
+    },
+    {
+      "id": "foreground-frame",
+      "prompt": "Generate one separate TRANSPARENT foreground overlay illustration for the very bottom edge of the attached Vietnamese bay scene, about 2400x650 very wide. ONLY a low scalloped line of dark jade/teal small rounded hills with fine gold contours and speckles, tiny green bushes, and two soft ivory gold-outlined ornamental scroll-cloud clusters near bottom-left and bottom-right. All top 55% of canvas fully transparent; the left corner may rise to 30% and right corner to 25%, CENTER stays very low at bottom 80–100%, so the railway arches and station are not covered. This overlay is only framing the lower edge, not a big leafy wall. No train, rails, bridge, water, station, boats, mountains in distance, text or background paper. Match reference's exact Vietnamese richly detailed gouache/watercolor decorative landscape with warm cream scroll clouds and jade/gold scalloped hills; natural irregular alpha silhouette, crisp fine details. The reference bridge must remain visible above this low framing layer.",
+      "source": "sources/foreground-frame.png",
+      "generatedSize": [
+        2172,
+        724
+      ]
+    },
+    {
+      "id": "river-registered",
+      "prompt": "EDIT / EXACT BACKGROUND EXTRACTION for a layered website, not a new composition. Input is the approved complete chapter. Output a transparent PNG of the SAME TALL PORTRAIT CANVAS ASPECT RATIO (795 wide by 1458 high, ideally render at 1590x2916 native detail). KEEP ONLY the illustrated river water and its thin botanical banks in their EXACT original positions and sizes on that canvas. Remove every other pixel to transparency: all text, mountains, gate, bicycle, pho bowl, tray, basket, hands, tea, cards, boats, bay, bridge and train. Where objects occlude the river, reconstruct ONLY that hidden narrow river section logically continuous. Do not relocate, widen, simplify, add bends or redesign the river. The source river starts directly below village gate near x82%,y20.6% of the full canvas, winds left-right in SMALL NARROW bends near x60–75%,y22–32%, curves around left of the basket near x40%,y38%, sweeps toward right edge at x95%,y47%, forms the broad RIGHT-SIDE bend BEHIND the cards through y52–62%, and exits down-left beneath the cards near x37%,y69%, fading to transparency by y72%. All area above y19%, below y73% and left of x25% should be fully transparent. Water MUST have the same delicate slender width as input, same quiet teal and jade color, fine cream ripples, narrow warm sandy banks with tiny clustered red and white flowers. Do not produce a thick stylized S ribbon filling the canvas. Treat source shape and placement as locked. Fine native watercolor/gouache detail and transparent organic feathered vegetation edges. No ivory background rectangle or paper fill. The full reference picture is only a coordinate/template guide, no other objects remain. Preserve source river spatial geometry as accurately as possible.",
+      "source": "sources/river-registered.png",
+      "generatedSize": [
+        926,
+        1699
+      ]
+    },
+    {
+      "id": "sailboat-single",
+      "prompt": "Render one small Vietnamese bay sailboat exactly matching the red sailboats in the attached reference, as an independent high-resolution TRANSPARENT layer. One slim dark brown wooden hull, ONE mast and ONE red triangular battened sail, fine antique gold seams, slightly three-quarter side view, subtle few pale turquoise painted ripple/reflection strokes below. High-detail watercolor/gouache heritage illustration matching reference, simple elegant distant vessel proportions. No other boats, no bay background, no islands, no scenery, no letters, no logos. Canvas about 768x1024 portrait with full sail and small reflection visible. Avoid the two large junk sails and big cabin; reference boats are tiny single-sail silhouettes with delicate rigging.",
+      "source": "sources/sailboat-single.png",
+      "generatedSize": [
+        1086,
+        1448
+      ]
+    },
+    {
+      "id": "station-palms",
+      "prompt": "Generate one independent high-resolution transparent illustration layer of the small Vietnamese countryside RAILWAY STATION at lower right of the attached reference. Match the exact architectural context and daytime perspective. One-storey warm ivory plaster station, long red terracotta tiled roof, roof ridge gently rising to right, visible gable at RIGHT, shallow veranda facing viewer/lower-left with thin dark wooden columns and modest warm windows. About twice as wide as tall, accompanied by a few slim coconut palms rising behind and at right, flowering shrubs and a little vegetation at ground. Perspective corresponds to railway descending LEFT TO RIGHT, station platform baseline slopes gently downward to right. Transparent background. No rails, no train, no bridge, no water, no other mountains, no giant ground rectangle, no text or station lettering. Not a pagoda, temple, shop or night scene. No glowing oversized lanterns. Style is the exact fine watercolor/gouache Vietnamese heritage illustration in reference, jade foliage, gold fine details, warm sun, ivory and red tiles. High native resolution roughly 1792x1024; preserve the full roof and all palms, fine believable tile, column and planting details.",
+      "source": "sources/station-palms.png",
+      "generatedSize": [
+        1659,
+        948
+      ]
+    },
+    {
+      "id": "train-right-refined",
+      "prompt": "Create a precise independently generated transparent TRAIN layer, matching the small train in attached bay reference. Native very wide image ~2400x600. Full five-part train with locomotive facing RIGHT at RIGHT END and FOUR coaches behind to LEFT, rear-to-front colors RED, BLUE, GREEN, RED, then RED locomotive with dark teal chimney and fine gold trim. Critical relative sizes: locomotive only 21% of total train LENGTH, the four coaches occupy 79%; engine HEIGHT at most 1.15 times nearest red coach height; rear coach height 80% of nearest red coach height. Restrained near-side view with slight three-quarter front, minimal dramatic perspective. Do NOT make a giant toy engine. Rails are NOT included, but wheel-contact baseline straight gentle downward to right by 0.15 units vertical per horizontal unit. All wheels touch the same slope; wheel contacts are the composition anchor. No huge front headlamp or bulging wheels. Long elegant narrow red steam engine, small gold wheels and piping, 4-coach body consistent roofline. Fine watercolor/gouache Vietnamese storybook illustration EXACT palette and brushwork of reference, gold accents, richly detailed, no glossy 3D model. Entire train uncropped with transparent 3% margins. No bridge, no track, no station, water, hills, ground, smoke or text. Preserve original train direction and red-blue-green-red coach sequence. All background fully transparent.",
+      "source": "sources/train-right-refined.png",
+      "generatedSize": [
+        2172,
+        724
+      ]
+    }
+  ]
+}

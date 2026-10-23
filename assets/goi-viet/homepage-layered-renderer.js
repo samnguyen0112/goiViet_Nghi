@@ -3,22 +3,35 @@
 (() => {
   const makeCanvas=(w,h)=>{const c=document.createElement('canvas');c.width=w;c.height=h;return c;};
   const load=(url,name)=>new Promise((resolve,reject)=>{const i=new Image();i.onload=()=>resolve(i);i.onerror=()=>reject(new Error('Không tải được '+name));i.src=url;});
-  window.LandscapeLab={async create(canvas,manifest,bundle){
+  window.LandscapeLab={async create(canvas,manifest,bundle,options={}){
+    const managed=!!options.managed;
     const W=manifest.width,H=manifest.height,ctx=canvas.getContext('2d',{alpha:false});
     if(!ctx)throw new Error('Không có Canvas 2D.');
     const images=new Map();await Promise.all(manifest.layers.map(async l=>images.set(l.id,await load(bundle[l.file]||l.file,l.label))));
+    // A displayed bird layer must keep the manifest's draw order.
+    const birdLayers=manifest.layers.filter(l=>l.kind==='bird');
+    const birdsOnTop=birdLayers.length&&manifest.layers.every(l=>l.kind==='bird'||l.z<=Math.min(...birdLayers.map(b=>b.z)));
+    const craneFlight=window.GoiVietCraneFlight?await window.GoiVietCraneFlight.create({sceneCanvas:birdsOnTop?canvas:null}).catch(()=>null):null;
+    const portraitFlight=matchMedia('(max-width: 600px) and (orientation: portrait)');
+    const portraitSky=document.body.dataset.previewVersion==='3'?{y:.39,scale:.72}:{y:.67,scale:.60};
+    canvas.dataset.craneAnimation=craneFlight?'approved-ivory-gold':'legacy';
     // The palace cutout includes a fragment of the train from the source painting.
     // Remove that overlap using the train's own alpha, before either layer enters.
     const palace=manifest.layers.find(l=>l.id==='hue'),trainLayer=manifest.layers.find(l=>l.id==='train');
-    if(palace&&trainLayer){
+    if(palace&&trainLayer&&!manifest.palaceTrainOverlapCleaned){
       const im=images.get(palace.id),clean=makeCanvas(im.width,im.height),g=clean.getContext('2d');
       g.drawImage(im,0,0);g.globalCompositeOperation='destination-out';
       const sx=im.width/palace.rect[2],sy=im.height/palace.rect[3];
       g.drawImage(images.get('train'),(trainLayer.rect[0]-palace.rect[0])*sx,(trainLayer.rect[1]-palace.rect[1])*sy,trainLayer.rect[2]*sx,trainLayer.rect[3]*sy);
       images.set(palace.id,clean);
     }
-    const reference=manifest.reference?await load(bundle[manifest.reference]||manifest.reference,'ảnh tham chiếu'):null;
-    const outline=manifest.outline?await load(bundle[manifest.outline]||manifest.outline,'đường viền núi'):null;
+    let reference=!managed&&manifest.reference?await load(bundle[manifest.reference]||manifest.reference,'ảnh tham chiếu'):null;
+    let outline=!managed&&manifest.outline?await load(bundle[manifest.outline]||manifest.outline,'đường viền núi'):null;
+    const referenceLoads={};
+    function loadOptional(kind){
+      if(!managed||!manifest[kind]||referenceLoads[kind])return;
+      referenceLoads[kind]=load(bundle[manifest[kind]]||manifest[kind],kind).then(im=>{if(kind==='reference')reference=im;else outline=im;}).catch(()=>{});
+    }
     const enabled=new Set(manifest.layers.map(l=>l.id));let wind=manifest.motionDefaults?.wind??.85,checker=false,showOutline=false,showReference=false;
     const motion=['cloud','tree','bird','leaf','smoke'];
     const ordered=manifest.layers.slice().sort((a,b)=>a.z-b.z),layerById=new Map(manifest.layers.map(l=>[l.id,l]));
@@ -34,8 +47,8 @@
     }
     const terrainLayers=ordered.filter(l=>l.kind==='mountain'||l.kind==='terrain');
     let atmosphere=null,revealField=null,projectedField=null,revealWeights=null,revealPixels=null;
-    function prepareReveal(){
-      const rw=Math.min(480,canvas.width),rh=Math.max(1,Math.round(rw*canvas.height/canvas.width));
+    function* prepareRevealSteps(){
+      const rw=managed?480:Math.min(480,canvas.width),rh=Math.max(1,Math.round(rw*(managed?H/W:canvas.height/canvas.width)));
       revealField=makeCanvas(rw,rh);projectedField=makeCanvas(rw,rh);revealPixels=revealField.getContext('2d').createImageData(rw,rh);const masks=[];
       const rect=l=>[l.rect[0]*rw/W,l.rect[1]*rh/H,l.rect[2]*rw/W,l.rect[3]*rh/H];
       // Visible ownership comes from true object alpha and draw order. Hidden
@@ -48,19 +61,40 @@
         for(let j=i+1;j<terrainLayers.length;j++){const l=terrainLayers[j];g.drawImage(images.get(l.id),...rect(l));}
         const soft=makeCanvas(rw,rh),s=soft.getContext('2d');s.filter=`blur(${rw/1594*52}px)`;s.drawImage(mask,0,0);
         masks.push({id:i<0?'sky':terrainLayers[i].id,pixels:s.getImageData(0,0,rw,rh).data});
+        yield;
       }
       // Normalize the feathered ownership: neighbouring depths add up to one,
       // so fully revealed areas cannot retain a pale seam between mountains.
       const n=rw*rh;revealWeights=masks.map(m=>({id:m.id,weights:new Float32Array(n)}));
       for(let p=0;p<n;p++){let total=0;for(const m of masks)total+=m.pixels[p*4+3];
-        if(!total){revealWeights[0].weights[p]=1;continue;}
-        masks.forEach((m,i)=>revealWeights[i].weights[p]=m.pixels[p*4+3]/total);
+        if(!total)revealWeights[0].weights[p]=1;
+        else masks.forEach((m,i)=>revealWeights[i].weights[p]=m.pixels[p*4+3]/total);
+        if(p%2048===0)yield;
       }
+    }
+    function prepareReveal(){for(const step of prepareRevealSteps()){} }
+    let preparation=null;
+    function prepare(){
+      if(preparation)return preparation;
+      preparation=new Promise((resolve,reject)=>{
+        const steps=prepareRevealSteps();
+        const schedule=()=>window.requestIdleCallback?requestIdleCallback(tick,{timeout:250}):setTimeout(()=>tick({didTimeout:true,timeRemaining:()=>3}),0);
+        function tick(deadline){
+          if(document.hidden){document.addEventListener('visibilitychange',schedule,{once:true});return;}
+          const start=performance.now();
+          try{do{if(steps.next().done){
+            // Upload the cold art before exposing a ready scene. Both paints
+            // occur in one task, so the waiting screen remains blank paper.
+            render(24);render(0,{introDuration:10});resolve();return;
+          }}while(performance.now()-start<3&&(deadline.didTimeout||deadline.timeRemaining()>1));schedule();}catch(error){reject(error);}
+        }
+        schedule();
+      });return preparation;
     }
     function drawAtmosphere(introTime){
       if(introTime===null||introTime>=6.1)return;
       const cw=canvas.width,ch=canvas.height;
-      if(!atmosphere||atmosphere.width!==cw||atmosphere.height!==ch){atmosphere=makeCanvas(cw,ch);prepareReveal();}
+      if(!atmosphere||atmosphere.width!==cw||atmosphere.height!==ch){release(atmosphere);atmosphere=makeCanvas(cw,ch);if(!managed||!revealWeights)prepareReveal();}
       const light=revealWeights.map(({id})=>{const timing=id==='sky'?[.05,1.1]:layerById.get(id).entrance;return smooth((introTime-timing[0])/(timing[1]-timing[0]));});
       const f=revealField.getContext('2d'),field=revealPixels;
       for(let p=0;p<field.data.length/4;p++){let visible=0;for(let i=0;i<revealWeights.length;i++)visible+=revealWeights[i].weights[p]*light[i];field.data[p*4+3]=Math.round(255*(1-visible));}
@@ -70,7 +104,14 @@
       const state=terrainPose(introTime),r=projectedField.getContext('2d'),rw=projectedField.width,rh=projectedField.height;
       r.setTransform(1,0,0,1,0,0);r.clearRect(0,0,rw,rh);r.setTransform(state.s,0,0,state.s,rw*.5*(1-state.s),rh*(1-state.s));r.drawImage(revealField,0,0);
       g.globalCompositeOperation='destination-in';g.drawImage(projectedField,0,0,cw,ch);
-      ctx.save();ctx.setTransform(1,0,0,1,0,0);ctx.globalAlpha=1;ctx.drawImage(atmosphere,0,0);ctx.restore();
+      if(craneFlight?.layered){
+        // The original mist stays above scenery AND birds during the entrance.
+        // Display its existing canvas directly, without an extra image copy.
+        if(!atmosphere.isConnected){atmosphere.className='gv-home-scene-overlay';atmosphere.dataset.homeSceneLayer='mist';atmosphere.setAttribute('aria-hidden','true');canvas.parentElement.append(atmosphere);}
+        atmosphere.hidden=false;
+      }else{
+        atmosphere.remove();ctx.save();ctx.setTransform(1,0,0,1,0,0);ctx.globalAlpha=1;ctx.drawImage(atmosphere,0,0);ctx.restore();
+      }
     }
     function arrival(l,introTime){
       if(introTime===null)return {a:1,x:0,y:0,s:1,ax:0,ay:0};
@@ -137,6 +178,45 @@
       return partial;
     }
     const birdCaches=new Map(),treeCaches=new Map(),spriteSources=new Map();
+    const cacheLimit=32*1024*1024,lru=new Map(),jobs=new Map();
+    let cacheBytes=0,idle=0,suspended=false,built=0,drawMisses=0,maxBuildMS=0;
+    const release=c=>{if(c instanceof HTMLCanvasElement){c.width=1;c.height=1;if(c.dataset.homeSceneLayer)c.remove();}};
+    function clearMotion(){
+      craneFlight?.clear();
+      for(const entry of lru.values())release(entry.frame.canvas);
+      lru.clear();cacheBytes=0;treeCaches.clear();birdCaches.clear();
+      for(const im of spriteSources.values())if(![...images.values()].includes(im))release(im);
+      spriteSources.clear();
+    }
+    function cancelWarm(){if(idle){if(window.requestIdleCallback)cancelIdleCallback(idle);else clearTimeout(idle);}idle=0;jobs.clear();}
+    function scheduleWarm(){
+      if(!managed||idle||suspended||document.hidden||!jobs.size)return;
+      const run=deadline=>{
+        idle=0;if(suspended||document.hidden)return;
+        if(!deadline.didTimeout&&deadline.timeRemaining()<3){scheduleWarm();return;}
+        const [id,job]=jobs.entries().next().value;jobs.delete(id);
+        const start=performance.now();job();built++;maxBuildMS=Math.max(maxBuildMS,performance.now()-start);
+        scheduleWarm();
+      };
+      // One indivisible mesh frame per idle slice; never drain the whole queue.
+      idle=window.requestIdleCallback?requestIdleCallback(run,{timeout:250}):setTimeout(()=>run({didTimeout:true}),50);
+    }
+    function cached(cache,id,key,build,source,period=0){
+      const tag=id+':'+key;
+      if(cache.has(key)){const entry=lru.get(tag);if(entry){lru.delete(tag);lru.set(tag,entry);}return cache.get(key);}
+      drawMisses++;
+      if(!jobs.has(tag)&&jobs.size<96){jobs.set(tag,()=>{
+        const frame=build(),bytes=frame.canvas.width*frame.canvas.height*4;
+        if(bytes>cacheLimit){release(frame.canvas);return;}
+        while(cacheBytes+bytes>cacheLimit&&lru.size){const [old,entry]=lru.entries().next().value;lru.delete(old);entry.cache.delete(entry.key);cacheBytes-=entry.bytes;release(entry.frame.canvas);}
+        cache.set(key,frame);lru.set(tag,{cache,key,frame,bytes});cacheBytes+=bytes;
+      });scheduleWarm();}
+      // Existing neighbouring poses keep motion live while a missing pose is
+      // prepared. A cold sprite can always draw its original alpha image.
+      let nearest=null,distance=Infinity;
+      for(const [k,frame]of cache){let d=Math.abs(k-key);if(period)d=Math.min(d,period-d);if(d<distance){nearest=frame;distance=d;}}
+      return nearest||{canvas:source,padding:0};
+    }
     function spriteImage(l){
       if(spriteSources.has(l.id))return spriteSources.get(l.id);
       const source=images.get(l.id),width=Math.min(source.width,Math.max(1,Math.ceil(l.rect[2]*canvas.width/W)));
@@ -174,19 +254,31 @@
     }
     function tree(l,t){
       const im=spriteImage(l),phase=t*Math.PI*2/(l.period||7)+(l.phase||0),amount=Math.sin(phase)*wind;
-      const key=Math.round(amount*8),cache=treeCaches.get(l.id)||new Map();treeCaches.set(l.id,cache);
+      const steps=managed?16:8,key=Math.round(amount*steps),cache=treeCaches.get(l.id)||new Map();treeCaches.set(l.id,cache);
+      if(managed)return cached(cache,l.id,key,()=>deformSprite(im,(x,y)=>treePoint(l,x,y,key/steps),6,12,Math.ceil((l.amplitude||5)*im.width/l.rect[2]*1.5)+6),im);
       if(cache.has(key))return cache.get(key);
       const frame=deformSprite(im,(x,y)=>treePoint(l,x,y,key/8),6,12,Math.ceil((l.amplitude||5)*im.width/l.rect[2]*1.5)+6);
       cache.set(key,frame);if(cache.size>25)cache.delete(cache.keys().next().value);return frame;
     }
+    function birdWingBeat(l,t){
+      if(craneFlight)return craneFlight.beat(l,t);
+      // Continuous strokes: a quicker downstroke and a slower recovery, without
+      // the old multi-second hold. Slow modulation keeps the pair out of sync.
+      const trailing=l.direction===-1,offset=trailing?1.9:0;
+      const phase=t*Math.PI*2/(trailing?1.72:1.58)+offset+.18*Math.sin(t*.53+offset);
+      const amplitude=.94+.06*Math.sin(t*.71+offset);
+      return Math.sin(phase+.20*Math.sin(phase))*amplitude;
+    }
     function bird(l,t){
-      const im=spriteImage(l),k=Math.floor((((t/(l.flapPeriod||1.3))%1+1)%1)*24),cache=birdCaches.get(l.id)||new Map();birdCaches.set(l.id,cache);
-      if(cache.has(k))return cache.get(k);
-      const flap=Math.sin(k/24*Math.PI*2);
-      const frame=deformSprite(im,(x,y)=>{
+      const count=managed?48:24,im=spriteImage(l),k=Math.round(birdWingBeat(l,t)*count/2),cache=birdCaches.get(l.id)||new Map();birdCaches.set(l.id,cache);
+      if(!managed&&cache.has(k))return cache.get(k);
+      const flap=k/(count/2);
+      const build=()=>deformSprite(im,(x,y)=>{
         const h=Math.max(0,Math.min(1,(im.height*.64-y)/(im.height*.58))),body=Math.max(0,Math.min(1,(im.width*.74-x)/(im.width*.16))),weight=h*(y>im.height*.48?body:1);
-        return {x:x+(x-im.width*.5)*.1*flap*weight,y:y+(im.height*.66-y)*.32*flap*weight};
-      },8,8,Math.ceil(Math.max(im.height*.24,im.width*.06))+8);
+        return {x:x+(x-im.width*.5)*.18*flap*weight,y:y+(im.height*.66-y)*.68*flap*weight};
+      },8,8,Math.ceil(Math.max(im.height*.48,im.width*.10))+8);
+      if(managed)return cached(cache,l.id,k,build,im);
+      const frame=build();
       cache.set(k,frame);return frame;
     }
     function birdTravelTime(l,t){
@@ -197,8 +289,27 @@
       const u=Math.max(0,t/duration);
       return initial*t+(1-initial)*duration*(u*u*u-.5*u*u*u*u);
     }
+    function birdPose(l,t){
+      const p=((birdTravelTime(l,t)/((l.period||25)*(craneFlight?1.12:1))+(l.phase||0))%1+1)%1;
+      const trailing=l.direction===-1,phase=p*Math.PI*2+(trailing?1.15:-.65);
+      const portrait=!!craneFlight&&portraitFlight.matches;
+      const distance=W+1000,amplitude=H*(craneFlight?(trailing ? .055 : .045):(trailing ? .082 : .07)),ripple=H*(craneFlight ? .006 : .014);
+      const flap=birdWingBeat(l,t);
+      // The portrait cover crop has its own open sky below the station links.
+      const y=portrait?H*(portraitSky.y+.012*Math.sin(phase)+(trailing ? .014 : 0))-l.rect[3]/2:
+        l.rect[1]+H*.065+amplitude*Math.sin(phase)+ripple*Math.sin(phase*2-.4)+H*(craneFlight ? .0008 : .003)*flap;
+      const dy=portrait?H*.012*Math.PI*2*Math.cos(phase):amplitude*Math.PI*2*Math.cos(phase)+ripple*Math.PI*4*Math.cos(phase*2-.4);
+      return {
+        x:trailing?W+500-distance*p:-500+distance*p,
+        y,
+        // Follow the path tangent; a small bank and slow depth change soften the turn.
+        angle:Math.atan2(dy,distance)+(craneFlight ? .012 : .035)*Math.sin(phase-.6),
+        scale:((trailing?.88:.98)+.10*Math.sin(phase-.8))*(portrait ? portraitSky.scale : 1),
+        flap
+      };
+    }
     function draw(l,t,introTime){
-      if(!enabled.has(l.id))return;const im=l.kind==='tree'||l.kind==='bird'?spriteImage(l):images.get(l.id),[x,y,w,h]=l.rect;
+      if(!enabled.has(l.id))return;const im=l.kind==='tree'||(l.kind==='bird'&&!craneFlight)?spriteImage(l):images.get(l.id),[x,y,w,h]=l.rect;
       const enter=arrival(l,introTime);if(!enter.a)return;
       ctx.save();
       ctx.globalAlpha=enter.a;
@@ -219,11 +330,19 @@
         ctx.drawImage(f.canvas,x-f.padding*scale,y-f.padding*scale,f.canvas.width*scale,f.canvas.height*scale);
       }else if(l.kind==='bird'){
         pose(enter);
-        const f=bird(l,t),p=((birdTravelTime(l,t)/(l.period||25)+(l.phase||0))%1+1)%1;
-        const px=l.direction===-1?W+500-(W+1000)*p:-500+(W+1000)*p;
-        const py=y+70*Math.sin(p*Math.PI*2);ctx.translate(px+w/2,py+h/2);
-        if(l.direction===-1)ctx.scale(-1,1);ctx.rotate(.025*Math.sin(t*.7));
-        const s=w/im.width;ctx.drawImage(f.canvas,-w/2-f.padding*s,-h/2-f.padding*s,f.canvas.width*s,f.canvas.height*s);
+        const f=craneFlight?null:bird(l,t),flight=birdPose(l,t),px=flight.x,py=flight.y;
+        // The unframed preview-3 invitation needs quiet sky behind its lettering.
+        // Keep each flight and wingbeat; fade only while its sprite crosses copy.
+        if(options.copySafeArea&&l.copySafeArea!==false){
+          const pad=(f?.padding||0)*w/im.width;
+          const cover=smooth((px+w+pad-W*.23)/(W*.07))*smooth((W*.77-px+pad)/(W*.07));
+          ctx.globalAlpha*=1-cover;
+        }
+        ctx.translate(px+w/2,py+h/2);
+        if(l.direction===-1)ctx.scale(-1,1);
+        ctx.rotate(flight.angle);ctx.scale(flight.scale,flight.scale);
+        if(craneFlight)craneFlight.draw(ctx,l,t,w);
+        else{const s=w/im.width;ctx.drawImage(f.canvas,-w/2-f.padding*s,-h/2-f.padding*s,f.canvas.width*s,f.canvas.height*s);}
       }else if(l.kind==='leaf'){
         pose(enter);
         const p=((t/(l.period||28)+(l.phase||0))%1+1)%1,fade=Math.min(1,p*10,(1-p)*10);
@@ -236,6 +355,15 @@
           const p=((t/6+i/9)%1+1)%1,size=.35+p*2.0;
           ctx.save();ctx.globalAlpha*=Math.sin(p*Math.PI)*.5;ctx.translate(x+p*150*wind,y-p*115);ctx.drawImage(im,-w*size/2,-h*size/2,w*size,h*size);ctx.restore();
         }
+      }else if(l.id==='train'&&l.spriteParts){
+        // Keep original painted volume. Register each carriage on the same rail
+        // through placement alone, without warping the generated artwork.
+        ctx.save();pose(enter);
+        for(const [left,right,down]of l.spriteParts){
+          const part=right-left;
+          ctx.drawImage(im,left*im.width,0,part*im.width,im.height,x+left*w,y+down*h,part*w,h);
+        }
+        ctx.restore();
       }else{
         // The terrain shares a subtle uniform approach and stays fixed afterwards.
         ctx.save();const partial=clipOccluders(l,introTime);pose(enter);ctx.drawImage(im,x,y,w,h);ctx.restore();
@@ -244,7 +372,10 @@
       ctx.restore();
     }
     function render(t=0,options={}){
+      if(managed&&suspended)return;
       const introTime=options.introDuration&&t<options.introDuration?t*12/options.introDuration:null;
+      craneFlight?.beginFrame();
+      if(atmosphere&&(introTime===null||introTime<=.05||introTime>=6.1||showReference))atmosphere.hidden=true;
       ctx.setTransform(canvas.width/W,0,0,canvas.height/H,0,0);ctx.imageSmoothingQuality='high';
       if(introTime!==null){const paper=ctx.createLinearGradient(0,0,W,H);paper.addColorStop(0,'#fae1c6');paper.addColorStop(.45,'#fff1cf');paper.addColorStop(1,'#f5e6c8');ctx.fillStyle=paper;}
       else ctx.fillStyle=checker?'#c5cbc1':'#f8ebd1';
@@ -256,9 +387,18 @@
       for(const l of paperLayers)draw(l,t,introTime);
       for(const l of objectLayers)draw(l,t,introTime);
       drawAtmosphere(introTime);
+      if(managed&&(introTime===null||introTime>=6.1)&&atmosphere){
+        release(atmosphere);atmosphere=null;
+      }
       if(showOutline&&outline){ctx.save();pose(terrainPose(introTime));ctx.drawImage(outline,0,0,W,H);ctx.restore();}
     }
-    function resolution(w){w=Math.min(W,Math.max(320,Math.round(w)));const h=Math.round(w*H/W);if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h;spriteSources.clear();treeCaches.clear();birdCaches.clear();atmosphere=null;}}
-    return {render,resolution,enabled,manifest,images,treePoint,setOcclusion:v=>occlusion=v,setWind:v=>{wind=v;treeCaches.clear();},setChecker:v=>checker=v,setOutline:v=>showOutline=v,setReference:v=>showReference=v,isMoving:l=>motion.includes(l.kind),get cachedFrames(){return [...treeCaches.values(),...birdCaches.values()].reduce((n,c)=>n+c.size,0);}};
+    function resolution(w){w=Math.min(W,Math.max(320,Math.round(w)));const h=Math.round(w*H/W);if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h;if(managed){cancelWarm();clearMotion();}else{spriteSources.clear();treeCaches.clear();birdCaches.clear();}release(atmosphere);atmosphere=null;}}
+    const lifecycle=managed?{
+      prepare,
+      suspend(){if(suspended)return;suspended=true;cancelWarm();clearMotion();release(atmosphere);atmosphere=null;},
+      resume(){if(!suspended)return false;suspended=false;scheduleWarm();return true;},
+      inspect:()=>({suspended,cacheBytes,cacheLimit,revealBytes:(revealWeights||[]).reduce((n,c)=>n+c.weights.byteLength,0)+(revealPixels?.data.byteLength||0)+(revealField?.width||0)*(revealField?.height||0)*8,pending:jobs.size,built,drawMisses,maxBuildMS,referenceDecoded:!!reference,outlineDecoded:!!outline,spritePixels:[...spriteSources.values()].reduce((n,c)=>n+c.width*c.height,0),cranes:craneFlight?.inspect()??null})
+    }:{};
+    return {render,resolution,enabled,manifest,images,treePoint,...lifecycle,setOcclusion:v=>occlusion=v,setWind:v=>{wind=v;if(managed){cancelWarm();clearMotion();}else treeCaches.clear();},setChecker:v=>checker=v,setOutline:v=>{showOutline=v;if(v)loadOptional('outline');},setReference:v=>{showReference=v;if(v)loadOptional('reference');},isMoving:l=>motion.includes(l.kind),get cachedFrames(){return [...treeCaches.values(),...birdCaches.values()].reduce((n,c)=>n+c.size,0);}};
   }};
 })();

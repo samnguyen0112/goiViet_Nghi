@@ -25,5 +25,54 @@
     }
     const result=levels.get(tolerance);wallDrawPoints+=result.length;return result;
   }
-  window.GoiVietRenderPerformance=Object.freeze({ringOffscreen,wallRing,originalProject:original,inspect:()=>({projected,culled,wallSourcePoints,wallDrawPoints})});
+  // Only the current camera is retained; the source rings remain immutable.
+  let ringCamera='',rings=new WeakMap(),ringReuses=0;
+  function projectRing(ring,z,cam,w,h){
+    const key=[w,h,...getMapScreenOrigin(w,h),cam.yaw,cam.pitch,cam.zoom,cam.panX,cam.panY].join(':');
+    if(key!==ringCamera){ringCamera=key;rings=new WeakMap();}
+    let planes=rings.get(ring);if(!planes){planes=new Map();rings.set(ring,planes);}
+    if(planes.has(z)){ringReuses++;return planes.get(z);}
+    const points=ring.map(p=>project3D(p[0],p[1],z,cam,w,h));planes.set(z,points);return points;
+  }
+  let wallQuads=0,wallBatches=0,wallPass=0;
+  const wallBuffers=new WeakMap(),wallColors=new Map();
+  function prepareWalls(ring,base,top,palette,sunX,sunY){
+    let quads=wallBuffers.get(ring);
+    if(!quads||quads.length!==ring.length-1){quads=Array.from({length:ring.length-1},()=>({}));wallBuffers.set(ring,quads);}
+    for(let i=0;i<quads.length;i++){
+      const dx=top[i+1][0]-top[i][0],dy=top[i+1][1]-top[i][1],length=Math.hypot(dx,dy)||1;
+      const factor=.85+((-dy/length)*sunX+(dx/length)*sunY)*.25;
+      const r=Math.max(0,Math.min(255,Math.round(palette[0]*factor))),g=Math.max(0,Math.min(255,Math.round(palette[1]*factor))),b=Math.max(0,Math.min(255,Math.round(palette[2]*factor))),key=(r<<16)|(g<<8)|b;
+      let fill=wallColors.get(key);if(!fill){fill=`rgba(${r},${g},${b},0.94)`;if(wallColors.size>=4096)wallColors.delete(wallColors.keys().next().value);wallColors.set(key,fill);}
+      const q=quads[i];q.b0=base[i];q.b1=base[i+1];q.t1=top[i+1];q.t0=top[i];q.midZ=.25*(base[i][2]+base[i+1][2]+top[i+1][2]+top[i][2]);q.fill=fill;
+    }
+    quads.sort((a,b)=>b.midZ-a.midZ);return quads;
+  }
+  function paintWalls(context,quads){
+    wallQuads+=quads.length;const pass=++wallPass,moving=Boolean(window.GoiVietRasterTasks?.isMoving?.());
+    const add=q=>{context.moveTo(q.b0[0],q.b0[1]);context.lineTo(q.b1[0],q.b1[1]);context.lineTo(q.t1[0],q.t1[1]);context.lineTo(q.t0[0],q.t0[1]);context.closePath();q.drawn=pass;};
+    for(const q of quads){q.lo=Math.min(q.b0[0],q.b1[0],q.t0[0],q.t1[0]);q.hi=Math.max(q.b0[0],q.b1[0],q.t0[0],q.t1[0]);q.top=Math.min(q.b0[1],q.b1[1],q.t0[1],q.t1[1]);q.bottom=Math.max(q.b0[1],q.b1[1],q.t0[1],q.t1[1]);}
+    for(let i=0;i<quads.length;){
+      if(quads[i].drawn===pass){i++;continue;}
+      const start=i;
+      const first=quads[i],fill=first.fill;let left=Infinity,right=-Infinity;
+      context.beginPath();
+      do{
+        const q=quads[i],lo=q.lo,hi=q.hi;
+        // Never merge overlapping translucent walls or reorder the depth sort.
+        if(i>0&&left!==Infinity&&!(hi<=left||lo>=right))break;
+        add(q);
+        left=Math.min(left,lo);right=Math.max(right,hi);i++;
+      }while(i<quads.length&&quads[i].drawn!==pass&&quads[i].fill===fill);
+      // Reorder only across faces whose screen bounds are strictly disjoint,
+      // including a 2px AA margin. Overlapping/translucent painter order stays.
+      for(let j=i;moving&&j<Math.min(quads.length,i+24);j++){
+        const q=quads[j];if(q.drawn===pass||q.fill!==fill)continue;
+        let disjoint=true;for(let k=start;k<j;k++)if(!(q.hi+2<quads[k].lo||q.lo-2>quads[k].hi||q.bottom+2<quads[k].top||q.top-2>quads[k].bottom)){disjoint=false;break;}
+        if(disjoint)add(q);
+      }
+      context.fillStyle=fill;context.fill();wallBatches++;
+    }
+  }
+  window.GoiVietRenderPerformance=Object.freeze({ringOffscreen,wallRing,projectRing,prepareWalls,paintWalls,originalProject:original,inspect:()=>({projected,culled,wallSourcePoints,wallDrawPoints,ringReuses,wallQuads,wallBatches,wallColors:wallColors.size})});
 })();

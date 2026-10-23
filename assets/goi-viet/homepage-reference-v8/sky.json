@@ -1,0 +1,21 @@
+{
+  "id": "sky",
+  "file": "sky.webp",
+  "source": "sources/sky.png",
+  "generatedFrom": "C:\\Users\\Uy\\.codex\\generated_images\\01a15871-114b-7d72-8257-05166a5cb4d4\\exec-a1e35022-6ffa-457e-8cc7-e5cf7820cf19.png",
+  "nativeWidth": 1594,
+  "nativeHeight": 987,
+  "width": 3840,
+  "height": 2378,
+  "originalRect": [
+    0,
+    0,
+    3840,
+    2378
+  ],
+  "alphaSHA256": "df9eaab5736714a255dffe8bedbee6a31c7554923d090bd46e9dc81abc071517",
+  "sourceSHA256": "fbc6fed2630143487aecaa05be5697e37b5e84c9a0e53feb651be52b9829a277",
+  "prompt": "Production background paper layer for Gói Việt. Image 1 is the original full registered sky/paper texture. Image 2 is the APPROVED homepage color reference. Recreate ONLY the empty paper/sky background, same canvas aspect 3840:2378, clean high-resolution delicate Vietnamese watercolor paper fibers and very subtle mottled gouache wash. Match Image 2's pale warm ivory cream, slightly less peach/orange than Image 1, with a soft lighter central reading area. Very restrained low contrast, no objects, mountains, horizon, sun, clouds, silhouettes, frames, logos or text. No strong gradients or dark stains. This paper will sit BEHIND independent mountain sprites and the live DOM; it must stay quiet. Fill the entire rectangular canvas, opaque. Highest practical native resolution.",
+  "tool": "built-in image_gen",
+  "registration": "Generated colors registered to original canvas; original alpha retained byte-for-byte. Opaque paper around terrain mist is aligned to the generated sky to avoid seams."
+}

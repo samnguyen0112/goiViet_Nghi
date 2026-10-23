@@ -1,0 +1,20 @@
+{
+  "id": "river-route-refined",
+  "source": "sources/river-route-refined.png",
+  "file": "river-route-refined.webp",
+  "width": 1254,
+  "height": 1254,
+  "generatedWidth": 1254,
+  "generatedHeight": 1254,
+  "alpha": true,
+  "sha256": "46a4d4f4744d1806bf029b62696b2e0edd6f8f07a2a791cd036916dab44d98eb",
+  "variants": [
+    {
+      "file": "river-route-refined-640.webp",
+      "width": 640
+    }
+  ],
+  "generator": "built-in image_gen",
+  "prompt": "Precisely regenerate ONLY the winding river with its very narrow flower banks in the attached reference (image 1), as one independent transparent layer. Image 2 is our previous river: retain its fine water and botanical style, but CORRECT ITS GEOMETRY to match image 1. Transparent SQUARE canvas 2048x2048. It will overlay the chapter at y290 in a 795px wide design. Critical corrections: lower outlet MUST terminate around x38% at y94%; it MUST NOT flow to the left edge or below x28% anywhere. Bottom-left 25% of canvas must be completely transparent. Narrow the water ribbon about 25% versus image 2, especially the first two bends and the lower-left outlet. Upper river is a slender stream, not a broad channel. Full course centerline in canvas percent: START (82,1), flow left through (61,8), right through (72,14), left through (58,20), bend left at (44,32), then sweep right through (72,42), broad outer RIGHT bend at (93,53), (91,64), (80,75), then bend back left through (62,84) and terminate feathered at (38,94). Water width 2% near source, 3% through top small bends, 6% at middle left bend, 8% near broad right bend, 10% near outlet. Fine pale ripples follow flowing water, no hard thick white foam edges. Extremely thin grassy ochre banks with tiny red and white wildflower clusters, interrupted organic edges as original reference. Outside water and narrow banks fully transparent. NO objects (gate, bowl, letters, basket, tea, cards), no paper rectangle, no sky or mountains or text. High native-detail Vietnamese watercolor/gouache heritage art matching image 1 exactly. Keep rightmost river edge inside canvas at x99%. Reference image 1 controls path and relative width; image 2 supplies detailed rendering technique only.",
+  "sourcePath": "C:\\Users\\Uy\\.codex\\generated_images\\01a15871-114b-7d72-8257-05166a5cb4d4\\exec-8f0e2bb3-aa0d-4fc4-82da-7f6b21373440.png"
+}

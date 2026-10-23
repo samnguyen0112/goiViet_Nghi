@@ -1,0 +1,17 @@
+# Homepage crane: one articulated illustration
+
+The production animation uses `articulated-parts.webp`: three immutable painted parts (body with neck/legs, near wing, far wing), packed into a padded 2048 × 512 texture. Each part keeps the same image and camera throughout the animation. There are no pose-image substitutions, contour morphs, optical flow or crossfades between different crane drawings.
+
+The source `articulated-source.png` was prepared with the built-in ImageGen tool on 22 October 2026, using the user's approved `approved-poses.png` as the identity, palette and feather-detail reference. Its full generation prompt is saved in [articulated-prompt.md](articulated-prompt.md). The source is retained for editing and is not downloaded by the homepage. The approved original is preserved verbatim.
+
+`homepage-crane-flight.js` projects a shoulder/elbow/wrist skeleton through one fixed camera. The wrist follows the shoulder with a small lag, the recovery folds and twists the wing, and both wings share a stroke. The body, neck and trailing legs use the same parent motion. Head stabilization keeps the beak steady while the neck compensates for body heave. Root fading joins the shoulder coverts to the body. Premultiplied alpha, mipmaps and anisotropic filtering keep the black primaries clean at small sizes.
+
+On the homepage, one transparent WebGL canvas displays both birds directly above the scenery, at the scenery canvas's backing resolution. The existing scene controller drives every frame and supplies each bird's exact transform and opacity; there is no independent animation clock or per-frame WebGL-to-Canvas-2D image copy. The displayed context uses `preserveDrawingBuffer: false`. The existing mist canvas is displayed above both scenery and birds during the entrance, preserving its original compositing order. All displayed layers share the same cover crop and ignore pointer input.
+
+A continuous Canvas mesh provides the fallback, including after WebGL context loss; the displayed bird canvas is then removed. Suspension releases the drawing buffer and removes the entrance mist; the same painted texture is reused on resume. Existing entrance, flight paths, wing/neck/leg motion and reduced-motion controls are unchanged. Standalone callers without a homepage scene canvas retain the original offscreen `draw()` API. A manifest that places other scenery above birds also keeps that API to preserve its draw order.
+
+Rebuild the texture with `node tools/build-home-crane-rig.cjs`. The old `build-home-crane-flight.cjs` command is a compatibility alias. Run `node tools/check-home-crane-rig.cjs` for material stability, continuous motion, uncropped tips, suspend/resume, context loss, responsive layouts and homepage controls. Review images are saved in `verification/crane-rig/`.
+
+The displayed-layer change was measured against the saved pre-change rig, not the legacy sprite fallback. `node tools/profile-home-crane-layer.cjs measure` runs six alternating real-Chrome measurements using the baseline in `verification/crane-webgl-layer-20261023/before/`. `visual` captures matching frames, and `verify` checks layer order, no WebGL copies, resize, suspend/resume, context loss and reduced motion. The local server and isolated test browsers close after each run. Results, trace files and the Vietnamese report are in `verification/crane-webgl-layer-20261023/`.
+
+`approved-flight.webp` is a superseded preview from the earlier pose-morph approach. It is retained for comparison and is not loaded by the homepage.

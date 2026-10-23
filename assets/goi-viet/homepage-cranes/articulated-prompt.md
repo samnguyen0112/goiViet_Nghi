@@ -1,0 +1,13 @@
+# ImageGen source prompt
+
+Mode: built-in `image_gen`, transparent background. Reference: `approved-poses.png` (the user's approved crane illustration). Result: `articulated-source.png`.
+
+Use case: precise-object-edit / animation asset preparation. Input image: the approved crane illustration is the strict identity and style reference. Create ONE high resolution transparent PNG exploded puppet sheet, NOT animation frames. Exactly THREE isolated components, widely separated, all belonging to the SAME crane seen from the SAME fixed side / slight three-quarter camera. Preserve the reference's beautiful traditional ivory-white plumage, charcoal black primary feathers, fine restrained warm golden feather outlines, red crown, slim black long beak, graceful extended black-and-ivory neck and rich feather detail. No redesign, no cartoon simplification, no scenery, no text, no labels, no shadows, no border.
+
+Layout: TOP HALF spanning full width: the complete wingless crane BODY facing RIGHT with long graceful extended neck and head, original red crown, original black neck stripe, a full rounded ivory torso and charcoal tail. Leave OFF BOTH WINGS. Reconstruct the torso naturally where wings formerly covered it. Include both slender dark trailing legs, close together, trailing LEFT and gently down, toes neatly gathered; keep legs attached and anatomically graceful.
+
+BOTTOM LEFT QUADRANT: one COMPLETE NEAR WING as a separate intact feather fan for rigging, shoulder root at its LOWER RIGHT, wing extending diagonally UP and LEFT from shoulder; small rounded ivory shoulder base, broad curving ivory upper coverts transitioning into long charcoal black outer primary feathers fanned at the distant upper-left tip and trailing outer edge. The entire wing including the hidden shoulder attachment MUST be present, no chopped or abruptly cut inner edge.
+
+BOTTOM RIGHT QUADRANT: one COMPLETE FAR WING from this SAME bird, same root at lower-right, same swept up-left anatomical orientation, slightly narrower perspective. Same ivory coverts and black outer primaries, same gold detailing and lighting; include its whole hidden inner contour and a rounded root, not a clipped fragment. The two wings have identical biological feather arrangement and coherent fixed-camera perspective, intended to rotate in 3D about shoulder, elbow and wrist; render each as a full continuous unfolded wing, not separate feathers.
+
+Keep all 3 components cleanly disconnected from one another by generous true transparent gaps, uncropped tips and full head, feet and beak. Premium graceful finished artwork as close as possible to the reference.

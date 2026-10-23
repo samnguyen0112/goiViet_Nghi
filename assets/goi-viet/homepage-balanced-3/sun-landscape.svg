@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="640" viewBox="0 0 640 640" fill="none">
+  <defs>
+    <radialGradient id="haze"><stop offset=".53" stop-color="#f1ba6d" stop-opacity=".32"/><stop offset=".8" stop-color="#f3cc86" stop-opacity=".12"/><stop offset="1" stop-color="#f4d69e" stop-opacity="0"/></radialGradient>
+    <linearGradient id="pigment" x1="276" y1="106" x2="356" y2="543" gradientUnits="userSpaceOnUse"><stop stop-color="#e89c54"/><stop offset=".48" stop-color="#dc7c43"/><stop offset="1" stop-color="#c05b38"/></linearGradient>
+    <filter id="paper" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".53" numOctaves="3" seed="21"/><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncA type="linear" slope=".16"/></feComponentTransfer><feBlend in="SourceGraphic" mode="soft-light"/></filter>
+    <clipPath id="disc"><path d="M546 316c2 127-97 230-225 231C195 548 94 447 94 321 93 196 194 94 319 94c125-1 226 97 227 222Z"/></clipPath>
+  </defs>
+  <circle cx="320" cy="320" r="320" fill="url(#haze)"/>
+  <g clip-path="url(#disc)"><path d="M88 88h466v466H88Z" fill="url(#pigment)" filter="url(#paper)"/></g>
+</svg>

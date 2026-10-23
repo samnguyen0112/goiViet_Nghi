@@ -1,0 +1,237 @@
+{
+  "version": 4,
+  "width": 1774,
+  "height": 887,
+  "referenceSHA256": "3b3c643d6016863febeeeb4fefed0a00248a8e1d87cf6e4d9d1b4136718a36d8",
+  "method": "Original pixels isolated by semantic masks and projective card rectification. Vector traced lettering. Restored occlusions used only in background fragments. No flattened UI image is shipped in HTML.",
+  "layers": [
+    {
+      "id": "paper",
+      "file": "paper.webp",
+      "width": 256,
+      "height": 256,
+      "origin": "quiet restored rice-paper material",
+      "rect": null
+    },
+    {
+      "id": "mountains-right",
+      "file": "mountains-right.webp",
+      "width": 1124,
+      "height": 665,
+      "origin": "approved original paint; inpaint restricted to removed foreground; semantic alpha mask",
+      "rect": [
+        650,
+        0,
+        1124,
+        665
+      ]
+    },
+    {
+      "id": "river-bottom",
+      "file": "river-bottom.webp",
+      "width": 1774,
+      "height": 447,
+      "origin": "approved original paint; inpaint restricted to removed foreground; semantic alpha mask",
+      "rect": [
+        0,
+        440,
+        1774,
+        447
+      ]
+    },
+    {
+      "id": "jasmine-left",
+      "file": "jasmine-left.webp",
+      "width": 355,
+      "height": 555,
+      "origin": "approved original paint; inpaint restricted to removed foreground; semantic alpha mask",
+      "rect": [
+        0,
+        195,
+        355,
+        555
+      ]
+    },
+    {
+      "id": "frame-tl",
+      "file": "frame-tl.webp",
+      "width": 70,
+      "height": 70,
+      "origin": "approved original: border slice",
+      "rect": [
+        0,
+        0,
+        70,
+        70
+      ]
+    },
+    {
+      "id": "frame-tr",
+      "file": "frame-tr.webp",
+      "width": 70,
+      "height": 70,
+      "origin": "approved original: border slice",
+      "rect": [
+        1704,
+        0,
+        1774,
+        70
+      ]
+    },
+    {
+      "id": "frame-bl",
+      "file": "frame-bl.webp",
+      "width": 70,
+      "height": 70,
+      "origin": "approved original: border slice",
+      "rect": [
+        0,
+        817,
+        70,
+        887
+      ]
+    },
+    {
+      "id": "frame-br",
+      "file": "frame-br.webp",
+      "width": 70,
+      "height": 70,
+      "origin": "approved original: border slice",
+      "rect": [
+        1704,
+        817,
+        1774,
+        887
+      ]
+    },
+    {
+      "id": "frame-top",
+      "file": "frame-top.webp",
+      "width": 1634,
+      "height": 36,
+      "origin": "approved original: border slice",
+      "rect": [
+        70,
+        0,
+        1704,
+        36
+      ]
+    },
+    {
+      "id": "frame-bottom",
+      "file": "frame-bottom.webp",
+      "width": 1634,
+      "height": 36,
+      "origin": "approved original: border slice",
+      "rect": [
+        70,
+        851,
+        1704,
+        887
+      ]
+    },
+    {
+      "id": "frame-left",
+      "file": "frame-left.webp",
+      "width": 36,
+      "height": 747,
+      "origin": "approved original: border slice",
+      "rect": [
+        0,
+        70,
+        36,
+        817
+      ]
+    },
+    {
+      "id": "frame-right",
+      "file": "frame-right.webp",
+      "width": 36,
+      "height": 747,
+      "origin": "approved original: border slice",
+      "rect": [
+        1738,
+        70,
+        1774,
+        817
+      ]
+    },
+    {
+      "id": "card-meal",
+      "file": "card-meal.webp",
+      "width": 400,
+      "height": 544,
+      "origin": "approved original: inverse-projective isolation",
+      "rect": [
+        [
+          934,
+          64
+        ],
+        [
+          1331,
+          130
+        ],
+        [
+          1255,
+          659
+        ],
+        [
+          859,
+          595
+        ]
+      ]
+    },
+    {
+      "id": "card-grandmother",
+      "file": "card-grandmother.webp",
+      "width": 368,
+      "height": 504,
+      "origin": "approved original: inverse-projective isolation",
+      "rect": [
+        [
+          1340,
+          155
+        ],
+        [
+          1701,
+          218
+        ],
+        [
+          1615,
+          714
+        ],
+        [
+          1254,
+          650
+        ]
+      ]
+    },
+    {
+      "id": "title-first",
+      "file": "title-first.svg",
+      "origin": "approved ink contours: vector paths, no embedded raster",
+      "rect": [
+        96,
+        155,
+        812,
+        149
+      ]
+    },
+    {
+      "id": "title-memory",
+      "file": "title-memory.svg",
+      "origin": "approved ink contours: vector paths, no embedded raster",
+      "rect": [
+        125,
+        284,
+        718,
+        171
+      ]
+    },
+    {
+      "id": "memory-ribbon",
+      "file": "memory-ribbon.svg",
+      "origin": "separate vector ornament"
+    }
+  ]
+}

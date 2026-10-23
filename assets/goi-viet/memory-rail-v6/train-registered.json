@@ -1,0 +1,27 @@
+{
+  "id": "train-registered",
+  "file": "train-registered.webp",
+  "source": "sources/train-registered.png",
+  "width": 2099,
+  "height": 499,
+  "generatedWidth": 2172,
+  "generatedHeight": 724,
+  "trimOffset": [
+    -39,
+    -159
+  ],
+  "variants": [
+    {
+      "file": "train-registered-640.webp",
+      "width": 640
+    },
+    {
+      "file": "train-registered-1280.webp",
+      "width": 1280
+    }
+  ],
+  "sha256": "794065e6415b53e28a35d9f04cbd65531961f237520ecea2aa69b779cdba3249",
+  "generator": "built-in image_gen",
+  "prompt": "Use case: precise-object-edit / compositing. Image 1 is the shared fixed railway-station camera guide; image 2 is the train design to preserve. Create ONLY a complete steam train cutout on genuine transparent background with no scenery, track, shadows extending beyond wheels, or smoke. Locomotive faces RIGHT, on right end, pulling FOUR passenger coaches to its left: rear red, then dark blue, then green, then red coach next to locomotive. Match the red/gold painted heritage style and compact realistic proportions of image 2, with carefully drawn wheels, couplers, running gear and black iron undercarriage. Do NOT add any extra coach or turn engine left.\nCRITICAL CAMERA: The train must have the EXACT SAME projected viewing direction as image 1's straight railway. A slightly elevated distant three-quarter view. All visible near wheel contact points must lie on ONE absolutely straight line descending right with slope +0.227 (approximately 12.8 degrees clockwise). Rearmost near wheel near x100,y180; foremost near wheel near x2250,y668 on a roughly 2400x800 canvas. This incline is screen perspective; body verticals stay upright. Wheels realistic circles/ellipses consistent with view, roofs, floorboards, windows share same projected rail direction. Make rear car slightly smaller than front, but never stepped baselines, floating wheels, doubled wheels or disconnected couplings. Every wheel rim tangent to the common ground line. Train alone, no drawn guide line or rails.\nEngine about 22% of complete train length, four coaches remaining 78%. Locomotive boiler horizontal ALONG the projected railway, red cylindrical boiler with gold bands and black wheels/gold rims. The functional black flared smokestack is at the FRONT of boiler, near right end behind brass front face, approximately 94% of total train width. One main smoke chimney, small brass steam domes farther rear on boiler; no smoke baked in. Front red cowcatcher just above wheel contact line, not hanging below rail. No giant locomotive, no toy plastic finish. Beautiful painterly microdetail, warm natural upper-left light, jade/gold Vietnamese illustrated website, no text or logos. Train fills wide canvas, fully visible end to end. Keep cutout alpha clean.",
+  "active": false
+}

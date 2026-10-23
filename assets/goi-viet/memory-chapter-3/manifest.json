@@ -1,0 +1,79 @@
+{
+  "generatedWith": "built-in image_gen",
+  "reference": "references/approved-concept.png",
+  "assets": [
+    {
+      "file": "taste.webp",
+      "source": "sources/taste.png",
+      "width": 1100,
+      "height": 825,
+      "bytes": 323316,
+      "hasAlpha": true
+    },
+    {
+      "file": "taste-small.webp",
+      "source": "sources/taste.png",
+      "width": 600,
+      "height": 450,
+      "bytes": 111778,
+      "hasAlpha": true
+    },
+    {
+      "file": "story.webp",
+      "source": "sources/story.png",
+      "width": 1100,
+      "height": 1375,
+      "bytes": 585860,
+      "hasAlpha": true
+    },
+    {
+      "file": "story-small.webp",
+      "source": "sources/story.png",
+      "width": 600,
+      "height": 750,
+      "bytes": 213526,
+      "hasAlpha": true
+    },
+    {
+      "file": "tradition.webp",
+      "source": "sources/tradition.png",
+      "width": 1100,
+      "height": 825,
+      "bytes": 309962,
+      "hasAlpha": true
+    },
+    {
+      "file": "tradition-small.webp",
+      "source": "sources/tradition.png",
+      "width": 600,
+      "height": 450,
+      "bytes": 108154,
+      "hasAlpha": true
+    },
+    {
+      "file": "tea.webp",
+      "source": "sources/tea.png",
+      "width": 1100,
+      "height": 1100,
+      "bytes": 338110,
+      "hasAlpha": true
+    },
+    {
+      "file": "tea-small.webp",
+      "source": "sources/tea.png",
+      "width": 600,
+      "height": 600,
+      "bytes": 119632,
+      "hasAlpha": true
+    },
+    {
+      "file": "water.webp",
+      "source": "sources/water.png",
+      "width": 600,
+      "height": 600,
+      "bytes": 105218,
+      "hasAlpha": false
+    }
+  ],
+  "reused": "See README.md for original homepage layers"
+}

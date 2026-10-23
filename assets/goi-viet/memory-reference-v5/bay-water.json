@@ -1,0 +1,24 @@
+{
+  "id": "bay-water",
+  "source": "sources/bay-water.png",
+  "file": "bay-water.webp",
+  "width": 1774,
+  "height": 887,
+  "generatedWidth": 1774,
+  "generatedHeight": 887,
+  "alpha": false,
+  "sha256": "e9544e27f805e58bcb71ac9d895ce60b2875a7cbc37f894e0103aad179884729",
+  "variants": [
+    {
+      "file": "bay-water-640.webp",
+      "width": 640
+    },
+    {
+      "file": "bay-water-1280.webp",
+      "width": 1280
+    }
+  ],
+  "generator": "built-in image_gen",
+  "prompt": "Create ONE landscape illustration background layer faithfully matching the attached Vietnamese bay reference, about 2048x1024. ONLY warm ivory paper sky, very distant pale blue/teal limestone mountain ranges on left and right, calm jade Ha Long bay water, small midwater karst islets with ivory stone bases and green tops, tiny distant red roof shoreline villages, soft reflections. NO train, bridge, track, station, large foreground trees or hills, sailboats, golden scroll clouds, text or UI. Independent foreground and mountains will be layered over this. Preserve scene's viewpoint, open horizon at 48% canvas height, warm ivory quiet opening upper center x25–72%, y0–42% for HTML text. Midwater distinctive taller karst islet x67% y49%, others x43% y54%, x35% y48%, x50% y53%. Water pale jade near horizon, richer luminous turquoise near bottom. Bottom is WATER through y100%, not a land floor. Same fine painterly Vietnamese watercolor-gouache with warm gold contours, distant mist, not a 3D toy or fantasy landscape. Compose to match the original reference bay directly, no unrelated objects.",
+  "sourcePath": "C:\\Users\\Uy\\.codex\\generated_images\\01a15871-114b-7d72-8257-05166a5cb4d4\\exec-4c9eb545-36ef-43ea-a916-6034c0ab6ca3.png"
+}

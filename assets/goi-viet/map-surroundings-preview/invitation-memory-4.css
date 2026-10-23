@@ -1,0 +1,225 @@
+/* Approved memory invitation. Each painted element is an independent registered
+   layer. The frame uses eight slices; lettering contains actual vector paths.
+   All copy, icons, and the primary action remain accessible DOM content. */
+body[data-preview-version="3"] #introWelcomeStage #homepageContent.gv-memory-invitation {
+  --im4-ink:#073e35; --im4-red:#aa2f1d; --im4-gold:#ab853c;
+  --im4-pad:clamp(18px,3.8cqi,66px);
+  width:min(88vw,112dvh,2200px);
+  padding:var(--im4-pad);
+  border:0; border-radius:24px;
+  background:#fcf4e2 url('../invitation-memory-4/paper.webp') repeat 0 0/220px 220px;
+  box-shadow:0 12px 35px #163c3530;
+  text-align:left; overflow:clip; isolation:isolate;
+}
+body[data-preview-version="3"] #introWelcomeStage #homepageContent.gv-memory-invitation::before { content:none; }
+body[data-preview-version="3"] #introWelcomeStage #homepageContent.gv-memory-invitation > .im4-world,
+body[data-preview-version="3"] #introWelcomeStage #homepageContent.gv-memory-invitation > .im4-frame {
+  position:absolute; inset:0; pointer-events:none; user-select:none; z-index:0;
+}
+.im4-world { overflow:hidden; border-radius:inherit; }
+.im4-art { position:absolute; display:block; }
+.im4-mountains-right { right:0; top:0; width:63.36%; height:75%; }
+.im4-river-bottom { bottom:0; left:0; width:100%; height:50.4%; }
+.im4-jasmine-left { left:0; top:22%; width:20%; height:62.57%; }
+body[data-preview-version="3"] #introWelcomeStage #homepageContent.gv-memory-invitation > .im4-frame {
+  z-index:4; display:grid;
+  grid-template-columns:3.95cqi 1fr 3.95cqi;
+  grid-template-rows:3.95cqi 1fr 3.95cqi;
+}
+.im4-frame img { display:block; width:100%; height:100%; min-width:0; min-height:0; }
+.im4-frame-tl { grid-area:1/1; }.im4-frame-top { grid-area:1/2; object-fit:fill; height:51.43%!important; }
+.im4-frame-tr { grid-area:1/3; }.im4-frame-left { grid-area:2/1; width:51.43%!important; }
+.im4-frame-right { grid-area:2/3; width:51.43%!important; justify-self:end; }
+.im4-frame-bl { grid-area:3/1; }.im4-frame-bottom { grid-area:3/2; height:51.43%!important; align-self:end; }
+.im4-frame-br { grid-area:3/3; }
+.im4-main { position:relative; z-index:1; display:grid; grid-template-columns:54% 46%; align-items:center; min-width:0; }
+.im4-message { min-width:0; padding-left:4.6cqi; padding-top:1.9cqi; padding-bottom:1.5cqi; }
+body[data-preview-version="3"] #introWelcomeStage #homepageContent.gv-memory-invitation .gv-home-kicker {
+  display:flex; justify-content:center; align-items:center; gap:.45em; margin:0 0 1.1cqi; padding:0;
+  font:700 clamp(11px,1.78cqi,34px)/1.3 'Invitation Display',Georgia,serif;
+  color:#a33d27; letter-spacing:0; background:none; border:0; max-width:none;
+}
+body[data-preview-version="3"] #introWelcomeStage #homepageContent.gv-memory-invitation .gv-home-kicker::before,
+body[data-preview-version="3"] #introWelcomeStage #homepageContent.gv-memory-invitation .gv-home-kicker::after { content:none; }
+body[data-preview-version="3"] #introWelcomeStage #homepageContent.gv-memory-invitation .gv-home-kicker > span { flex:none; }
+body[data-preview-version="3"] #introWelcomeStage #homepageContent.gv-memory-invitation #homepageHeading {
+  margin:0; padding:0; max-width:none; width:100%; line-height:1; font-size:inherit;
+}
+.im4-lettering { display:block; position:relative; padding-bottom:.7cqi; margin-inline:auto; }
+.im4-lettering img { display:block; height:auto; }
+.im4-title-first { width:100%; }
+.im4-title-memory { width:88.4%; margin-top:-1cqi; margin-inline:auto; }
+.im4-ribbon { position:absolute; width:77%; left:50%; transform:translateX(-50%); bottom:.1cqi; }
+body[data-preview-version="3"] #introWelcomeStage #homepageContent.gv-memory-invitation .gv-home-description {
+  margin:.4cqi 0 0; max-width:none; padding:0; text-align:center;
+  font:500 clamp(12px,1.7cqi,30px)/1.45 var(--font-sans,sans-serif); color:var(--im4-ink);
+}
+body[data-preview-version="3"] #introWelcomeStage #homepageContent.gv-memory-invitation .gv-home-actions {
+  display:flex; justify-content:center; margin:1.2cqi 0 0; padding:0; gap:0; border:0; width:100%;
+}
+body[data-preview-version="3"] #introWelcomeStage #homepageContent.gv-memory-invitation #btnQuickStartWelcome {
+  display:flex; align-items:center; justify-content:center; gap:1.7cqi;
+  min-width:0; width:74%; min-height:44px; padding:.8cqi 1.6cqi; margin:0;
+  border:1px solid #963421; border-radius:12px;
+  font:700 clamp(15px,1.98cqi,36px)/1.2 'Invitation Display',Georgia,serif;
+  color:#fff5df; background:linear-gradient(115deg,#b23421,#9e2819);
+  box-shadow:inset 0 0 0 2px #fff4d3,inset 0 0 0 3px #b34429,0 3px 8px #6b3f2415;
+  cursor:pointer; transition:background .2s,box-shadow .2s;
+}
+body[data-preview-version="3"] #introWelcomeStage #homepageContent.gv-memory-invitation #btnQuickStartWelcome svg {
+  width:1.35em; height:.8em; flex:none; stroke:currentColor; stroke-width:1.2;
+}
+.im4-footnote { margin:.7cqi 0 0; color:#5c7664; text-align:center; font:400 clamp(10px,1.15cqi,23px)/1.5 var(--font-sans,sans-serif); }
+.im4-cards { position:relative; align-self:stretch; min-height:0; isolation:isolate; }
+.im4-card { position:absolute; height:auto; width:51%; border-radius:4.5%; filter:drop-shadow(0 5px 8px #62401923); }
+.im4-card-meal { left:1.5%; top:2%; transform:rotate(8.5deg); z-index:2; }
+.im4-card-grandmother { right:1%; top:16%; width:47%; transform:rotate(9deg); z-index:1; }
+body[data-preview-version="3"] #introWelcomeStage #homepageContent.gv-memory-invitation .gv-home-features {
+  position:relative; z-index:3; display:grid; grid-template-columns:repeat(3,minmax(0,1fr));
+  margin:1cqi 1.6cqi 0; padding:1cqi .9cqi; min-height:0;
+  border:1px solid #c9ab6b; border-radius:18px; background:#fff9e9e8;
+}
+body[data-preview-version="3"] #introWelcomeStage #homepageContent.gv-memory-invitation .gv-home-features li {
+  display:flex; align-items:center; flex-direction:row; gap:1.1cqi; min-width:0; min-height:0; padding:0 1.7cqi; text-align:left;
+}
+body[data-preview-version="3"] #introWelcomeStage #homepageContent.gv-memory-invitation .gv-home-features li + li { border-left:1px solid #cbb17c; border-top:0; }
+body[data-preview-version="3"] #introWelcomeStage #homepageContent.gv-memory-invitation .gv-home-features li::before { content:none; }
+body[data-preview-version="3"] #introWelcomeStage #homepageContent.gv-memory-invitation .invite-feature-mark {
+  display:block; flex:0 0 3.8cqi; width:3.8cqi; height:4cqi; border:0; padding:0; background:none; color:var(--im4-gold);
+}
+body[data-preview-version="3"] #introWelcomeStage #homepageContent.gv-memory-invitation .invite-feature-text { display:flex; flex-direction:column; gap:.35cqi; min-width:0; }
+body[data-preview-version="3"] #introWelcomeStage #homepageContent.gv-memory-invitation .invite-feature-text strong {
+  color:#174c40; font:700 clamp(11px,1.68cqi,32px)/1.25 'Invitation Display',Georgia,serif;
+}
+body[data-preview-version="3"] #introWelcomeStage #homepageContent.gv-memory-invitation .invite-feature-text small {
+  display:block; color:#627461; font:400 clamp(10px,1.24cqi,24px)/1.4 var(--font-sans,sans-serif);
+}
+#homepageContent.gv-memory-invitation button:focus-visible { outline:3px solid #1c6554; outline-offset:4px; }
+@media(hover:hover) {
+  body[data-preview-version="3"] #introWelcomeStage #homepageContent.gv-memory-invitation #btnQuickStartWelcome:hover { background:#8f251a; box-shadow:inset 0 0 0 2px #fff4d3,0 5px 15px #64321f25; }
+}
+/* Fit the invitation below the railway without altering the cinematic artwork.
+   Compact typography and card sizes adapt to the available lower-screen slot. */
+@media(min-width:1001px) and (min-height:701px) {
+  body[data-preview-version="3"] #introWelcomeStage #homepageContent.gv-memory-invitation {
+    --im4-pad:clamp(15px,1.7cqi,38px);
+    width:min(88vw,112dvh,2200px);
+  }
+  .im4-message { padding-top:.5cqi; padding-bottom:0; }
+  .im4-lettering { width:79%; }
+  body[data-preview-version="3"] #introWelcomeStage #homepageContent.gv-memory-invitation .gv-home-kicker { font-size:1.45cqi; margin-bottom:.7cqi; }
+  body[data-preview-version="3"] #introWelcomeStage #homepageContent.gv-memory-invitation .gv-home-description { font-size:1.35cqi; }
+  body[data-preview-version="3"] #introWelcomeStage #homepageContent.gv-memory-invitation .gv-home-actions { margin-top:.75cqi; }
+  body[data-preview-version="3"] #introWelcomeStage #homepageContent.gv-memory-invitation #btnQuickStartWelcome { font-size:1.75cqi; padding:.7cqi 1cqi; }
+  .im4-footnote { margin-top:.4cqi; font-size:1.05cqi; }
+  .im4-card { width:42%; left:5%; top:3%; }
+  .im4-card-grandmother { width:39%; left:auto; right:5%; top:11%; }
+  body[data-preview-version="3"] #introWelcomeStage #homepageContent.gv-memory-invitation .gv-home-features { padding:.65cqi .6cqi; margin-top:.8cqi; }
+  body[data-preview-version="3"] #introWelcomeStage #homepageContent.gv-memory-invitation .invite-feature-text strong { font-size:1.5cqi; }
+  body[data-preview-version="3"] #introWelcomeStage #homepageContent.gv-memory-invitation .invite-feature-text small { font-size:1.15cqi; }
+}
+@media(max-width:1000px), (max-height:700px) {
+  body[data-preview-version="3"] #introWelcomeStage #homepageContent.gv-memory-invitation {
+    width:92vw; --im4-pad:18px; border-radius:19px;
+  }
+  .im4-main { grid-template-columns:58% 42%; }
+  .im4-message { padding:3px 0 0 9px; }
+  .im4-lettering { width:100%; }
+  body[data-preview-version="3"] #introWelcomeStage #homepageContent.gv-memory-invitation .gv-home-kicker { font-size:10px; margin-bottom:8px; }
+  body[data-preview-version="3"] #introWelcomeStage #homepageContent.gv-memory-invitation .gv-home-description { margin-top:4px; font-size:11px; line-height:1.35; }
+  body[data-preview-version="3"] #introWelcomeStage #homepageContent.gv-memory-invitation .gv-home-actions { margin-top:8px; }
+  body[data-preview-version="3"] #introWelcomeStage #homepageContent.gv-memory-invitation #btnQuickStartWelcome { width:100%; min-height:44px; padding:8px; font-size:13px; border-radius:8px; gap:8px; }
+  .im4-footnote { font-size:9px; margin-top:5px; }
+  .im4-card { width:76%; left:13%; top:6%; transform:rotate(-8deg); }
+  .im4-card-grandmother { width:70%; left:auto; right:0; top:40%; transform:rotate(10deg); }
+  body[data-preview-version="3"] #introWelcomeStage #homepageContent.gv-memory-invitation .gv-home-features { margin:12px 0 0; padding:7px 0; border-radius:10px; }
+  body[data-preview-version="3"] #introWelcomeStage #homepageContent.gv-memory-invitation .gv-home-features li { padding:0 5px; gap:5px; flex-direction:column; text-align:center; }
+  body[data-preview-version="3"] #introWelcomeStage #homepageContent.gv-memory-invitation .invite-feature-mark { flex-basis:22px; width:22px; height:22px; }
+  body[data-preview-version="3"] #introWelcomeStage #homepageContent.gv-memory-invitation .invite-feature-text strong { font-size:10px; }
+  body[data-preview-version="3"] #introWelcomeStage #homepageContent.gv-memory-invitation .invite-feature-text small { display:none; }
+}
+@media(orientation:landscape) and (max-height:500px) {
+  body[data-preview-version="3"] #introWelcomeStage #homepageContent.gv-memory-invitation { width:61%; right:12px; left:auto; translate:none; bottom:12px; --im4-pad:14px; }
+  .im4-main { grid-template-columns:61% 39%; }
+  .im4-lettering { width:72%; }
+  body[data-preview-version="3"] #introWelcomeStage #homepageContent.gv-memory-invitation .gv-home-kicker { margin-bottom:4px; font-size:10px; }
+  .im4-footnote { font-size:9px; }
+  .im4-card { width:60%; top:4%; left:3%; }
+  .im4-card-grandmother { width:55%; right:0; top:34%; }
+}
+@media(prefers-reduced-motion:reduce) {
+  #homepageContent.gv-memory-invitation button { transition:none!important; }
+}
+/* Size the card pair against its own available height. This prevents the
+   illustrations from touching the feature strip at wide/4K breakpoints. */
+@media(min-width:1001px) and (min-height:701px), (min-width:600px) and (max-width:1000px) and (orientation:portrait) {
+  .im4-card { height:90%; width:auto; left:13%; top:0; }
+  .im4-card-grandmother { height:86%; width:auto; left:auto; right:8%; top:5%; }
+}
+@media(min-width:600px) and (max-width:1000px) and (orientation:portrait) {
+  .im4-main { grid-template-columns:54% 46%; }
+  body[data-preview-version="3"] #introWelcomeStage #homepageContent.gv-memory-invitation .gv-home-kicker { font-size:14px; }
+  body[data-preview-version="3"] #introWelcomeStage #homepageContent.gv-memory-invitation .gv-home-description { font-size:14px; }
+  body[data-preview-version="3"] #introWelcomeStage #homepageContent.gv-memory-invitation #btnQuickStartWelcome { font-size:18px; }
+  .im4-card { height:72%; left:6%; top:5%; transform:rotate(8.5deg); }
+  .im4-card-grandmother { height:68%; right:0; top:22%; transform:rotate(9deg); }
+}
+@media(max-width:599px), (orientation:landscape) and (max-height:500px) {
+  .im4-card { height:48%; width:auto; left:12%; top:3%; transform:rotate(-7deg); }
+  .im4-card-grandmother { height:45%; width:auto; left:auto; right:4%; top:50%; transform:rotate(8deg); z-index:3; }
+}
+/* Respect the native pixel budget of the isolated original painting. Do not
+   advertise a synthetic 4K resize as additional detail. Vector type and frame
+   geometry can grow freely; the card art never needs a raster upsample. */
+.im4-card-meal { max-height:544px; }
+.im4-card-grandmother { max-height:504px; }
+@media(min-resolution:1.5dppx) {
+  .im4-card-meal { max-height:272px; }
+  .im4-card-grandmother { max-height:252px; }
+}
+@media(min-resolution:2.5dppx) {
+  .im4-card-meal { max-height:181.33px; }
+  .im4-card-grandmother { max-height:168px; }
+}
+/* Keep the next-chapter cue in the invitation, alongside the three steps. */
+.im4-footer { display:flex; align-items:center; gap:1.1cqi; margin:1cqi 1.6cqi 0; }
+body[data-preview-version="3"] #introWelcomeStage #homepageContent.gv-memory-invitation .im4-footer .gv-home-features {
+  flex:1; min-width:0; margin:0;
+}
+body[data-preview-version="3"] #introWelcomeStage #homepageContent .im4-next-cue {
+  position:relative; inset:auto; translate:none; display:flex; align-items:center; justify-content:center;
+  flex:0 0 44px; width:44px; height:44px; min-height:44px; margin:0; padding:0;
+  border:1px solid #b4935c; border-radius:50%; background:#fcf1dc;
+  color:#244f42; box-shadow:inset 0 0 0 3px #fff8e7; cursor:pointer;
+  transition:background .2s,color .2s;
+}
+.im4-next-cue > span:first-child { position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
+.im4-next-cue svg { width:22px; height:29px; stroke:currentColor; stroke-width:1.4; transition:translate .2s; }
+@media(hover:hover) {
+  body[data-preview-version="3"] #introWelcomeStage #homepageContent .im4-next-cue:hover { color:#fff5df; background:#9e341f; }
+  .im4-next-cue:hover svg { translate:0 2px; }
+}
+@media(min-width:1001px) and (min-height:701px) {
+  .im4-message { left:2.2cqi; position:relative; }
+  .im4-footer { margin-top:.8cqi; }
+}
+@media(max-width:1000px), (max-height:700px) {
+  .im4-footer { margin:12px 0 0; gap:7px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .im4-next-cue svg { transition:none; }
+  .im4-next-cue:hover svg { translate:none; }
+}
+/* Uniform diagonal reduction, anchored at the bottom so more railway stays
+   visible. Individual scale leaves the opening's translate animation intact.
+   Preserve 44px physical button targets after the 0.85 visual scale. */
+@media(min-width:1001px) and (min-height:701px) {
+  body[data-preview-version="3"] #introWelcomeStage #homepageContent.gv-memory-invitation {
+    scale:.85;
+    transform-origin:center bottom;
+  }
+  body[data-preview-version="3"] #introWelcomeStage #homepageContent.gv-memory-invitation #btnQuickStartWelcome { min-height:52px; }
+  body[data-preview-version="3"] #introWelcomeStage #homepageContent .im4-next-cue {
+    flex-basis:52px; width:52px; height:52px; min-height:52px;
+  }
+}

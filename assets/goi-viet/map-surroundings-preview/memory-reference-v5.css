@@ -1,0 +1,129 @@
+/* Approved 795 × 1458 reference. All artwork is separate from live copy/controls. */
+.mc-reference-v5{--mc-support-size:clamp(14px,1.45cqw,20px)}
+.mc-reference-v5 .mc-content{aspect-ratio:795/1458}
+.mc-reference-v5 .n5-image{object-fit:contain;image-rendering:auto}
+.mc-reference-v5 .mc-world{overflow:visible}
+.mc-reference-v5 .n5-ridges{z-index:0;top:-6px!important;mask-image:linear-gradient(#000 35%,transparent 70%)}
+.mc-reference-v5 .n5-river{z-index:1;mask-image:linear-gradient(transparent,#000 3%,#000 92%,transparent)}
+.mc-reference-v5 .mc-introduction{left:8.3%;top:12.5%;width:56%}
+.mc-reference-v5 .mc-eyebrow{display:none}
+.mc-reference-v5 .mc-introduction h2{font-size:5.85cqw;line-height:1.08}
+.mc-reference-v5 .mc-lead{font-size:2cqw;padding-top:1.6cqw}
+.mc-reference-v5 .mc-taste .mc-memory-copy{left:62.22222%;top:8.51852%;width:34.44444%}
+.mc-reference-v5 .mc-story .mc-memory-copy{left:55.45977%;top:71.66667%;width:41.66667%}
+.mc-reference-v5 .mc-tradition .mc-memory-copy{left:70.46512%;top:30.55556%;width:27.90698%}
+.mc-reference-v5 .mc-memory h3{font-size:2.85cqw;line-height:1.16;margin:.6cqw 0 .65cqw;text-wrap:nowrap}
+.mc-reference-v5 .mc-number{position:relative;border:0;outline:0;padding:0;transform:none;color:var(--mc-red);font:400 3.2cqw/1.1 Georgia,serif}
+.mc-reference-v5 .mc-number::after{content:'';position:absolute;left:calc(100% + 1.2cqw);top:65%;width:7.6cqw;height:1px;background:#c39a6266}
+.mc-reference-v5 .mc-memory-copy::before{inset:-.5cqw -.8cqw;background:radial-gradient(ellipse,#fcf0d8dc 25%,#fcf0d890 53%,transparent 78%)}
+.mc-reference-v5 .mc-story .mc-memory-copy::before,.mc-reference-v5 .mc-tradition .mc-memory-copy::before{inset:-2cqw -2.5cqw;background:radial-gradient(ellipse farthest-side,#fcf0d8 55%,#fcf0d8db 78%,transparent)}
+.mc-reference-v5 .mc-tradition h3{font-size:2.6cqw}
+.mc-reference-v5 .n5-steam{position:absolute;left:18%;top:4%;width:10%;height:20%;opacity:.65;filter:blur(.5px)}
+.mc-reference-v5 .mc-conversation-copy{left:15.6%;top:5.26316%;width:45%}
+.mc-reference-v5 .mc-conversation h2{font-size:3.85cqw;line-height:1.18}
+.mc-reference-v5 .mc-conversation h2 em{font-size:.97em}
+.mc-reference-v5 .mc-conversation-copy>p{font-size:1.8cqw;line-height:1.45;margin:1.8cqw 0 1.2cqw 7cqw}
+.mc-reference-v5 .mc-text-button{font-size:1.65cqw;margin-left:7cqw}
+.mc-reference-v5 .mc-conversation-prompt{display:flex;align-items:center;gap:clamp(12px,1.2cqw,18px);width:max-content;max-width:calc(100% - 7cqw);margin:1.8cqw 0 1.2cqw 7cqw}
+.mc-reference-v5 .mc-conversation-prompt>p{min-width:0;margin:0}
+.mc-reference-v5 .mc-reset-button{
+ flex:none;width:40px;height:40px;min-height:40px;margin:0;padding:0;
+ border:1px solid #9e2b2799;border-radius:5px;background:#fff5e3b3;
+ color:var(--mc-red);text-decoration:none;
+ transition:background-color .18s ease,border-color .18s ease;
+}
+.mc-reference-v5 .mc-reset-button .mc-text-button-icon{width:21px;height:21px;transition:transform .2s ease}
+@media(hover:hover){
+ .mc-reference-v5 .mc-reset-button:not([aria-disabled=true]):hover{
+  background:#f4dfc7;border-color:var(--mc-red);
+ }
+ .mc-reference-v5 .mc-reset-button:not([aria-disabled=true]):hover .mc-text-button-icon{transform:rotate(25deg)}
+}
+.mc-reference-v5 .mc-reset-button:not([aria-disabled=true]):active{background:#eed4b8}
+.mc-reference-v5 .mc-reset-button[aria-disabled=true]{opacity:.65}
+@media(pointer:coarse){.mc-reference-v5 .mc-reset-button{width:44px;height:44px;min-height:44px}}
+@media(prefers-reduced-motion:reduce){.mc-reference-v5 .mc-reset-button,.mc-reference-v5 .mc-reset-button .mc-text-button-icon{transition:none;transform:none!important}}
+.reduced-motion .mc-reference-v5 .mc-reset-button,.reduced-motion .mc-reference-v5 .mc-reset-button .mc-text-button-icon{transition:none;transform:none!important}
+.mc-reference-v5 .mc-card-stack{left:58.23899%;top:6.31579%;width:25.78616%;height:auto;aspect-ratio:2/3}
+.mc-reference-v5 .mc-card-tilt{transform:rotate(6deg)}
+.mc-reference-v5 .mc-card-under{left:13%;top:4%;transform:rotate(11deg)}
+.mc-reference-v5 .mc-card-category{font-size:1.35cqw}
+.mc-reference-v5 .mc-card-question{font-size:2.45cqw}
+.mc-reference-v5 .mc-steps{left:10.7%;top:71.12483%;width:78.6%;height:2.5%;gap:2cqw}
+.mc-reference-v5 .mc-steps li{font-size:1.55cqw;gap:1cqw}
+.mc-reference-v5 .mc-steps li>span{font-size:3.2cqw}
+.mc-reference-v5 .mc-steps li:not(:last-child)::after{font-size:3.4cqw;margin-left:1cqw}
+.mc-reference-v5 .mc-destination-copy{left:24%;top:5.2%;width:52%;padding:0}
+.mc-reference-v5 .mc-destination-copy::before{inset:-2cqw -4cqw;background:radial-gradient(ellipse,#fcf0d8b8 12%,#fcf0d860 48%,transparent 75%)}
+.mc-reference-v5 .mc-destination h2{font-size:3.75cqw;line-height:1.14;letter-spacing:-.045em}
+.mc-reference-v5 .mc-destination h2 em{font-size:.9em}
+.mc-reference-v5 .mc-destination-copy>p{font-size:1.65cqw;margin:1.1cqw 0 1.4cqw}
+.mc-reference-v5 .mc-primary.mc-map-ticket{min-height:5cqw;gap:1.8cqw;padding:.9cqw 2.6cqw;border-radius:.5cqw}
+.mc-reference-v5 .mc-ticket-seal,.mc-reference-v5 .mc-ticket-kicker{display:none}
+.mc-reference-v5 .mc-ticket-title{font-size:1.95cqw}
+.mc-reference-v5 .mc-ticket-arrow{padding:0;margin:0;border:0;font-size:2.3cqw}
+.mc-reference-v5 .mc-exit-world{overflow:hidden}
+.mc-reference-v5 .n5-bay{z-index:0;mask-image:linear-gradient(transparent,#000 14%,#000)}
+.mc-reference-v5 .n5-left-shore,.mc-reference-v5 .n5-right-shore{z-index:1}
+.mc-reference-v5 .n5-boat{z-index:2}
+.mc-reference-v5 .n5-station{z-index:3}
+.mc-reference-v5 .n5-bridge{z-index:4;transform:rotate(-2.7deg);transform-origin:0 0}
+.mc-reference-v5 .n5-train{z-index:5;transform:none}
+.mc-reference-v5 .n5-train-art{transform:rotate(3.8deg);transform-origin:0 0}
+.mc-reference-v5 .n5-foreground{z-index:6}
+.mc.mc-reference-v5 .mc-train-group.n5-train.is-visible{animation:n5-arrival 5.2s cubic-bezier(.18,.62,.25,1) both}
+@keyframes n5-arrival{from{translate:-10cqw -1.5cqw}to{translate:0 0}}
+@media(max-width:700px){
+ .mc-reference-v5{--mc-support-size:16px}
+ .mc-reference-v5 .mc-content{aspect-ratio:auto}
+ .mc-reference-v5 .mc-world{height:240px;overflow:hidden;mask-image:linear-gradient(#000 65%,transparent)}
+ .mc-reference-v5 .mc-world .n5-ridges{display:block;top:0!important;width:100%!important}
+ .mc-reference-v5 .mc-world .n5-river{display:none}
+ .mc-reference-v5 .n5-mobile-river{left:-18%!important;top:380px!important;width:150%!important;height:auto!important;opacity:.42;object-fit:contain;mask-image:linear-gradient(transparent,#000 8%,#000 90%,transparent)}
+ .mc-reference-v5 .mc-introduction{left:auto;top:auto;width:100%;padding:140px 24px 26px}
+ .mc-reference-v5 .mc-introduction h2{font-size:clamp(29px,7.7vw,46px)}
+ .mc-reference-v5 .mc-lead{font-size:14px;white-space:normal;padding-top:16px}
+ .mc-reference-v5 .mc-memory{height:260px!important}
+ .mc-reference-v5 .mc-taste .mc-art-group{left:-7%;top:30px;width:88%;aspect-ratio:450/270}
+ .mc-reference-v5 .mc-story .mc-art-group{right:-3%;top:0;width:58%;aspect-ratio:348/360}
+ .mc-reference-v5 .mc-tradition .mc-art-group{left:-7%;top:30px;width:88%;aspect-ratio:430/180}
+ .mc-reference-v5 .mc-taste .mc-memory-copy,.mc-reference-v5 .mc-tradition .mc-memory-copy{left:auto;top:auto;width:36%;margin-left:62%;padding-right:12px}
+ .mc-reference-v5 .mc-story .mc-memory-copy{left:auto;top:auto;width:40%;margin-left:6%;padding:0}
+ .mc-reference-v5 .mc-memory h3{font-size:22px;white-space:normal;text-wrap:balance}
+ .mc-reference-v5 .mc-number{font-size:24px}
+ .mc-reference-v5 .mc-number::after{left:calc(100% + 10px);width:36px}
+ .mc-reference-v5 .mc-conversation{height:auto!important;padding:28px 24px 50px;gap:40px}
+ .mc-reference-v5 .mc-conversation-copy{left:auto;top:auto;width:100%}
+ .mc-reference-v5 .mc-conversation h2{font-size:clamp(26px,7.2vw,42px)}
+ .mc-reference-v5 .mc-conversation h2 em{white-space:normal}
+ .mc-reference-v5 .mc-conversation-copy>p{font-size:16px;margin:18px 0 12px}
+ .mc-reference-v5 .mc-text-button{font-size:15px;margin:0;min-height:44px}
+ .mc-reference-v5 .mc-conversation-prompt{gap:12px;max-width:100%;margin:18px 0 12px}
+ .mc-reference-v5 .mc-reset-button{width:44px;height:44px}
+ .mc-reference-v5 .mc-tea.mc-art-group{left:-12%!important;bottom:0!important;top:auto!important;width:90%!important;height:auto!important;aspect-ratio:315/394}
+ .mc-reference-v5 .mc-card-stack{position:relative;left:auto;top:auto;width:225px;max-width:74%;margin:0 0 190px 36px}
+ .mc-reference-v5 .mc-card-category{font-size:12px}
+ .mc-reference-v5 .mc-card-question{font-size:24px}
+ .mc-reference-v5 .mc-steps{left:auto;top:auto;width:auto;height:auto;margin:0 24px;padding:24px 0;gap:16px}
+ .mc-reference-v5 .mc-steps li{font-size:14px;gap:15px}
+ .mc-reference-v5 .mc-steps li>span{font-size:26px}
+ .mc-reference-v5 .mc-destination{height:calc(270px + 49.56vw)!important}
+ .mc-reference-v5 .mc-exit-world{left:0;top:auto;bottom:0;width:100%;height:auto;aspect-ratio:795/394;transform:none}
+ .mc-reference-v5 .mc-destination-copy{position:relative;left:auto;top:auto;width:100%;padding:48px 20px 0}
+ .mc-reference-v5 .mc-destination h2{font-size:29px}
+ .mc-reference-v5 .mc-destination-copy>p{font-size:15px;margin:16px 0}
+ .mc-reference-v5 .mc-primary.mc-map-ticket{min-height:48px;gap:14px;padding:11px 24px;border-radius:5px}
+ .mc-reference-v5 .mc-ticket-title{font-size:18px}
+ .mc-reference-v5 .mc-ticket-arrow{font-size:22px}
+}
+@media(prefers-reduced-motion:reduce){.mc.mc-reference-v5 .mc-train-group.n5-train.is-visible{animation:none!important;translate:0 0}}
+body.reduced-motion .mc.mc-reference-v5 .mc-train-group.n5-train.is-visible{animation:none!important;translate:0 0}
+body[data-preview-version="3"] .mc-transition>div{background-image:url('../memory-reference-v5/bay-water.webp')}
+
+/* One consistent style for the three memory prompts and the conversation invitation. */
+.mc-reference-v5 .mc-memory-copy>p,
+.mc-reference-v5 .mc-conversation-prompt>p{
+ font-family:'Be Vietnam Pro','Segoe UI',Arial,sans-serif;
+ font-size:var(--mc-support-size);font-weight:400;font-style:normal;
+ line-height:1.6;letter-spacing:normal;text-wrap:pretty;
+}

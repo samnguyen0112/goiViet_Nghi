@@ -1,0 +1,24 @@
+{
+  "id": "bridge-rail",
+  "source": "sources/bridge-rail.png",
+  "file": "bridge-rail.webp",
+  "width": 1983,
+  "height": 652,
+  "generatedWidth": 1983,
+  "generatedHeight": 793,
+  "alpha": true,
+  "sha256": "b8491aa985f176bd2a08e16909495e73a3cdaff843c6321ae64e503e900ee8a2",
+  "variants": [
+    {
+      "file": "bridge-rail-640.webp",
+      "width": 640
+    },
+    {
+      "file": "bridge-rail-1280.webp",
+      "width": 1280
+    }
+  ],
+  "generator": "built-in image_gen",
+  "prompt": "One independently generated transparent landscape illustration layer: ONLY the long warm-gray stone arch railway bridge and two thin rail tracks from the reference. No train, buildings, scenery, boats, water, text or backdrop. Regenerate native fine detail about 2400x600 wide. Critical track geometry: bridge extends full canvas width; rail surface at left is at y12% canvas height, rail surface at right y62%, straight gentle downhill LEFT TO RIGHT. Track slope in world coordinates must be about 0.15 (around 8.5 degrees). Six elegant broad semicircular stone arches, weathered sandstone blocks. Piers remain VERTICAL despite sloping railway top; the whole bridge must not be simply rotated. Transparent arch openings. Thin dark sleepers and steel rails on top with no thick parapet hiding wheels. Fine Vietnamese watercolor/gouache illustration matching the exact attached bay bridge, soft warm sunlight, restrained ochre shadows and golden edge details. Full bridge end to end, piers descending naturally, no solid rectangular ground beneath. This clean separate layer will have train added on top and a station beside right side.",
+  "sourcePath": "C:\\Users\\Uy\\.codex\\generated_images\\01a15871-114b-7d72-8257-05166a5cb4d4\\exec-1fad4245-1765-4bd6-949e-003d0e5f3372.png"
+}

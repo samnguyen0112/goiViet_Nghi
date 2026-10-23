@@ -1,0 +1,27 @@
+{
+  "id": "viaduct-station-aligned",
+  "file": "viaduct-station-aligned.webp",
+  "source": "sources/viaduct-station-aligned.png",
+  "width": 2048,
+  "height": 708,
+  "generatedWidth": 2048,
+  "generatedHeight": 768,
+  "trimOffset": [
+    0,
+    -53
+  ],
+  "variants": [
+    {
+      "file": "viaduct-station-aligned-640.webp",
+      "width": 640
+    },
+    {
+      "file": "viaduct-station-aligned-1280.webp",
+      "width": 1280
+    }
+  ],
+  "sha256": "5cbf69a1a1260008c1e20e0b67210db5c8f43b48f7cee40342ae4bd9a91dd62d",
+  "generator": "built-in image_gen",
+  "prompt": "Use case: precise-object-edit. Edit ONLY the station building architecture and its veranda on this transparent bridge-and-station cutout. Preserve the railway, every rail pixel/direction, stone arches, left entrance, platform retaining walls, palms, shrubs, lighting, image size, transparency and composition unchanged.\nThe current roof ridge and veranda eaves are nearly horizontal, causing a perspective mismatch. CORRECT the HOUSE LONGITUDINAL LINES so they descend to the right at the same projected +0.227 slope (~12.8 degrees) as the railway and platform front. Redraw the pitched roof, veranda roof, windows, door lintels and sills on that architectural system. Keep vertical columns and wall corners upright, not rotated. This is changing the camera perspective of the HOUSE, not rotating the whole cutout. Long facade faces rails/viewer, right gable visible. Shared weak perspective / distant orthographic view.\nOn the approximately 2048x768 source canvas, coherent desired anchors are main roof ridge left (1390,205) to right (1750,287); veranda front eaves left (1190,340) to right (1620,438), veranda front ground left (1190,440) to right (1620,538). All these long lines parallel the rail. Short gable/depth lines recede upward-right. Leave platform edge and rails unchanged; veranda feet must meet platform. Fit this into the existing station area, same size/scale, warm plaster, rich red tile, palms right. Show physically clear support and warm contact shadow under each column. No extra track, no train, no smoke, no text, no new background. Genuine transparent background.",
+  "active": false
+}

@@ -1,0 +1,162 @@
+[
+  {
+    "quality": "2k",
+    "bundleBytes": 2850038,
+    "layers": 64,
+    "generated": 12,
+    "checks": [
+      {
+        "id": "sky",
+        "width": 1920,
+        "height": 1189,
+        "alphaUnchanged": true
+      },
+      {
+        "id": "mountains-far-left",
+        "width": 927,
+        "height": 611,
+        "alphaUnchanged": true
+      },
+      {
+        "id": "mountains-far-right",
+        "width": 900,
+        "height": 594,
+        "alphaUnchanged": true
+      },
+      {
+        "id": "mountains-mid-left",
+        "width": 947,
+        "height": 754,
+        "alphaUnchanged": true
+      },
+      {
+        "id": "mountains-mid-right",
+        "width": 971,
+        "height": 1018,
+        "alphaUnchanged": true
+      },
+      {
+        "id": "mountains-near-left",
+        "width": 532,
+        "height": 230,
+        "alphaUnchanged": true
+      },
+      {
+        "id": "mountains-near-right",
+        "width": 687,
+        "height": 198,
+        "alphaUnchanged": true
+      },
+      {
+        "id": "river-valley",
+        "width": 1920,
+        "height": 1096,
+        "alphaUnchanged": true
+      },
+      {
+        "id": "hanoi",
+        "width": 109,
+        "height": 154,
+        "alphaUnchanged": true
+      },
+      {
+        "id": "hue",
+        "width": 207,
+        "height": 149,
+        "alphaUnchanged": true
+      },
+      {
+        "id": "saigon",
+        "width": 164,
+        "height": 124,
+        "alphaUnchanged": true
+      },
+      {
+        "id": "bridge",
+        "width": 1920,
+        "height": 139,
+        "alphaUnchanged": true
+      }
+    ]
+  },
+  {
+    "quality": "4k",
+    "bundleBytes": 11378447,
+    "layers": 64,
+    "generated": 12,
+    "checks": [
+      {
+        "id": "sky",
+        "width": 3840,
+        "height": 2378,
+        "alphaUnchanged": true
+      },
+      {
+        "id": "mountains-far-left",
+        "width": 1853,
+        "height": 1221,
+        "alphaUnchanged": true
+      },
+      {
+        "id": "mountains-far-right",
+        "width": 1800,
+        "height": 1188,
+        "alphaUnchanged": true
+      },
+      {
+        "id": "mountains-mid-left",
+        "width": 1894,
+        "height": 1507,
+        "alphaUnchanged": true
+      },
+      {
+        "id": "mountains-mid-right",
+        "width": 1941,
+        "height": 2036,
+        "alphaUnchanged": true
+      },
+      {
+        "id": "mountains-near-left",
+        "width": 1063,
+        "height": 460,
+        "alphaUnchanged": true
+      },
+      {
+        "id": "mountains-near-right",
+        "width": 1374,
+        "height": 396,
+        "alphaUnchanged": true
+      },
+      {
+        "id": "river-valley",
+        "width": 3840,
+        "height": 2191,
+        "alphaUnchanged": true
+      },
+      {
+        "id": "hanoi",
+        "width": 217,
+        "height": 308,
+        "alphaUnchanged": true
+      },
+      {
+        "id": "hue",
+        "width": 413,
+        "height": 297,
+        "alphaUnchanged": true
+      },
+      {
+        "id": "saigon",
+        "width": 328,
+        "height": 248,
+        "alphaUnchanged": true
+      },
+      {
+        "id": "bridge",
+        "width": 3840,
+        "height": 278,
+        "alphaUnchanged": true
+      }
+    ]
+  }
+]

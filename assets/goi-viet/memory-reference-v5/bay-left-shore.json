@@ -1,0 +1,24 @@
+{
+  "id": "bay-left-shore",
+  "source": "sources/bay-left-shore.png",
+  "file": "bay-left-shore.webp",
+  "width": 1552,
+  "height": 987,
+  "generatedWidth": 1564,
+  "generatedHeight": 1006,
+  "alpha": true,
+  "sha256": "c46f7f4dfbfc4ff70c6d5b0331b58ac5f2bb4a74ec776d3c48197f1b1e41d5e7",
+  "variants": [
+    {
+      "file": "bay-left-shore-640.webp",
+      "width": 640
+    },
+    {
+      "file": "bay-left-shore-1280.webp",
+      "width": 1280
+    }
+  ],
+  "generator": "built-in image_gen",
+  "prompt": "Render ONE independent high resolution transparent layer matching only the LEFT shore in the attached Vietnamese bay reference. Tall teal limestone cliff at far upper-left, descending low green hills to the right, rolling rice fields, lush small trees and tiny ivory houses with red roofs near the base. Strict original watercolor-gouache style, warm gold contours and jade colors, fine miniature village details, illustrated not photographic. This group occupies only x0–35%, y8–63% of reference scene. No water plane, no train, no rails, no bridge, no station, no boats, no clouds, no text. Natural irregular mountain silhouette and transparent background, softly misted far ridges, crisp nearer vegetation, isolated whole hill cluster roughly 1792x1152. Preserve exact context and scale relationships; don't invent giant houses or symmetric mountains.",
+  "sourcePath": "C:\\Users\\Uy\\.codex\\generated_images\\01a15871-114b-7d72-8257-05166a5cb4d4\\exec-5540d1e8-3d70-4bf7-b6ba-a1155916a4e1.png"
+}

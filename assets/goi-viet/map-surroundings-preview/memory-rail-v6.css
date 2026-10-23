@@ -1,0 +1,27 @@
+/* One projection and one continuous railway support the moving train. */
+.mc-reference-v5 .n6-exit-world{isolation:isolate}
+.mc-reference-v5 .n6-rail-space{position:absolute;inset:0;z-index:4;transform:matrix(1,var(--n6-camera-shear),0,1,0,0);transform-origin:0 0;pointer-events:none}
+.mc-reference-v5 .n6-image{position:absolute;max-width:none;object-fit:contain;image-rendering:auto}
+.mc-reference-v5 .n6-infrastructure{z-index:0}
+.mc-reference-v5 .mc-train-group.n6-train{z-index:1;transform:none;translate:0 0;opacity:0;visibility:visible;backface-visibility:hidden}
+.mc-reference-v5 .n6-train-part{position:absolute;inset:0;transform-origin:0 0}
+.mc-reference-v5 .n6-rail-contact{position:absolute;inset:0;width:100%;height:100%;overflow:visible;z-index:0}
+.mc-reference-v5 .n6-train-art{z-index:1}
+.mc-reference-v5 .n7-native-wheels{position:absolute;inset:0;width:100%;height:100%;z-index:1;visibility:hidden;pointer-events:none}
+.mc-reference-v5 .n7-wheels-ready>.n6-train-art{visibility:hidden}
+.mc-reference-v5 .n7-wheels-ready>.n7-native-wheels{visibility:visible}
+.mc-reference-v5 .n7-coach-wheels{position:absolute;top:0;height:100%;z-index:2;visibility:hidden;pointer-events:none}
+.mc-reference-v5 .n7-coach-ready>.n7-coach-wheels{visibility:visible}
+.mc-reference-v5 .n6-contact-shadow{position:absolute;inset:0;width:100%;height:100%;overflow:visible;fill:#24332580;filter:blur(.4px);z-index:0}
+.mc-reference-v5 .n6-chimney,.mc-reference-v5 .n6-wheel-contact{position:absolute;width:0;height:0;pointer-events:none;opacity:0}
+.mc-reference-v5 .n6-smoke{position:absolute;inset:0;width:100%;height:100%;z-index:5;pointer-events:none;contain:strict}
+.mc-reference-v5 .n5-foreground{z-index:6}
+.mc.mc-reference-v5 .mc-train-group.n6-train.is-visible{opacity:1;animation:n6-arrival var(--n6-arrival-duration,12s) linear both;will-change:translate}
+/* Steady travel, then deceleration with continuous velocity and acceleration. */
+@keyframes n6-arrival{
+ 0%{translate:-50cqw -11.5cqw;animation-timing-function:linear}
+ 75%{translate:-7.1428571429cqw -1.6428571429cqw;animation-timing-function:cubic-bezier(.5,1,.5,1)}
+ 100%{translate:0 0}
+}
+@media(prefers-reduced-motion:reduce){.mc.mc-reference-v5 .mc-train-group.n6-train{opacity:1;animation:none!important;translate:0 0;will-change:auto}}
+body.reduced-motion .mc.mc-reference-v5 .mc-train-group.n6-train{opacity:1;animation:none!important;translate:0 0;will-change:auto}

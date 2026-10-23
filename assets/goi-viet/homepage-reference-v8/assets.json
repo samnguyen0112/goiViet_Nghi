@@ -1,0 +1,263 @@
+{
+  "reference": "references/approved-home.png",
+  "assets": [
+    {
+      "id": "sky",
+      "file": "sky.webp",
+      "source": "sources/sky.png",
+      "generatedFrom": "C:\\Users\\Uy\\.codex\\generated_images\\01a15871-114b-7d72-8257-05166a5cb4d4\\exec-a1e35022-6ffa-457e-8cc7-e5cf7820cf19.png",
+      "nativeWidth": 1594,
+      "nativeHeight": 987,
+      "width": 3840,
+      "height": 2378,
+      "originalRect": [
+        0,
+        0,
+        3840,
+        2378
+      ],
+      "alphaSHA256": "df9eaab5736714a255dffe8bedbee6a31c7554923d090bd46e9dc81abc071517",
+      "sourceSHA256": "fbc6fed2630143487aecaa05be5697e37b5e84c9a0e53feb651be52b9829a277",
+      "prompt": "Production background paper layer for Gói Việt. Image 1 is the original full registered sky/paper texture. Image 2 is the APPROVED homepage color reference. Recreate ONLY the empty paper/sky background, same canvas aspect 3840:2378, clean high-resolution delicate Vietnamese watercolor paper fibers and very subtle mottled gouache wash. Match Image 2's pale warm ivory cream, slightly less peach/orange than Image 1, with a soft lighter central reading area. Very restrained low contrast, no objects, mountains, horizon, sun, clouds, silhouettes, frames, logos or text. No strong gradients or dark stains. This paper will sit BEHIND independent mountain sprites and the live DOM; it must stay quiet. Fill the entire rectangular canvas, opaque. Highest practical native resolution.",
+      "tool": "built-in image_gen",
+      "registration": "Generated colors registered to original canvas; original alpha retained byte-for-byte. Opaque paper around terrain mist is aligned to the generated sky to avoid seams."
+    },
+    {
+      "id": "mountains-far-left",
+      "file": "mountains-far-left.webp",
+      "source": "sources/mountains-far-left.png",
+      "generatedFrom": "C:\\Users\\Uy\\.codex\\generated_images\\01a15871-114b-7d72-8257-05166a5cb4d4\\exec-375bb975-5e45-4d9a-a5c4-653d9d08a80f.png",
+      "nativeWidth": 1545,
+      "nativeHeight": 1018,
+      "width": 1853,
+      "height": 1221,
+      "originalRect": [
+        0,
+        18,
+        1853,
+        1221
+      ],
+      "alphaSHA256": "a0628ef101d8cedff17d9a7f7b6fe3991ad6d870826d4b9da1d7bb0404943937",
+      "sourceSHA256": "2f6d7376c997b805bf0f9013f0385a2634c62368a50bedf02c1c44444c931add",
+      "prompt": "Production sprite for the existing Gói Việt layered homepage.\nImage 1 is the EXACT isolated original layer to edit, including its canvas registration and cutout shape. Image 2 is the user's APPROVED FINAL HOMEPAGE and is the primary color/style reference, NOT an object to reproduce in this sprite.\nRepaint ONLY the mountain layer in Image 1 with the sharper, deeper turquoise/teal, warm muted-gold ridge lines and moss-green highlights seen in Image 2. Keep the same simple stylized Vietnamese storybook gouache/watercolor shapes, same major ridges and mountain peaks, tiny original trees, villages, original house locations and proportions, fine gold contour lines, paper grain and light mist. Make existing small edges and lines clean and well resolved, not blurry. This is not realistic karst, not a lush forest, no new leaf detail, no new flowers, no additional buildings.\nCRITICAL REGISTRATION: use the SAME complete bounding canvas/aspect and composition as Image 1, same peak coordinates, scale, orientation and silhouette. Do not center a smaller cutout, trim margins, add margins, crop or move existing features. Do not copy any text, logos, station pins, train, bridge, clouds or crane from Image 2. The sky outside the mountain silhouette stays genuinely transparent, not white or checkerboard.\nIMPORTANT: Image 1 has old hidden-fill artifacts: horizontal edge-extrusion streaks, rectangular color placeholders, occasional red/blue fragments at the bottom. These are NOT intended scenery. Replace those artifacts with naturally continued painted mountain/valley texture or delicate original-colored mist so the sprite is clean behind other layers. Preserve the real visible mountain outline and original internal features from the approved image, not the defective streaks.\nMatch the approved reference's restrained but clearly deeper teal shadows, cleaner cyan-green mids and soft warm gold. No black crushed shadows, fluorescent colors or excessive global saturation. Far slopes remain misty; near crests retain clear gold lines. No lettering, labels, frames or watermark.\nDeliver ONE high-resolution isolated production layer, ideally at least 2048 pixels on its long edge, with true alpha transparency outside the subject, keeping the original complete canvas registration.\nLayer ID: mountains-far-left. Keep this specific LEFT mountain cluster in its ORIGINAL orientation and framing.",
+      "tool": "built-in image_gen",
+      "registration": "Generated colors registered to original canvas; original alpha retained byte-for-byte. Opaque paper around terrain mist is aligned to the generated sky to avoid seams."
+    },
+    {
+      "id": "mountains-far-right",
+      "file": "mountains-far-right.webp",
+      "source": "sources/mountains-far-right.png",
+      "generatedFrom": "C:\\Users\\Uy\\.codex\\generated_images\\01a15871-114b-7d72-8257-05166a5cb4d4\\exec-ef8609dd-2506-4e51-b17f-2dbd33f2465b.png",
+      "nativeWidth": 1543,
+      "nativeHeight": 1019,
+      "width": 1800,
+      "height": 1188,
+      "originalRect": [
+        2040,
+        56,
+        1800,
+        1188
+      ],
+      "alphaSHA256": "0b77b50cd413dbcd2c4a69e896fa738669ea04222d97380c23e94c986d454eb4",
+      "sourceSHA256": "0682e6e0297d85faa5bd7dab3d8f12d4e57e985759c52d945d21c185897dc34e",
+      "prompt": "Production sprite for the existing Gói Việt layered homepage.\nImage 1 is the EXACT isolated original layer to edit, including its canvas registration and cutout shape. Image 2 is the user's APPROVED FINAL HOMEPAGE and is the primary color/style reference, NOT an object to reproduce in this sprite.\nRepaint ONLY the mountain layer in Image 1 with the sharper, deeper turquoise/teal, warm muted-gold ridge lines and moss-green highlights seen in Image 2. Keep the same simple stylized Vietnamese storybook gouache/watercolor shapes, same major ridges and mountain peaks, tiny original trees, villages, original house locations and proportions, fine gold contour lines, paper grain and light mist. Make existing small edges and lines clean and well resolved, not blurry. This is not realistic karst, not a lush forest, no new leaf detail, no new flowers, no additional buildings.\nCRITICAL REGISTRATION: use the SAME complete bounding canvas/aspect and composition as Image 1, same peak coordinates, scale, orientation and silhouette. Do not center a smaller cutout, trim margins, add margins, crop or move existing features. Do not copy any text, logos, station pins, train, bridge, clouds or crane from Image 2. The sky outside the mountain silhouette stays genuinely transparent, not white or checkerboard.\nIMPORTANT: Image 1 has old hidden-fill artifacts: horizontal edge-extrusion streaks, rectangular color placeholders, occasional red/blue fragments at the bottom. These are NOT intended scenery. Replace those artifacts with naturally continued painted mountain/valley texture or delicate original-colored mist so the sprite is clean behind other layers. Preserve the real visible mountain outline and original internal features from the approved image, not the defective streaks.\nMatch the approved reference's restrained but clearly deeper teal shadows, cleaner cyan-green mids and soft warm gold. No black crushed shadows, fluorescent colors or excessive global saturation. Far slopes remain misty; near crests retain clear gold lines. No lettering, labels, frames or watermark.\nDeliver ONE high-resolution isolated production layer, ideally at least 2048 pixels on its long edge, with true alpha transparency outside the subject, keeping the original complete canvas registration.\nLayer ID: mountains-far-right. Keep this specific RIGHT mountain cluster in its ORIGINAL orientation and framing.",
+      "tool": "built-in image_gen",
+      "registration": "Generated colors registered to original canvas; original alpha retained byte-for-byte. Opaque paper around terrain mist is aligned to the generated sky to avoid seams."
+    },
+    {
+      "id": "mountains-mid-left",
+      "file": "mountains-mid-left.webp",
+      "source": "sources/mountains-mid-left.png",
+      "generatedFrom": "C:\\Users\\Uy\\.codex\\generated_images\\01a15871-114b-7d72-8257-05166a5cb4d4\\exec-beb263d5-428b-461e-b527-9a960fcb64de.png",
+      "nativeWidth": 1406,
+      "nativeHeight": 1119,
+      "width": 1894,
+      "height": 1507,
+      "originalRect": [
+        0,
+        546,
+        1894,
+        1507
+      ],
+      "alphaSHA256": "3ff248d594e61cfc337ccadc37b7261fd15e293d450f3459a9acae336e0ef62a",
+      "sourceSHA256": "75f145ae0da09d9b9d0f73dbfd5d411b5133121ff0aa68085a55b3d5cdd6b107",
+      "prompt": "Production sprite for the existing Gói Việt layered homepage.\nImage 1 is the EXACT isolated original layer to edit, including its canvas registration and cutout shape. Image 2 is the user's APPROVED FINAL HOMEPAGE and is the primary color/style reference, NOT an object to reproduce in this sprite.\nRepaint ONLY the mountain layer in Image 1 with the sharper, deeper turquoise/teal, warm muted-gold ridge lines and moss-green highlights seen in Image 2. Keep the same simple stylized Vietnamese storybook gouache/watercolor shapes, same major ridges and mountain peaks, tiny original trees, villages, original house locations and proportions, fine gold contour lines, paper grain and light mist. Make existing small edges and lines clean and well resolved, not blurry. This is not realistic karst, not a lush forest, no new leaf detail, no new flowers, no additional buildings.\nCRITICAL REGISTRATION: use the SAME complete bounding canvas/aspect and composition as Image 1, same peak coordinates, scale, orientation and silhouette. Do not center a smaller cutout, trim margins, add margins, crop or move existing features. Do not copy any text, logos, station pins, train, bridge, clouds or crane from Image 2. The sky outside the mountain silhouette stays genuinely transparent, not white or checkerboard.\nIMPORTANT: Image 1 has old hidden-fill artifacts: horizontal edge-extrusion streaks, rectangular color placeholders, occasional red/blue fragments at the bottom. These are NOT intended scenery. Replace those artifacts with naturally continued painted mountain/valley texture or delicate original-colored mist so the sprite is clean behind other layers. Preserve the real visible mountain outline and original internal features from the approved image, not the defective streaks.\nMatch the approved reference's restrained but clearly deeper teal shadows, cleaner cyan-green mids and soft warm gold. No black crushed shadows, fluorescent colors or excessive global saturation. Far slopes remain misty; near crests retain clear gold lines. No lettering, labels, frames or watermark.\nDeliver ONE high-resolution isolated production layer, ideally at least 2048 pixels on its long edge, with true alpha transparency outside the subject, keeping the original complete canvas registration.\nLayer ID: mountains-mid-left. Keep this specific LEFT mountain cluster in its ORIGINAL orientation and framing.",
+      "tool": "built-in image_gen",
+      "registration": "Generated colors registered to original canvas; original alpha retained byte-for-byte. Opaque paper around terrain mist is aligned to the generated sky to avoid seams."
+    },
+    {
+      "id": "mountains-mid-right",
+      "file": "mountains-mid-right.webp",
+      "source": "sources/mountains-mid-right.png",
+      "generatedFrom": "C:\\Users\\Uy\\.codex\\generated_images\\01a15871-114b-7d72-8257-05166a5cb4d4\\exec-c4a7ecbb-aa77-42bb-a2bd-91ccf117a7d0.png",
+      "nativeWidth": 1225,
+      "nativeHeight": 1284,
+      "width": 1941,
+      "height": 2036,
+      "originalRect": [
+        1899,
+        187,
+        1941,
+        2036
+      ],
+      "alphaSHA256": "c5c4a313959dbcf565c41944ff091c8787b21cc034d8f36ef8d4bb733251a048",
+      "sourceSHA256": "cbc29a381f1dccb1b687e981827ce4c9890b723474d4fe9a0d29bf5ba5d5f48c",
+      "prompt": "Production sprite for the existing Gói Việt layered homepage.\nImage 1 is the EXACT isolated original layer to edit, including its canvas registration and cutout shape. Image 2 is the user's APPROVED FINAL HOMEPAGE and is the primary color/style reference, NOT an object to reproduce in this sprite.\nRepaint ONLY the mountain layer in Image 1 with the sharper, deeper turquoise/teal, warm muted-gold ridge lines and moss-green highlights seen in Image 2. Keep the same simple stylized Vietnamese storybook gouache/watercolor shapes, same major ridges and mountain peaks, tiny original trees, villages, original house locations and proportions, fine gold contour lines, paper grain and light mist. Make existing small edges and lines clean and well resolved, not blurry. This is not realistic karst, not a lush forest, no new leaf detail, no new flowers, no additional buildings.\nCRITICAL REGISTRATION: use the SAME complete bounding canvas/aspect and composition as Image 1, same peak coordinates, scale, orientation and silhouette. Do not center a smaller cutout, trim margins, add margins, crop or move existing features. Do not copy any text, logos, station pins, train, bridge, clouds or crane from Image 2. The sky outside the mountain silhouette stays genuinely transparent, not white or checkerboard.\nIMPORTANT: Image 1 has old hidden-fill artifacts: horizontal edge-extrusion streaks, rectangular color placeholders, occasional red/blue fragments at the bottom. These are NOT intended scenery. Replace those artifacts with naturally continued painted mountain/valley texture or delicate original-colored mist so the sprite is clean behind other layers. Preserve the real visible mountain outline and original internal features from the approved image, not the defective streaks.\nMatch the approved reference's restrained but clearly deeper teal shadows, cleaner cyan-green mids and soft warm gold. No black crushed shadows, fluorescent colors or excessive global saturation. Far slopes remain misty; near crests retain clear gold lines. No lettering, labels, frames or watermark.\nDeliver ONE high-resolution isolated production layer, ideally at least 2048 pixels on its long edge, with true alpha transparency outside the subject, keeping the original complete canvas registration.\nLayer ID: mountains-mid-right. Keep this specific RIGHT mountain cluster in its ORIGINAL orientation and framing.",
+      "tool": "built-in image_gen",
+      "registration": "Generated colors registered to original canvas; original alpha retained byte-for-byte. Opaque paper around terrain mist is aligned to the generated sky to avoid seams."
+    },
+    {
+      "id": "mountains-near-left",
+      "file": "mountains-near-left.webp",
+      "source": "sources/mountains-near-left.png",
+      "generatedFrom": "C:\\Users\\Uy\\.codex\\generated_images\\01a15871-114b-7d72-8257-05166a5cb4d4\\exec-8d09dfc0-9423-4b4b-939f-2ed49eb98a7f.png",
+      "nativeWidth": 1906,
+      "nativeHeight": 825,
+      "width": 1063,
+      "height": 460,
+      "originalRect": [
+        0,
+        1918,
+        1063,
+        460
+      ],
+      "alphaSHA256": "49b81ac81e1eaed18edbd7817764cc9768d44c477870f0363eafb2bf23f641dc",
+      "sourceSHA256": "7a23976d349094884b5874748fe25f4ec52560ce77e34f7950bd5a4dd25ef2dc",
+      "prompt": "Production sprite for the existing Gói Việt layered homepage.\nImage 1 is the EXACT isolated original layer to edit, including its canvas registration and cutout shape. Image 2 is the user's APPROVED FINAL HOMEPAGE and is the primary color/style reference, NOT an object to reproduce in this sprite.\nRepaint ONLY the mountain layer in Image 1 with the sharper, deeper turquoise/teal, warm muted-gold ridge lines and moss-green highlights seen in Image 2. Keep the same simple stylized Vietnamese storybook gouache/watercolor shapes, same major ridges and mountain peaks, tiny original trees, villages, original house locations and proportions, fine gold contour lines, paper grain and light mist. Make existing small edges and lines clean and well resolved, not blurry. This is not realistic karst, not a lush forest, no new leaf detail, no new flowers, no additional buildings.\nCRITICAL REGISTRATION: use the SAME complete bounding canvas/aspect and composition as Image 1, same peak coordinates, scale, orientation and silhouette. Do not center a smaller cutout, trim margins, add margins, crop or move existing features. Do not copy any text, logos, station pins, train, bridge, clouds or crane from Image 2. The sky outside the mountain silhouette stays genuinely transparent, not white or checkerboard.\nIMPORTANT: Image 1 has old hidden-fill artifacts: horizontal edge-extrusion streaks, rectangular color placeholders, occasional red/blue fragments at the bottom. These are NOT intended scenery. Replace those artifacts with naturally continued painted mountain/valley texture or delicate original-colored mist so the sprite is clean behind other layers. Preserve the real visible mountain outline and original internal features from the approved image, not the defective streaks.\nMatch the approved reference's restrained but clearly deeper teal shadows, cleaner cyan-green mids and soft warm gold. No black crushed shadows, fluorescent colors or excessive global saturation. Far slopes remain misty; near crests retain clear gold lines. No lettering, labels, frames or watermark.\nDeliver ONE high-resolution isolated production layer, ideally at least 2048 pixels on its long edge, with true alpha transparency outside the subject, keeping the original complete canvas registration.\nThis specific layer is the very WIDE, LOW LEFT FOREGROUND HILL strip, canvas aspect 1063:460. Preserve the low cropped hill silhouette, the large gold contour arcs, dotted accents and stylized paper texture. Match the approved deep teal/blue-green palette, warm fine gold lines. It is a bottom-corner layer, NOT a full mountain landscape. No trees, houses, clouds, horizon, extra tall peaks or change to crop/scale.",
+      "tool": "built-in image_gen",
+      "registration": "Generated colors registered to original canvas; original alpha retained byte-for-byte. Opaque paper around terrain mist is aligned to the generated sky to avoid seams."
+    },
+    {
+      "id": "mountains-near-right",
+      "file": "mountains-near-right.webp",
+      "source": "sources/mountains-near-right.png",
+      "generatedFrom": "C:\\Users\\Uy\\.codex\\generated_images\\01a15871-114b-7d72-8257-05166a5cb4d4\\exec-23e54a04-ebc8-405d-af75-cf4b876590e2.png",
+      "nativeWidth": 2172,
+      "nativeHeight": 724,
+      "width": 1374,
+      "height": 396,
+      "originalRect": [
+        2466,
+        1982,
+        1374,
+        396
+      ],
+      "alphaSHA256": "4c18df92fc946d0ccb04f3049feba7551704cb925371ddb49951b6a6bb7cc494",
+      "sourceSHA256": "6bf86c32512925ed35e42461cc6eff7048be593eb6cb07c5174113c84c290939",
+      "prompt": "Production sprite for the existing Gói Việt layered homepage.\nImage 1 is the EXACT isolated original layer to edit, including its canvas registration and cutout shape. Image 2 is the user's APPROVED FINAL HOMEPAGE and is the primary color/style reference, NOT an object to reproduce in this sprite.\nRepaint ONLY the mountain layer in Image 1 with the sharper, deeper turquoise/teal, warm muted-gold ridge lines and moss-green highlights seen in Image 2. Keep the same simple stylized Vietnamese storybook gouache/watercolor shapes, same major ridges and mountain peaks, tiny original trees, villages, original house locations and proportions, fine gold contour lines, paper grain and light mist. Make existing small edges and lines clean and well resolved, not blurry. This is not realistic karst, not a lush forest, no new leaf detail, no new flowers, no additional buildings.\nCRITICAL REGISTRATION: use the SAME complete bounding canvas/aspect and composition as Image 1, same peak coordinates, scale, orientation and silhouette. Do not center a smaller cutout, trim margins, add margins, crop or move existing features. Do not copy any text, logos, station pins, train, bridge, clouds or crane from Image 2. The sky outside the mountain silhouette stays genuinely transparent, not white or checkerboard.\nIMPORTANT: Image 1 has old hidden-fill artifacts: horizontal edge-extrusion streaks, rectangular color placeholders, occasional red/blue fragments at the bottom. These are NOT intended scenery. Replace those artifacts with naturally continued painted mountain/valley texture or delicate original-colored mist so the sprite is clean behind other layers. Preserve the real visible mountain outline and original internal features from the approved image, not the defective streaks.\nMatch the approved reference's restrained but clearly deeper teal shadows, cleaner cyan-green mids and soft warm gold. No black crushed shadows, fluorescent colors or excessive global saturation. Far slopes remain misty; near crests retain clear gold lines. No lettering, labels, frames or watermark.\nDeliver ONE high-resolution isolated production layer, ideally at least 2048 pixels on its long edge, with true alpha transparency outside the subject, keeping the original complete canvas registration.\nThis specific layer is the very WIDE, LOW RIGHT FOREGROUND HILL strip, canvas aspect 1374:396. Preserve the low cropped hill silhouette, the large gold contour arcs, dotted accents and stylized paper texture. Match the approved deep teal/blue-green palette, warm fine gold lines. It is a bottom-corner layer, NOT a full mountain landscape. No trees, houses, clouds, horizon, extra tall peaks or change to crop/scale.",
+      "tool": "built-in image_gen",
+      "registration": "Generated colors registered to original canvas; original alpha retained byte-for-byte. Opaque paper around terrain mist is aligned to the generated sky to avoid seams."
+    },
+    {
+      "id": "river-valley",
+      "file": "river-valley.webp",
+      "source": "sources/river-valley.png",
+      "generatedFrom": "C:\\Users\\Uy\\.codex\\generated_images\\01a15871-114b-7d72-8257-05166a5cb4d4\\exec-e9d90087-8e45-483f-aadd-315f7e94d1ea.png",
+      "nativeWidth": 1660,
+      "nativeHeight": 948,
+      "width": 3840,
+      "height": 2191,
+      "originalRect": [
+        0,
+        187,
+        3840,
+        2191
+      ],
+      "alphaSHA256": "beca60611cb2ebdcfd4cc5d7b7d101c55cb5fc37a16ffc22c8290b4935214519",
+      "sourceSHA256": "180af0f7a20ed9c5fd5909cd4a96140f7918181ed8da240e98a5f2ec388ad1b9",
+      "prompt": "Production sprite for the existing Gói Việt layered homepage.\nImage 1 is the EXACT isolated original layer to edit, including its canvas registration and cutout shape. Image 2 is the user's APPROVED FINAL HOMEPAGE and is the primary color/style reference, NOT an object to reproduce in this sprite.\nRepaint ONLY the mountain layer in Image 1 with the sharper, deeper turquoise/teal, warm muted-gold ridge lines and moss-green highlights seen in Image 2. Keep the same simple stylized Vietnamese storybook gouache/watercolor shapes, same major ridges and mountain peaks, tiny original trees, villages, original house locations and proportions, fine gold contour lines, paper grain and light mist. Make existing small edges and lines clean and well resolved, not blurry. This is not realistic karst, not a lush forest, no new leaf detail, no new flowers, no additional buildings.\nCRITICAL REGISTRATION: use the SAME complete bounding canvas/aspect and composition as Image 1, same peak coordinates, scale, orientation and silhouette. Do not center a smaller cutout, trim margins, add margins, crop or move existing features. Do not copy any text, logos, station pins, train, bridge, clouds or crane from Image 2. The sky outside the mountain silhouette stays genuinely transparent, not white or checkerboard.\nIMPORTANT: Image 1 has old hidden-fill artifacts: horizontal edge-extrusion streaks, rectangular color placeholders, occasional red/blue fragments at the bottom. These are NOT intended scenery. Replace those artifacts with naturally continued painted mountain/valley texture or delicate original-colored mist so the sprite is clean behind other layers. Preserve the real visible mountain outline and original internal features from the approved image, not the defective streaks.\nMatch the approved reference's restrained but clearly deeper teal shadows, cleaner cyan-green mids and soft warm gold. No black crushed shadows, fluorescent colors or excessive global saturation. Far slopes remain misty; near crests retain clear gold lines. No lettering, labels, frames or watermark.\nDeliver ONE high-resolution isolated production layer, ideally at least 2048 pixels on its long edge, with true alpha transparency outside the subject, keeping the original complete canvas registration.\nThis specific layer is the FULL RIVER VALLEY, original canvas 3840×2191. Preserve the existing long river, the left and right shoreline silhouettes, same winding water pattern, houses and stylized gold-veined hills. No skyline or mountain scene added above the original visible terrain; the unused upper region is transparent. Old colored red/blue edge placeholders and long smears are artifacts to reconstruct into clean valley texture. Make water cleaner turquoise and near hills deep teal like Image 2. Do not add rocks, flowers, extra houses, waterfalls or fine realistic foliage. Keep the original overall registration and the river course.",
+      "tool": "built-in image_gen",
+      "registration": "Generated colors registered to original canvas; original alpha retained byte-for-byte. Opaque paper around terrain mist is aligned to the generated sky to avoid seams."
+    },
+    {
+      "id": "hanoi",
+      "file": "hanoi.webp",
+      "source": "sources/hanoi.png",
+      "generatedFrom": "C:/Users/Uy/.codex/generated_images/01a15871-114b-7d72-8257-05166a5cb4d4/exec-bd90c111-9f3b-4cd4-849c-5601d937f048.png",
+      "nativeWidth": 1053,
+      "nativeHeight": 1494,
+      "width": 217,
+      "height": 308,
+      "originalRect": [
+        1025,
+        939,
+        217,
+        308
+      ],
+      "alphaSHA256": "4a69adc081c64f4155ecf0487138c55e3b7ce7cc32f666b28e5415f81973dc13",
+      "sourceSHA256": "d2408f588f3be517f31b18145a068eb4d5f98ba8a2f6775ab8644f6027f29aa9",
+      "prompt": "Production isolated architecture sprite for the layered Gói Việt homepage. Image 1 is the exact original extracted sprite; Image 2 is the user's approved homepage, the main guide to final color, geometry and restrained illustration style. Repaint THIS SINGLE OBJECT from Image 1 with sharply resolved existing painted detail and the color in Image 2. The LEFT Hanoi red-roof pavilion (Khuê Văn Các style): same frontal camera, roof silhouette, red upper storey, circular pale opening, stone lower storey, arched wooden door and existing steps/ramp. Keep identical positions and framing on the original 217:308 canvas.\nCRITICAL: Keep the identical canvas aspect, framing, camera angle, scale, proportions and feature locations. No margins, recentering, tightened crop or alternative view. It will be registered back onto the same original scene coordinates and alpha mask. Retain simple hand-painted Vietnamese storybook/gouache style, not a photo or 3D render, and do not increase decorative complexity. Resolve roof tile strokes, existing stone/mortar edges, doors and trim cleanly rather than blurring them. Deep controlled teal shadows, warm sandstone/ivory, soft gold, clean warm vermilion, matched to Image 2.\nClean away any rectangular source-fill streaks, pasted fragments, horizontal edge extrusion or neon placeholders visible in Image 1: these are defects, not intended architectural elements. Restore natural painted object texture behind occluding layers.\nOnly the single specified object, with truly transparent surrounding air (and transparent arch openings for the bridge). Do not copy other elements from Image 2, no scenery, extra buildings, vegetation beyond the source footprint, train, logo, station pins, labels, text, watermark, frames or backdrop. Highest practical native resolution with fine clear edges, ideally at least 2048 pixels on the long edge. Preserve the original complete canvas registration and all correct geometry.",
+      "tool": "built-in image_gen",
+      "registration": "Generated colors registered to original canvas; original alpha retained byte-for-byte. Opaque paper around terrain mist is aligned to the generated sky to avoid seams."
+    },
+    {
+      "id": "hue",
+      "file": "hue.webp",
+      "source": "sources/hue.png",
+      "generatedFrom": "C:/Users/Uy/.codex/generated_images/01a15871-114b-7d72-8257-05166a5cb4d4/exec-d602444c-e527-497a-8eb6-8367b5579b4e.png",
+      "nativeWidth": 1479,
+      "nativeHeight": 1064,
+      "width": 413,
+      "height": 297,
+      "originalRect": [
+        1722,
+        959,
+        413,
+        297
+      ],
+      "alphaSHA256": "b9eb4e16a493685b431c3b8334acb1a53c6394c8705170659a660385b5c746ee",
+      "sourceSHA256": "377fcbe04a205897043265bb5474d4bed9b91418276510468be5faada940ae7a",
+      "prompt": "Production isolated architecture sprite for the layered Gói Việt homepage. Image 1 is the exact original extracted sprite; Image 2 is the user's approved homepage, the main guide to final color, geometry and restrained illustration style. Repaint THIS SINGLE OBJECT from Image 1 with sharply resolved existing painted detail and the color in Image 2. The CENTER Hue imperial gate: same frontal camera, two gold-tiled roof levels, cream/dark red facade, five front bays and existing lower archways/foundation, same footprint on the original 413:297 canvas. Do not add a train. The red/yellow fragments at the lower right of Image 1 are OLD extraction artifacts from the train, not architecture; replace them with clean architectural underpainting or transparent air as appropriate.\nCRITICAL: Keep the identical canvas aspect, framing, camera angle, scale, proportions and feature locations. No margins, recentering, tightened crop or alternative view. It will be registered back onto the same original scene coordinates and alpha mask. Retain simple hand-painted Vietnamese storybook/gouache style, not a photo or 3D render, and do not increase decorative complexity. Resolve roof tile strokes, existing stone/mortar edges, doors and trim cleanly rather than blurring them. Deep controlled teal shadows, warm sandstone/ivory, soft gold, clean warm vermilion, matched to Image 2.\nClean away any rectangular source-fill streaks, pasted fragments, horizontal edge extrusion or neon placeholders visible in Image 1: these are defects, not intended architectural elements. Restore natural painted object texture behind occluding layers.\nOnly the single specified object, with truly transparent surrounding air (and transparent arch openings for the bridge). Do not copy other elements from Image 2, no scenery, extra buildings, vegetation beyond the source footprint, train, logo, station pins, labels, text, watermark, frames or backdrop. Highest practical native resolution with fine clear edges, ideally at least 2048 pixels on the long edge. Preserve the original complete canvas registration and all correct geometry.",
+      "tool": "built-in image_gen",
+      "registration": "Generated colors registered to original canvas; original alpha retained byte-for-byte. Opaque paper around terrain mist is aligned to the generated sky to avoid seams."
+    },
+    {
+      "id": "saigon",
+      "file": "saigon.webp",
+      "source": "sources/saigon.png",
+      "generatedFrom": "C:/Users/Uy/.codex/generated_images/01a15871-114b-7d72-8257-05166a5cb4d4/exec-b83f7b9d-2ada-47b2-b277-6b34f2ce483c.png",
+      "nativeWidth": 1442,
+      "nativeHeight": 1091,
+      "width": 328,
+      "height": 248,
+      "originalRect": [
+        2569,
+        919,
+        328,
+        248
+      ],
+      "alphaSHA256": "860cdfc58db038f3f22a891bcc39c09de9d60aba902d6381b03dc866e85f2861",
+      "sourceSHA256": "1a3dfef653c252ef6f1c3c4265266e1fb9de36d0f93a75a5f283628b48864ab6",
+      "prompt": "Production isolated architecture sprite for the layered Gói Việt homepage. Image 1 is the exact original extracted sprite; Image 2 is the user's approved homepage, the main guide to final color, geometry and restrained illustration style. Repaint THIS SINGLE OBJECT from Image 1 with sharply resolved existing painted detail and the color in Image 2. The RIGHT Saigon clock-tower gate: same cream plaster facade, teal central arch, small side wings, red pyramid roof and round clock with its original time and hands. Same camera and footprint on the original 328:248 canvas.\nCRITICAL: Keep the identical canvas aspect, framing, camera angle, scale, proportions and feature locations. No margins, recentering, tightened crop or alternative view. It will be registered back onto the same original scene coordinates and alpha mask. Retain simple hand-painted Vietnamese storybook/gouache style, not a photo or 3D render, and do not increase decorative complexity. Resolve roof tile strokes, existing stone/mortar edges, doors and trim cleanly rather than blurring them. Deep controlled teal shadows, warm sandstone/ivory, soft gold, clean warm vermilion, matched to Image 2.\nClean away any rectangular source-fill streaks, pasted fragments, horizontal edge extrusion or neon placeholders visible in Image 1: these are defects, not intended architectural elements. Restore natural painted object texture behind occluding layers.\nOnly the single specified object, with truly transparent surrounding air (and transparent arch openings for the bridge). Do not copy other elements from Image 2, no scenery, extra buildings, vegetation beyond the source footprint, train, logo, station pins, labels, text, watermark, frames or backdrop. Highest practical native resolution with fine clear edges, ideally at least 2048 pixels on the long edge. Preserve the original complete canvas registration and all correct geometry.",
+      "tool": "built-in image_gen",
+      "registration": "Generated colors registered to original canvas; original alpha retained byte-for-byte. Opaque paper around terrain mist is aligned to the generated sky to avoid seams."
+    },
+    {
+      "id": "bridge",
+      "file": "bridge.webp",
+      "source": "sources/bridge.png",
+      "generatedFrom": "C:/Users/Uy/.codex/generated_images/01a15871-114b-7d72-8257-05166a5cb4d4/exec-32982a27-3737-4699-bae8-9e2567b40958.png",
+      "nativeWidth": 2172,
+      "nativeHeight": 724,
+      "width": 3840,
+      "height": 278,
+      "originalRect": [
+        0,
+        1274,
+        3840,
+        278
+      ],
+      "alphaSHA256": "ef450699a08874b92e4c23942db2e0df33cd6a84032dd7c5c7cffabf6025c0f7",
+      "sourceSHA256": "17f3f328e7cfe2ce9edd7131686d35c524f52bf6be662c9ac89013d0f9475e2f",
+      "prompt": "Production isolated architecture sprite for the layered Gói Việt homepage. Image 1 is the exact original extracted sprite; Image 2 is the user's approved homepage, the main guide to final color, geometry and restrained illustration style. Repaint THIS SINGLE OBJECT from Image 1 with sharply resolved existing painted detail and the color in Image 2. The COMPLETE extremely WIDE LOW HORIZONTAL stone viaduct/rail strip: original canvas 3840:278. Keep exactly the same arch count, same pier locations, stone courses, top rail at the same horizontal level, and original approach hills at both edges. Perfectly straight horizontal rail; no perspective rotation or diagonal bridge. No train, buildings, sky, landscape in the arch openings or clouds. The openings are genuinely transparent. Match the approved warm golden sandstone tone, crisp fine mortar lines and shaded arch recesses. Keep full original extreme panorama ratio, no trimming or padding.\nCRITICAL: Keep the identical canvas aspect, framing, camera angle, scale, proportions and feature locations. No margins, recentering, tightened crop or alternative view. It will be registered back onto the same original scene coordinates and alpha mask. Retain simple hand-painted Vietnamese storybook/gouache style, not a photo or 3D render, and do not increase decorative complexity. Resolve roof tile strokes, existing stone/mortar edges, doors and trim cleanly rather than blurring them. Deep controlled teal shadows, warm sandstone/ivory, soft gold, clean warm vermilion, matched to Image 2.\nClean away any rectangular source-fill streaks, pasted fragments, horizontal edge extrusion or neon placeholders visible in Image 1: these are defects, not intended architectural elements. Restore natural painted object texture behind occluding layers.\nOnly the single specified object, with truly transparent surrounding air (and transparent arch openings for the bridge). Do not copy other elements from Image 2, no scenery, extra buildings, vegetation beyond the source footprint, train, logo, station pins, labels, text, watermark, frames or backdrop. Highest practical native resolution with fine clear edges, ideally at least 2048 pixels on the long edge. Preserve the original complete canvas registration and all correct geometry.",
+      "tool": "built-in image_gen",
+      "registration": "Generated colors registered to original canvas; original alpha retained byte-for-byte. Opaque paper around terrain mist is aligned to the generated sky to avoid seams.",
+      "generatedCrop": {
+        "left": 0,
+        "top": 278,
+        "width": 2172,
+        "height": 166
+      }
+    }
+  ]
+}

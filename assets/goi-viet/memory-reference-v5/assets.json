@@ -1,0 +1,348 @@
+{
+  "version": 5,
+  "method": "Separate native ImageGen layers; unmodified PNG originals and lossless native WebP. Responsive exports downsample only.",
+  "assets": [
+    {
+      "id": "bay-left-shore",
+      "source": "sources/bay-left-shore.png",
+      "file": "bay-left-shore.webp",
+      "width": 1552,
+      "height": 987,
+      "generatedWidth": 1564,
+      "generatedHeight": 1006,
+      "alpha": true,
+      "sha256": "c46f7f4dfbfc4ff70c6d5b0331b58ac5f2bb4a74ec776d3c48197f1b1e41d5e7",
+      "variants": [
+        {
+          "file": "bay-left-shore-640.webp",
+          "width": 640
+        },
+        {
+          "file": "bay-left-shore-1280.webp",
+          "width": 1280
+        }
+      ],
+      "generator": "built-in image_gen",
+      "prompt": "Render ONE independent high resolution transparent layer matching only the LEFT shore in the attached Vietnamese bay reference. Tall teal limestone cliff at far upper-left, descending low green hills to the right, rolling rice fields, lush small trees and tiny ivory houses with red roofs near the base. Strict original watercolor-gouache style, warm gold contours and jade colors, fine miniature village details, illustrated not photographic. This group occupies only x0–35%, y8–63% of reference scene. No water plane, no train, no rails, no bridge, no station, no boats, no clouds, no text. Natural irregular mountain silhouette and transparent background, softly misted far ridges, crisp nearer vegetation, isolated whole hill cluster roughly 1792x1152. Preserve exact context and scale relationships; don't invent giant houses or symmetric mountains.",
+      "sourcePath": "C:\\Users\\Uy\\.codex\\generated_images\\01a15871-114b-7d72-8257-05166a5cb4d4\\exec-5540d1e8-3d70-4bf7-b6ba-a1155916a4e1.png",
+      "active": true
+    },
+    {
+      "id": "bay-right-shore",
+      "source": "sources/bay-right-shore.png",
+      "file": "bay-right-shore.webp",
+      "width": 1136,
+      "height": 1031,
+      "generatedWidth": 1145,
+      "generatedHeight": 1374,
+      "alpha": true,
+      "sha256": "8744a55df93ca50cb6e4c0dbba189539a2c9f810850017bd57dcaca86355aaff",
+      "variants": [
+        {
+          "file": "bay-right-shore-640.webp",
+          "width": 640
+        }
+      ],
+      "generator": "built-in image_gen",
+      "prompt": "One independent transparent isolated right bank against references/exit.png: highest steep jade limestone cliffs on right descending left, tiny red roof waterfront village. No bay, boats, bridge, train or station. Native fine Vietnamese gouache details.",
+      "sourcePath": "C:/Users/Uy/.codex/generated_images/01a15871-114b-7d72-8257-05166a5cb4d4/exec-f40c7f99-3e11-4fab-87de-8db25d24db33.png",
+      "active": true
+    },
+    {
+      "id": "bay-water",
+      "source": "sources/bay-water.png",
+      "file": "bay-water.webp",
+      "width": 1774,
+      "height": 887,
+      "generatedWidth": 1774,
+      "generatedHeight": 887,
+      "alpha": false,
+      "sha256": "e9544e27f805e58bcb71ac9d895ce60b2875a7cbc37f894e0103aad179884729",
+      "variants": [
+        {
+          "file": "bay-water-640.webp",
+          "width": 640
+        },
+        {
+          "file": "bay-water-1280.webp",
+          "width": 1280
+        }
+      ],
+      "generator": "built-in image_gen",
+      "prompt": "Create ONE landscape illustration background layer faithfully matching the attached Vietnamese bay reference, about 2048x1024. ONLY warm ivory paper sky, very distant pale blue/teal limestone mountain ranges on left and right, calm jade Ha Long bay water, small midwater karst islets with ivory stone bases and green tops, tiny distant red roof shoreline villages, soft reflections. NO train, bridge, track, station, large foreground trees or hills, sailboats, golden scroll clouds, text or UI. Independent foreground and mountains will be layered over this. Preserve scene's viewpoint, open horizon at 48% canvas height, warm ivory quiet opening upper center x25–72%, y0–42% for HTML text. Midwater distinctive taller karst islet x67% y49%, others x43% y54%, x35% y48%, x50% y53%. Water pale jade near horizon, richer luminous turquoise near bottom. Bottom is WATER through y100%, not a land floor. Same fine painterly Vietnamese watercolor-gouache with warm gold contours, distant mist, not a 3D toy or fantasy landscape. Compose to match the original reference bay directly, no unrelated objects.",
+      "sourcePath": "C:\\Users\\Uy\\.codex\\generated_images\\01a15871-114b-7d72-8257-05166a5cb4d4\\exec-4c9eb545-36ef-43ea-a916-6034c0ab6ca3.png",
+      "active": true
+    },
+    {
+      "id": "bridge-causeway",
+      "source": "sources/bridge-causeway.png",
+      "file": "bridge-causeway.webp",
+      "width": 2086,
+      "height": 595,
+      "generatedWidth": 2112,
+      "generatedHeight": 745,
+      "alpha": true,
+      "sha256": "bd4e4e7402842125f994ceb3c51c89ad259c12e3f3d58da5d99fd0ca18761c56",
+      "variants": [
+        {
+          "file": "bridge-causeway-640.webp",
+          "width": 640
+        },
+        {
+          "file": "bridge-causeway-1280.webp",
+          "width": 1280
+        }
+      ],
+      "generator": "built-in image_gen",
+      "prompt": "Create one independent high native detail TRANSPARENT illustration layer of the exact bridge and railway embankment from attached Vietnamese bay reference. Very wide ~2400x650. Only track, stone viaduct and its connected vegetated causeway. NO train, no station building, no sky, no mountains, no boats, no text, no background water. Critical composition: LEFT 60% is stone arch viaduct with SIX SMALL semicircular arch openings, spaced closely and evenly, warm gray sandstone blocks with fine ochre shadows. RIGHT 40% transitions to a low planted stone embankment/causeway supporting the track, with small jade bushes and flowering shrubs below, NOT more large arch openings. A narrow station platform is BEHIND the rail on right side, but no building. Track runs through entire width on a straight gentle downward line from left to right, slope 0.15 units vertical per horizontal unit (8.5 degrees); piers vertical and not simply rotated. Bridge is delicate, piers and arches relatively small as in reference, no huge monumental arches. Background through all arch openings and above irregular vegetation fully transparent. Entire narrow railway top must remain clean and consistent so a separate small right-facing train can sit on it and a separate station can sit behind the right causeway. Exact Vietnamese watercolor/gouache illustration reference palette and viewpoint, warm ivory gray stone, fine textured masonry, jade vegetation and muted gold details. The reference controls arch count, left-right distribution and thin structure.",
+      "sourcePath": "C:\\Users\\Uy\\.codex\\generated_images\\01a15871-114b-7d72-8257-05166a5cb4d4\\exec-6334ff4a-6f94-4e6f-b21d-b1206e12072d.png",
+      "active": true
+    },
+    {
+      "id": "bridge-rail",
+      "source": "sources/bridge-rail.png",
+      "file": "bridge-rail.webp",
+      "width": 1983,
+      "height": 652,
+      "generatedWidth": 1983,
+      "generatedHeight": 793,
+      "alpha": true,
+      "sha256": "b8491aa985f176bd2a08e16909495e73a3cdaff843c6321ae64e503e900ee8a2",
+      "variants": [
+        {
+          "file": "bridge-rail-640.webp",
+          "width": 640
+        },
+        {
+          "file": "bridge-rail-1280.webp",
+          "width": 1280
+        }
+      ],
+      "generator": "built-in image_gen",
+      "prompt": "One independently generated transparent landscape illustration layer: ONLY the long warm-gray stone arch railway bridge and two thin rail tracks from the reference. No train, buildings, scenery, boats, water, text or backdrop. Regenerate native fine detail about 2400x600 wide. Critical track geometry: bridge extends full canvas width; rail surface at left is at y12% canvas height, rail surface at right y62%, straight gentle downhill LEFT TO RIGHT. Track slope in world coordinates must be about 0.15 (around 8.5 degrees). Six elegant broad semicircular stone arches, weathered sandstone blocks. Piers remain VERTICAL despite sloping railway top; the whole bridge must not be simply rotated. Transparent arch openings. Thin dark sleepers and steel rails on top with no thick parapet hiding wheels. Fine Vietnamese watercolor/gouache illustration matching the exact attached bay bridge, soft warm sunlight, restrained ochre shadows and golden edge details. Full bridge end to end, piers descending naturally, no solid rectangular ground beneath. This clean separate layer will have train added on top and a station beside right side.",
+      "sourcePath": "C:\\Users\\Uy\\.codex\\generated_images\\01a15871-114b-7d72-8257-05166a5cb4d4\\exec-1fad4245-1765-4bd6-949e-003d0e5f3372.png",
+      "active": false
+    },
+    {
+      "id": "chapter-ridges",
+      "source": "sources/chapter-ridges.png",
+      "file": "chapter-ridges.webp",
+      "width": 1983,
+      "height": 793,
+      "generatedWidth": 1983,
+      "generatedHeight": 793,
+      "alpha": true,
+      "sha256": "ec8babf3941c2e8a79a4fc72384e3ce57b45ddb56f19ad61b09e22ebabc5a788",
+      "variants": [
+        {
+          "file": "chapter-ridges-640.webp",
+          "width": 640
+        },
+        {
+          "file": "chapter-ridges-1280.webp",
+          "width": 1280
+        }
+      ],
+      "generator": "built-in image_gen",
+      "prompt": "Independently regenerate only the top mountain panorama against references/chapter.png: high detail transparent jade mountains, low pale center, left village and gold clouds, fade below. No other objects or text.",
+      "sourcePath": "C:/Users/Uy/.codex/generated_images/01a15871-114b-7d72-8257-05166a5cb4d4/exec-95c65205-0955-4833-9d59-a6bd37e98324.png",
+      "active": true
+    },
+    {
+      "id": "foreground-frame",
+      "source": "sources/foreground-frame.png",
+      "file": "foreground-frame.webp",
+      "width": 2172,
+      "height": 724,
+      "generatedWidth": 2172,
+      "generatedHeight": 724,
+      "alpha": true,
+      "sha256": "e764df6b443db995d5856d38bf16ff836c34055c5ce9efc01a493976860ee321",
+      "variants": [
+        {
+          "file": "foreground-frame-640.webp",
+          "width": 640
+        },
+        {
+          "file": "foreground-frame-1280.webp",
+          "width": 1280
+        }
+      ],
+      "generator": "built-in image_gen",
+      "prompt": "Generate one separate TRANSPARENT foreground overlay illustration for the very bottom edge of the attached Vietnamese bay scene, about 2400x650 very wide. ONLY a low scalloped line of dark jade/teal small rounded hills with fine gold contours and speckles, tiny green bushes, and two soft ivory gold-outlined ornamental scroll-cloud clusters near bottom-left and bottom-right. All top 55% of canvas fully transparent; the left corner may rise to 30% and right corner to 25%, CENTER stays very low at bottom 80–100%, so the railway arches and station are not covered. This overlay is only framing the lower edge, not a big leafy wall. No train, rails, bridge, water, station, boats, mountains in distance, text or background paper. Match reference's exact Vietnamese richly detailed gouache/watercolor decorative landscape with warm cream scroll clouds and jade/gold scalloped hills; natural irregular alpha silhouette, crisp fine details. The reference bridge must remain visible above this low framing layer.",
+      "sourcePath": "C:\\Users\\Uy\\.codex\\generated_images\\01a15871-114b-7d72-8257-05166a5cb4d4\\exec-78fd16f1-f5a4-44f7-ae72-a24c4754e6fd.png",
+      "active": true
+    },
+    {
+      "id": "river-registered",
+      "source": "sources/river-registered.png",
+      "file": "river-registered.webp",
+      "width": 926,
+      "height": 1699,
+      "generatedWidth": 926,
+      "generatedHeight": 1699,
+      "alpha": true,
+      "sha256": "4ea995599a82df6fecd70822a6e35c167433d2f31842909eeaa20de9fd7cbd64",
+      "variants": [
+        {
+          "file": "river-registered-640.webp",
+          "width": 640
+        }
+      ],
+      "generator": "built-in image_gen",
+      "prompt": "EDIT / EXACT BACKGROUND EXTRACTION for a layered website, not a new composition. Input is the approved complete chapter. Output a transparent PNG of the SAME TALL PORTRAIT CANVAS ASPECT RATIO (795 wide by 1458 high, ideally render at 1590x2916 native detail). KEEP ONLY the illustrated river water and its thin botanical banks in their EXACT original positions and sizes on that canvas. Remove every other pixel to transparency: all text, mountains, gate, bicycle, pho bowl, tray, basket, hands, tea, cards, boats, bay, bridge and train. Where objects occlude the river, reconstruct ONLY that hidden narrow river section logically continuous. Do not relocate, widen, simplify, add bends or redesign the river. The source river starts directly below village gate near x82%,y20.6% of the full canvas, winds left-right in SMALL NARROW bends near x60–75%,y22–32%, curves around left of the basket near x40%,y38%, sweeps toward right edge at x95%,y47%, forms the broad RIGHT-SIDE bend BEHIND the cards through y52–62%, and exits down-left beneath the cards near x37%,y69%, fading to transparency by y72%. All area above y19%, below y73% and left of x25% should be fully transparent. Water MUST have the same delicate slender width as input, same quiet teal and jade color, fine cream ripples, narrow warm sandy banks with tiny clustered red and white flowers. Do not produce a thick stylized S ribbon filling the canvas. Treat source shape and placement as locked. Fine native watercolor/gouache detail and transparent organic feathered vegetation edges. No ivory background rectangle or paper fill. The full reference picture is only a coordinate/template guide, no other objects remain. Preserve source river spatial geometry as accurately as possible.",
+      "sourcePath": "C:\\Users\\Uy\\.codex\\generated_images\\01a15871-114b-7d72-8257-05166a5cb4d4\\exec-5741d6d3-1cbe-4e1a-bc7a-d429be1112e9.png",
+      "active": true
+    },
+    {
+      "id": "river-route-refined",
+      "source": "sources/river-route-refined.png",
+      "file": "river-route-refined.webp",
+      "width": 1254,
+      "height": 1254,
+      "generatedWidth": 1254,
+      "generatedHeight": 1254,
+      "alpha": true,
+      "sha256": "46a4d4f4744d1806bf029b62696b2e0edd6f8f07a2a791cd036916dab44d98eb",
+      "variants": [
+        {
+          "file": "river-route-refined-640.webp",
+          "width": 640
+        }
+      ],
+      "generator": "built-in image_gen",
+      "prompt": "Precisely regenerate ONLY the winding river with its very narrow flower banks in the attached reference (image 1), as one independent transparent layer. Image 2 is our previous river: retain its fine water and botanical style, but CORRECT ITS GEOMETRY to match image 1. Transparent SQUARE canvas 2048x2048. It will overlay the chapter at y290 in a 795px wide design. Critical corrections: lower outlet MUST terminate around x38% at y94%; it MUST NOT flow to the left edge or below x28% anywhere. Bottom-left 25% of canvas must be completely transparent. Narrow the water ribbon about 25% versus image 2, especially the first two bends and the lower-left outlet. Upper river is a slender stream, not a broad channel. Full course centerline in canvas percent: START (82,1), flow left through (61,8), right through (72,14), left through (58,20), bend left at (44,32), then sweep right through (72,42), broad outer RIGHT bend at (93,53), (91,64), (80,75), then bend back left through (62,84) and terminate feathered at (38,94). Water width 2% near source, 3% through top small bends, 6% at middle left bend, 8% near broad right bend, 10% near outlet. Fine pale ripples follow flowing water, no hard thick white foam edges. Extremely thin grassy ochre banks with tiny red and white wildflower clusters, interrupted organic edges as original reference. Outside water and narrow banks fully transparent. NO objects (gate, bowl, letters, basket, tea, cards), no paper rectangle, no sky or mountains or text. High native-detail Vietnamese watercolor/gouache heritage art matching image 1 exactly. Keep rightmost river edge inside canvas at x99%. Reference image 1 controls path and relative width; image 2 supplies detailed rendering technique only.",
+      "sourcePath": "C:\\Users\\Uy\\.codex\\generated_images\\01a15871-114b-7d72-8257-05166a5cb4d4\\exec-8f0e2bb3-aa0d-4fc4-82da-7f6b21373440.png",
+      "active": false
+    },
+    {
+      "id": "river-route",
+      "source": "sources/river-route.png",
+      "file": "river-route.webp",
+      "width": 1254,
+      "height": 1254,
+      "generatedWidth": 1254,
+      "generatedHeight": 1254,
+      "alpha": true,
+      "sha256": "e4a6e171cba50ec61cd700ff2740547137b14323ef06e52f14efd48e1e3a6b94",
+      "variants": [
+        {
+          "file": "river-route-640.webp",
+          "width": 640
+        }
+      ],
+      "generator": "built-in image_gen",
+      "prompt": "Create one independent high-detail transparent illustration layer: ONLY the calm jade river and very thin flower-dotted banks from the attached memory chapter. Square canvas around 2048x2048, most of canvas transparent. No gate, pho, hands, cards, tea, mountains or lettering. Match the exact winding route, not a generic S: percent centerline coordinates (82,1), (60,8), (73,14), (58,20), (46,32), (74,40), (93,50), (92,63), (81,76), (66,82), (37,94), (27,100). Starts narrow 2.5% of canvas width, first bends 4–5%, at middle left bend 7%, lower right bend 10–13%, lower-left mouth 15%. Gentle turquoise water with fine ivory ripples, no foamy rapids and no thick bright white rim. Narrow continuous ochre sandy banks with moss, little grasses and clustered tiny red/white wildflowers as in reference. Outside banks fully transparent, broken organic feathered foliage edges. The reference gate, bowl and basket are separate objects not drawn here. Exquisite Vietnamese gouache/watercolor paper-illustration aesthetic and fine native detail, turquoise/teal/jade and muted ochre, not photorealistic, no paper rectangle. Preserve this specified 2D canvas registration and source course faithfully.",
+      "sourcePath": "C:\\Users\\Uy\\.codex\\generated_images\\01a15871-114b-7d72-8257-05166a5cb4d4\\exec-a90e7f66-18e7-483b-a4d8-099d7c59cdc2.png",
+      "active": false
+    },
+    {
+      "id": "sailboat-single",
+      "source": "sources/sailboat-single.png",
+      "file": "sailboat-single.webp",
+      "width": 868,
+      "height": 1291,
+      "generatedWidth": 1086,
+      "generatedHeight": 1448,
+      "alpha": true,
+      "sha256": "3d31eb7b6abaaefc1d96120a2cfba70bbc20a2ae239dedbd2a5717f015578c94",
+      "variants": [
+        {
+          "file": "sailboat-single-640.webp",
+          "width": 640
+        }
+      ],
+      "generator": "built-in image_gen",
+      "prompt": "Render one small Vietnamese bay sailboat exactly matching the red sailboats in the attached reference, as an independent high-resolution TRANSPARENT layer. One slim dark brown wooden hull, ONE mast and ONE red triangular battened sail, fine antique gold seams, slightly three-quarter side view, subtle few pale turquoise painted ripple/reflection strokes below. High-detail watercolor/gouache heritage illustration matching reference, simple elegant distant vessel proportions. No other boats, no bay background, no islands, no scenery, no letters, no logos. Canvas about 768x1024 portrait with full sail and small reflection visible. Avoid the two large junk sails and big cabin; reference boats are tiny single-sail silhouettes with delicate rigging.",
+      "sourcePath": "C:\\Users\\Uy\\.codex\\generated_images\\01a15871-114b-7d72-8257-05166a5cb4d4\\exec-248d0aa1-bf72-42b4-bab3-4742ae55217c.png",
+      "active": true
+    },
+    {
+      "id": "station-palms",
+      "source": "sources/station-palms.png",
+      "file": "station-palms.webp",
+      "width": 1641,
+      "height": 942,
+      "generatedWidth": 1659,
+      "generatedHeight": 948,
+      "alpha": true,
+      "sha256": "47b37449d3db683cb8b5868404079b6d7b917cd6d6f3ae5d92f6ddaf8a3dcfe4",
+      "variants": [
+        {
+          "file": "station-palms-640.webp",
+          "width": 640
+        },
+        {
+          "file": "station-palms-1280.webp",
+          "width": 1280
+        }
+      ],
+      "generator": "built-in image_gen",
+      "prompt": "Generate one independent high-resolution transparent illustration layer of the small Vietnamese countryside RAILWAY STATION at lower right of the attached reference. Match the exact architectural context and daytime perspective. One-storey warm ivory plaster station, long red terracotta tiled roof, roof ridge gently rising to right, visible gable at RIGHT, shallow veranda facing viewer/lower-left with thin dark wooden columns and modest warm windows. About twice as wide as tall, accompanied by a few slim coconut palms rising behind and at right, flowering shrubs and a little vegetation at ground. Perspective corresponds to railway descending LEFT TO RIGHT, station platform baseline slopes gently downward to right. Transparent background. No rails, no train, no bridge, no water, no other mountains, no giant ground rectangle, no text or station lettering. Not a pagoda, temple, shop or night scene. No glowing oversized lanterns. Style is the exact fine watercolor/gouache Vietnamese heritage illustration in reference, jade foliage, gold fine details, warm sun, ivory and red tiles. High native resolution roughly 1792x1024; preserve the full roof and all palms, fine believable tile, column and planting details.",
+      "sourcePath": "C:\\Users\\Uy\\.codex\\generated_images\\01a15871-114b-7d72-8257-05166a5cb4d4\\exec-cf13e6c2-8a2d-4140-92b6-be0e3c4e6326.png",
+      "active": true
+    },
+    {
+      "id": "train-right-refined",
+      "source": "sources/train-right-refined.png",
+      "file": "train-right-refined.webp",
+      "width": 2088,
+      "height": 368,
+      "generatedWidth": 2172,
+      "generatedHeight": 724,
+      "alpha": true,
+      "sha256": "03dc726af736f66977114f3fd5584177321c6e62a5f576726b1d64d09c23f01d",
+      "variants": [
+        {
+          "file": "train-right-refined-640.webp",
+          "width": 640
+        },
+        {
+          "file": "train-right-refined-1280.webp",
+          "width": 1280
+        }
+      ],
+      "generator": "built-in image_gen",
+      "prompt": "Create a precise independently generated transparent TRAIN layer, matching the small train in attached bay reference. Native very wide image ~2400x600. Full five-part train with locomotive facing RIGHT at RIGHT END and FOUR coaches behind to LEFT, rear-to-front colors RED, BLUE, GREEN, RED, then RED locomotive with dark teal chimney and fine gold trim. Critical relative sizes: locomotive only 21% of total train LENGTH, the four coaches occupy 79%; engine HEIGHT at most 1.15 times nearest red coach height; rear coach height 80% of nearest red coach height. Restrained near-side view with slight three-quarter front, minimal dramatic perspective. Do NOT make a giant toy engine. Rails are NOT included, but wheel-contact baseline straight gentle downward to right by 0.15 units vertical per horizontal unit. All wheels touch the same slope; wheel contacts are the composition anchor. No huge front headlamp or bulging wheels. Long elegant narrow red steam engine, small gold wheels and piping, 4-coach body consistent roofline. Fine watercolor/gouache Vietnamese storybook illustration EXACT palette and brushwork of reference, gold accents, richly detailed, no glossy 3D model. Entire train uncropped with transparent 3% margins. No bridge, no track, no station, water, hills, ground, smoke or text. Preserve original train direction and red-blue-green-red coach sequence. All background fully transparent.",
+      "sourcePath": "C:\\Users\\Uy\\.codex\\generated_images\\01a15871-114b-7d72-8257-05166a5cb4d4\\exec-7575fdf5-a4df-45dd-ae76-000d8895aedc.png",
+      "active": true
+    },
+    {
+      "id": "train-right",
+      "source": "sources/train-right.png",
+      "file": "train-right.webp",
+      "width": 2077,
+      "height": 536,
+      "generatedWidth": 2172,
+      "generatedHeight": 724,
+      "alpha": true,
+      "sha256": "18b3e974277883684d15b40220b1a5e06f31a76e9bf69e878761c06002dfdf6a",
+      "variants": [
+        {
+          "file": "train-right-640.webp",
+          "width": 640
+        },
+        {
+          "file": "train-right-1280.webp",
+          "width": 1280
+        }
+      ],
+      "generator": "built-in image_gen",
+      "prompt": "Generate one independent TRANSPARENT high-resolution illustration layer: the complete small steam train in the attached reference, with EXACT direction and gentle diagonal perspective. Canvas very wide about 2400x650. The locomotive is on RIGHT, faces RIGHT, slightly toward viewer, its cowcatcher at lower-right. Four carriages trail to LEFT: immediately behind locomotive RED passenger coach, then GREEN passenger coach, then BLUE passenger coach, then RED rear passenger coach at far left. Full train visible, no clipping. Locomotive red lacquer body, dark teal chimney, antique gold trim and 3 gold-rim wheels, small elegant proportions. Entire wheel-contact line gently slopes downward left-to-right by about 0.15 units vertical per horizontal unit: left rear coach wheels higher, engine wheels lower. Perspective painted in; coaches farther left are smaller than front red coach and locomotive. Train is long and low: total occupied width at least 5 times occupied height, no giant engine. Strictly no track, sleepers, bridge, station, water, scenery, lettering or background. Fine hand-painted Vietnamese watercolor/gouache matching red, jade, ivory and antique gold reference, detailed real native texture, crisp alpha edges, no large smoke clouds. Match the exact scale relationships and orientation of the reference train, not a side-on perfectly horizontal toy train.",
+      "sourcePath": "C:\\Users\\Uy\\.codex\\generated_images\\01a15871-114b-7d72-8257-05166a5cb4d4\\exec-8c3ca06e-ae54-41d3-92cc-895cc14bd07d.png",
+      "active": false
+    }
+  ],
+  "activeNewLayers": [
+    "chapter-ridges",
+    "river-registered",
+    "bay-water",
+    "bay-left-shore",
+    "bay-right-shore",
+    "sailboat-single",
+    "station-palms",
+    "bridge-causeway",
+    "train-right-refined",
+    "foreground-frame"
+  ]
+}

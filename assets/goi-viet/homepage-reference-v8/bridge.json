@@ -1,0 +1,27 @@
+{
+  "id": "bridge",
+  "file": "bridge.webp",
+  "source": "sources/bridge.png",
+  "generatedFrom": "C:/Users/Uy/.codex/generated_images/01a15871-114b-7d72-8257-05166a5cb4d4/exec-32982a27-3737-4699-bae8-9e2567b40958.png",
+  "nativeWidth": 2172,
+  "nativeHeight": 724,
+  "width": 3840,
+  "height": 278,
+  "originalRect": [
+    0,
+    1274,
+    3840,
+    278
+  ],
+  "alphaSHA256": "ef450699a08874b92e4c23942db2e0df33cd6a84032dd7c5c7cffabf6025c0f7",
+  "sourceSHA256": "17f3f328e7cfe2ce9edd7131686d35c524f52bf6be662c9ac89013d0f9475e2f",
+  "prompt": "Production isolated architecture sprite for the layered Gói Việt homepage. Image 1 is the exact original extracted sprite; Image 2 is the user's approved homepage, the main guide to final color, geometry and restrained illustration style. Repaint THIS SINGLE OBJECT from Image 1 with sharply resolved existing painted detail and the color in Image 2. The COMPLETE extremely WIDE LOW HORIZONTAL stone viaduct/rail strip: original canvas 3840:278. Keep exactly the same arch count, same pier locations, stone courses, top rail at the same horizontal level, and original approach hills at both edges. Perfectly straight horizontal rail; no perspective rotation or diagonal bridge. No train, buildings, sky, landscape in the arch openings or clouds. The openings are genuinely transparent. Match the approved warm golden sandstone tone, crisp fine mortar lines and shaded arch recesses. Keep full original extreme panorama ratio, no trimming or padding.\nCRITICAL: Keep the identical canvas aspect, framing, camera angle, scale, proportions and feature locations. No margins, recentering, tightened crop or alternative view. It will be registered back onto the same original scene coordinates and alpha mask. Retain simple hand-painted Vietnamese storybook/gouache style, not a photo or 3D render, and do not increase decorative complexity. Resolve roof tile strokes, existing stone/mortar edges, doors and trim cleanly rather than blurring them. Deep controlled teal shadows, warm sandstone/ivory, soft gold, clean warm vermilion, matched to Image 2.\nClean away any rectangular source-fill streaks, pasted fragments, horizontal edge extrusion or neon placeholders visible in Image 1: these are defects, not intended architectural elements. Restore natural painted object texture behind occluding layers.\nOnly the single specified object, with truly transparent surrounding air (and transparent arch openings for the bridge). Do not copy other elements from Image 2, no scenery, extra buildings, vegetation beyond the source footprint, train, logo, station pins, labels, text, watermark, frames or backdrop. Highest practical native resolution with fine clear edges, ideally at least 2048 pixels on the long edge. Preserve the original complete canvas registration and all correct geometry.",
+  "tool": "built-in image_gen",
+  "registration": "Generated colors registered to original canvas; original alpha retained byte-for-byte. Opaque paper around terrain mist is aligned to the generated sky to avoid seams.",
+  "generatedCrop": {
+    "left": 0,
+    "top": 278,
+    "width": 2172,
+    "height": 166
+  }
+}

@@ -3,8 +3,7 @@
   'use strict';
   const N=window.GoiVietJourneyNetwork,intro=document.getElementById('introScreen'),active=()=>intro.classList.contains('intro-hidden'),clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
   let selected=null,currentId='hn',plan=null,trip=null,previous=null,lastLeg=null,changedAt=-1000,arrivedAt=-1000,revision=0,dirty=1,baseDirty=-1,baseKey='',lastNow=performance.now(),paused=false,phaseKey='',bar=null,clearButton=null,obstacles=[],progressUpdate=0;
-  let baseFrames=0,reusedFrames=0,arrival=null,focusCamera=null;
-  const cameraFields=[['zoom','targetZoom'],['yaw','targetYaw'],['pitch','targetPitch'],['panX','targetPanX'],['panY','targetPanY']];
+  let baseFrames=0,reusedFrames=0,arrival=null;
   let lastReduced=state.reducedMotion;
   const name=id=>(N.node(id)?.name||CULTURAL_PLACE_MAP[id]?.short||id).replace(/^TP\.\s*/,'').normalize('NFC');
   const ease=t=>mapRailProgress(clamp(t,0,1));
@@ -29,7 +28,6 @@
   function tick(now=performance.now()){
     if(lastReduced!==state.reducedMotion){lastReduced=state.reducedMotion;syncControls();invalidate();}
     const suspended=!active()||document.hidden||Boolean(getTopOpenModalElement()),delta=Math.max(0,now-lastNow);lastNow=now;
-    if(focusCamera&&(suspended||paused))focusCamera.last=now;
     if(trip){
       if(!paused&&!suspended)trip.elapsed+=delta;
       paused=suspended;
@@ -64,7 +62,7 @@
     announceSR(trip?'Đã bỏ chọn. Tàu tiếp tục đến '+name(trip.route.id)+'.':'Đã bỏ chọn và ẩn tuyến hành trình.');
   }
   function reset(){
-    focusCamera=null;arrival=null;selected=null;currentId='hn';plan=null;trip=null;previous=null;lastLeg=null;changedAt=arrivedAt=-1000;phaseKey='';lastNow=performance.now();revision++;obstacles=[];
+    arrival=null;selected=null;currentId='hn';plan=null;trip=null;previous=null;lastLeg=null;changedAt=arrivedAt=-1000;phaseKey='';lastNow=performance.now();revision++;obstacles=[];
     const point=N.node(currentId).point;state.railRun={curve:buildArcLengthCurveFromRaw([[point[0]-1,point[1]],[...point]]),progress:1,curWX:point[0],curWY:point[1],duration:0,startTime:0,branchCurves:[],stopDistance:1};state.seaRun=null;state.trainSteamPuffs=[];
     invalidate();syncControls();requestMapRender(2);
   }
@@ -98,19 +96,7 @@
     const [ox,oy]=getMapScreenOrigin(cw,ch);camera.panX+=(area.left+area.right-2*ox)/(2*camera.zoom);camera.panY+=(area.top+area.bottom-2*oy)/(2*camera.zoom*Math.cos(camera.pitch));
     Object.assign(state.cam,{targetZoom:camera.zoom,targetYaw:0,targetPitch:.24,targetPanX:clampPanX(camera.panX),targetPanY:clampPanY(camera.panY)});
     window.GoiVietRegionalPreview?.constrainCamera();
-    focusCamera=state.reducedMotion?null:{last:performance.now(),target:cameraFields.map(([,target])=>state.cam[target])};requestMapRender(3);
-  }
-  function advanceFocusCamera(now){
-    if(!focusCamera)return;
-    const c=state.cam;
-    if(state.reducedMotion||isDraggingMain||isTouchDragging||cameraFields.some(([,target],i)=>Math.abs(c[target]-focusCamera.target[i])>1e-7)){focusCamera=null;return;}
-    if(paused||document.hidden){focusCamera.last=now;return;}
-    // The host applies 14% per frame. Add only the elapsed-time correction on slow
-    // frames during our own focus, so a terrain load cannot stretch it for seconds.
-    const steps=Math.max(1,Math.min(100,Math.max(0,now-focusCamera.last))/(1000/60)),extra=1-Math.pow(.86,steps-1);focusCamera.last=now;
-    for(const[key,target]of cameraFields)c[key]+=(c[target]-c[key])*extra;
-    const delta=cameraFields.reduce((sum,[key,target])=>sum+Math.abs(c[target]-c[key])*((key==='panX'||key==='panY') ? .01 : 1),0);
-    if(delta<.00008){for(const[key,target]of cameraFields)c[key]=c[target];focusCamera=null;}
+    requestMapRender(3);
   }
   function buttonLabel(id){return trip?id!==trip.route.id?'Chờ đến ga':paused?'Tạm dừng':trip.phase?.kind==='transfer'?'Chuyển chặng':trip.phase?.kind==='sea'?'Đang đi biển':'Đang chạy':id===currentId?(N.node(id).kind==='island'?'Đã đến đảo':'Đang ở ga'):state.reducedMotion?'Đến ngay':'Khởi hành';}
   function syncProgress(){
@@ -151,9 +137,9 @@
   }
   function screenKey(now){const c=state.cam;return JSON.stringify([cw,ch,c.zoom,c.yaw,c.pitch,c.panX,c.panY,c.targetZoom,c.targetYaw,c.targetPitch,c.targetPanX,c.targetPanY,state.theme,getMapSelectedPlaceId(),state.hoveredItem?.id,revision,window.GoiVietRegionalPreview?.isAnimating()?Math.floor(now/50):0,...getMapScreenOrigin(cw,ch)]);}
   function renderFrame(now){
-    tick(now);advanceFocusCamera(now);if(!active()){window.GoiVietJourneyVehicles?.clear();return false;}
+    tick(now);if(!active()){window.GoiVietJourneyVehicles?.clear();return false;}
     const key=screenKey(now),camera=state.cam,settled=Math.abs(camera.zoom-camera.targetZoom)+Math.abs(camera.pitch-camera.targetPitch)+Math.abs(camera.yaw-camera.targetYaw)+Math.abs(camera.panX-camera.targetPanX)*.01+Math.abs(camera.panY-camera.targetPanY)*.01<.00008;
-    if(baseDirty===dirty&&baseKey===key&&settled&&!state.ripples.length&&!isDraggingMain&&!isTouchDragging){reusedFrames++;window.GoiVietJourneyVehicles?.paint(now);return true;}return false;
+    if(baseDirty===dirty&&baseKey===key&&settled&&!state.ripples.length&&!window.GoiVietLabelPerformance?.needsPaint()){reusedFrames++;window.GoiVietJourneyVehicles?.paint(now);return true;}return false;
   }
   function afterBase(now){baseFrames++;baseDirty=dirty;baseKey=screenKey(now);positionBar();window.GoiVietJourneyVehicles?.paint(now);}
   function isAnimating(){const now=performance.now();return active()&&(moving()||!state.reducedMotion&&(now-changedAt<300||now-arrivedAt<1100));}

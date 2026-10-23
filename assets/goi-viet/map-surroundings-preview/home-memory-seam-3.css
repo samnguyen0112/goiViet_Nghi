@@ -1,0 +1,30 @@
+/* A short paper/mist bridge between the classic home and memory chapter.
+   Fade only scenery: live text, invitation, controls and chapter content keep
+   their opacity. No displaced duplicate mountains or screenshot overlay. */
+body[data-home-theme="classic"] { --home-memory-mist:clamp(48px,5.5vw,88px); }
+body[data-home-theme="classic"] #introWelcomeStage { background:#fcf0d8; }
+body[data-home-theme="classic"] #introWelcomeStage .gv-home-film {
+  -webkit-mask-image:linear-gradient(#000 calc(100% - var(--home-memory-mist)),transparent);
+  mask-image:linear-gradient(#000 calc(100% - var(--home-memory-mist)),transparent);
+}
+body[data-home-theme="classic"] #memorySeam {
+  position:relative; z-index:1; height:clamp(32px,3.5vw,64px);
+  margin:-1px 0; isolation:isolate; pointer-events:none;
+  background:#fcf0d8 url('../memory-native-v4/paper-grain.webp') repeat 0 0/384px 384px;
+  -webkit-mask-image:none; mask-image:none;
+}
+body[data-home-theme="classic"] #memorySeam > img,
+body[data-home-theme="classic"] #memorySeam > canvas { display:none; }
+body[data-home-theme="classic"] #memorySeam::before {
+  content:''; position:absolute; inset:0; pointer-events:none;
+  background:linear-gradient(#fcf0d8,rgba(252,240,216,0) 95%);
+}
+body[data-home-theme="classic"] #memoryChapter .mc-content::before {
+  content:''; position:absolute; inset:0 0 auto; height:var(--home-memory-mist);
+  z-index:1; pointer-events:none;
+  background:#fcf0d8 url('../memory-native-v4/paper-grain.webp') repeat 0 0/384px 384px;
+  -webkit-mask-image:linear-gradient(#000,transparent);
+  mask-image:linear-gradient(#000,transparent);
+}
+/* Static gradients work identically with reduced motion; the existing chapter
+   controller already uses instant scrolling when that preference is enabled. */

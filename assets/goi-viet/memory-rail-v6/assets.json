@@ -1,0 +1,59 @@
+{
+  "version": 6,
+  "assets": [
+    {
+      "id": "viaduct-station-final",
+      "file": "viaduct-station-final.webp",
+      "source": "sources/viaduct-station-final.png",
+      "width": 2048,
+      "height": 768,
+      "generatedWidth": 2048,
+      "generatedHeight": 768,
+      "trimOffset": [
+        0,
+        0
+      ],
+      "variants": [
+        {
+          "file": "viaduct-station-final-640.webp",
+          "width": 640
+        },
+        {
+          "file": "viaduct-station-final-1280.webp",
+          "width": 1280
+        }
+      ],
+      "sha256": "e60d7048307aec90bbe5c5adf8c3276031bed08b8ba55de6195635614fd4f687",
+      "generator": "built-in image_gen",
+      "prompt": "Use case: precise-object-edit. This is a transparent railway viaduct and station cutout. Make ONE precise proportion correction: reduce the station BUILDING to 75% of its present width and height, scaling around its front-left veranda foot (approximately source x1200,y430). Its left-front veranda foot stays planted there. The building therefore ends farther left than it currently does. Reduce the palm tree group to 80% of its current size while keeping its roots on the right bank, so palms remain behind/right of the smaller station. Replace newly exposed space with subtle low shrubs and visible empty stone station platform, no paper or color background.\nKEEP ALL of the railway, rails, sleepers, stone viaduct arches, bridge entrance at left, platform front wall, track centerline and image canvas geometry EXACTLY unchanged. Keep the house's CORRECT shared perspective: its roof ridge, long front eaves and front facade descend right parallel to the +0.23 rail direction; vertical columns remain upright; right gable visible; warm plaster, red tiles, front veranda faces the rails. This is making the building smaller in the existing correct camera, NOT changing camera, NOT tilting or flattening roof perspective. Preserve clear foot shadows and real platform support.\nThe smaller station should feel like an intimate village stop in a grand landscape, with clear breathing room between train and station and more visible landscape behind. No train, no smoke, no text. Preserve genuine transparent alpha; no sky, lake, rectangle or haze background. Same image canvas and composition, same fine painted detail and warm lighting.",
+      "active": true
+    },
+    {
+      "id": "train-front-stack",
+      "file": "train-front-stack.webp",
+      "source": "sources/train-front-stack.png",
+      "width": 2102,
+      "height": 504,
+      "generatedWidth": 2172,
+      "generatedHeight": 724,
+      "trimOffset": [
+        -40,
+        -157
+      ],
+      "variants": [
+        {
+          "file": "train-front-stack-640.webp",
+          "width": 640
+        },
+        {
+          "file": "train-front-stack-1280.webp",
+          "width": 1280
+        }
+      ],
+      "sha256": "52e61402682669676ad6ccc34789de537a329ad7d1ed60a08c7af5e6044ea18a",
+      "generator": "built-in image_gen",
+      "prompt": "Use case: precise-object-edit. Edit this train cutout. Change ONLY the locomotive smokestack arrangement: REMOVE the tall black chimney directly in front of the driver's cab, replace that position with a low rounded brass steam dome. Put the ONE tall BLACK flared smoke chimney at the FRONT of the boiler just BEHIND the round brass front face on the RIGHT (replace the tall brass chimney near right front with the BLACK flared smoke chimney). The ONE true chimney must be on the right-front boiler, as in a real steam locomotive. The small brass steam domes stay low in the rear half of boiler. No smoke baked in. All other train geometry, 4 coach colors/order, couplers, windows, wheels, wheel contact baseline, camera angle, painterly style and transparent background MUST remain the same. Do NOT reshape or reframe the whole train. Keep the full train visible with true transparent alpha.",
+      "active": true
+    }
+  ]
+}

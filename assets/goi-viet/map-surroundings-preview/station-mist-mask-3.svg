@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="240" viewBox="0 0 1200 240" preserveAspectRatio="none">
+  <!-- Alpha only: an uneven bank of mist, feathered on every edge. -->
+  <defs>
+    <filter id="mist" x="-15%" y="-35%" width="130%" height="170%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency=".014 .035" numOctaves="2" seed="17" result="grain"/>
+      <feDisplacementMap in="SourceGraphic" in2="grain" scale="23" xChannelSelector="R" yChannelSelector="G"/>
+      <feGaussianBlur stdDeviation="14"/>
+    </filter>
+  </defs>
+  <g fill="white" filter="url(#mist)">
+    <path fill-opacity=".83" d="M65 142C93 105 141 108 183 99C230 88 264 110 311 99C363 88 391 75 427 53C471 29 487 48 532 30C582 9 626 18 670 37C709 54 734 77 782 85C831 96 868 83 912 95C957 107 981 92 1026 109C1065 124 1100 112 1138 143C1097 171 1065 169 1029 178C979 191 956 177 905 184C865 190 828 174 782 180C728 186 709 168 657 176C609 184 575 177 525 184C478 191 436 176 392 184C348 192 316 175 271 183C228 191 203 174 158 176C115 177 85 166 65 142Z"/>
+    <ellipse cx="232" cy="132" rx="149" ry="39" fill-opacity=".52"/>
+    <ellipse cx="602" cy="119" rx="184" ry="56" fill-opacity=".46"/>
+    <ellipse cx="971" cy="132" rx="143" ry="39" fill-opacity=".5"/>
+  </g>
+</svg>

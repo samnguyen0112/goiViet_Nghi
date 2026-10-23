@@ -1,0 +1,27 @@
+{
+  "id": "train-front-stack",
+  "file": "train-front-stack.webp",
+  "source": "sources/train-front-stack.png",
+  "width": 2102,
+  "height": 504,
+  "generatedWidth": 2172,
+  "generatedHeight": 724,
+  "trimOffset": [
+    -40,
+    -157
+  ],
+  "variants": [
+    {
+      "file": "train-front-stack-640.webp",
+      "width": 640
+    },
+    {
+      "file": "train-front-stack-1280.webp",
+      "width": 1280
+    }
+  ],
+  "sha256": "52e61402682669676ad6ccc34789de537a329ad7d1ed60a08c7af5e6044ea18a",
+  "generator": "built-in image_gen",
+  "prompt": "Use case: precise-object-edit. Edit this train cutout. Change ONLY the locomotive smokestack arrangement: REMOVE the tall black chimney directly in front of the driver's cab, replace that position with a low rounded brass steam dome. Put the ONE tall BLACK flared smoke chimney at the FRONT of the boiler just BEHIND the round brass front face on the RIGHT (replace the tall brass chimney near right front with the BLACK flared smoke chimney). The ONE true chimney must be on the right-front boiler, as in a real steam locomotive. The small brass steam domes stay low in the rear half of boiler. No smoke baked in. All other train geometry, 4 coach colors/order, couplers, windows, wheels, wheel contact baseline, camera angle, painterly style and transparent background MUST remain the same. Do NOT reshape or reframe the whole train. Keep the full train visible with true transparent alpha.",
+  "active": true
+}

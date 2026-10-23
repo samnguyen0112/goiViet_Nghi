@@ -1,0 +1,138 @@
+{
+  "height": 2378,
+  "offset": 0,
+  "reports": [
+    {
+      "quality": "2k",
+      "rigid": [
+        {
+          "id": "hanoi",
+          "rect": [
+            1025,
+            939,
+            217,
+            308
+          ],
+          "offset": 0
+        },
+        {
+          "id": "hue",
+          "rect": [
+            1722,
+            959,
+            413,
+            297
+          ],
+          "offset": 0
+        },
+        {
+          "id": "saigon",
+          "rect": [
+            2569,
+            919,
+            328,
+            248
+          ],
+          "offset": 0
+        },
+        {
+          "id": "train",
+          "rect": [
+            1245,
+            1161,
+            1387,
+            137
+          ],
+          "offset": 0
+        },
+        {
+          "id": "bridge",
+          "rect": [
+            0,
+            1274,
+            3840,
+            278
+          ],
+          "offset": 0
+        }
+      ],
+      "terrain": [
+        "mountains-far-left",
+        "mountains-far-right",
+        "mountains-mid-left",
+        "mountains-mid-right",
+        "mountains-near-left",
+        "mountains-near-right",
+        "river-valley"
+      ],
+      "maxUpperStretch": 0.9995938850602215,
+      "poster": "poster-2k.webp"
+    },
+    {
+      "quality": "4k",
+      "rigid": [
+        {
+          "id": "hanoi",
+          "rect": [
+            1025,
+            939,
+            217,
+            308
+          ],
+          "offset": 0
+        },
+        {
+          "id": "hue",
+          "rect": [
+            1722,
+            959,
+            413,
+            297
+          ],
+          "offset": 0
+        },
+        {
+          "id": "saigon",
+          "rect": [
+            2569,
+            919,
+            328,
+            248
+          ],
+          "offset": 0
+        },
+        {
+          "id": "train",
+          "rect": [
+            1245,
+            1161,
+            1387,
+            137
+          ],
+          "offset": 0
+        },
+        {
+          "id": "bridge",
+          "rect": [
+            0,
+            1274,
+            3840,
+            278
+          ],
+          "offset": 0
+        }
+      ],
+      "terrain": [
+        "mountains-far-left",
+        "mountains-far-right",
+        "mountains-mid-left",
+        "mountains-mid-right",
+        "mountains-near-left",
+        "mountains-near-right",
+        "river-valley"
+      ],
+      "maxUpperStretch": 0.9995938850602215,
+      "poster": "poster-4k.webp"
+    }
+  ]
+}

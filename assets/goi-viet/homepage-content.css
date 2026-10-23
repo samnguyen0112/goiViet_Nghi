@@ -34,13 +34,16 @@
   height: var(--home-scene-height, 100%);
   transform: translate(-50%, -50%);
 }
-.gv-home-poster, #homeSceneCanvas {
+.gv-home-poster, #homeSceneCanvas, .gv-home-scene-overlay {
   position: absolute; inset: 0; display: block;
   width: 100%; height: 100%; object-fit: cover; pointer-events: none;
 }
-#homeSceneCanvas { opacity: 0; }
-.gv-home-film[data-clip-ready="true"] #homeSceneCanvas { opacity: 1; }
-.gv-home-film[data-clip-status="error"] #homeSceneCanvas { opacity: 0; }
+#homeSceneCanvas, .gv-home-scene-overlay { opacity: 0; }
+.gv-home-scene-overlay[hidden] { display: none; }
+.gv-home-film[data-clip-ready="true"] #homeSceneCanvas,
+.gv-home-film[data-clip-ready="true"] .gv-home-scene-overlay { opacity: 1; }
+.gv-home-film[data-clip-status="error"] #homeSceneCanvas,
+.gv-home-film[data-clip-status="error"] .gv-home-scene-overlay { opacity: 0; }
 .gv-home-content {
   position: relative; z-index: 1;
   display: flex; flex-direction: column; align-items: center;

@@ -12,24 +12,24 @@
   const geometry = () => window.GoiVietRegionalGeometry;
   const host = document.createElement('div');
   host.className = 'regional-background';host.setAttribute('aria-hidden', 'true');host.inert = true;host.hidden = true;
-  const background = document.createElement('canvas');background.id = 'regionalLandSeaCanvas';
+  let background = document.createElement('canvas');background.id = 'regionalLandSeaCanvas';
   const waveCanvas = document.createElement('canvas');waveCanvas.id = 'regionalWavesCanvas';
   const labelCanvas = document.createElement('canvas');labelCanvas.id = 'regionalContextLabelsCanvas';
   host.append(background, waveCanvas, labelCanvas);scene.prepend(host);
-  const back = background.getContext('2d');const waves = waveCanvas.getContext('2d');const labels = labelCanvas.getContext('2d');
+  let back = background.getContext('2d');const waves = waveCanvas.getContext('2d');const labels = labelCanvas.getContext('2d');
   const images = new Map();
   const worldBoxes = new WeakMap(),polygonAreas=new WeakMap();
   const minimumValues = new Map();
   const simplified = new WeakMap();
-  let visibleWorld = null;
-  let planarProject = null, detailLevel = 2, projectionPoints = 0;
+  let detailLevel = 2, projectionPoints = 0;
   let lastKey = '', lastWaveKey = '', lastWater = null, lastLand = null;
   let lastLabelKey='', cachedCamera=null, cachedHomography=null, bufferToScreen=null, screenToBuffer=null, rasterGuard=0;
+  let cachedViewport=null;
   let countryLabels = [], objectBoxes = [], islandLabels = [], minimumKey = '', minimumValue = .12;
   let waveMotion = false, pinchAnchor = null, waveCheckbox = null, mounted = false;
   let geometryLoading = false, geometryError = false;
   let backdropDraws = 0, waveDraws = 0, waveCount = 0, cameraConstraints = 0;
-  let rasterDirty=false,lastRasterRefine=0;
+  let rasterDirty=false,lastRasterRefine=0,rasterRefineTimer=0;
   const targetCamera = () => ({...state.cam, zoom:state.cam.targetZoom, yaw:state.cam.targetYaw, pitch:state.cam.targetPitch, panX:state.cam.targetPanX, panY:state.cam.targetPanY});
   const mapOrigin = () => getMapScreenOrigin(cw, ch);
   function ensureGeometry() {
@@ -95,52 +95,58 @@
     if (zoom !== camera.zoom || x !== camera.panX || y !== camera.panY) cameraConstraints++;
     state.cam.targetZoom = zoom;state.cam.targetPanX = x;state.cam.targetPanY = y;
   }
-  function heightAt(x,y) {
+  function heightAt(x,y,camera=state.cam) {
     for (let i = renderedHitProvinces.length - 1; i >= 0; i--) {
       const item = renderedHitProvinces[i];
-      if (!item.topProjectedRings.some(ring => pointInRing2D(x,y,ring))) continue;
       const id=item.prov.id;
-      return getMapSelectedPlaceId()===id || state.hoveredItem?.id===id ? 36 : ['hn','hue','hcm'].includes(id) || state.exploredPlaceIds.includes(id) ? 24 : 16;
+      const z=getMapSelectedPlaceId()===id || state.hoveredItem?.id===id ? 36 : ['hn','hue','hcm'].includes(id) || state.exploredPlaceIds.includes(id) ? 24 : 16;
+      if(item.prov.polyRings.some(ring=>!window.GoiVietNaturalLandscape?.excludeProvinceIsland(ring)&&pointInRing2D(x,y,projectMapRing(ring,z,camera,cw,ch))))return z;
     }
     return 0;
   }
-  function zoomAt(x, y, desiredZoom) {
+  function zoomAt(x, y, desiredZoom, schedule=true) {
     if (state.seaRun) state.seaRun.didFocus = true;
-    const before = targetCamera(), z = heightAt(x,y), point = inverse(x,y,before,z);
+    const before = targetCamera(), z = heightAt(x,y,before), point = inverse(x,y,before,z);
     const next = {...before,zoom:clamp(desiredZoom,minimumZoom(before),3)};
     const after = inverse(x,y,next,z);
     state.cam.targetZoom = next.zoom;
     if (point && after) {state.cam.targetPanX += after[0]-point[0];state.cam.targetPanY += after[1]-point[1];}
-    constrainCamera();requestMapRender(24);
+    constrainCamera();if(schedule)requestMapRender();
   }
-  function panBy(dx,dy) {
+  function panBy(dx,dy,x,y) {
     if (state.seaRun) state.seaRun.didFocus = true;
     const camera = targetCamera();
-    const x = isTouchDragging ? lastTouchX : lastMouseX, y = isTouchDragging ? lastTouchY : lastMouseY;
+    const bounds=mainCanvas.getBoundingClientRect();
+    x ??= (isTouchDragging ? lastTouchX : lastMouseX)-bounds.left;
+    y ??= (isTouchDragging ? lastTouchY : lastMouseY)-bounds.top;
     const from = inverse(x-dx,y-dy,camera), to = inverse(x,y,camera);
     if (from && to) {state.cam.targetPanX += to[0]-from[0];state.cam.targetPanY += to[1]-from[1];}
     constrainCamera();
   }
   function beginPinch(touches) {
     if (touches.length < 2) return;
-    const x=(touches[0].clientX+touches[1].clientX)/2,y=(touches[0].clientY+touches[1].clientY)/2;
-    pinchAnchor = inverse(x,y,targetCamera());
+    const bounds=mainCanvas.getBoundingClientRect();
+    const x=(touches[0].clientX+touches[1].clientX)/2-bounds.left,y=(touches[0].clientY+touches[1].clientY)/2-bounds.top;
+    pinchAnchor = inverse(x,y,state.cam);
   }
   function pinch(touches, zoom) {
     if (touches.length < 2 || !pinchAnchor) return;
     if (state.seaRun) state.seaRun.didFocus = true;
     const next={...targetCamera(),zoom:clamp(zoom,minimumZoom(),3)};
-    const x=(touches[0].clientX+touches[1].clientX)/2,y=(touches[0].clientY+touches[1].clientY)/2,point=inverse(x,y,next);
+    const bounds=mainCanvas.getBoundingClientRect();
+    const x=(touches[0].clientX+touches[1].clientX)/2-bounds.left,y=(touches[0].clientY+touches[1].clientY)/2-bounds.top,point=inverse(x,y,next);
     state.cam.targetZoom=next.zoom;
     if(point){state.cam.targetPanX+=point[0]-pinchAnchor[0];state.cam.targetPanY+=point[1]-pinchAnchor[1];}
     constrainCamera();
   }
   function sizeCanvas(canvas, context, width, height, pad=0) {
-    const ratio=Math.min(window.devicePixelRatio||1,pad?(width>1080?1:1.25):2);
+    const ratio=window.GoiVietPixelBudget?.ratio(canvas===waveCanvas?'waves':'labels',width,height,pad) ?? (pad?backdropRatio(width,height,pad):Math.min(window.devicePixelRatio||1,2));
     const w=width+2*pad,h=height+2*pad;
     if(canvas.width!==Math.round(w*ratio)||canvas.height!==Math.round(h*ratio)){
       canvas.width=Math.round(w*ratio);canvas.height=Math.round(h*ratio);canvas.style.width=w+'px';canvas.style.height=h+'px';
-      context.setTransform(ratio,0,0,ratio,pad*ratio,pad*ratio);lastKey='';lastWaveKey='';lastLabelKey='';cachedCamera=null;
+      context.setTransform(ratio,0,0,ratio,pad*ratio,pad*ratio);
+      if(window.GoiVietPixelBudget){if(canvas===waveCanvas)lastWaveKey='';else lastLabelKey='';}
+      else {lastKey='';lastWaveKey='';lastLabelKey='';cachedCamera=null;}
     }
   }
   function multiply(a,b){const c=[];for(let r=0;r<3;r++)for(let col=0;col<3;col++)c[r*3+col]=a[r*3]*b[col]+a[r*3+1]*b[col+3]+a[r*3+2]*b[col+6];return c;}
@@ -153,56 +159,30 @@
   }
   function applyRasterTransform(camera,width,height){
     if(!cachedHomography)return false;
-    const shift=[1,0,-rasterGuard,0,1,-rasterGuard,0,0,1];
+    const source=window.GoiVietPixelBudget&&cachedViewport||{width,height,pad:rasterGuard};
+    const shift=[1,0,-source.pad,0,1,-source.pad,0,0,1];
     bufferToScreen=multiply(multiply(homography(camera,width,height),invertMatrix(cachedHomography)),shift);screenToBuffer=invertMatrix(bufferToScreen);
     const m=bufferToScreen.map(v=>v/bufferToScreen[8]);
     const css='matrix3d('+[m[0],m[3],0,m[6],m[1],m[4],0,m[7],0,0,1,0,m[2],m[5],0,m[8]].join(',')+')';
-    background.style.transform=css;waveCanvas.style.transform=css;
-    return [[0,0],[width,0],[width,height],[0,height]].every(([x,y])=>{const p=matrixPoint(screenToBuffer,x,y);return p[0]>=24&&p[1]>=24&&p[0]<=width+2*rasterGuard-24&&p[1]<=height+2*rasterGuard-24;});
+    if(background.style.transform!==css){background.style.transform=css;waveCanvas.style.transform=css;}
+    return [[0,0],[width,0],[width,height],[0,height]].every(([x,y])=>{const p=matrixPoint(screenToBuffer,x,y);return p[0]>=24&&p[1]>=24&&p[0]<=source.width+2*source.pad-24&&p[1]<=source.height+2*source.pad-24;});
   }
-  function polygonsPath(polygons,camera,width,height,path=new Path2D()) {
-    for(const polygon of polygons) {
-      const rings=Array.isArray(polygon)?polygon:[polygon.outer,...(polygon.holes||[])];
-      if(!worldVisible(rings[0])||window.GoiVietNaturalLandscape?.excludeBackgroundIsland(rings))continue;
-      const outer=rings[0];let area=polygonAreas.get(outer);
-      if(area===undefined){area=Math.abs(outer.reduce((sum,p,i)=>{const q=outer[(i+1)%outer.length];return sum+p[0]*q[1]-q[0]*p[1];},0))/2;polygonAreas.set(outer,area);}
-      if(area*camera.zoom*camera.zoom<1.8)continue;
-      for(const rawRing of rings) {
-      const ring=displayLine(rawRing);
-      if(!ring.length)continue;
-      for(let i=0;i<ring.length;i++){const p=planarProject(...ring[i]);if(i)path.lineTo(p[0],p[1]);else path.moveTo(p[0],p[1]);}path.closePath();projectionPoints+=ring.length;
-      }
-    }
-    return path;
-  }
-  function displayLine(points) {
+  function displayLine(points, level=detailLevel) {
     if(points.length<7)return points;
-    let levels=simplified.get(points);if(!levels){levels=new Map();simplified.set(points,levels);}if(levels.has(detailLevel))return levels.get(detailLevel);
-    const tolerance=[.12,.28,.55,1][detailLevel],squared=tolerance*tolerance,keep=new Uint8Array(points.length);keep[0]=keep[points.length-1]=1;
+    let levels=simplified.get(points);if(!levels){levels=new Map();simplified.set(points,levels);}if(levels.has(level))return levels.get(level);
+    const tolerance=[.12,.28,.55,1][level],squared=tolerance*tolerance,keep=new Uint8Array(points.length);keep[0]=keep[points.length-1]=1;
     const stack=[[0,points.length-1]];
     while(stack.length){const[first,last]=stack.pop(),a=points[first],b=points[last],dx=b[0]-a[0],dy=b[1]-a[1],length=dx*dx+dy*dy;let maximum=squared,index=-1;
       for(let i=first+1;i<last;i++){const p=points[i],t=length?clamp(((p[0]-a[0])*dx+(p[1]-a[1])*dy)/length,0,1):0,x=p[0]-a[0]-t*dx,y=p[1]-a[1]-t*dy,d=x*x+y*y;if(d>maximum){maximum=d;index=i;}}
       if(index>=0){keep[index]=1;stack.push([first,index],[index,last]);}
     }
-    const reduced=points.filter((p,i)=>keep[i]);const output=reduced.length<4&&points[0][0]===points.at(-1)[0]&&points[0][1]===points.at(-1)[1]?points:reduced;levels.set(detailLevel,output);return output;
+    const reduced=points.filter((p,i)=>keep[i]);const output=reduced.length<4&&points[0][0]===points.at(-1)[0]&&points[0][1]===points.at(-1)[1]?points:reduced;levels.set(level,output);return output;
   }
-  function prepareProjection(camera,width,height) {
-    const co=Math.cos(camera.yaw),si=Math.sin(camera.yaw),cp=Math.cos(camera.pitch),sp=Math.sin(camera.pitch),[ox,oy]=getMapScreenOrigin(width,height);
-    planarProject=(x,y)=>{const dx=x-MAP_CENTER_X+camera.panX,dy=y-MAP_CENTER_Y+camera.panY,rx=dx*co-dy*si,ry=dx*si+dy*co,s=camera.zoom*2400/Math.max(450,2400-ry*sp*.52);return [ox+rx*s,oy+ry*cp*s,s];};
-    detailLevel=camera.zoom>1.7?0:camera.zoom>.9?1:camera.zoom>.45?2:3;projectionPoints=0;
-  }
-  function worldVisible(points) {
-    if(!visibleWorld||!points?.length)return true;
-    let box=worldBoxes.get(points);
-    if(!box){box={left:Infinity,right:-Infinity,top:Infinity,bottom:-Infinity};for(const[x,y]of points){box.left=Math.min(box.left,x);box.right=Math.max(box.right,x);box.top=Math.min(box.top,y);box.bottom=Math.max(box.bottom,y);}worldBoxes.set(points,box);}
-    return overlaps(box,visibleWorld);
-  }
-  function linesPath(lines,camera,width,height) {
-    const path=new Path2D();for(const raw of lines) {if(!worldVisible(raw)||window.GoiVietNaturalLandscape?.excludeBackgroundIsland([raw]))continue;const box=worldBoxes.get(raw);if(box&&Math.hypot(box.right-box.left,box.bottom-box.top)*camera.zoom<2)continue;const line=displayLine(raw);for(let i=0;i<line.length;i++){const p=planarProject(...line[i]);if(i)path.lineTo(p[0],p[1]);else path.moveTo(p[0],p[1]);}projectionPoints+=line.length;}return path;
-  }
+  const measureText=(context,text)=>window.GoiVietLabelPerformance?.measure(context,text)??context.measureText(text).width;
   let frameUI=null;
   function visibleUI() {
     if(frameUI)return frameUI.slice();
+    if(window.GoiVietLabelPerformance){frameUI=GoiVietLabelPerformance.ui(7,true).concat(window.GoiVietHeritageFrame?.obstacles()||[]);return frameUI.slice();}
     frameUI=[...scene.querySelectorAll('.top-header,.left-helper,#stationPanel,.bottom-dock,.mobile-view-switcher,.journey-route-bar')].filter(el=>{
       const style=getComputedStyle(el);return !el.inert&&el.getAttribute('aria-hidden')!=='true'&&style.display!=='none'&&style.visibility!=='hidden'&&Number(style.opacity)>.1;
     }).map(el=>{const r=el.getBoundingClientRect();return {left:r.left-7,right:r.right+7,top:r.top-7,bottom:r.bottom+7};}).concat(window.GoiVietHeritageFrame?.obstacles()||[]);
@@ -218,7 +198,7 @@
       const anchor=country.label||country.anchor,p=project3D(...anchor,0,camera,width,height),size=clamp(14*Math.sqrt(p[3]/.828),12,20);
       const name=country.name.toLocaleUpperCase('vi-VN');
       context.font=canvasFont(size,600,'ui');
-      const labelWidth=context.measureText(name).width+16,box=rect(p[0],p[1],labelWidth,size+14);
+      const labelWidth=measureText(context,name)+16,box=rect(p[0],p[1],labelWidth,size+14);
       if(!insideScreen(box,width,height)||blocked.some(b=>overlaps(box,b))||countryLabels.some(b=>overlaps(box,b.box)))continue;
       context.textAlign='center';context.textBaseline='middle';context.lineJoin='round';
       context.strokeStyle=dark?'rgba(62,79,57,.5)':'rgba(249,236,202,.65)';context.lineWidth=3;context.strokeText(name,p[0],p[1]);
@@ -227,17 +207,18 @@
     }
     const p=project3D(700,635,0,camera,width,height),size=clamp(17*Math.sqrt(p[3]/.828),13,23);
     context.font=canvasFont(size,500,'ui');
-    const name='BIỂN ĐÔNG',box=rect(p[0],p[1],context.measureText(name).width+16,size+16);
+    const name='BIỂN ĐÔNG',box=rect(p[0],p[1],measureText(context,name)+16,size+16);
     if(insideScreen(box,width,height)&&!blocked.some(b=>overlaps(box,b))) {
       context.textAlign='center';context.textBaseline='middle';context.fillStyle=dark?'#B9D1C5':'#E6E9CA';context.fillText(name,p[0],p[1]);
       countryLabels.push({id:'bien-dong',text:name,point:[p[0],p[1]],world:[700,635],box,size});
     }
   }
-  function drawWaves(camera,width,height,dark,now) {
+  function drawWaves(camera,width,height,dark,now,pad=rasterGuard) {
     const moving=isAnimating(),phase=moving?Math.floor(now/50):0;
     const key=lastKey+':'+phase+':'+moving;if(key===lastWaveKey)return;lastWaveKey=key;
-    waves.clearRect(-rasterGuard,-rasterGuard,width+2*rasterGuard,height+2*rasterGuard);if(!lastWater)return;
-    const extent=viewportWorld(camera,width,height,rasterGuard);if(!extent)return;
+    waves.clearRect(-pad,-pad,width+2*pad,height+2*pad);if(!lastWater)return;
+    const extent=window.GoiVietPixelBudget&&cachedViewport?cachedViewport.extent:viewportWorld(camera,width,height,pad);if(!extent)return;
+    const wavePoint=(x,y)=>window.GoiVietPixelBudget?matrixPoint(cachedHomography,x,y):project3D(x,y,0,camera,width,height);
     waves.save();waves.clip(lastWater,'evenodd');
     const spacing=camera.zoom<.4?240:camera.zoom<.8?165:130,span=spacing*2.5;
     const path=new Path2D();waveCount=0;
@@ -248,61 +229,144 @@
         const x=gx*span+shift+span*.18*n,y=gy*spacing+(n-.5)*spacing*.38;
         const drift=moving?Math.sin(now*.00035+n*8)*2.3:0,length=span*(.30+.46*hash(gx+3,gy-1));
         const points=[[x,y+drift],[x+length*.22,y-spacing*.30+drift],[x+length*.46,y+spacing*.29+drift],[x+length*.74,y+drift],[x+length*.91,y-spacing*.08+drift],[x+length,y-spacing*.18+drift]];
-        const p=points.map(([wx,wy])=>project3D(wx,wy,0,camera,width,height));
-        if(p.every(q=>q[0]<-rasterGuard-20)||p.every(q=>q[0]>width+rasterGuard+20)||p.every(q=>q[1]<-rasterGuard-20)||p.every(q=>q[1]>height+rasterGuard+20))continue;
+        const p=points.map(([wx,wy])=>wavePoint(wx,wy));
+        if(p.every(q=>q[0]<-pad-20)||p.every(q=>q[0]>width+pad+20)||p.every(q=>q[1]<-pad-20)||p.every(q=>q[1]>height+pad+20))continue;
         path.moveTo(p[0][0],p[0][1]);path.bezierCurveTo(p[1][0],p[1][1],p[2][0],p[2][1],p[3][0],p[3][1]);path.quadraticCurveTo(p[4][0],p[4][1],p[5][0],p[5][1]);
-        if(n>.84){const a=project3D(x+length*.35,y+spacing*.34+drift,0,camera,width,height),b=project3D(x+length*.49,y+spacing*.10+drift,0,camera,width,height),c=project3D(x+length*.64,y+spacing*.39+drift,0,camera,width,height),d=project3D(x+length*.82,y+spacing*.26+drift,0,camera,width,height);path.moveTo(a[0],a[1]);path.bezierCurveTo(b[0],b[1],c[0],c[1],d[0],d[1]);}
+        if(n>.84){const a=wavePoint(x+length*.35,y+spacing*.34+drift),b=wavePoint(x+length*.49,y+spacing*.10+drift),c=wavePoint(x+length*.64,y+spacing*.39+drift),d=wavePoint(x+length*.82,y+spacing*.26+drift);path.moveTo(a[0],a[1]);path.bezierCurveTo(b[0],b[1],c[0],c[1],d[0],d[1]);}
         waveCount++;
       }
     }
     waves.lineCap='round';waves.lineJoin='round';waves.strokeStyle=dark?'rgba(171,211,191,.12)':'rgba(235,239,209,.17)';waves.lineWidth=clamp(camera.zoom*.65,.45,.95);waves.stroke(path);
     window.GoiVietNaturalLandscape?.coastalWaves(waves,camera,width,height,geometry());waves.restore();waveDraws++;
   }
-  function paintBackdrop(camera,width,height,dark,now=performance.now()) {
-    frameUI=null;
-    if(!active()){host.hidden=true;return;}
-    islandLabels=[];
-    host.hidden=false;rasterGuard=width<=768?120:180;
-    sizeCanvas(background,back,width,height,rasterGuard);sizeCanvas(waveCanvas,waves,width,height,rasterGuard);sizeCanvas(labelCanvas,labels,width,height);
-    const source=geometry();if(!source)return;
-    const ui=visibleUI();
-    const moving=isDraggingMain||isTouchDragging||['zoom','yaw','pitch','panX','panY'].some(k=>Math.abs(camera[k]-camera['target'+k[0].toUpperCase()+k.slice(1)])>.001);
-    if(rasterDirty&&!moving&&performance.now()-lastRasterRefine>450){lastKey='';lastWaveKey='';rasterDirty=false;lastRasterRefine=performance.now();}
-    const key=JSON.stringify([width,height,window.devicePixelRatio||1,dark,Boolean(window.GoiVietNaturalLandscape?.inspect().ready),Boolean(window.GoiVietNaturalRegionalRelief?.inspect().ready),Boolean(window.GoiVietHydrology?.inspect().ready)]);
-    const covered=cachedCamera&&applyRasterTransform(camera,width,height);
-    const ratio=cachedCamera?camera.zoom/cachedCamera.zoom:1;
-    if(key!==lastKey||!covered||ratio<.74||ratio>1.3||Math.abs(camera.pitch-(cachedCamera?.pitch||0))>.12||Math.abs(camera.yaw-(cachedCamera?.yaw||0))>.14) {
-      lastKey=key;lastWaveKey='';cachedCamera={...camera};cachedHomography=homography(camera,width,height);
-      back.clearRect(-rasterGuard,-rasterGuard,width+2*rasterGuard,height+2*rasterGuard);
-      prepareProjection(camera,width,height);
-      visibleWorld=viewportWorld(camera,width,height,rasterGuard);
-      if(visibleWorld){const margin=70/camera.zoom;visibleWorld={left:visibleWorld.left-margin,right:visibleWorld.right+margin,top:visibleWorld.top-margin,bottom:visibleWorld.bottom+margin};}
-      const near=project3D(300,250,0,camera,width,height),far=project3D(1200,800,0,camera,width,height);
-      const sea=back.createLinearGradient(near[0],near[1],far[0],far[1]);
-      sea.addColorStop(0,dark?'#285650':'#74AD9B');sea.addColorStop(.34,dark?'#234E50':'#438F89');sea.addColorStop(1,dark?'#193E46':'#286F7C');
-      back.fillStyle=sea;back.fillRect(-rasterGuard,-rasterGuard,width+2*rasterGuard,height+2*rasterGuard);
-      window.GoiVietNaturalLandscape?.paintSea(back,camera,width,height,dark,visibleWorld);
-      lastLand=polygonsPath(source.land,camera,width,height);
-      lastWater=new Path2D(lastLand);lastWater.rect(-rasterGuard-2,-rasterGuard-2,width+2*rasterGuard+4,height+2*rasterGuard+4);
-      const shore=linesPath(source.coastlines,camera,width,height);
-      back.save();back.clip(lastWater,'evenodd');back.strokeStyle=dark?'rgba(122,179,161,.05)':'rgba(188,220,191,.08)';back.lineWidth=clamp(8*camera.zoom,2,15);back.lineJoin='round';back.stroke(shore);back.restore();
-      const a=project3D(50,0,0,camera,width,height),b=project3D(220,1050,0,camera,width,height),paper=back.createLinearGradient(a[0],a[1],b[0],b[1]);
-      paper.addColorStop(0,dark?'#555A40':'#F0DFB6');paper.addColorStop(.6,dark?'#5E6044':'#E6D3A4');paper.addColorStop(1,dark?'#615E42':'#DCC99A');
-      back.fillStyle=paper;back.fill(lastLand,'evenodd');
-      window.GoiVietNaturalRegionalRelief?.paint(back,{id:'context',polygons:source.land},camera,width,height,visibleWorld,dark,lastLand);
-      for(const country of source.countries)window.GoiVietNaturalRegionalRelief?.paint(back,country,camera,width,height,visibleWorld,dark,polygonsPath(country.polygons,camera,width,height));
-      // Foreground VN rivers use their province surface, so the ground-level
-      // background must not leave a second, displaced copy beside a raised coast.
-      const hydroExclusion=new Path2D();hydroExclusion.rect(-rasterGuard-2,-rasterGuard-2,width+2*rasterGuard+4,height+2*rasterGuard+4);
-      polygonsPath(source.vietnamOuter,camera,width,height,hydroExclusion);
-      window.GoiVietHydrology?.paint(back,camera,width,height,dark,0,lastLand,null,hydroExclusion);
-      back.strokeStyle=dark?'rgba(209,196,135,.20)':'rgba(206,180,123,.45)';back.lineWidth=clamp(camera.zoom*.95,.6,1.2);back.stroke(shore);
-      for(const country of source.countries){back.strokeStyle=dark?'rgba(207,192,143,.52)':'rgba(135,112,66,.66)';back.lineWidth=clamp(camera.zoom*.82,.55,1.1);back.stroke(linesPath(country.borders,camera,width,height));}
-      backdropDraws++;applyRasterTransform(camera,width,height);
+  // A private staging canvas is filled in small tasks. The visible canvas and
+  // its camera/water geometry change together, only after a complete pass.
+  let stagingCanvas=null,backdropJob=null,backdropSerial=0,backdropCancels=0,backdropError=null;
+  let textureRevision=0,lastBackdropAttempt=0,lastCameraChange=0,lastObservedCamera='',cachedDark=null;
+  function backdropRatio(w,h,pad){return window.GoiVietPixelBudget?.ratio('backdrop',w,h,pad) ?? Math.min(window.devicePixelRatio||1,w>1080?1:1.25,Math.sqrt((4*1024*1024-4096)/((w+2*pad)*(h+2*pad))));}
+  const coverageCanvas=document.createElement('canvas');coverageCanvas.id='regionalCoverageCanvas';coverageCanvas.hidden=true;host.prepend(coverageCanvas);
+  function cancelBackdrop(){if(backdropJob){window.GoiVietRasterTasks?.cancel('backdrop');stagingCanvas=backdropJob.canvas;backdropJob=null;backdropCancels++;}}
+  function deferBackdrop(delay){
+    if(rasterRefineTimer)clearTimeout(rasterRefineTimer);
+    rasterRefineTimer=setTimeout(()=>{rasterRefineTimer=0;if(active()&&!document.hidden)requestMapRender();},Math.max(1,delay));
+  }
+  function projectionFor(camera,width,height){
+    const [ox,oy]=getMapScreenOrigin(width,height),co=Math.cos(camera.yaw),si=Math.sin(camera.yaw),cp=Math.cos(camera.pitch),sp=Math.sin(camera.pitch);
+    return(x,y)=>{const dx=x-MAP_CENTER_X+camera.panX,dy=y-MAP_CENTER_Y+camera.panY,rx=dx*co-dy*si,ry=dx*si+dy*co,scale=camera.zoom*2400/Math.max(450,2400-ry*sp*.52);return[ox+rx*scale,oy+ry*cp*scale,scale];};
+  }
+  function* backdropPath(polygons,job,lines=false,path=new Path2D()){
+    for(const polygon of polygons){
+      const rings=lines?[polygon]:(Array.isArray(polygon)?polygon:[polygon.outer,...(polygon.holes||[])]);
+      const outer=rings[0];let bounds=worldBoxes.get(outer);if(!bounds){bounds=window.GoiVietNaturalCore.box(outer);worldBoxes.set(outer,bounds);}
+      if(job.extent&&!overlaps(bounds,job.extent)||window.GoiVietNaturalLandscape?.excludeBackgroundIsland(rings))continue;
+      if(lines&&Math.hypot(bounds.right-bounds.left,bounds.bottom-bounds.top)*job.camera.zoom<2)continue;
+      if(!lines){let area=polygonAreas.get(outer);if(area===undefined){area=Math.abs(outer.reduce((sum,p,i)=>{const q=outer[(i+1)%outer.length];return sum+p[0]*q[1]-q[0]*p[1];},0))/2;polygonAreas.set(outer,area);}if(area*job.camera.zoom*job.camera.zoom<1.8)continue;}
+      for(const ring of rings){const points=displayLine(ring,job.level);for(let i=0;i<points.length;i++){const p=job.project(...points[i]);if(i)path.lineTo(p[0],p[1]);else path.moveTo(p[0],p[1]);}if(!lines)path.closePath();job.points=(job.points||0)+points.length;yield;}
     }
-    const labelKey=JSON.stringify([camera,width,height,dark,ui,document.fonts.status]);
+    return path;
+  }
+  function* buildBackdrop(job){
+    const {context:b,camera:c,width:w,height:h,dark,pad,source}=job;
+    const near=job.project(300,250),far=job.project(1200,800),sea=b.createLinearGradient(near[0],near[1],far[0],far[1]);
+    sea.addColorStop(0,dark?'#285650':'#74AD9B');sea.addColorStop(.34,dark?'#234E50':'#438F89');sea.addColorStop(1,dark?'#193E46':'#286F7C');b.fillStyle=sea;b.fillRect(-pad,-pad,w+2*pad,h+2*pad);yield;
+    if(window.GoiVietNaturalLandscape?.paintSeaSteps)yield* window.GoiVietNaturalLandscape.paintSeaSteps(b,c,w,h,dark,job.extent);
+    job.land=yield* backdropPath(source.land,job);job.water=new Path2D(job.land);job.water.rect(-pad-2,-pad-2,w+2*pad+4,h+2*pad+4);
+    const shore=yield* backdropPath(source.coastlines,job,true);
+    b.save();b.clip(job.water,'evenodd');b.strokeStyle=dark?'rgba(122,179,161,.05)':'rgba(188,220,191,.08)';b.lineWidth=clamp(8*c.zoom,2,15);b.lineJoin='round';b.stroke(shore);b.restore();yield;
+    const a=job.project(50,0),end=job.project(220,1050),paper=b.createLinearGradient(a[0],a[1],end[0],end[1]);paper.addColorStop(0,dark?'#555A40':'#F0DFB6');paper.addColorStop(.6,dark?'#5E6044':'#E6D3A4');paper.addColorStop(1,dark?'#615E42':'#DCC99A');b.fillStyle=paper;b.fill(job.land,'evenodd');yield;
+    const relief=window.GoiVietNaturalRegionalRelief;
+    if(relief?.paintSteps){yield* relief.paintSteps(b,{id:'context',polygons:source.land},c,w,h,job.extent,dark,job.land);for(const country of source.countries){const path=yield* backdropPath(country.polygons,job);yield* relief.paintSteps(b,country,c,w,h,job.extent,dark,path);}}
+    const exclusion=new Path2D();exclusion.rect(-pad-2,-pad-2,w+2*pad+4,h+2*pad+4);yield* backdropPath(source.vietnamOuter,job,false,exclusion);
+    if(window.GoiVietHydrology?.paintSteps)yield* window.GoiVietHydrology.paintSteps(b,c,w,h,dark,0,job.land,null,exclusion);
+    b.strokeStyle=dark?'rgba(209,196,135,.20)':'rgba(206,180,123,.45)';b.lineWidth=clamp(c.zoom*.95,.6,1.2);b.stroke(shore);yield;
+    for(const country of source.countries){b.strokeStyle=dark?'rgba(207,192,143,.52)':'rgba(135,112,66,.66)';b.lineWidth=clamp(c.zoom*.82,.55,1.1);b.stroke(yield* backdropPath(country.borders,job,true));yield;}
+    return job;
+  }
+  function startBackdrop(camera,width,height,dark,key){
+    cancelBackdrop();lastBackdropAttempt=performance.now();backdropError=null;
+    const pad=rasterGuard,ratio=backdropRatio(width,height,pad);
+    const canvas=stagingCanvas||document.createElement('canvas');stagingCanvas=null;
+    canvas.width=Math.round((width+2*pad)*ratio);canvas.height=Math.round((height+2*pad)*ratio);canvas.style.width=width+2*pad+'px';canvas.style.height=height+2*pad+'px';
+    const context=canvas.getContext('2d');context.setTransform(ratio,0,0,ratio,pad*ratio,pad*ratio);
+    const c={...camera},extent=viewportWorld(c,width,height,pad),margin=70/c.zoom;
+    if(extent){extent.left-=margin;extent.right+=margin;extent.top-=margin;extent.bottom+=margin;}
+    const job={id:++backdropSerial,canvas,context,camera:c,width,height,dark,pad,key,source:geometry(),extent,project:projectionFor(c,width,height),origin:mapOrigin(),revision:textureRevision,level:c.zoom>1.7?0:c.zoom>.9?1:c.zoom>.45?2:3};backdropJob=job;
+    window.GoiVietRasterTasks.run('backdrop',buildBackdrop(job),(result,missing)=>{
+      if(backdropJob!==job)return;
+      backdropJob=null;stagingCanvas=canvas;
+      if(!active()||document.hidden||(state.theme==='dark')!==dark||cw!==width||ch!==height||mapOrigin().some((v,i)=>v!==job.origin[i]))return;
+      // Do not replace a complete valid backdrop with a partially loaded one.
+      // On first load/outside coverage the low-detail pass is a valid fallback.
+      const covered=cachedCamera&&applyRasterTransform(state.cam,width,height);
+      if(missing&&covered){rasterDirty=true;deferBackdrop(180);return;}
+      const old=background;canvas.id='regionalLandSeaCanvas';old.replaceWith(canvas);old.removeAttribute('id');background=canvas;back=context;stagingCanvas=old;
+      cachedCamera=c;cachedViewport={width,height,pad,extent};cachedDark=dark;background.hidden=false;cachedHomography=homography(c,width,height);lastLand=job.land;lastWater=job.water;lastKey=key;lastWaveKey='';detailLevel=job.level;projectionPoints=job.points;backdropDraws++;
+      rasterDirty=missing||textureRevision!==job.revision;lastRasterRefine=performance.now();applyRasterTransform(state.cam,width,height);
+      coverageCanvas.hidden=true;requestMapRender();
+      if(rasterDirty)deferBackdrop(180);
+    },error=>{backdropJob=null;backdropError=error.message;stagingCanvas=canvas;});
+  }
+  let coverageMesh=null,coverageSource=null;
+  function prepareCoverage(source){
+    if(coverageSource===source)return;
+    coverageSource=source;coverageMesh=null;
+    function* build(){
+      const candidates=[];
+      for(const polygon of source.land){const rings=Array.isArray(polygon)?polygon:[polygon.outer,...(polygon.holes||[])],bounds=window.GoiVietNaturalCore.box(rings[0]),area=(bounds.right-bounds.left)*(bounds.bottom-bounds.top);if(area>16)candidates.push({rings,bounds,area});yield;}
+      candidates.sort((a,b)=>b.area-a.area);const mesh=[];
+      for(const item of candidates.slice(0,64)){const rings=[];for(const ring of item.rings){const simple=displayLine(ring,3),stride=Math.max(1,Math.ceil(simple.length/1024));rings.push(simple.filter((p,i)=>i%stride===0));yield;}mesh.push({bounds:item.bounds,rings});}
+      return mesh;
+    }
+    window.GoiVietRasterTasks.run('coverage-mesh',build(),mesh=>{if(coverageSource===source){coverageMesh=mesh;if(active())requestMapRender();}});
+  }
+  function drawCoverage(camera,width,height,dark){
+    coverageCanvas.hidden=false;const ratio=window.GoiVietPixelBudget?.ratio('coverage',width,height) ?? Math.min(1,Math.sqrt(2*1024*1024/(width*height)));
+    if(coverageCanvas.width!==Math.round(width*ratio)||coverageCanvas.height!==Math.round(height*ratio)){coverageCanvas.width=Math.round(width*ratio);coverageCanvas.height=Math.round(height*ratio);coverageCanvas.style.width=width+'px';coverageCanvas.style.height=height+'px';}
+    const context=coverageCanvas.getContext('2d');context.setTransform(ratio,0,0,ratio,0,0);context.fillStyle=dark?'#234E50':'#438F89';context.fillRect(0,0,width,height);
+    const project=projectionFor(camera,width,height),extent=viewportWorld(camera,width,height),path=new Path2D();let count=0;
+    // A bounded coarse mesh keeps coverage fast even while the detailed
+    // backdrop is being rebuilt. Its immutable world geometry is prepared once.
+    const mesh=coverageMesh||geometry().land.slice(0,32).map(p=>({rings:[Array.isArray(p)?p[0]:p.outer]}));
+    for(const item of mesh){if(extent&&item.bounds&&!overlaps(extent,item.bounds))continue;for(const ring of item.rings){const stride=coverageMesh?1:Math.max(1,Math.ceil(ring.length/64));let first=true;for(let i=0;i<ring.length&&count<8192;i+=stride){const p=project(...ring[i]);if(first){path.moveTo(p[0],p[1]);first=false;}else path.lineTo(p[0],p[1]);count++;}path.closePath();}if(count>=8192)break;}
+    context.fillStyle=dark?'#5E6044':'#E6D3A4';context.fill(path,'evenodd');
+  }
+  function paintBackdrop(camera,width,height,dark,now=performance.now()){
+    frameUI=null;if(!active()){host.hidden=true;cancelBackdrop();return;}
+    islandLabels=[];host.hidden=false;const ui=visibleUI();
+    // Bound both front and staging surfaces to 32 MiB RGBA combined.
+    rasterGuard=width<=768?160:260;
+    // Keep the displayed front intact; startBackdrop commits its replacement atomically.
+    if(!window.GoiVietPixelBudget)sizeCanvas(background,back,width,height,rasterGuard);
+    const waveView=window.GoiVietPixelBudget&&cachedViewport||{width,height,pad:rasterGuard};
+    sizeCanvas(waveCanvas,waves,waveView.width,waveView.height,waveView.pad);sizeCanvas(labelCanvas,labels,width,height);
+    const source=geometry();if(!source)return;
+    if(!window.GoiVietRasterTasks?.managed){background.hidden=true;drawCoverage(camera,width,height,dark);return;}
+    prepareCoverage(source);
+    const cameraKey=[width,height,...mapOrigin(),camera.zoom,camera.yaw,camera.pitch,camera.panX,camera.panY].join(':');
+    if(cameraKey!==lastObservedCamera){lastObservedCamera=cameraKey;lastCameraChange=now;rasterDirty=true;}
+    const moving=isDraggingMain||isTouchDragging||['zoom','yaw','pitch','panX','panY'].some(k=>Math.abs(camera[k]-camera['target'+k[0].toUpperCase()+k.slice(1)])>.001);
+    window.GoiVietRasterTasks.setView(camera,width,height,dark,viewportWorld(camera,width,height,rasterGuard+100),moving||now-lastCameraChange<180);
+    const key=JSON.stringify([width,height,window.devicePixelRatio||1,dark,...mapOrigin(),Boolean(window.GoiVietNaturalLandscape?.inspect().ready),Boolean(window.GoiVietNaturalRegionalRelief?.inspect().ready),Boolean(window.GoiVietHydrology?.inspect().ready)]);
+    const covered=cachedCamera&&cachedDark===dark&&applyRasterTransform(camera,width,height),zoomRatio=cachedCamera?camera.zoom/cachedCamera.zoom:1;
+    const guardPoints=screenToBuffer&&[[-80,-80],[width+80,-80],[width+80,height+80],[-80,height+80]].map(([x,y])=>matrixPoint(screenToBuffer,x,y));
+    const safe=covered&&guardPoints.every(p=>p[0]>=24&&p[1]>=24&&p[0]<=waveView.width+2*waveView.pad-24&&p[1]<=waveView.height+2*waveView.pad-24);
+    const needsCoverage=!safe||zoomRatio<.74||zoomRatio>1.3||Math.abs(camera.pitch-(cachedCamera?.pitch||0))>.12||Math.abs(camera.yaw-(cachedCamera?.yaw||0))>.14;
+    const quiet=!moving&&now-lastCameraChange>=180;
+    // The displayed ground plane is already reprojected exactly. Do not submit
+    // expensive background raster passes to the GPU while the camera moves;
+    // the bounded coverage mesh fills newly exposed areas until refinement.
+    if(backdropJob&&cachedCamera&&!quiet){cancelBackdrop();rasterDirty=true;deferBackdrop(190);}
+    if(backdropJob&&(backdropJob.key!==key||Math.abs(Math.log(camera.zoom/backdropJob.camera.zoom))>.35))cancelBackdrop();
+    if(!backdropJob&&(key!==lastKey||needsCoverage||rasterDirty&&quiet)){
+      if(cachedCamera&&!quiet)deferBackdrop(190);
+      else if(key!==lastKey||needsCoverage&&now-lastBackdropAttempt>80||quiet&&now-lastRasterRefine>=180)startBackdrop(camera,width,height,dark,key);
+      else deferBackdrop(Math.max(180-(now-lastCameraChange),180-(now-lastRasterRefine)));
+    }else if(rasterDirty&&!quiet)deferBackdrop(180);
+    background.hidden=cachedDark!==dark;
+    if(!covered)drawCoverage(camera,width,height,dark);else coverageCanvas.hidden=true;
+    const labelKey=JSON.stringify([camera,width,height,dark,ui,document.fonts.status,window.GoiVietLabelPerformance?.fontRevision()]);
     if(labelKey!==lastLabelKey){lastLabelKey=labelKey;labels.clearRect(0,0,width,height);labels.save();placeCountryLabels(labels,camera,width,height,dark);labels.restore();}
-    drawWaves(cachedCamera,width,height,dark,now);mountCrane();
+    if(cachedCamera)drawWaves(cachedCamera,waveView.width,waveView.height,dark,now,waveView.pad);mountCrane();
   }
   const landmarkSpecs = [
     {id:'hn',file:'hanoi.svg',width:34,height:46,geo:[105.8523,21.02786]},
@@ -328,8 +392,8 @@
     for(const id of ['hn','hue','hcm']){
       const selected=getMapSelectedPlaceId()===id,province=P34_MAP[id],p=project3D(...province.center,selected?44:34,camera,width,height);
       pinBoxes.push(rect(p[0],p[1],44,44));
-      if(!selected||window.GoiVietJourneyPreview?.active()){context.save();context.font=canvasFont(13,700);const name=getCleanStationName(CULTURAL_PLACE_MAP[id]);pinBoxes.push(rect(p[0],p[1]-21,context.measureText(name).width+14,24));context.restore();}
-      else {const pawn=getPlayerPawn(state.currentPlayerIndex);context.save();context.font=canvasFont(12,700);const name=getCleanStationName(CULTURAL_PLACE_MAP[id])+' • '+pawn.roleLabel;pinBoxes.push(rect(p[0],p[1]-33,context.measureText(name).width+40,27));context.restore();}
+      if(!selected||window.GoiVietJourneyPreview?.active()){context.save();context.font=canvasFont(13,700);const name=getCleanStationName(CULTURAL_PLACE_MAP[id]);pinBoxes.push(rect(p[0],p[1]-21,measureText(context,name)+14,24));context.restore();}
+      else {const pawn=getPlayerPawn(state.currentPlayerIndex);context.save();context.font=canvasFont(12,700);const name=getCleanStationName(CULTURAL_PLACE_MAP[id])+' • '+pawn.roleLabel;pinBoxes.push(rect(p[0],p[1]-33,measureText(context,name)+40,27));context.restore();}
     }
     const hitsTrack=box=>tracks.some(points=>points.some((p,i)=>{if(!i)return false;const a=points[i-1],dx=p[0]-a[0],dy=p[1]-a[1],steps=Math.max(1,Math.ceil(Math.hypot(dx,dy)/4));for(let t=0;t<=steps;t++){const x=a[0]+dx*t/steps,y=a[1]+dy*t/steps;if(x>box.left-6&&x<box.right+6&&y>box.top-6&&y<box.bottom+6)return true;}return false;}));
     for(const spec of landmarkSpecs){
@@ -376,7 +440,7 @@
     const lines=isArchipelago?['QUẦN ĐẢO',island.id==='hoang-sa'?'HOÀNG SA':'TRƯỜNG SA']:[island.short];
     const size=isArchipelago?clamp(13*Math.sqrt(p[3]/.828),11.5,17):12;
     context.save();context.font=canvasFont(size,isArchipelago?600:500,'heading');
-    const textWidth=Math.max(isArchipelago?94:0,Math.max(...lines.map(line=>context.measureText(line).width))+14);
+    const textWidth=Math.max(isArchipelago?94:0,Math.max(...lines.map(line=>measureText(context,line)))+14);
     const lineHeight=size*1.35,labelHeight=lines.length*lineHeight+6,buttonHeight=isArchipelago?(width<=768?44:30):0,boxHeight=labelHeight+(isArchipelago?buttonHeight+5:0);
     // Keep Con Dao's caption beside its real shoreline, in screen pixels.
     // A world-space offset made Con Dao's caption drift far south when zoomed in.
@@ -418,11 +482,11 @@
     document.querySelector('#mapSourcesContent')?.append(note);
   }
   function sync() {
-    host.hidden=!active();lastKey='';lastWaveKey='';
+    host.hidden=!active();lastKey='';lastWaveKey='';cancelBackdrop();if(!active()){if(rasterRefineTimer)clearTimeout(rasterRefineTimer);rasterRefineTimer=0;coverageCanvas.hidden=true;}
     if(active()){ensureGeometry();loadArt();mountOptions();mountCrane();requestMapRender(3);}
   }
   new MutationObserver(sync).observe(intro,{attributes:true,attributeFilter:['class']});
-  window.addEventListener('resize',()=>{minimumKey='';minimumValues.clear();lastKey='';lastWaveKey='';requestMapRender(3);},{passive:true});
+  window.addEventListener('resize',()=>{minimumKey='';minimumValues.clear();lastKey='';lastWaveKey='';cancelBackdrop();requestMapRender(3);},{passive:true});
   mainCanvas.tabIndex=0;
   const help=document.createElement('p');help.id='regionalMapHelp';help.className='regional-map-help';help.textContent='Kéo để khám phá bản đồ. Dùng phím mũi tên để di chuyển, dấu cộng hoặc trừ để thu phóng, R hoặc Home để về giữa. Giữ Shift khi kéo để xoay.';
   scene.append(help);mainCanvas.setAttribute('aria-describedby',help.id);
@@ -441,13 +505,14 @@
   });
   document.fonts.ready.then(()=>{lastKey='';requestMapRender(2);});
   window.GoiVietRegionalPreview=Object.freeze({active,paintBackdrop,paintLandmarks,paintIslandLabel,clampPan,constrainCamera,panBy,zoomAt,beginPinch,pinch,endPinch:()=>{pinchAnchor=null;},minimumZoom,panRanges,inverse,viewportWorld,isAnimating,
-    waterAtScreen:(x,y)=>{if(!lastWater||!screenToBuffer)return false;const p=matrixPoint(screenToBuffer,x,y),ratio=Math.min(window.devicePixelRatio||1,cw>1080?1.35:1.5);return back.isPointInPath(lastWater,p[0]*ratio,p[1]*ratio,'evenodd');},
+    waterAtScreen:(x,y)=>{if(!cachedCamera||!lastWater||!screenToBuffer)return false;const p=matrixPoint(screenToBuffer,x,y),ratio=back.getTransform().a;return back.isPointInPath(lastWater,p[0]*ratio,p[1]*ratio,'evenodd');},
     waterAtBuffer:(x,y)=>Boolean(lastWater&&back.isPointInPath(lastWater,x,y,'evenodd')),
-    backgroundPoint:(x,y)=>{if(!cachedCamera||!bufferToScreen)return null;const p=project3D(x,y,0,cachedCamera,cw,ch);return matrixPoint(bufferToScreen,p[0]+rasterGuard,p[1]+rasterGuard);},
+    backgroundPoint:(x,y)=>{if(!cachedCamera||!bufferToScreen)return null;const v=window.GoiVietPixelBudget&&cachedViewport||{width:cw,height:ch,pad:rasterGuard},p=window.GoiVietPixelBudget?matrixPoint(cachedHomography,x,y):project3D(x,y,0,cachedCamera,v.width,v.height);return matrixPoint(bufferToScreen,p[0]+v.pad,p[1]+v.pad);},
     labelObstacles:()=>active()?[...objectBoxes,...countryLabels.map(l=>l.box),...islandLabels.map(l=>l.box)]:[],
-    inspect:()=>({active:active(),minimumZoom:minimumZoom(),panRanges:panRanges(),geometryLoaded:!!geometry(),geometryError,geometryStats:geometry()?.stats,projectionPoints,detailLevel,countryLabels:countryLabels.map(l=>({...l})),islandLabels:islandLabels.map(l=>({...l})),landmarks:objectBoxes.map(l=>({...l})),waveCount,waveMotion,backdropDraws,waveDraws,cameraConstraints,art:[...images].map(([id,item])=>({id,ready:item.ready,failed:item.failed})),stack:{background:0,mountains:1,mapCanvas:2,decorativeFrame:3},backgroundSize:[background.width,background.height]})
+    inspect:()=>({active:active(),minimumZoom:minimumZoom(),panRanges:panRanges(),geometryLoaded:!!geometry(),geometryError,geometryStats:geometry()?.stats,projectionPoints,detailLevel,countryLabels:countryLabels.map(l=>({...l})),islandLabels:islandLabels.map(l=>({...l})),landmarks:objectBoxes.map(l=>({...l})),waveCount,waveMotion,backdropDraws,waveDraws,cameraConstraints,art:[...images].map(([id,item])=>({id,ready:item.ready,failed:item.failed})),stack:{background:0,mountains:1,mapCanvas:2,decorativeFrame:3},backgroundSize:[background.width,background.height],backdropPending:!!backdropJob,backdropCancels,backdropCommits:backdropDraws,backdropError,coverageFallback:!coverageCanvas.hidden,backdropBytes:background.width*background.height*4+((stagingCanvas||backdropJob?.canvas)?.width||0)*((stagingCanvas||backdropJob?.canvas)?.height||0)*4,refinePending:!!rasterRefineTimer})
   });
-  window.GoiVietRasterTasks?.onUpdate(()=>{rasterDirty=true;});
+  window.GoiVietRasterTasks?.onUpdate(()=>{rasterDirty=true;textureRevision++;});
+  document.addEventListener('visibilitychange',()=>{if(document.hidden)cancelBackdrop();});
   sync();
   if(new URL(location.href).searchParams.get('view')==='map'){
     const enter=()=>{closeIntroModal();recenterMapBestView();if(cw<=768&&!document.body.classList.contains('mobile-map-focus'))toggleMobileMapFocus();};

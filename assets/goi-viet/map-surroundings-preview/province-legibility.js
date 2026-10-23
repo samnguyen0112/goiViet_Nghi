@@ -6,7 +6,12 @@
   const active=()=>Boolean(intro?.classList.contains('intro-hidden'));
   const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
   const anchors=new WeakMap();
-  let lastLayout=[],lastKey='';
+  let lastLayout=[],lastKey='',lastObstacles='',layoutCamera=null,visibleLayout=[],lastCamera=null,lastMotion=0,refineTimer=0,settled=false,layouts=0,reuses=0;
+  const measure=(context,text)=>window.GoiVietLabelPerformance?.measure(context,text)??context.measureText(text).width;
+  function refineAfterRest(){
+    clearTimeout(refineTimer);
+    refineTimer=setTimeout(()=>{refineTimer=0;if(active()&&!document.hidden)requestMapRender();},190);
+  }
   const overlaps=(a,b)=>a.left<b.right&&a.right>b.left&&a.top<b.bottom&&a.bottom>b.top;
   const rect=(x,y,w,h)=>({left:x-w/2,right:x+w/2,top:y-h/2,bottom:y+h/2});
   function segmentHitsRect(a,b,box) {
@@ -45,12 +50,12 @@
   function labelVariants(context,text,size,weight) {
     const font=canvasFont(size,weight,'ui'),lineHeight=size*1.32;
     context.font=font;
-    const variant=lines=>{const widths=lines.map(line=>context.measureText(line).width);return {lines,widths,font,lineHeight,width:Math.max(...widths)+8,height:lines.length*lineHeight+4};};
+    const variant=lines=>{const widths=lines.map(line=>measure(context,line));return {lines,widths,font,lineHeight,width:Math.max(...widths)+8,height:lines.length*lineHeight+4};};
     const variants=[variant([text])],words=text.split(/\s+/);
     if(words.length>1){
       let best=null,score=Infinity;
       for(let i=1;i<words.length;i++){
-        const lines=[words.slice(0,i).join(' '),words.slice(i).join(' ')],widths=lines.map(line=>context.measureText(line).width),next=Math.max(...widths)+Math.abs(widths[0]-widths[1])*.2;
+        const lines=[words.slice(0,i).join(' '),words.slice(i).join(' ')],widths=lines.map(line=>measure(context,line)),next=Math.max(...widths)+Math.abs(widths[0]-widths[1])*.2;
         if(next<score){best=lines;score=next;}
       }
       variants.push(variant(best));
@@ -58,26 +63,31 @@
     return variants;
   }
   function paintLabels(context,cam,width,height) {
-    if(!active()){lastLayout=[];lastKey='';return;}
+    if(!active()){lastLayout=[];lastKey='';layoutCamera=null;clearTimeout(refineTimer);refineTimer=0;return;}
     context.save();
-    const blocked=[...document.querySelectorAll('.top-header,.left-helper,#stationPanel,.bottom-dock,.mobile-view-switcher,.journey-route-bar')].filter(el=>!el.inert&&el.getAttribute('aria-hidden')!=='true'&&getComputedStyle(el).visibility!=='hidden').map(el=>el.getBoundingClientRect()).filter(r=>r.width>0&&r.height>0).map(r=>({left:r.left-5,right:r.right+5,top:r.top-5,bottom:r.bottom+5}));
+    const blocked=window.GoiVietLabelPerformance?GoiVietLabelPerformance.ui(5):[...document.querySelectorAll('.top-header,.left-helper,#stationPanel,.bottom-dock,.mobile-view-switcher,.journey-route-bar')].filter(el=>!el.inert&&el.getAttribute('aria-hidden')!=='true'&&getComputedStyle(el).visibility!=='hidden').map(el=>el.getBoundingClientRect()).filter(r=>r.width>0&&r.height>0).map(r=>({left:r.left-5,right:r.right+5,top:r.top-5,bottom:r.bottom+5}));
     blocked.push(...(window.GoiVietRegionalPreview?.labelObstacles() || []));
     blocked.push(...(window.GoiVietHeritageFrame?.obstacles() || []));
     blocked.push(...(window.GoiVietJourneyPreview?.labelObstacles() || []));
     for(const pin of renderedHitDemoPins){
       blocked.push(rect(pin.sx,pin.sy,pin.hitR*2+8,pin.hitR*2+8));
-      if(P34_MAP[pin.place.id]&&(window.GoiVietJourneyPreview?.active()||state.selectedPlaceId!==pin.place.id)){context.font=canvasFont(13,700,'heading');const text=getCleanStationName(pin.place);blocked.push(rect(pin.sx,pin.sy-18,context.measureText(text).width+12,22));}
+      if(P34_MAP[pin.place.id]&&(window.GoiVietJourneyPreview?.active()||state.selectedPlaceId!==pin.place.id)){context.font=canvasFont(13,700,'heading');const text=getCleanStationName(pin.place);blocked.push(rect(pin.sx,pin.sy-18,measure(context,text)+12,22));}
     }
-    for(const mem of state.mentionedPlaces){if(!mem.center)continue;const[x,y]=project3D(...mem.center,36,cam,width,height);context.font=canvasFont(12.5,700,'heading');blocked.push(rect(x,y-10,context.measureText(`✦ ${mem.name} (Ký ức)`).width+14,42));}
+    for(const mem of state.mentionedPlaces){if(!mem.center)continue;const[x,y]=project3D(...mem.center,36,cam,width,height);context.font=canvasFont(12.5,700,'heading');blocked.push(rect(x,y-10,measure(context,`✦ ${mem.name} (Ký ức)`)+14,42));}
     if(!window.GoiVietJourneyPreview?.ownsVehicles&&state.railRun?.curve&&(!window.GoiVietJourneyPreview?.active()||window.GoiVietJourneyPreview.shouldPaintTrain())&&Number.isFinite(state.railRun.curWX)){const run=state.railRun,maxStop=Math.max(0,run.curve.totalLen-6),head=run.progress*maxStop;
       const positions=[head,...getTrainCarDistances(run.curve,head,cam,width,height)].map(d=>{const p=sampleCurveAtDist(run.curve,d);return project3D(p.wx,p.wy,38,cam,width,height);});
       positions.forEach(([x,y])=>blocked.push(rect(x,y-7,40,42)));
     }
     if(state.railRun?.curve&&!window.GoiVietJourneyPreview?.active()){const destination=P34_MAP[normalizePlaceId(state.selectedPlaceId)]?.center||ISLAND_MAP[state.selectedPlaceId]?.pt;
-      if(destination){const[x,y]=project3D(...destination,44,cam,width,height),place=CULTURAL_PLACE_MAP[normalizePlaceId(state.selectedPlaceId)]||CULTURAL_PLACES[0],pawn=getPlayerPawn(state.currentPlayerIndex);context.font=canvasFont(12,700);blocked.push(rect(x,y-32,context.measureText(`${getCleanStationName(place)} • ${pawn.roleLabel}`).width+38,34));blocked.push(rect(x,y,36,36));}
+      if(destination){const[x,y]=project3D(...destination,44,cam,width,height),place=CULTURAL_PLACE_MAP[normalizePlaceId(state.selectedPlaceId)]||CULTURAL_PLACES[0],pawn=getPlayerPawn(state.currentPlayerIndex);context.font=canvasFont(12,700);blocked.push(rect(x,y-32,measure(context,`${getCleanStationName(place)} • ${pawn.roleLabel}`)+38,34));blocked.push(rect(x,y,36,36));}
     }
-    const key=JSON.stringify([width,height,cam.zoom,cam.yaw,cam.pitch,cam.panX,cam.panY,getMapSelectedPlaceId(),window.GoiVietJourneyPreview?.revision(),state.hoveredItem?.id,state.theme,state.exploredPlaceIds,state.mentionedPlaces.map(m=>[m.name,m.center]),state.railRun?.progress,state.railRun?.curWX,state.railRun?.curWY,state.currentPlayerIndex,Boolean(window.GoiVietDEM || window.GoiVietNaturalTerrainRenderer?.inspect().ready),[600,700].map(weight=>document.fonts.check(canvasFont(13,weight))),blocked]);
-    if(key===lastKey){lastLayout.forEach(label=>drawLabel(context,label));context.restore();return;}
+    const now=performance.now(),cameraChanged=!lastCamera||['zoom','yaw','pitch','panX','panY'].some(k=>cam[k]!==lastCamera[k]);
+    if(cameraChanged){lastMotion=now;lastCamera={...cam};settled=false;refineAfterRest();}
+    const quiet=now-lastMotion>=180&&!isDraggingMain&&!isTouchDragging;
+    const key=JSON.stringify([width,height,getMapSelectedPlaceId(),window.GoiVietJourneyPreview?.revision(),state.hoveredItem?.id,state.theme,state.exploredPlaceIds,state.mentionedPlaces.map(m=>[m.name,m.center]),state.currentPlayerIndex,Boolean(window.GoiVietDEM||window.GoiVietNaturalTerrainRenderer?.inspect().ready),window.GoiVietLabelPerformance?.fontRevision(),window.GoiVietLabelPerformance?.revision(),getMapScreenOrigin(width,height)]);
+    const significant=!layoutCamera||cam.zoom/layoutCamera.zoom<.8||cam.zoom/layoutCamera.zoom>1.25||Math.abs(cam.yaw-layoutCamera.yaw)>.16||Math.abs(cam.pitch-layoutCamera.pitch)>.12||Math.abs(cam.panX-layoutCamera.panX)>width*.4||Math.abs(cam.panY-layoutCamera.panY)>height*.4;
+    const obstacles=quiet?JSON.stringify(blocked):'';
+    const reuse=key===lastKey&&!significant&&(!quiet||settled&&obstacles===lastObstacles);
     const selected=getMapSelectedPlaceId(),hovered=state.hoveredItem?.id,candidates=[];
     const corridors=[];
     const visibleTracks=window.GoiVietJourneyPreview?.active()?window.GoiVietJourneyPreview.tracks().map(t=>[t.curve,27]):[[MAIN_RAIL_SPLINE,27],...(state.railRun?.branchCurves||[]).map(curve=>[curve,28])];
@@ -86,6 +96,20 @@
       for(let i=1;i<points.length;i++){const a=points[i-1],b=points[i],radius=window.GoiVietJourneyPreview?.ownsVehicles?Math.max(6,Math.min(13,7+cam.zoom*3)):Math.max(4,Math.max(a[3],b[3])*3.6+1);corridors.push({a,b,radius,bounds:{left:Math.min(a[0],b[0])-radius,right:Math.max(a[0],b[0])+radius,top:Math.min(a[1],b[1])-radius,bottom:Math.max(a[1],b[1])+radius}});}
     }
     const coversTrack=box=>corridors.some(({a,b,radius,bounds})=>overlaps(box,bounds)&&segmentHitsRect(a,b,{left:box.left-radius,right:box.right+radius,top:box.top-radius,bottom:box.bottom+radius}));
+    if(reuse){
+      const placed=[],visible=[];
+      for(const label of lastLayout){
+        const [x,y]=project3D(...label.anchor,label.z+4,cam,width,height),box=rect(x,y,label.rect.right-label.rect.left,label.rect.bottom-label.rect.top),safe={left:box.left-3,right:box.right+3,top:box.top-3,bottom:box.bottom+3};
+        const entry=renderedHitProvinces.find(e=>e.prov.id===label.id),inside=(x,y)=>entry?.topProjectedRings.some(r=>pointInRing2D(x,y,r));
+        if(box.left<8||box.right>width-8||box.top<8||box.bottom>height-8||blocked.some(b=>overlaps(safe,b))||placed.some(b=>overlaps(safe,b))||!inside(x,y)||(!label.priority&&coversTrack(safe)))continue;
+        if(!label.priority&&!label.lines.every((_,i)=>{const cy=y+(i-(label.lines.length-1)/2)*label.lineHeight;return inside(x,cy-label.size*.2)&&inside(x,cy+label.size*.2);}))continue;
+        label.x=x;label.y=y;label.rect=box;label.anchorScreen=[x,y];placed.push(box);visible.push(label);drawLabel(context,label);
+      }
+      // Retain hidden anchors so a temporary occluder does not cause a new
+      // placement or lose the label for the rest of the gesture.
+      visibleLayout=visible;
+      reuses++;context.restore();return;
+    }
     for(const entry of renderedHitProvinces){
       const p=entry.prov;if(['hn','hue','hcm'].includes(p.id)||!p.center)continue;
       const selectedHere=p.id===selected,hoveredHere=p.id===hovered,priority=selectedHere||hoveredHere;
@@ -130,7 +154,7 @@
         placed.push({id:label.id,text:label.text,lines,font,lineHeight,x,y,size:label.size,anchor:[...anchor],anchorScreen:[x,y],offset:[0,0],z:label.z,rect:box,priority:label.priority,selected:label.selected,callout:false,inside:true,fill:'#FFF6DE',halo:'rgba(17,49,40,.94)'});
       }
     }
-    lastLayout=placed;lastKey=key;placed.forEach(label=>drawLabel(context,label));context.restore();
+    lastLayout=placed;visibleLayout=placed;lastKey=key;lastObstacles=obstacles;layoutCamera={...cam};settled=quiet;layouts++;placed.forEach(label=>drawLabel(context,label));context.restore();
   }
-  window.GoiVietMapLegibility=Object.freeze({active,paintBoundary,paintLabels,inspect:()=>active()?lastLayout.map(label=>({...label,lines:[...label.lines],rect:{...label.rect},anchor:[...label.anchor],anchorScreen:[...label.anchorScreen],offset:[...label.offset]})):[]});
+  window.GoiVietMapLegibility=Object.freeze({active,paintBoundary,paintLabels,performance:()=>({layouts,reuses,refinePending:Boolean(refineTimer),settled}),inspect:()=>active()?visibleLayout.map(label=>({...label,lines:[...label.lines],rect:{...label.rect},anchor:[...label.anchor],anchorScreen:[...label.anchorScreen],offset:[...label.offset]})):[]});
 })();

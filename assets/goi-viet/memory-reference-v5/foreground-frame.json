@@ -1,0 +1,24 @@
+{
+  "id": "foreground-frame",
+  "source": "sources/foreground-frame.png",
+  "file": "foreground-frame.webp",
+  "width": 2172,
+  "height": 724,
+  "generatedWidth": 2172,
+  "generatedHeight": 724,
+  "alpha": true,
+  "sha256": "e764df6b443db995d5856d38bf16ff836c34055c5ce9efc01a493976860ee321",
+  "variants": [
+    {
+      "file": "foreground-frame-640.webp",
+      "width": 640
+    },
+    {
+      "file": "foreground-frame-1280.webp",
+      "width": 1280
+    }
+  ],
+  "generator": "built-in image_gen",
+  "prompt": "Generate one separate TRANSPARENT foreground overlay illustration for the very bottom edge of the attached Vietnamese bay scene, about 2400x650 very wide. ONLY a low scalloped line of dark jade/teal small rounded hills with fine gold contours and speckles, tiny green bushes, and two soft ivory gold-outlined ornamental scroll-cloud clusters near bottom-left and bottom-right. All top 55% of canvas fully transparent; the left corner may rise to 30% and right corner to 25%, CENTER stays very low at bottom 80–100%, so the railway arches and station are not covered. This overlay is only framing the lower edge, not a big leafy wall. No train, rails, bridge, water, station, boats, mountains in distance, text or background paper. Match reference's exact Vietnamese richly detailed gouache/watercolor decorative landscape with warm cream scroll clouds and jade/gold scalloped hills; natural irregular alpha silhouette, crisp fine details. The reference bridge must remain visible above this low framing layer.",
+  "sourcePath": "C:\\Users\\Uy\\.codex\\generated_images\\01a15871-114b-7d72-8257-05166a5cb4d4\\exec-78fd16f1-f5a4-44f7-ae72-a24c4754e6fd.png"
+}

@@ -1,0 +1,752 @@
+{
+  "version": 4,
+  "method": "Individually generated detailed native raster assets. Responsive exports downsample only; no upscaling.",
+  "assets": {
+    "bay-background": {
+      "file": "bay-background.webp",
+      "source": "sources/bay-background.png",
+      "width": 1672,
+      "height": 941,
+      "generatedWidth": 1672,
+      "generatedHeight": 941,
+      "alpha": false,
+      "nativeEncoding": "lossless WebP",
+      "responsiveQuality": 96,
+      "bytes": 1978136,
+      "sha256": "faa15cd639fdb5f98241ba9d49e9b2d589da93023e494137e39769155afa27d5",
+      "variants": [
+        {
+          "file": "bay-background-640.webp",
+          "width": 640
+        },
+        {
+          "file": "bay-background-1280.webp",
+          "width": 1280
+        }
+      ]
+    },
+    "station": {
+      "file": "station.webp",
+      "source": "sources/station.png",
+      "width": 1741,
+      "height": 819,
+      "generatedWidth": 1774,
+      "generatedHeight": 887,
+      "alpha": true,
+      "nativeEncoding": "lossless WebP",
+      "responsiveQuality": 96,
+      "bytes": 1943840,
+      "sha256": "2c9e2377a3dad5eb1341ccb6b795925ef634682781376f2d6a44961cd69400b6",
+      "variants": [
+        {
+          "file": "station-640.webp",
+          "width": 640
+        },
+        {
+          "file": "station-1280.webp",
+          "width": 1280
+        }
+      ]
+    },
+    "bridge-track": {
+      "file": "bridge-track.webp",
+      "source": "sources/bridge-track.png",
+      "width": 2153,
+      "height": 357,
+      "generatedWidth": 2159,
+      "generatedHeight": 728,
+      "alpha": true,
+      "nativeEncoding": "lossless WebP",
+      "responsiveQuality": 96,
+      "bytes": 973740,
+      "sha256": "3efef60e9ee0b79e5cd8538f3ab5684b2ebb62197fe5aa1e6d85f5f5fb46b1dc",
+      "variants": [
+        {
+          "file": "bridge-track-640.webp",
+          "width": 640
+        },
+        {
+          "file": "bridge-track-1280.webp",
+          "width": 1280
+        }
+      ]
+    },
+    "locomotive": {
+      "file": "locomotive.webp",
+      "source": "sources/locomotive.png",
+      "width": 1661,
+      "height": 672,
+      "generatedWidth": 1774,
+      "generatedHeight": 887,
+      "alpha": true,
+      "nativeEncoding": "lossless WebP",
+      "responsiveQuality": 96,
+      "bytes": 1309750,
+      "sha256": "7cc750b08abf47cbf902bc0539d8c0a4752047a405c44587d743ce5704cd8e7a",
+      "variants": [
+        {
+          "file": "locomotive-640.webp",
+          "width": 640
+        },
+        {
+          "file": "locomotive-1280.webp",
+          "width": 1280
+        }
+      ]
+    },
+    "coach-red": {
+      "file": "coach-red.webp",
+      "source": "sources/coach-red.png",
+      "width": 2017,
+      "height": 551,
+      "generatedWidth": 2048,
+      "generatedHeight": 768,
+      "alpha": true,
+      "nativeEncoding": "lossless WebP",
+      "responsiveQuality": 96,
+      "bytes": 1424502,
+      "sha256": "4767f222b18ebfc091ef0156979daca8ac7b5925a1ab0bf2f1ad6ed012ccb9f1",
+      "variants": [
+        {
+          "file": "coach-red-640.webp",
+          "width": 640
+        },
+        {
+          "file": "coach-red-1280.webp",
+          "width": 1280
+        }
+      ]
+    },
+    "coach-green": {
+      "file": "coach-green.webp",
+      "source": "sources/coach-green.png",
+      "width": 2154,
+      "height": 577,
+      "generatedWidth": 2172,
+      "generatedHeight": 724,
+      "alpha": true,
+      "nativeEncoding": "lossless WebP",
+      "responsiveQuality": 96,
+      "bytes": 1441166,
+      "sha256": "ed432e880d2a3b8708240ea4c1ebb3119fa607d16ea480bced24a9dd1e25f1a3",
+      "variants": [
+        {
+          "file": "coach-green-640.webp",
+          "width": 640
+        },
+        {
+          "file": "coach-green-1280.webp",
+          "width": 1280
+        }
+      ]
+    },
+    "shore-foliage": {
+      "file": "shore-foliage.webp",
+      "source": "sources/shore-foliage.png",
+      "width": 2172,
+      "height": 635,
+      "generatedWidth": 2172,
+      "generatedHeight": 724,
+      "alpha": true,
+      "nativeEncoding": "lossless WebP",
+      "responsiveQuality": 96,
+      "bytes": 1473650,
+      "sha256": "e508b63190865d3d59e1a833dd366c4c94c4d34e4deca87141f9f1de12257922",
+      "variants": [
+        {
+          "file": "shore-foliage-640.webp",
+          "width": 640
+        },
+        {
+          "file": "shore-foliage-1280.webp",
+          "width": 1280
+        }
+      ]
+    },
+    "red-sailboat": {
+      "file": "red-sailboat.webp",
+      "source": "sources/red-sailboat.png",
+      "width": 1021,
+      "height": 1116,
+      "generatedWidth": 1366,
+      "generatedHeight": 1152,
+      "alpha": true,
+      "nativeEncoding": "lossless WebP",
+      "responsiveQuality": 96,
+      "bytes": 1132588,
+      "sha256": "cfc10a6bdb83fbe433dc58dd5e220a7452444205668b86b39bba7e34896e3cb0",
+      "variants": [
+        {
+          "file": "red-sailboat-640.webp",
+          "width": 640
+        }
+      ]
+    },
+    "chapter-mountains-left": {
+      "file": "chapter-mountains-left.webp",
+      "source": "sources/chapter-mountains-left.png",
+      "width": 1774,
+      "height": 765,
+      "generatedWidth": 1774,
+      "generatedHeight": 887,
+      "alpha": true,
+      "nativeEncoding": "lossless WebP",
+      "responsiveQuality": 96,
+      "bytes": 1586934,
+      "sha256": "f74482145d644be543a613af99ef6354770260a283ca6c17dc4cd20209ce9ad3",
+      "variants": [
+        {
+          "file": "chapter-mountains-left-640.webp",
+          "width": 640
+        },
+        {
+          "file": "chapter-mountains-left-1280.webp",
+          "width": 1280
+        }
+      ]
+    },
+    "chapter-mountains-right": {
+      "file": "chapter-mountains-right.webp",
+      "source": "sources/chapter-mountains-right.png",
+      "width": 1767,
+      "height": 780,
+      "generatedWidth": 1774,
+      "generatedHeight": 887,
+      "alpha": true,
+      "nativeEncoding": "lossless WebP",
+      "responsiveQuality": 96,
+      "bytes": 1568820,
+      "sha256": "e2d20e8fc0dee4af326a1d64345d1a2a699933c0680c0f555def854112bf7adf",
+      "variants": [
+        {
+          "file": "chapter-mountains-right-640.webp",
+          "width": 640
+        },
+        {
+          "file": "chapter-mountains-right-1280.webp",
+          "width": 1280
+        }
+      ]
+    },
+    "cloud-scroll": {
+      "file": "cloud-scroll.webp",
+      "source": "sources/cloud-scroll.png",
+      "width": 2025,
+      "height": 540,
+      "generatedWidth": 2172,
+      "generatedHeight": 724,
+      "alpha": true,
+      "nativeEncoding": "lossless WebP",
+      "responsiveQuality": 96,
+      "bytes": 708910,
+      "sha256": "51c584a901a4ee1a8181d78d06f613d69dda85f2d254d41f31d7dfedd2ecc547",
+      "variants": [
+        {
+          "file": "cloud-scroll-640.webp",
+          "width": 640
+        },
+        {
+          "file": "cloud-scroll-1280.webp",
+          "width": 1280
+        }
+      ]
+    },
+    "river-upper": {
+      "file": "river-upper.webp",
+      "source": "sources/river-upper.png",
+      "width": 960,
+      "height": 1612,
+      "generatedWidth": 972,
+      "generatedHeight": 1619,
+      "alpha": true,
+      "nativeEncoding": "lossless WebP",
+      "responsiveQuality": 96,
+      "bytes": 1094442,
+      "sha256": "6fc52fdc025122e877c5c97c3b1422bbea0d42b11354b6ffaaa9132ae93bf944",
+      "variants": [
+        {
+          "file": "river-upper-640.webp",
+          "width": 640
+        }
+      ]
+    },
+    "river-middle": {
+      "file": "river-middle.webp",
+      "source": "sources/river-middle.png",
+      "width": 1774,
+      "height": 464,
+      "generatedWidth": 1774,
+      "generatedHeight": 887,
+      "alpha": true,
+      "nativeEncoding": "lossless WebP",
+      "responsiveQuality": 96,
+      "bytes": 597664,
+      "sha256": "23dd69a03fe61d5a3f18bb43943a7634e25f59bfcf3366639bc07793e39bcf9e",
+      "variants": [
+        {
+          "file": "river-middle-640.webp",
+          "width": 640
+        },
+        {
+          "file": "river-middle-1280.webp",
+          "width": 1280
+        }
+      ]
+    },
+    "river-lower": {
+      "file": "river-lower.webp",
+      "source": "sources/river-lower.png",
+      "width": 1536,
+      "height": 1024,
+      "generatedWidth": 1536,
+      "generatedHeight": 1024,
+      "alpha": true,
+      "nativeEncoding": "lossless WebP",
+      "responsiveQuality": 96,
+      "bytes": 796482,
+      "sha256": "82cb0f9b3d96d4c66a6d51e8bb352b0c0107b3fde537043776257d1d918dbfef",
+      "variants": [
+        {
+          "file": "river-lower-640.webp",
+          "width": 640
+        },
+        {
+          "file": "river-lower-1280.webp",
+          "width": 1280
+        }
+      ]
+    },
+    "pho-bowl": {
+      "file": "pho-bowl.webp",
+      "source": "sources/pho-bowl.png",
+      "width": 1400,
+      "height": 865,
+      "generatedWidth": 1536,
+      "generatedHeight": 1024,
+      "alpha": true,
+      "nativeEncoding": "lossless WebP",
+      "responsiveQuality": 96,
+      "bytes": 1658332,
+      "sha256": "e44d2b78736da4f1965ed5406f38fe1c09e1e032ef13f05132a93f4b317722f5",
+      "variants": [
+        {
+          "file": "pho-bowl-640.webp",
+          "width": 640
+        },
+        {
+          "file": "pho-bowl-1280.webp",
+          "width": 1280
+        }
+      ]
+    },
+    "taste-tray-foliage": {
+      "file": "taste-tray-foliage.webp",
+      "source": "sources/taste-tray-foliage.png",
+      "width": 1510,
+      "height": 990,
+      "generatedWidth": 1536,
+      "generatedHeight": 1024,
+      "alpha": true,
+      "nativeEncoding": "lossless WebP",
+      "responsiveQuality": 96,
+      "bytes": 1606646,
+      "sha256": "c0f3702666e8f99963db1870534f41af74a58e7cc3f166b6d0e34216af9133e8",
+      "variants": [
+        {
+          "file": "taste-tray-foliage-640.webp",
+          "width": 640
+        },
+        {
+          "file": "taste-tray-foliage-1280.webp",
+          "width": 1280
+        }
+      ]
+    },
+    "sauce-dish": {
+      "file": "sauce-dish.webp",
+      "source": "sources/sauce-dish.png",
+      "width": 1151,
+      "height": 939,
+      "generatedWidth": 1302,
+      "generatedHeight": 1208,
+      "alpha": true,
+      "nativeEncoding": "lossless WebP",
+      "responsiveQuality": 96,
+      "bytes": 1339080,
+      "sha256": "5a5a312ee695176daadab6642b66bce58ab4ab18d78f9041418eedf331ebb396",
+      "variants": [
+        {
+          "file": "sauce-dish-640.webp",
+          "width": 640
+        }
+      ]
+    },
+    "village-gate": {
+      "file": "village-gate.webp",
+      "source": "sources/village-gate.png",
+      "width": 1511,
+      "height": 979,
+      "generatedWidth": 1536,
+      "generatedHeight": 1024,
+      "alpha": true,
+      "nativeEncoding": "lossless WebP",
+      "responsiveQuality": 96,
+      "bytes": 2372556,
+      "sha256": "bd05e9846bbfdb71477ba724519bd220784b1a32bab7a6af0ba0e5a23dae03d0",
+      "variants": [
+        {
+          "file": "village-gate-640.webp",
+          "width": 640
+        },
+        {
+          "file": "village-gate-1280.webp",
+          "width": 1280
+        }
+      ]
+    },
+    "bicycle": {
+      "file": "bicycle.webp",
+      "source": "sources/bicycle.png",
+      "width": 1509,
+      "height": 944,
+      "generatedWidth": 1536,
+      "generatedHeight": 1024,
+      "alpha": true,
+      "nativeEncoding": "lossless WebP",
+      "responsiveQuality": 96,
+      "bytes": 1255336,
+      "sha256": "06fd76a8fdd16f8a0cee32de076a737c5531ec8788489cf6314500d31dc9d3fb",
+      "variants": [
+        {
+          "file": "bicycle-640.webp",
+          "width": 640
+        },
+        {
+          "file": "bicycle-1280.webp",
+          "width": 1280
+        }
+      ]
+    },
+    "family-letter": {
+      "file": "family-letter.webp",
+      "source": "sources/family-letter.png",
+      "width": 1395,
+      "height": 935,
+      "generatedWidth": 1536,
+      "generatedHeight": 1024,
+      "alpha": true,
+      "nativeEncoding": "lossless WebP",
+      "responsiveQuality": 96,
+      "bytes": 1489382,
+      "sha256": "d3419bb14bc490b454b37faa8f2b15dff85b9c833799a0c0b2d91d337afa8ddc",
+      "variants": [
+        {
+          "file": "family-letter-640.webp",
+          "width": 640
+        },
+        {
+          "file": "family-letter-1280.webp",
+          "width": 1280
+        }
+      ]
+    },
+    "weaving-hands-basket": {
+      "file": "weaving-hands-basket.webp",
+      "source": "sources/weaving-hands-basket.png",
+      "width": 1520,
+      "height": 903,
+      "generatedWidth": 1536,
+      "generatedHeight": 1024,
+      "alpha": true,
+      "nativeEncoding": "lossless WebP",
+      "responsiveQuality": 96,
+      "bytes": 1782456,
+      "sha256": "9e6f9483d3f11999963c0e79ba868de161e149eaa61e23167c464dcd4378a91e",
+      "variants": [
+        {
+          "file": "weaving-hands-basket-640.webp",
+          "width": 640
+        },
+        {
+          "file": "weaving-hands-basket-1280.webp",
+          "width": 1280
+        }
+      ]
+    },
+    "tea-window-table": {
+      "file": "tea-window-table.webp",
+      "source": "sources/tea-window-table.png",
+      "width": 1122,
+      "height": 1402,
+      "generatedWidth": 1122,
+      "generatedHeight": 1402,
+      "alpha": true,
+      "nativeEncoding": "lossless WebP",
+      "responsiveQuality": 96,
+      "bytes": 1338068,
+      "sha256": "f13cfbae97f8a487695eabc6539e965b061e71f1224c9bae96e34241ca1ca2c5",
+      "variants": [
+        {
+          "file": "tea-window-table-640.webp",
+          "width": 640
+        }
+      ]
+    },
+    "tea-pot": {
+      "file": "tea-pot.webp",
+      "source": "sources/tea-pot.png",
+      "width": 1473,
+      "height": 961,
+      "generatedWidth": 1536,
+      "generatedHeight": 1024,
+      "alpha": true,
+      "nativeEncoding": "lossless WebP",
+      "responsiveQuality": 96,
+      "bytes": 1400878,
+      "sha256": "1c93fa32cf68652bde58221dc497738e9262ebe3f83295ccc8272e027ecbf570",
+      "variants": [
+        {
+          "file": "tea-pot-640.webp",
+          "width": 640
+        },
+        {
+          "file": "tea-pot-1280.webp",
+          "width": 1280
+        }
+      ]
+    },
+    "tea-cups": {
+      "file": "tea-cups.webp",
+      "source": "sources/tea-cups.png",
+      "width": 1413,
+      "height": 797,
+      "generatedWidth": 1536,
+      "generatedHeight": 1024,
+      "alpha": true,
+      "nativeEncoding": "lossless WebP",
+      "responsiveQuality": 96,
+      "bytes": 905606,
+      "sha256": "5b0cf9338dfab8e247b8ddbaa3134181f27261349a773a628e105cccdd558c90",
+      "variants": [
+        {
+          "file": "tea-cups-640.webp",
+          "width": 640
+        },
+        {
+          "file": "tea-cups-1280.webp",
+          "width": 1280
+        }
+      ]
+    },
+    "card-front": {
+      "file": "card-front.webp",
+      "source": "sources/card-front.png",
+      "width": 991,
+      "height": 1486,
+      "generatedWidth": 1024,
+      "generatedHeight": 1536,
+      "alpha": true,
+      "nativeEncoding": "lossless WebP",
+      "responsiveQuality": 96,
+      "bytes": 1820968,
+      "sha256": "9433ec0ca1a28a1c0431a066267a01922a39db03eb2ceb19c92638d4e839f232",
+      "variants": [
+        {
+          "file": "card-front-640.webp",
+          "width": 640
+        }
+      ]
+    },
+    "card-back": {
+      "file": "card-back.webp",
+      "source": "sources/card-back.png",
+      "width": 988,
+      "height": 1492,
+      "generatedWidth": 1024,
+      "generatedHeight": 1536,
+      "alpha": true,
+      "nativeEncoding": "lossless WebP",
+      "responsiveQuality": 96,
+      "bytes": 2850734,
+      "sha256": "113241e5696704ecc440f604596031493d342c26fd6da30c6878a020e4382dae",
+      "variants": [
+        {
+          "file": "card-back-640.webp",
+          "width": 640
+        }
+      ]
+    },
+    "station-embankment": {
+      "file": "station-embankment.webp",
+      "source": "sources/station-embankment.png",
+      "width": 1536,
+      "height": 607,
+      "generatedWidth": 1536,
+      "generatedHeight": 1024,
+      "alpha": true,
+      "nativeEncoding": "lossless WebP",
+      "responsiveQuality": 96,
+      "bytes": 1359852,
+      "sha256": "5bb940e7e17d241ba1fbeb2dbb0ce9686f6b3b74d70b2c3fdaf2c26ea908e14c",
+      "variants": [
+        {
+          "file": "station-embankment-640.webp",
+          "width": 640
+        },
+        {
+          "file": "station-embankment-1280.webp",
+          "width": 1280
+        }
+      ]
+    },
+    "vietnam-silhouette": {
+      "file": "vietnam-silhouette.webp",
+      "source": "sources/vietnam-silhouette.png",
+      "width": 740,
+      "height": 1480,
+      "generatedWidth": 1024,
+      "generatedHeight": 1536,
+      "alpha": true,
+      "nativeEncoding": "lossless WebP",
+      "responsiveQuality": 96,
+      "bytes": 717176,
+      "sha256": "a5ae32bc2d9eb9e7a1c0c6e78403527098795a0305ced603549d0c82112aef44",
+      "variants": [
+        {
+          "file": "vietnam-silhouette-640.webp",
+          "width": 640
+        }
+      ]
+    },
+    "paper-grain": {
+      "file": "paper-grain.webp",
+      "source": "sources/paper-grain.png",
+      "width": 1254,
+      "height": 1254,
+      "generatedWidth": 1254,
+      "generatedHeight": 1254,
+      "alpha": false,
+      "nativeEncoding": "lossless WebP",
+      "responsiveQuality": 96,
+      "bytes": 1677972,
+      "sha256": "0754f25a90cadbedc51ae60df15ed1e075ce645d19f266267a3464885522de79",
+      "variants": [
+        {
+          "file": "paper-grain-640.webp",
+          "width": 640
+        }
+      ]
+    },
+    "river-continuous": {
+      "file": "river-continuous.webp",
+      "source": "sources/river-continuous.png",
+      "width": 1122,
+      "height": 1402,
+      "generatedWidth": 1122,
+      "generatedHeight": 1402,
+      "alpha": true,
+      "nativeEncoding": "lossless WebP",
+      "responsiveQuality": 96,
+      "bytes": 667908,
+      "sha256": "5955bb25ab9532ce5cd42f40656325ac15ac66169edb1a1d6e738a8917fa5419",
+      "variants": [
+        {
+          "file": "river-continuous-640.webp",
+          "width": 640
+        }
+      ]
+    },
+    "station-perspective-scene": {
+      "file": "station-perspective-scene.webp",
+      "source": "sources/station-perspective-scene.png",
+      "width": 1672,
+      "height": 941,
+      "generatedWidth": 1672,
+      "generatedHeight": 941,
+      "alpha": false,
+      "nativeEncoding": "lossless WebP",
+      "responsiveQuality": 96,
+      "bytes": 2292970,
+      "sha256": "5eecfeccdd8da3992249bb3dc3a85590d8774107f73fe70219ccd96ee3ceb844",
+      "variants": [
+        {
+          "file": "station-perspective-scene-640.webp",
+          "width": 640
+        },
+        {
+          "file": "station-perspective-scene-1280.webp",
+          "width": 1280
+        }
+      ]
+    },
+    "train-perspective": {
+      "file": "train-perspective.webp",
+      "source": "sources/train-perspective.png",
+      "width": 2143,
+      "height": 572,
+      "generatedWidth": 2172,
+      "generatedHeight": 724,
+      "alpha": true,
+      "nativeEncoding": "lossless WebP",
+      "responsiveQuality": 96,
+      "bytes": 835850,
+      "sha256": "1a0902064ec9db5d030d95177b49c6e6c6ca99a13218b193adc97f7a05953453",
+      "variants": [
+        {
+          "file": "train-perspective-640.webp",
+          "width": 640
+        },
+        {
+          "file": "train-perspective-1280.webp",
+          "width": 1280
+        }
+      ]
+    },
+    "train-perspective-v2": {
+      "file": "train-perspective-v2.webp",
+      "source": "sources/train-perspective-v2.png",
+      "width": 2030,
+      "height": 405,
+      "generatedWidth": 2068,
+      "generatedHeight": 760,
+      "alpha": true,
+      "nativeEncoding": "lossless WebP",
+      "responsiveQuality": 96,
+      "bytes": 640114,
+      "sha256": "0f517875a493853d47f8b6943ad1638e47b252cf0b885361599d0f04b70bd6c3",
+      "variants": [
+        {
+          "file": "train-perspective-v2-640.webp",
+          "width": 640
+        },
+        {
+          "file": "train-perspective-v2-1280.webp",
+          "width": 1280
+        }
+      ]
+    },
+    "home-train-perspective": {
+      "file": "home-train-perspective.webp",
+      "source": "sources/home-train-perspective.png",
+      "width": 2118,
+      "height": 289,
+      "generatedWidth": 2170,
+      "generatedHeight": 725,
+      "alpha": true,
+      "nativeEncoding": "lossless WebP",
+      "responsiveQuality": 96,
+      "bytes": 641718,
+      "sha256": "79efc25ff6417f8ded12a92480a9a8a9a3f81def897cf0c347ffc9f79e088a9c",
+      "variants": [
+        {
+          "file": "home-train-perspective-640.webp",
+          "width": 640
+        },
+        {
+          "file": "home-train-perspective-1280.webp",
+          "width": 1280
+        }
+      ]
+    }
+  }
+}

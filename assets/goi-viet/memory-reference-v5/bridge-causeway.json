@@ -1,0 +1,24 @@
+{
+  "id": "bridge-causeway",
+  "source": "sources/bridge-causeway.png",
+  "file": "bridge-causeway.webp",
+  "width": 2086,
+  "height": 595,
+  "generatedWidth": 2112,
+  "generatedHeight": 745,
+  "alpha": true,
+  "sha256": "bd4e4e7402842125f994ceb3c51c89ad259c12e3f3d58da5d99fd0ca18761c56",
+  "variants": [
+    {
+      "file": "bridge-causeway-640.webp",
+      "width": 640
+    },
+    {
+      "file": "bridge-causeway-1280.webp",
+      "width": 1280
+    }
+  ],
+  "generator": "built-in image_gen",
+  "prompt": "Create one independent high native detail TRANSPARENT illustration layer of the exact bridge and railway embankment from attached Vietnamese bay reference. Very wide ~2400x650. Only track, stone viaduct and its connected vegetated causeway. NO train, no station building, no sky, no mountains, no boats, no text, no background water. Critical composition: LEFT 60% is stone arch viaduct with SIX SMALL semicircular arch openings, spaced closely and evenly, warm gray sandstone blocks with fine ochre shadows. RIGHT 40% transitions to a low planted stone embankment/causeway supporting the track, with small jade bushes and flowering shrubs below, NOT more large arch openings. A narrow station platform is BEHIND the rail on right side, but no building. Track runs through entire width on a straight gentle downward line from left to right, slope 0.15 units vertical per horizontal unit (8.5 degrees); piers vertical and not simply rotated. Bridge is delicate, piers and arches relatively small as in reference, no huge monumental arches. Background through all arch openings and above irregular vegetation fully transparent. Entire narrow railway top must remain clean and consistent so a separate small right-facing train can sit on it and a separate station can sit behind the right causeway. Exact Vietnamese watercolor/gouache illustration reference palette and viewpoint, warm ivory gray stone, fine textured masonry, jade vegetation and muted gold details. The reference controls arch count, left-right distribution and thin structure.",
+  "sourcePath": "C:\\Users\\Uy\\.codex\\generated_images\\01a15871-114b-7d72-8257-05166a5cb4d4\\exec-6334ff4a-6f94-4e6f-b21d-b1206e12072d.png"
+}

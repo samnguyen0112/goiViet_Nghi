@@ -1,0 +1,21 @@
+{
+  "id": "hanoi",
+  "file": "hanoi.webp",
+  "source": "sources/hanoi.png",
+  "generatedFrom": "C:/Users/Uy/.codex/generated_images/01a15871-114b-7d72-8257-05166a5cb4d4/exec-bd90c111-9f3b-4cd4-849c-5601d937f048.png",
+  "nativeWidth": 1053,
+  "nativeHeight": 1494,
+  "width": 217,
+  "height": 308,
+  "originalRect": [
+    1025,
+    939,
+    217,
+    308
+  ],
+  "alphaSHA256": "4a69adc081c64f4155ecf0487138c55e3b7ce7cc32f666b28e5415f81973dc13",
+  "sourceSHA256": "d2408f588f3be517f31b18145a068eb4d5f98ba8a2f6775ab8644f6027f29aa9",
+  "prompt": "Production isolated architecture sprite for the layered Gói Việt homepage. Image 1 is the exact original extracted sprite; Image 2 is the user's approved homepage, the main guide to final color, geometry and restrained illustration style. Repaint THIS SINGLE OBJECT from Image 1 with sharply resolved existing painted detail and the color in Image 2. The LEFT Hanoi red-roof pavilion (Khuê Văn Các style): same frontal camera, roof silhouette, red upper storey, circular pale opening, stone lower storey, arched wooden door and existing steps/ramp. Keep identical positions and framing on the original 217:308 canvas.\nCRITICAL: Keep the identical canvas aspect, framing, camera angle, scale, proportions and feature locations. No margins, recentering, tightened crop or alternative view. It will be registered back onto the same original scene coordinates and alpha mask. Retain simple hand-painted Vietnamese storybook/gouache style, not a photo or 3D render, and do not increase decorative complexity. Resolve roof tile strokes, existing stone/mortar edges, doors and trim cleanly rather than blurring them. Deep controlled teal shadows, warm sandstone/ivory, soft gold, clean warm vermilion, matched to Image 2.\nClean away any rectangular source-fill streaks, pasted fragments, horizontal edge extrusion or neon placeholders visible in Image 1: these are defects, not intended architectural elements. Restore natural painted object texture behind occluding layers.\nOnly the single specified object, with truly transparent surrounding air (and transparent arch openings for the bridge). Do not copy other elements from Image 2, no scenery, extra buildings, vegetation beyond the source footprint, train, logo, station pins, labels, text, watermark, frames or backdrop. Highest practical native resolution with fine clear edges, ideally at least 2048 pixels on the long edge. Preserve the original complete canvas registration and all correct geometry.",
+  "tool": "built-in image_gen",
+  "registration": "Generated colors registered to original canvas; original alpha retained byte-for-byte. Opaque paper around terrain mist is aligned to the generated sky to avoid seams."
+}

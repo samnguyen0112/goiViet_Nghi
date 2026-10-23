@@ -1,0 +1,58 @@
+/* Preview 3: quiet, unframed controls matching the homepage reference. */
+body[data-preview-version="3"] .gv-home-opening-tools {
+  gap: 16px;
+  color: #a4553d;
+}
+
+body[data-preview-version="3"] .gv-home-opening-tools > button,
+body[data-preview-version="3"] .gv-home-opening-tools summary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 8px 6px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  box-shadow: none;
+  color: #a4553d;
+  font: 700 16px/1.5 var(--font-display, Georgia, serif);
+  white-space: nowrap;
+  transition: color .15s ease;
+}
+
+body[data-preview-version="3"] .gv-home-opening-tools > button[hidden] {
+  display: none;
+}
+
+body[data-preview-version="3"] .gv-home-opening-tools summary::after {
+  content: none;
+}
+
+body[data-preview-version="3"] .gv-home-tool-icon {
+  width: 24px;
+  height: 24px;
+  flex: 0 0 24px;
+}
+
+body[data-preview-version="3"] .gv-home-opening-tools > button:hover,
+body[data-preview-version="3"] .gv-home-opening-tools summary:hover,
+body[data-preview-version="3"] .gv-home-opening-tools details[open] > summary {
+  color: #803a29;
+}
+
+@media (max-width: 480px) {
+  body[data-preview-version="3"] .gv-home-opening-tools { gap: 10px; }
+  body[data-preview-version="3"] .gv-home-opening-tools > button,
+  body[data-preview-version="3"] .gv-home-opening-tools summary {
+    gap: 7px;
+    padding-inline: 4px;
+    font-size: 14px;
+  }
+  body[data-preview-version="3"] .gv-home-tool-icon {
+    width: 22px;
+    height: 22px;
+    flex-basis: 22px;
+  }
+}

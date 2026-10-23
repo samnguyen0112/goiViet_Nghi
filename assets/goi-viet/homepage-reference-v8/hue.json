@@ -1,0 +1,21 @@
+{
+  "id": "hue",
+  "file": "hue.webp",
+  "source": "sources/hue.png",
+  "generatedFrom": "C:/Users/Uy/.codex/generated_images/01a15871-114b-7d72-8257-05166a5cb4d4/exec-d602444c-e527-497a-8eb6-8367b5579b4e.png",
+  "nativeWidth": 1479,
+  "nativeHeight": 1064,
+  "width": 413,
+  "height": 297,
+  "originalRect": [
+    1722,
+    959,
+    413,
+    297
+  ],
+  "alphaSHA256": "b9eb4e16a493685b431c3b8334acb1a53c6394c8705170659a660385b5c746ee",
+  "sourceSHA256": "377fcbe04a205897043265bb5474d4bed9b91418276510468be5faada940ae7a",
+  "prompt": "Production isolated architecture sprite for the layered Gói Việt homepage. Image 1 is the exact original extracted sprite; Image 2 is the user's approved homepage, the main guide to final color, geometry and restrained illustration style. Repaint THIS SINGLE OBJECT from Image 1 with sharply resolved existing painted detail and the color in Image 2. The CENTER Hue imperial gate: same frontal camera, two gold-tiled roof levels, cream/dark red facade, five front bays and existing lower archways/foundation, same footprint on the original 413:297 canvas. Do not add a train. The red/yellow fragments at the lower right of Image 1 are OLD extraction artifacts from the train, not architecture; replace them with clean architectural underpainting or transparent air as appropriate.\nCRITICAL: Keep the identical canvas aspect, framing, camera angle, scale, proportions and feature locations. No margins, recentering, tightened crop or alternative view. It will be registered back onto the same original scene coordinates and alpha mask. Retain simple hand-painted Vietnamese storybook/gouache style, not a photo or 3D render, and do not increase decorative complexity. Resolve roof tile strokes, existing stone/mortar edges, doors and trim cleanly rather than blurring them. Deep controlled teal shadows, warm sandstone/ivory, soft gold, clean warm vermilion, matched to Image 2.\nClean away any rectangular source-fill streaks, pasted fragments, horizontal edge extrusion or neon placeholders visible in Image 1: these are defects, not intended architectural elements. Restore natural painted object texture behind occluding layers.\nOnly the single specified object, with truly transparent surrounding air (and transparent arch openings for the bridge). Do not copy other elements from Image 2, no scenery, extra buildings, vegetation beyond the source footprint, train, logo, station pins, labels, text, watermark, frames or backdrop. Highest practical native resolution with fine clear edges, ideally at least 2048 pixels on the long edge. Preserve the original complete canvas registration and all correct geometry.",
+  "tool": "built-in image_gen",
+  "registration": "Generated colors registered to original canvas; original alpha retained byte-for-byte. Opaque paper around terrain mist is aligned to the generated sky to avoid seams."
+}

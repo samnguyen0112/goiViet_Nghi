@@ -1,0 +1,27 @@
+{
+  "id": "viaduct-station",
+  "file": "viaduct-station.webp",
+  "source": "sources/viaduct-station.png",
+  "width": 2048,
+  "height": 706,
+  "generatedWidth": 2048,
+  "generatedHeight": 768,
+  "trimOffset": [
+    0,
+    -55
+  ],
+  "variants": [
+    {
+      "file": "viaduct-station-640.webp",
+      "width": 640
+    },
+    {
+      "file": "viaduct-station-1280.webp",
+      "width": 1280
+    }
+  ],
+  "sha256": "7a0802e97d1d2fe5bff6c85d17d4ddc1e65193d9ef191833065b62c19c4da664",
+  "generator": "built-in image_gen",
+  "prompt": "Use case: compositing. Edit target is the stone bridge source, supporting reference is station-palms, final scene is composition reference only. Create one coherent exceptionally detailed hand-painted Vietnamese heritage illustration cutout of the EMPTY stone railway viaduct connecting to the village station and its solid landscaped platform on the right. Genuine transparent background, no lake, sky or distant landscape, NO TRAIN, NO SMOKE, NO TEXT.\nCanvas very wide landscape approximately 2400 by 900. Railway runs straight diagonally down to the right in projection, NOT a physically steep hill: common projected near rail approximately from (0,220) to (2400,580), slope 0.15, smooth absolutely straight uninterrupted continuous two steel rails, correctly spaced brown wooden sleepers and gravel bed. Railway must run cleanly OFF BOTH left and right canvas edges, no isolated floating cut-off entry on left. On left 62% seven or eight modest rounded sandstone arches with structurally thick piers and dark soffits, transition on right into solid stone retaining embankment and station platform, with shrubs supporting the base. No fence across train track.\nStation on right roughly x1450 to2090, behind railway at correct scale. One small Vietnamese heritage station: warm plaster walls, terracotta tiled roof, right gable visible, veranda faces the railway toward viewer. Strong coherent architectural perspective: front facade, ridge, eaves, veranda floor and platform length all parallel the same rail direction (down right); upright columns; right-gable depth edges recede away/up-right consistently. Veranda roof and pitched main roof have physically sensible distinct planes. House has clear grounded foundation on a level platform behind and alongside the rails, solid stone platform face and shaded veranda feet, no building hovering over arches. Palm trees behind and right; subtle red flowering shrubs. Foreground of viaduct must not become excessively bushy and obscure arches. Match the source illustration's sophisticated jade/gold/cream/red painted detail. Orthographic-like distant slightly elevated three-quarter camera, consistent for bridge AND station. Keep bridge rail and house in ONE shared viewpoint. Soft warm daylight from upper left. All desired art fits vertically with transparent surrounding space. Rails extend to both horizontal edges, no white rectangle or paper plate. Preserve original visual character and main proportions of the scene reference.",
+  "active": false
+}

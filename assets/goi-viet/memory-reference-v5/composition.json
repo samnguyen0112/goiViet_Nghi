@@ -1,0 +1,114 @@
+{
+  "frame": [
+    795,
+    1458
+  ],
+  "reference": "references/chapter.png",
+  "groups": {
+    "taste": [
+      0,
+      322,
+      450,
+      270
+    ],
+    "story": [
+      447,
+      84,
+      348,
+      360
+    ],
+    "tradition": [
+      365,
+      460,
+      430,
+      180
+    ],
+    "conversation": [
+      0,
+      680,
+      795,
+      380
+    ],
+    "tea": [
+      0,
+      620,
+      315,
+      394
+    ],
+    "exit": [
+      0,
+      1064,
+      795,
+      394
+    ]
+  },
+  "river": {
+    "id": "river-registered",
+    "rect": [
+      0,
+      0,
+      795,
+      1458.64471
+    ]
+  },
+  "boats": [
+    [
+      421,
+      210,
+      26
+    ],
+    [
+      469,
+      195,
+      14
+    ],
+    [
+      571,
+      210,
+      25
+    ],
+    [
+      609,
+      203,
+      20
+    ],
+    [
+      650,
+      198,
+      10
+    ],
+    [
+      704,
+      185,
+      15
+    ]
+  ],
+  "station": [
+    448,
+    219,
+    245
+  ],
+  "bridge": {
+    "id": "bridge-causeway",
+    "rect": [
+      0,
+      229,
+      795
+    ],
+    "rotation": -2.7
+  },
+  "railSlope": 0.15,
+  "train": {
+    "id": "train-right-refined",
+    "rect": [
+      30,
+      222,
+      350,
+      61.68582375478927
+    ],
+    "direction": "right",
+    "coaches": "rear red, blue, green, front red",
+    "rotation": 3.8
+  },
+  "nativeGeometry": true
+}

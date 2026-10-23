@@ -4442,23 +4442,27 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 <link rel="stylesheet" href="assets/goi-viet/map-reference-ui.css?v=20261013-1">
 <script src="assets/goi-viet/map-reference-ui.js?v=20261015-scope-summary" defer></script>
 <script src="assets/goi-viet/map-warm-terrain-palette.js?v=20261014-3" defer></script>
-<script src="assets/goi-viet/map-surroundings-preview/natural/core.js?v=6" defer></script>
-<script src="assets/goi-viet/map-surroundings-preview/natural/hydrology.js?v=smooth-labels-20261015-1" defer></script>
-<script src="assets/goi-viet/map-surroundings-preview/render-performance.js?v=smooth-labels-20261015-1" defer></script>
+<script src="assets/goi-viet/map-surroundings-preview/natural/core.js?v=60fps-20261018" defer></script>
+<script src="assets/goi-viet/map-surroundings-preview/natural/hydrology.js?v=phase3-20261017" defer></script>
+<script src="assets/goi-viet/map-surroundings-preview/pixel-budget.js?v=60fps-20261018"></script>
+<script src="assets/goi-viet/map-surroundings-preview/render-performance.js?v=60fps-20261018" defer></script>
 <script src="assets/goi-viet/map-surroundings-preview/natural/raster-tasks.js?v=1" defer></script>
-<script src="assets/goi-viet/map-surroundings-preview/natural/terrain-renderer.js?v=5" defer></script>
-<script src="assets/goi-viet/map-surroundings-preview/natural/regional-renderer.js?v=6" defer></script>
+<script src="assets/goi-viet/map-surroundings-preview/natural/raster-scheduler.js?v=60fps-20261018" defer></script>
+<script src="assets/goi-viet/map-surroundings-preview/natural/terrain-renderer.js?v=60fps-20261018" defer></script>
+<script src="assets/goi-viet/map-surroundings-preview/natural/regional-renderer.js?v=phase3-20261017" defer></script>
 <script src="assets/goi-viet/map-surroundings-preview/natural/archipelago-renderer.js?v=3" defer></script>
 <script src="assets/goi-viet/map-surroundings-preview/natural/island-chart.js?v=2" defer></script>
-<script src="assets/goi-viet/map-surroundings-preview/natural/landscape.js?v=14" defer></script>
+<script src="assets/goi-viet/map-surroundings-preview/natural/landscape.js?v=phase4-20261017" defer></script>
 <link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/natural/natural.css?v=3">
 <link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/natural/island-chart.css?v=2">
 <link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/journey-preview.css?v=heritage-network-2">
 <script src="assets/goi-viet/map-surroundings-preview/journey-network-data.js?v=2" defer></script>
 <script src="assets/goi-viet/map-surroundings-preview/journey-network.js?v=2" defer></script>
-<script src="assets/goi-viet/map-surroundings-preview/journey-system.js?v=arrival-journal-3" defer></script>
-<script src="assets/goi-viet/map-surroundings-preview/journey-vehicles.js?v=2" defer></script>
-<script src="assets/goi-viet/map-surroundings-preview/province-legibility.js?v=heritage-journeys-5-frame-1" defer></script>
+<script src="assets/goi-viet/map-surroundings-preview/journey-system.js?v=phase4-20261017" defer></script>
+<script src="assets/goi-viet/map-surroundings-preview/journey-vehicles.js?v=phase5-20261018" defer></script>
+<script src="assets/goi-viet/map-surroundings-preview/surface-cache.js?v=60fps-20261018" defer></script>
+<script src="assets/goi-viet/map-surroundings-preview/label-performance.js?v=phase4-20261017" defer></script>
+<script src="assets/goi-viet/map-surroundings-preview/province-legibility.js?v=phase4-20261017" defer></script>
 <link rel="stylesheet" href="assets/goi-viet/map-decorative-frame-phase5.css?v=20261014-4">
 <script src="assets/goi-viet/map-surroundings-preview/heritage-frame.js?v=20261015-3" defer></script>
 <link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/island-controls.css?v=2">
@@ -4471,7 +4475,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 <link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/preview.css?v=2">
 <script src="assets/goi-viet/map-surroundings-preview/landmark-assets.js?v=red-sails-20261015" defer></script>
 <link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/polish.css?v=2">
-<script src="assets/goi-viet/map-surroundings-preview/preview.js?v=smooth-labels-20261015-1" defer></script>
+<script src="assets/goi-viet/map-surroundings-preview/preview.js?v=60fps-20261018" defer></script>
 <script src="assets/goi-viet/map-surroundings-preview/polish.js?v=stable-drawer-20261015" defer></script>
 <link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/heritage-tickets.css?v=20261015-3">
 <link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/heritage-command-bar.css?v=20261015-3">
@@ -8925,7 +8929,7 @@ function toggleMaterialTheme() {
 const mainCanvas = document.getElementById('mainCanvas');
 const ctx = mainCanvas.getContext('2d');
 let cw = window.innerWidth, ch = window.innerHeight;
-const dpr = Math.min(window.devicePixelRatio || 1, 2);
+let dpr = Math.min(window.devicePixelRatio || 1, 2);
 
 let mapCompass = null;
 let mapScreenArea = null;
@@ -9009,14 +9013,13 @@ function resizeCanvases() {
   const wasOverview = Math.abs(state.cam.targetZoom - getBestOverviewZoom(cw, ch)) < 0.02 && Math.abs(state.cam.targetPanX) < 1 && Math.abs(state.cam.targetPanY) < 1;
   cw = window.innerWidth;
   ch = window.innerHeight;
-  mainCanvas.width = cw * dpr;
-  mainCanvas.height = ch * dpr;
-  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  // Backing size is committed by renderMainScene in the same frame as paint.
 
   syncHeaderOffset();
   syncMobilePanelVisibility();
   if (wasOverview) state.cam.targetZoom = getBestOverviewZoom(cw, ch);
   updateTrainSmokePosition();
+  requestMapRender();
 }
 window.addEventListener('resize', resizeCanvases);
 window.addEventListener('DOMContentLoaded', updateTrainSmokePosition);
@@ -9158,19 +9161,28 @@ function getMapSelectedPlaceId() {
   return window.GoiVietJourneyPreview?.active() ? window.GoiVietJourneyPreview.selectedId() : normalizePlaceId(state.selectedPlaceId);
 }
 
+function projectMapRing(ring, z, camera, width, height) {
+  // The first inline paint runs before deferred preview modules are loaded.
+  return window.GoiVietRenderPerformance?.projectRing(ring,z,camera,width,height)
+    || ring.map(p=>project3D(p[0],p[1],z,camera,width,height));
+}
+
 function renderMainScene(now) {
-  if (window.GoiVietJourneyPreview?.renderFrame?.(now || performance.now())) return;
+  now = now ?? performance.now();
+  const direct = flushMapInput();
   if (!document.getElementById('introScreen').classList.contains('intro-hidden')) {
     state.cam.pitch = state.cam.targetPitch = 0.24;
   }
-  const lerpFactor = state.reducedMotion ? 1.0 : 0.14;
+  advanceMapCamera(now, direct);
+  dpr = window.GoiVietPixelBudget?.ratio('main', cw, ch) ?? Math.min(devicePixelRatio || 1, 2);
+  const backingWidth = Math.round(cw * dpr), backingHeight = Math.round(ch * dpr);
+  if (mainCanvas.width !== backingWidth || mainCanvas.height !== backingHeight) {
+    mainCanvas.width = backingWidth; mainCanvas.height = backingHeight;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    window.GoiVietJourneyPreview?.invalidate?.();
+  }
+  if (window.GoiVietJourneyPreview?.renderFrame?.(now)) return;
   const c = state.cam;
-  window.GoiVietRegionalPreview?.constrainCamera();
-  c.yaw += (c.targetYaw - c.yaw) * lerpFactor;
-  c.pitch += (c.targetPitch - c.pitch) * lerpFactor;
-  c.zoom += (c.targetZoom - c.zoom) * lerpFactor;
-  c.panX += (c.targetPanX - c.panX) * lerpFactor;
-  c.panY += (c.targetPanY - c.panY) * lerpFactor;
 
   ctx.clearRect(0, 0, cw, ch);
   const isDark = state.theme === 'dark';
@@ -9240,18 +9252,19 @@ function renderMainScene(now) {
     (prov.polyRings || []).forEach(ring => {
       if (window.GoiVietNaturalLandscape?.excludeProvinceIsland(ring)) return;
       if (window.GoiVietRenderPerformance?.ringOffscreen(ring,c,cw,ch,zHeight)) return;
-      const bPts = ring.map(pt => project3D(pt[0], pt[1], 0, c, cw, ch));
-      const tPts = ring.map(pt => project3D(pt[0], pt[1], zHeight, c, cw, ch));
+      const bPts = projectMapRing(ring,0,c,cw,ch);
+      const tPts = projectMapRing(ring,zHeight,c,cw,ch);
       topProjectedRings.push(tPts);
 
-      window.GoiVietTerrainRelief?.paintShadow(ctx, bPts, c.zoom);
+      if (!window.GoiVietSurfaceCache?.paintShadow(ctx, ring, zHeight, c, cw, ch, isDark)) window.GoiVietTerrainRelief?.paintShadow(ctx, bPts, c.zoom);
       // Only subpixel side-wall detail is reduced; the top, borders and hit rings
       // retain the complete source geometry at every zoom level.
       const wallRing = window.GoiVietRenderPerformance?.wallRing(ring,c.zoom) || ring;
-      const wallBase = wallRing === ring ? bPts : wallRing.map(pt => project3D(pt[0],pt[1],0,c,cw,ch));
-      const wallTop = wallRing === ring ? tPts : wallRing.map(pt => project3D(pt[0],pt[1],zHeight,c,cw,ch));
-      const wallQuads = [];
-      for (let i = 0; i < wallRing.length - 1; i++) {
+      const wallBase = wallRing === ring ? bPts : projectMapRing(wallRing,0,c,cw,ch);
+      const wallTop = wallRing === ring ? tPts : projectMapRing(wallRing,zHeight,c,cw,ch);
+      const preparedWalls = window.GoiVietRenderPerformance?.prepareWalls?.(wallRing, wallBase, wallTop, pal.wall, sunX, sunY);
+      const wallQuads = preparedWalls || [];
+      if (!preparedWalls) for (let i = 0; i < wallRing.length - 1; i++) {
         const segDx = wallTop[i + 1][0] - wallTop[i][0];
         const segDy = wallTop[i + 1][1] - wallTop[i][1];
         const segLen = Math.hypot(segDx, segDy) || 1;
@@ -9260,8 +9273,9 @@ function renderMainScene(now) {
         const midZ = 0.25 * (wallBase[i][2] + wallBase[i + 1][2] + wallTop[i + 1][2] + wallTop[i][2]);
         wallQuads.push({ b0: wallBase[i], b1: wallBase[i + 1], t1: wallTop[i + 1], t0: wallTop[i], midZ, fill: rgbStr(wallRGB, 0.94) });
       }
-      wallQuads.sort((a, b) => b.midZ - a.midZ);
-      wallQuads.forEach(wq => {
+      if (!preparedWalls) wallQuads.sort((a, b) => b.midZ - a.midZ);
+      if (window.GoiVietRenderPerformance?.paintWalls) window.GoiVietRenderPerformance.paintWalls(ctx,wallQuads);
+      else wallQuads.forEach(wq => {
         ctx.beginPath();
         ctx.moveTo(wq.b0[0], wq.b0[1]); ctx.lineTo(wq.b1[0], wq.b1[1]);
         ctx.lineTo(wq.t1[0], wq.t1[1]); ctx.lineTo(wq.t0[0], wq.t0[1]);
@@ -9273,12 +9287,13 @@ function renderMainScene(now) {
       ctx.beginPath();
       tPts.forEach((p, i) => { if (i === 0) ctx.moveTo(p[0], p[1]); else ctx.lineTo(p[0], p[1]); });
       ctx.closePath();
-      const reliefPainted = window.GoiVietTerrainRelief?.paintTop(ctx, ring, zHeight, c, cw, ch, isSelected || isHovered);
+      const surfacePainted = window.GoiVietSurfaceCache?.paint(ctx, ring, zHeight, c, cw, ch, isDark, tPts);
+      const reliefPainted = surfacePainted || window.GoiVietTerrainRelief?.paintTop(ctx, ring, zHeight, c, cw, ch, isSelected || isHovered);
       if (!reliefPainted) {
         ctx.fillStyle = rgbStr(topRGB, (isDemoProv || isSelected || isHovered) ? 0.98 : 0.84);
         ctx.fill();
       }
-      window.GoiVietHydrology?.paintTop(ctx, ring, zHeight, c, cw, ch, isDark);
+      if (!surfacePainted) window.GoiVietHydrology?.paintTop(ctx, ring, zHeight, c, cw, ch, isDark, tPts);
       if (!window.GoiVietMapLegibility?.paintBoundary(ctx, c.zoom, isSelected, isHovered)) {
       ctx.lineWidth = (isSelected || isDemoProv) ? 1.8 : 0.9;
       ctx.strokeStyle = window.GoiVietTerrainRelief?.active() ? (isSelected ? '#FFF0C7' : 'rgba(255,206,141,0.42)') : (isSelected ? (isDark ? '#EE9A80' : '#9C3F2D') : (isDark ? 'rgba(20,16,12,0.85)' : 'rgba(255,253,248,0.88)'));
@@ -9890,6 +9905,75 @@ let isDraggingMain = false;
 let activeMouseBtn = 0;
 let dragStartX = 0, dragStartY = 0;
 let lastMouseX = 0, lastMouseY = 0;
+let dragMoved = false, touchMoved = false;
+let lastCameraFrame = null;
+const cameraAxes = [['yaw','targetYaw',.00001],['pitch','targetPitch',.00001],['zoom','targetZoom',.00001],['panX','targetPanX',.001],['panY','targetPanY',.001]];
+const pendingMapInput = [];
+
+// Keep event order, coalescing adjacent moves. Only the render owner applies input.
+function queueMapInput(type, values) {
+  const last = pendingMapInput.at(-1);
+  if (last?.type === type && ['pan','rotate'].includes(type)) {
+    last.values[0] += values[0]; last.values[1] += values[1];
+    last.values[2] = values[2]; last.values[3] = values[3];
+  } else if (last?.type === 'wheel' && type === 'wheel' && last.values[1] === values[1] && last.values[2] === values[2]) {
+    last.values[0] += values[0];
+  } else if (last?.type === 'pinch' && type === 'pinch') last.values = values;
+  else pendingMapInput.push({type, values});
+  requestMapRender();
+}
+function flushMapInput() {
+  if (!pendingMapInput.length) return false;
+  const c = state.cam;
+  // A new pointer gesture takes over from the camera actually on screen.
+  for (const [key,target] of cameraAxes) c[target] = c[key];
+  for (const {type,values:v} of pendingMapInput.splice(0)) {
+    if (type === 'pan') applyCameraPanDelta(...v);
+    else if (type === 'rotate') applyCameraRotationDelta(v[0],v[1]);
+    else if (type === 'wheel') {
+      const zoom = c.targetZoom * Math.exp(-v[0] * .0013);
+      applyCameraZoomAt(v[1],v[2],zoom);
+    } else if (type === 'pinchStart') window.GoiVietRegionalPreview?.beginPinch(v[0]);
+    else if (type === 'pinchEnd') window.GoiVietRegionalPreview?.endPinch();
+    else if (type === 'pinch') {
+      if (window.GoiVietRegionalPreview?.active()) window.GoiVietRegionalPreview.pinch(v[0],v[1]);
+      else c.targetZoom = Math.max(MIN_MAP_ZOOM,Math.min(3,v[1]));
+    }
+    // Each subsequent operation uses the result of the preceding one.
+    for (const [key,target] of cameraAxes) c[key] = c[target];
+  }
+  return true;
+}
+function advanceMapCamera(now, direct = false) {
+  const dt = lastCameraFrame === null ? 1000/60 : Math.max(0,Math.min(100,now-lastCameraFrame));
+  lastCameraFrame = now;
+  const alpha = state.reducedMotion || direct ? 1 : 1-Math.exp(-dt/110);
+  window.GoiVietRegionalPreview?.constrainCamera();
+  for (const [key,target,epsilon] of cameraAxes) {
+    state.cam[key] += (state.cam[target]-state.cam[key])*alpha;
+    if (Math.abs(state.cam[target]-state.cam[key]) < epsilon) state.cam[key] = state.cam[target];
+  }
+}
+function cancelMapGesture() {
+  pendingMapInput.length = 0;
+  isDraggingMain = isTouchDragging = false;
+  initialPinchDist = 0;
+  window.GoiVietRegionalPreview?.endPinch();
+  lastCameraFrame = null;
+}
+
+function applyCameraZoomAt(x, y, zoom) {
+  if (window.GoiVietRegionalPreview?.active()) {
+    window.GoiVietRegionalPreview.zoomAt(x,y,zoom,false);
+    return;
+  }
+  // Preserve the standalone map controls if the optional preview module fails.
+  const c=state.cam,old=c.targetZoom,next=Math.max(MIN_MAP_ZOOM,Math.min(3,zoom)),ratio=next/old;
+  const [ox,oy]=getMapScreenOrigin(cw,ch);
+  const [dx,dy]=screenDeltaToWorldDelta((x-ox)*(1-1/ratio),(y-oy)*(1-1/ratio));
+  c.targetPanX=clampPanX(c.targetPanX-dx);c.targetPanY=clampPanY(c.targetPanY-dy);c.targetZoom=next;
+}
+
 
 function clampYaw(yaw) {
   return Math.max(-0.65, Math.min(0.65, yaw));
@@ -9919,8 +10003,8 @@ function applyCameraRotationDelta(dx, dy) {
   }
 }
 
-function applyCameraPanDelta(dx, dy) {
-  if (window.GoiVietRegionalPreview?.active()) { window.GoiVietRegionalPreview.panBy(dx, dy); return; }
+function applyCameraPanDelta(dx, dy, x, y) {
+  if (window.GoiVietRegionalPreview?.active()) { window.GoiVietRegionalPreview.panBy(dx, dy, x, y); return; }
   if (state.seaRun) state.seaRun.didFocus = true;
   const [wdx, wdy] = screenDeltaToWorldDelta(dx, dy);
   state.cam.targetPanX = clampPanX(state.cam.targetPanX + wdx);
@@ -9946,6 +10030,8 @@ function screenDeltaToWorldDelta(dx, dy) {
 mainCanvas.addEventListener('contextmenu', e => e.preventDefault());
 
 mainCanvas.addEventListener('mousedown', e => {
+  if (![0,1,2].includes(e.button)) return;
+  dragMoved = false;
   isDraggingMain = true;
   activeMouseBtn = e.button;
   dragStartX = lastMouseX = e.clientX;
@@ -9960,11 +10046,9 @@ window.addEventListener('mousemove', e => {
     lastMouseY = e.clientY;
 
     const wantRotate = (activeMouseBtn === 2) || (activeMouseBtn === 1) || e.shiftKey || (activeMouseBtn === 0 && state.leftDragMode === 'rotate');
-    if (wantRotate) {
-      applyCameraRotationDelta(dx, dy);
-    } else {
-      applyCameraPanDelta(dx, dy);
-    }
+    dragMoved ||= Math.hypot(e.clientX-dragStartX,e.clientY-dragStartY) >= 6;
+    const bounds = mainCanvas.getBoundingClientRect();
+    queueMapInput(wantRotate ? 'rotate' : 'pan', [dx,dy,e.clientX-bounds.left,e.clientY-bounds.top]);
     requestMapRender(16);
     return;
   }
@@ -10027,7 +10111,7 @@ window.addEventListener('mouseup', e => {
   const dist = Math.hypot(e.clientX - dragStartX, e.clientY - dragStartY);
   isDraggingMain = false;
 
-  if (dist < 6 && e.button === 0) {
+  if (!dragMoved && dist < 6 && e.button === 0) {
     const bounds = mainCanvas.getBoundingClientRect();
     const h = hitTestCanvasAt(e.clientX-bounds.left, e.clientY-bounds.top);
     if (!h) { window.GoiVietJourneyPreview?.clear(); return; }
@@ -10050,28 +10134,10 @@ mainCanvas.addEventListener('dblclick', e => {
 
 mainCanvas.addEventListener('wheel', e => {
   e.preventDefault();
-  if (state.seaRun) state.seaRun.didFocus = true;
+  if (!Number.isFinite(e.deltaY) || !e.deltaY) return;
   const rect = mainCanvas.getBoundingClientRect();
-  const mx = e.clientX - rect.left;
-  const my = e.clientY - rect.top;
-  if (window.GoiVietRegionalPreview?.active()) {
-    window.GoiVietRegionalPreview.zoomAt(mx, my, state.cam.targetZoom * (e.deltaY < 0 ? 1.14 : 0.88));
-    requestMapRender(24); return;
-  }
-  const oldZoom = state.cam.targetZoom;
-  const factor = e.deltaY < 0 ? 1.14 : 0.88;
-  const newZoom = Math.max(MIN_MAP_ZOOM, Math.min(3.0, oldZoom * factor));
-  const zoomRatio = newZoom / oldZoom;
-  if (Math.abs(zoomRatio - 1) > 1e-4) {
-    const [origX, origY] = getMapScreenOrigin(cw, ch);
-    const offsetX = mx - origX;
-    const offsetY = my - origY;
-    const [wdx, wdy] = screenDeltaToWorldDelta(offsetX * (1 - 1 / zoomRatio), offsetY * (1 - 1 / zoomRatio));
-    state.cam.targetPanX = clampPanX(state.cam.targetPanX - wdx);
-    state.cam.targetPanY = clampPanY(state.cam.targetPanY - wdy);
-    state.cam.targetZoom = newZoom;
-    requestMapRender(24);
-  }
+  const pixels = e.deltaY * (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? rect.height : 1);
+  queueMapInput('wheel', [pixels,e.clientX-rect.left,e.clientY-rect.top]);
 }, { passive: false });
 
 function stepZoom(factor) {
@@ -10182,6 +10248,7 @@ function hitTestCanvasAt(mx, my) {
 
 mainCanvas.addEventListener('touchstart', e => {
   if (e.touches.length === 1) {
+    touchMoved = false;
     isTouchDragging = true;
     touchStartX = lastTouchX = e.touches[0].clientX;
     touchStartY = lastTouchY = e.touches[0].clientY;
@@ -10191,8 +10258,8 @@ mainCanvas.addEventListener('touchstart', e => {
       e.touches[0].clientX - e.touches[1].clientX,
       e.touches[0].clientY - e.touches[1].clientY
     );
-    initialPinchZoom = state.cam.targetZoom;
-    window.GoiVietRegionalPreview?.beginPinch(e.touches);
+    initialPinchZoom = state.cam.zoom;
+    queueMapInput('pinchStart', [[...e.touches].map(t=>({clientX:t.clientX,clientY:t.clientY}))]);
   }
   requestMapRender();
 }, { passive: true });
@@ -10208,11 +10275,9 @@ mainCanvas.addEventListener('touchmove', e => {
     if (Math.hypot(tx - touchStartX, ty - touchStartY) > 6) {
       e.preventDefault();
     }
-    if (state.leftDragMode === 'rotate') {
-      applyCameraRotationDelta(dx, dy);
-    } else {
-      applyCameraPanDelta(dx, dy);
-    }
+    touchMoved ||= Math.hypot(tx-touchStartX,ty-touchStartY) >= 6;
+    const bounds = mainCanvas.getBoundingClientRect();
+    queueMapInput(state.leftDragMode === 'rotate' ? 'rotate' : 'pan',[dx,dy,tx-bounds.left,ty-bounds.top]);
     requestMapRender(16);
   } else if (e.touches.length === 2 && initialPinchDist > 10) {
     e.preventDefault();
@@ -10221,20 +10286,21 @@ mainCanvas.addEventListener('touchmove', e => {
       e.touches[0].clientY - e.touches[1].clientY
     );
     const ratio = curDist / initialPinchDist;
-    if (window.GoiVietRegionalPreview?.active()) window.GoiVietRegionalPreview.pinch(e.touches, initialPinchZoom * ratio);
-    else state.cam.targetZoom = Math.max(MIN_MAP_ZOOM, Math.min(3.0, initialPinchZoom * ratio));
+    queueMapInput('pinch', [[...e.touches].map(t=>({clientX:t.clientX,clientY:t.clientY})),initialPinchZoom*ratio]);
     requestMapRender(16);
   }
 }, { passive: false });
 
 mainCanvas.addEventListener('touchend', e => {
-  window.GoiVietRegionalPreview?.endPinch();
+  const wasPinching = initialPinchDist > 0;
+  if (wasPinching) queueMapInput('pinchEnd', []);
+  initialPinchDist = 0;
   if (isTouchDragging && e.changedTouches.length === 1) {
     const tx = e.changedTouches[0].clientX;
     const ty = e.changedTouches[0].clientY;
     const dist = Math.hypot(tx - touchStartX, ty - touchStartY);
     isTouchDragging = false;
-    if (dist < 12) {
+    if (!touchMoved && dist < 6) {
       const rect = mainCanvas.getBoundingClientRect();
       const mx = tx - rect.left;
       const my = ty - rect.top;
@@ -10250,8 +10316,17 @@ mainCanvas.addEventListener('touchend', e => {
       }
     }
   }
+  if (wasPinching && e.touches.length === 1) {
+    isTouchDragging = true;
+    touchMoved = true;
+    touchStartX = lastTouchX = e.touches[0].clientX;
+    touchStartY = lastTouchY = e.touches[0].clientY;
+  }
   requestMapRender();
 }, { passive: true });
+
+mainCanvas.addEventListener('touchcancel', cancelMapGesture, {passive:true});
+window.addEventListener('blur', cancelMapGesture);
 
 function syncMobilePanelVisibility() {
   const isMapFocused = window.innerWidth <= 768 && document.body.classList.contains('mobile-map-focus');
@@ -10329,7 +10404,7 @@ window.addEventListener('keydown', e => {
 // Pauses requestAnimationFrame when document is hidden, when a modal covers the screen,
 // or when camera, ripples, and train movement have settled!
 let mapRenderRequested = false;
-let idleFramesRemaining = 20;
+let idleFramesRemaining = 0;
 
 // Keep device and in-session preferences in sync without silently restoring motion.
 syncMotionPreference();
@@ -10345,21 +10420,15 @@ if (window.matchMedia) {
 
 function isSceneAnimating() {
   const c = state.cam;
-  const camDelta =
-    Math.abs(c.targetYaw - c.yaw) +
-    Math.abs(c.targetPitch - c.pitch) +
-    Math.abs(c.targetZoom - c.zoom) +
-    Math.abs(c.targetPanX - c.panX) * 0.01 +
-    Math.abs(c.targetPanY - c.panY) * 0.01;
   const trainMoving = window.GoiVietJourneyPreview?.ownsVehicles ? window.GoiVietJourneyPreview.isMoving() : Boolean(state.railRun && state.railRun.progress < 1.0);
   const boatMoving = !window.GoiVietJourneyPreview?.ownsVehicles && Boolean(state.seaRun && (state.seaRun.waitForRail || state.seaRun.progress < 1));
   const hasRipples = state.ripples.length > 0;
-  return camDelta > 0.0008 || trainMoving || boatMoving || hasRipples || isDraggingMain || isTouchDragging || Boolean(window.GoiVietRegionalPreview?.isAnimating()) || Boolean(window.GoiVietJourneyPreview?.isAnimating());
+  return cameraAxes.some(([key,target])=>c[key]!==c[target]) || pendingMapInput.length > 0 || trainMoving || boatMoving || hasRipples || Boolean(window.GoiVietRegionalPreview?.isAnimating()) || Boolean(window.GoiVietJourneyPreview?.isAnimating());
 }
 
-function requestMapRender(frames = 24) {
+function requestMapRender() {
   window.GoiVietJourneyPreview?.invalidate?.();
-  idleFramesRemaining = Math.max(idleFramesRemaining, frames);
+  idleFramesRemaining = 1;
   if (!mapRenderRequested) {
     mapRenderRequested = true;
     requestAnimationFrame(animateLoop);
@@ -10368,12 +10437,10 @@ function requestMapRender(frames = 24) {
 
 document.addEventListener('visibilitychange', () => {
   document.body.classList.toggle('gv-tab-hidden', document.hidden);
-  if (!document.hidden) requestMapRender();
+  lastCameraFrame = null;
+  if (document.hidden) cancelMapGesture();
+  else requestMapRender();
 });
-window.addEventListener('mousedown', () => requestMapRender(12));
-window.addEventListener('wheel', () => requestMapRender(24), { passive: true });
-window.addEventListener('click', () => requestMapRender(24));
-
 // Initialize UI & Start Render Loop
 resizeCanvases();
 updateSessionHeaderUI();
@@ -10386,29 +10453,27 @@ requestMapRender(30);
 ensureUIFontsReady().then(refreshTypographyRendering);
 
 function animateLoop(now) {
-  mapRenderRequested = false;
-  if (document.hidden) {
+  // Keep ownership through render: callbacks raised during painting cannot queue
+  // a second RAF alongside the one scheduled below.
+  if (document.hidden || getTopOpenModalElement()) {
+    cancelMapGesture();
+    mapRenderRequested = false;
+    lastCameraFrame = null;
     return;
   }
-  const topModal = getTopOpenModalElement();
-  // Suspend background rendering while the intro or another full-screen modal is open.
-  if (topModal) {
-    return;
-  }
-  renderMainScene(now || performance.now());
-  if (isSceneAnimating() || idleFramesRemaining > 0) {
-    if (idleFramesRemaining > 0) idleFramesRemaining -= 1;
-    mapRenderRequested = true;
-    requestAnimationFrame(animateLoop);
-  }
+  idleFramesRemaining = 0;
+  renderMainScene(now);
+  if (isSceneAnimating() || idleFramesRemaining) requestAnimationFrame(animateLoop);
+  else { mapRenderRequested = false; lastCameraFrame = null; }
 }
+
 </script>
 <script src="assets/goi-viet/homepage-scene-layout.js"></script>
 <script src="assets/goi-viet/homepage-opening-config.js?v=gentle-cranes-v13"></script>
-<script src="assets/goi-viet/homepage-layered-renderer.js?v=clean-train-cached-motion-20261015"></script>
-<script src="assets/goi-viet/homepage-layered-scene.js?v=gentle-cranes-v13"></script>
-<script src="assets/goi-viet/homepage-layered-opening.js?v=gentle-cranes-v13"></script>
+<script src="assets/goi-viet/homepage-layered-renderer.js?v=60fps-20261018"></script>
+<script src="assets/goi-viet/homepage-layered-scene.js?v=60fps-20261018"></script>
+<script src="assets/goi-viet/homepage-layered-opening.js?v=phase5-20261018"></script>
 <script src="assets/goi-viet/homepage-music.js"></script>
-<script src="assets/goi-viet/homepage-opening-controller.js" onerror="document.getElementById('introScreen').dataset.homeOpening='complete';document.querySelector('.gv-home-content').inert=false;document.getElementById('btnHomeOpeningStart').hidden=true;document.querySelector('.gv-home-opening-tools').style.display='none'"></script>
+<script src="assets/goi-viet/homepage-opening-controller.js?v=60fps-20261018" onerror="document.getElementById('introScreen').dataset.homeOpening='complete';document.querySelector('.gv-home-content').inert=false;document.getElementById('btnHomeOpeningStart').hidden=true;document.querySelector('.gv-home-opening-tools').style.display='none'"></script>
 </body>
 </html>

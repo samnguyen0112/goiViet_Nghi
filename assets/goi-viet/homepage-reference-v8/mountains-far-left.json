@@ -1,0 +1,21 @@
+{
+  "id": "mountains-far-left",
+  "file": "mountains-far-left.webp",
+  "source": "sources/mountains-far-left.png",
+  "generatedFrom": "C:\\Users\\Uy\\.codex\\generated_images\\01a15871-114b-7d72-8257-05166a5cb4d4\\exec-375bb975-5e45-4d9a-a5c4-653d9d08a80f.png",
+  "nativeWidth": 1545,
+  "nativeHeight": 1018,
+  "width": 1853,
+  "height": 1221,
+  "originalRect": [
+    0,
+    18,
+    1853,
+    1221
+  ],
+  "alphaSHA256": "a0628ef101d8cedff17d9a7f7b6fe3991ad6d870826d4b9da1d7bb0404943937",
+  "sourceSHA256": "2f6d7376c997b805bf0f9013f0385a2634c62368a50bedf02c1c44444c931add",
+  "prompt": "Production sprite for the existing Gói Việt layered homepage.\nImage 1 is the EXACT isolated original layer to edit, including its canvas registration and cutout shape. Image 2 is the user's APPROVED FINAL HOMEPAGE and is the primary color/style reference, NOT an object to reproduce in this sprite.\nRepaint ONLY the mountain layer in Image 1 with the sharper, deeper turquoise/teal, warm muted-gold ridge lines and moss-green highlights seen in Image 2. Keep the same simple stylized Vietnamese storybook gouache/watercolor shapes, same major ridges and mountain peaks, tiny original trees, villages, original house locations and proportions, fine gold contour lines, paper grain and light mist. Make existing small edges and lines clean and well resolved, not blurry. This is not realistic karst, not a lush forest, no new leaf detail, no new flowers, no additional buildings.\nCRITICAL REGISTRATION: use the SAME complete bounding canvas/aspect and composition as Image 1, same peak coordinates, scale, orientation and silhouette. Do not center a smaller cutout, trim margins, add margins, crop or move existing features. Do not copy any text, logos, station pins, train, bridge, clouds or crane from Image 2. The sky outside the mountain silhouette stays genuinely transparent, not white or checkerboard.\nIMPORTANT: Image 1 has old hidden-fill artifacts: horizontal edge-extrusion streaks, rectangular color placeholders, occasional red/blue fragments at the bottom. These are NOT intended scenery. Replace those artifacts with naturally continued painted mountain/valley texture or delicate original-colored mist so the sprite is clean behind other layers. Preserve the real visible mountain outline and original internal features from the approved image, not the defective streaks.\nMatch the approved reference's restrained but clearly deeper teal shadows, cleaner cyan-green mids and soft warm gold. No black crushed shadows, fluorescent colors or excessive global saturation. Far slopes remain misty; near crests retain clear gold lines. No lettering, labels, frames or watermark.\nDeliver ONE high-resolution isolated production layer, ideally at least 2048 pixels on its long edge, with true alpha transparency outside the subject, keeping the original complete canvas registration.\nLayer ID: mountains-far-left. Keep this specific LEFT mountain cluster in its ORIGINAL orientation and framing.",
+  "tool": "built-in image_gen",
+  "registration": "Generated colors registered to original canvas; original alpha retained byte-for-byte. Opaque paper around terrain mist is aligned to the generated sky to avoid seams."
+}

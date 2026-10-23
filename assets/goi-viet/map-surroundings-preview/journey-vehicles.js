@@ -64,7 +64,7 @@
     GoiVietJourneyPreview.setObstacles(boxes);
   }
   function paint(now=performance.now()){
-    const begin=performance.now(),ratio=Math.min(devicePixelRatio||1,1.5,Math.sqrt(6*1024*1024/Math.max(1,cw*ch)));if(canvas.width!==Math.round(cw*ratio)||canvas.height!==Math.round(ch*ratio)){canvas.width=Math.round(cw*ratio);canvas.height=Math.round(ch*ratio);}
+    const begin=performance.now(),ratio=window.GoiVietPixelBudget?.ratio('vehicle',cw,ch) ?? Math.min(devicePixelRatio||1,1.5,Math.sqrt(6*1024*1024/Math.max(1,cw*ch)));if(canvas.width!==Math.round(cw*ratio)||canvas.height!==Math.round(ch*ratio)){canvas.width=Math.round(cw*ratio);canvas.height=Math.round(ch*ratio);}
     ctx.setTransform(ratio,0,0,ratio,0,0);ctx.clearRect(0,0,cw,ch);if(!GoiVietJourneyPreview.active())return;
     const p=GoiVietJourneyPreview.presentation();tracks(p,now);endpoints(p,now);const v=GoiVietJourneyPreview.vehicle();lastVehicle=null;
     if(v){if(v.mode==='transfer'){ctx.save();ctx.globalAlpha=1-v.transfer;lastVehicle=(v.leg.mode==='sea'?boat:train)({...v,mode:v.leg.mode});ctx.restore();ctx.save();ctx.globalAlpha=v.transfer;(v.next.mode==='sea'?boat:train)({...v,leg:v.next,progress:0});ctx.restore();}else lastVehicle=(v.mode==='sea'?boat:train)(v);}

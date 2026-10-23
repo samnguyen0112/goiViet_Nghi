@@ -1,0 +1,114 @@
+{
+  "frame": [
+    971,
+    1776
+  ],
+  "groups": {
+    "taste": [
+      0,
+      274,
+      550,
+      388
+    ],
+    "story": [
+      517,
+      122,
+      454,
+      360
+    ],
+    "tradition": [
+      425,
+      483,
+      546,
+      260
+    ],
+    "tea": [
+      0,
+      685,
+      418,
+      482
+    ],
+    "conversation": [
+      0,
+      730,
+      971,
+      430
+    ],
+    "exit": [
+      0,
+      1230,
+      971,
+      546
+    ]
+  },
+  "railSlope": 0.145,
+  "railIntercept": 364,
+  "wheelContacts": [
+    [
+      54,
+      171
+    ],
+    [
+      211,
+      188
+    ],
+    [
+      350,
+      205
+    ],
+    [
+      543,
+      226
+    ],
+    [
+      685,
+      243
+    ],
+    [
+      900,
+      270
+    ],
+    [
+      1060,
+      292
+    ],
+    [
+      1370,
+      331
+    ],
+    [
+      1540,
+      345
+    ],
+    [
+      1635,
+      361
+    ],
+    [
+      1735,
+      379
+    ],
+    [
+      1835,
+      394
+    ]
+  ],
+  "perspective": "painted three-quarter reference viewpoint; no affine distortion",
+  "station": [
+    569,
+    380,
+    167,
+    76
+  ],
+  "train": [
+    38,
+    325,
+    457,
+    107
+  ],
+  "stationGap": 74,
+  "river": "single continuous native generation",
+  "generatedAssets": 34,
+  "trainAssembly": "single coherent perspective cutout",
+  "nativeOnly": true
+}
