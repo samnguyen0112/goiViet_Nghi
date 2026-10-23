@@ -1,0 +1,7 @@
+/* Preview 3: the postcard carries the ivory-ribbon logo, which needs a larger slot than the solid red mark. */
+body[data-preview-version="3"] #postcardModal .postcard-top { grid-template-columns: 168px minmax(0,1fr) auto; }
+body[data-preview-version="3"] #postcardModal .gv-postcard-logo { width: 168px; }
+@media (max-width: 650px) {
+  body[data-preview-version="3"] #postcardModal .postcard-top { grid-template-columns: 120px 1fr; }
+  body[data-preview-version="3"] #postcardModal .gv-postcard-logo { width: 120px; }
+}

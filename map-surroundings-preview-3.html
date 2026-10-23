@@ -4490,13 +4490,18 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 <link rel="stylesheet" href="assets/goi-viet/heritage-overlays.css?v=20261016-alignment">
 <link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/memory-reference-v2.css?v=20261022-prewarm-1">
 <link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/memory-native-v4.css?v=20261019-letter-polish-2">
-<script src="assets/goi-viet/map-surroundings-preview/memory-reference-v2.js?v=20261022-prewarm-1" defer></script>
+<script src="assets/goi-viet/map-surroundings-preview/memory-reference-v2.js?v=20261023-t6-lock" defer></script>
 <script src="assets/goi-viet/map-surroundings-preview/map-prewarm-3.js?v=20261022-prewarm-1" defer></script>
 <script src="assets/goi-viet/heritage-overlays-3.js?v=20261022-level23-1" defer></script>
-<script src="assets/goi-viet/postcard-design.js?v=20261015-1" defer></script>
+<script src="assets/goi-viet/postcard-design-3.js?v=20261023-ivory-logo-1" defer></script>
+<script src="assets/goi-viet/map-surroundings-preview/home-station-feedback-3.js?v=20261023-1" defer></script>
 <script src="assets/goi-viet/map-surroundings-preview/home-invitation-3.js?v=20261019-button-lock-2" defer></script>
-<link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/home-classic-3.css?v=20261020-station-refined-fit">
+<link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/home-classic-3.css?v=20261023-wide-stations-1">
+<link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/home-projector-3.css?v=20261023-t4-1">
+<link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/home-hierarchy-3.css?v=20261023-t7-1">
+<link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/postcard-logo-3.css?v=20261023-1">
 <link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/home-controls-3.css?v=20261019-restored">
+<link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/home-gate-3.css?v=20261023-gate-fade-3">
 <link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/home-memory-seam-3.css?v=20261020-1">
 <link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/memory-reference-v5.css?v=20261022-unified-support-type">
 <link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/memory-rail-v6.css?v=20261021-all-native-wheels-1">
@@ -4564,7 +4569,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
       <span class="intro-ornament-line"></span>
     </div>
 
-    <h1 id="introTitle" class="intro-main-title" aria-label="Gói Việt"><span class="gv-logo-text">Gói Việt</span><img class="gv-logo" src="assets/goi-viet/brand/goi-viet-logo-512.webp" srcset="assets/goi-viet/brand/goi-viet-logo-512.webp 512w, assets/goi-viet/brand/goi-viet-logo-1024.webp 1024w, assets/goi-viet/brand/goi-viet-logo.webp 1850w" sizes="(max-width: 760px) 145px, 172px" width="1850" height="850" alt="Gói Việt" onerror="this.hidden=true;this.previousElementSibling.classList.add('gv-logo-fallback')"></h1>
+    <h1 id="introTitle" class="intro-main-title" aria-label="Gói Việt"><span class="gv-logo-text">Gói Việt</span><img class="gv-logo" src="assets/goi-viet/brand/goi-viet-logo-ivory-ribbon-v2-512.webp" srcset="assets/goi-viet/brand/goi-viet-logo-ivory-ribbon-v2-512.webp 512w, assets/goi-viet/brand/goi-viet-logo-ivory-ribbon-v2-1024.webp 1024w, assets/goi-viet/brand/goi-viet-logo-ivory-ribbon-v2.webp 1902w" sizes="(max-width: 760px) 62vw, 360px" width="1902" height="827" alt="Gói Việt" onerror="this.hidden=true;this.previousElementSibling.classList.add('gv-logo-fallback')"></h1>
     <div class="intro-poetic-sub">
       “Một đoàn tàu đi dọc ba miền đất nước<br>Mỗi tỉnh thành là một ga dừng nghỉ để cả nhà cùng nghe chuyện xưa và sẻ chia ký&nbsp;ức.”
     </div>
@@ -4736,9 +4741,22 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 
     <!-- TRANG CHỦ: chỉnh nội dung chữ/nút tại đây; phong cảnh và chuyển động ở lớp riêng. -->
     <div id="introWelcomeStage">
-      <button type="button" id="btnHomeOpeningStart" class="gv-home-opening-gate" aria-label="Chạm để mở hành trình Gói Việt">
-        <span id="homeOpeningHint">Chạm vào màn hình để mở hành trình</span>
-      </button>
+      <div id="homeOpeningGate" class="gv-home-opening-gate">
+        <span class="gv-gate-content">
+          <img class="gv-gate-logo" src="assets/goi-viet/brand/goi-viet-logo-ivory-ribbon-v2-512.webp"
+            srcset="assets/goi-viet/brand/goi-viet-logo-ivory-ribbon-v2-512.webp 512w, assets/goi-viet/brand/goi-viet-logo-ivory-ribbon-v2-1024.webp 1024w, assets/goi-viet/brand/goi-viet-logo-ivory-ribbon-v2.webp 1902w"
+            sizes="(max-height: 500px) min(320px, 64vw, 62dvh), (max-width: 760px) 80vw, clamp(280px, 34vw, 640px)"
+            width="1902" height="827" alt="" decoding="async" fetchpriority="high">
+          <span class="gv-gate-tagline">Gói tinh hoa <span aria-hidden="true">·</span> Mở kết nối</span>
+          <button type="button" id="btnHomeOpeningStart" class="gv-gate-action" aria-label="Chạm để bắt đầu hành trình Gói Việt" aria-describedby="homeOpeningHint" aria-busy="false">
+            <span class="gv-gate-action-label">Chạm để bắt đầu</span>
+            <span class="gv-gate-action-busy">Đang chuẩn bị…</span>
+            <svg class="gv-gate-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15m-6-6 6 6-6 6"/></svg>
+            <span class="gv-gate-spinner"></span>
+          </button>
+          <span id="homeOpeningHint">Một chạm, mở chuyện quê mình.</span>
+        </span>
+      </div>
       <div class="gv-home-opening-tools">
         <button type="button" id="btnHomeOpeningSkip"><svg class="gv-home-tool-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 5 10 7L5 19V5Z"/><path d="M19 5v14"/></svg><span>Bỏ qua mở đầu</span></button>
         <button type="button" id="btnHomeOpeningReplay" hidden><svg class="gv-home-tool-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10a9 9 0 1 1 2.6 8.4"/><path d="M3 4v6h6"/></svg><span>Xem lại mở đầu</span></button>
@@ -4784,23 +4802,23 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
       <div class="gv-home-content" inert>
         <header class="gv-home-header">
           <div id="homeLogoEffect" class="gv-home-logo" data-home-enter="5.3,7.2,20">
-            <img src="assets/goi-viet/brand/goi-viet-logo-512.webp" srcset="assets/goi-viet/brand/goi-viet-logo-512.webp 512w, assets/goi-viet/brand/goi-viet-logo-1024.webp 1024w, assets/goi-viet/brand/goi-viet-logo.webp 1850w" sizes="(min-width: 2200px) clamp(440px, 17vw, 700px), (max-width: 760px) 290px, (max-height: 760px) 240px, clamp(250px, 29vw, 440px)" width="1850" height="850" alt="Gói Việt">
+            <img src="assets/goi-viet/brand/goi-viet-logo-ivory-ribbon-v2-512.webp" srcset="assets/goi-viet/brand/goi-viet-logo-ivory-ribbon-v2-512.webp 512w, assets/goi-viet/brand/goi-viet-logo-ivory-ribbon-v2-1024.webp 1024w, assets/goi-viet/brand/goi-viet-logo-ivory-ribbon-v2.webp 1902w" sizes="(min-width: 2200px) clamp(440px, 17vw, 700px), (max-width: 760px) 290px, (max-height: 760px) 240px, clamp(250px, 29vw, 440px)" width="1902" height="827" alt="Gói Việt" decoding="async" fetchpriority="high">
           </div>
           <p class="gv-home-verse" data-home-enter="6.6,7.9,9"><span>Mở chuyện nhà mình.</span><span>Một lá bài nhỏ, một khoảng gần nhau.</span></p>
-          <p id="homeStationHint" class="gv-home-station-hint" data-home-enter="7.1,8.1,9">Chọn một ga để bắt đầu hành trình</p>
+          <p aria-live="polite" aria-atomic="true" id="homeStationHint" class="gv-home-station-hint" data-home-enter="7.1,8.1,9">Chọn một ga để bắt đầu hành trình</p>
           <nav class="gv-home-stations" aria-label="Khám phá ba miền" aria-describedby="homeStationHint">
             <span class="gv-home-station-atmosphere" aria-hidden="true"><span class="gv-home-station-mist" data-home-enter="5.6,8.4,0"></span></span>
-            <button type="button" id="btnHomeStationNorth" class="gv-home-station gv-home-interactive" data-home-enter="7.3,8.2,6" onclick="selectDemoPlace('hn',true);window.GoiVietMemoryChapter.begin()">
+            <button type="button" id="btnHomeStationNorth" aria-pressed="false" class="gv-home-station gv-home-interactive" data-home-enter="7.3,8.2,6" onclick="selectDemoPlace('hn',true)">
               <svg viewBox="4 1 16 22" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 12 7 12s7-7 7-12a7 7 0 0 0-7-7Zm0 10a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z" fill="currentColor"/></svg>
               <span class="classic-station-copy"><small>Ga miền Bắc</small><strong>Hà Nội</strong></span>
               <span class="gv-home-station-arrow" aria-hidden="true">↗</span>
             </button>
-            <button type="button" id="btnHomeStationCentral" class="gv-home-station gv-home-interactive" data-home-enter="7.46,8.36,6" onclick="selectDemoPlace('hue',true);window.GoiVietMemoryChapter.begin()">
+            <button type="button" id="btnHomeStationCentral" aria-pressed="false" class="gv-home-station gv-home-interactive" data-home-enter="7.46,8.36,6" onclick="selectDemoPlace('hue',true)">
               <svg viewBox="4 1 16 22" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 12 7 12s7-7 7-12a7 7 0 0 0-7-7Zm0 10a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z" fill="currentColor"/></svg>
               <span class="classic-station-copy"><small>Ga miền Trung</small><strong>Cố đô Huế</strong></span>
               <span class="gv-home-station-arrow" aria-hidden="true">↗</span>
             </button>
-            <button type="button" id="btnHomeStationSouth" class="gv-home-station gv-home-interactive" data-home-enter="7.62,8.52,6" onclick="selectDemoPlace('hcm',true);window.GoiVietMemoryChapter.begin()">
+            <button type="button" id="btnHomeStationSouth" aria-pressed="false" class="gv-home-station gv-home-interactive" data-home-enter="7.62,8.52,6" onclick="selectDemoPlace('hcm',true)">
               <svg viewBox="4 1 16 22" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 12 7 12s7-7 7-12a7 7 0 0 0-7-7Zm0 10a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z" fill="currentColor"/></svg>
               <span class="classic-station-copy"><small>Ga miền Nam</small><strong>TP.HCM</strong></span>
               <span class="gv-home-station-arrow" aria-hidden="true">↗</span>
@@ -4840,7 +4858,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
           </ul>
           <div class="gv-home-actions">
             <button type="button" id="btnQuickStartWelcome" class="gv-home-start gv-home-interactive" aria-controls="mapScene" data-home-enter="10.2,11.3,7" onclick="window.GoiVietMemoryChapter.enterMap(event)">Mở bản đồ ký ức <span aria-hidden="true">→</span></button>
-            <button type="button" id="btnHomeExploreMemory" class="mc-scroll-cue classic-next-cue" aria-label="Khám phá miền ký ức bên dưới" title="Cuộn xuống miền ký ức" aria-controls="memoryChapter" data-home-enter="10.5,11.6,7" onclick="window.GoiVietMemoryChapter.begin()"><svg viewBox="0 0 24 32" fill="none" aria-hidden="true"><path d="M12 3v25m-7-7 7 7 7-7"/></svg></button>
+            <button type="button" id="btnHomeExploreMemory" class="gv-home-guide" aria-controls="memoryChapter" data-home-enter="10.5,11.6,7" onclick="window.GoiVietMemoryChapter.begin()">Xem cách chơi<svg viewBox="0 0 24 32" fill="none" aria-hidden="true"><path d="M12 3v25m-7-7 7 7 7-7"/></svg></button>
           </div>
           </div>
         </article>
@@ -5473,7 +5491,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
     <div class="modal-body">
       <div class="postcard-frame">
         <div class="postcard-top">
-          <img class="gv-postcard-logo" src="assets/goi-viet/brand/goi-viet-logo-512.webp" srcset="assets/goi-viet/brand/goi-viet-logo-512.webp 512w, assets/goi-viet/brand/goi-viet-logo-1024.webp 1024w, assets/goi-viet/brand/goi-viet-logo.webp 1850w" sizes="180px" alt="Gói Việt" width="1850" height="850" onerror="this.hidden=true">
+          <img class="gv-postcard-logo" src="assets/goi-viet/brand/goi-viet-logo-ivory-ribbon-v2-512.webp" srcset="assets/goi-viet/brand/goi-viet-logo-ivory-ribbon-v2-512.webp 512w, assets/goi-viet/brand/goi-viet-logo-ivory-ribbon-v2-1024.webp 1024w" sizes="(max-width: 650px) 120px, 168px" alt="Gói Việt" width="1902" height="827" onerror="this.hidden=true">
           <div><h3>Một chuyến đi, nhiều điều thương</h3><p>Những miền đất đã ghé, những câu chuyện đã cùng nghe.</p></div>
           <div class="postcard-stamp-box"><div>DẤU ẤN ĐOÀN VIÊN</div><div id="postcardStampCount">0 dấu kỷ niệm</div></div>
         </div>
@@ -8401,10 +8419,10 @@ function ensurePostcardArtworkReady() {
     };
     const timer = setTimeout(finish, 2000);
     script.onload = script.onerror = finish;
-    script.src = 'assets/goi-viet/postcard-logo-data.js?v=logo-refresh-20261015';
+    script.src = 'assets/goi-viet/postcard-logo-data-3.js?v=20261023-ivory-logo-1';
     document.head.appendChild(script);
   });
-  postcardArtworkPromise = logoDataReady.then(() => Promise.all([load('logo','brand/goi-viet-logo.webp')]))
+  postcardArtworkPromise = logoDataReady.then(() => Promise.all([load('logo','brand/goi-viet-logo-ivory-ribbon-v2-1024.webp')]))
     .then(results => results.every(Boolean)).finally(() => { postcardArtworkPromise = null; });
   return postcardArtworkPromise;
 }
@@ -10381,7 +10399,7 @@ function animateLoop(now) {
 <script src="assets/goi-viet/homepage-layered-renderer-3.js?v=articulated-cranes-layer-20261023-1"></script>
 <script src="assets/goi-viet/homepage-layered-scene.js?v=reference-layers-v8-20261021-1"></script>
 <script src="assets/goi-viet/homepage-layered-opening.js?v=phase5-20261018"></script>
-<script src="assets/goi-viet/homepage-music-3.js?v=20261021-dom-writes-1"></script>
-<script src="assets/goi-viet/homepage-opening-controller-3.js?v=20261022-level23-1" onerror="document.getElementById('introScreen').dataset.homeOpening='complete';document.querySelector('.gv-home-content').inert=false;document.getElementById('btnHomeOpeningStart').hidden=true;document.querySelector('.gv-home-opening-tools').style.display='none'"></script>
+<script src="assets/goi-viet/homepage-music-3.js?v=20261023-gate-fade-3"></script>
+<script src="assets/goi-viet/homepage-opening-controller-3.js?v=20261023-t6-lock" onerror="document.getElementById('introScreen').dataset.homeOpening='complete';document.querySelector('.gv-home-content').inert=false;document.getElementById('btnHomeOpeningStart').hidden=true;document.getElementById('homeOpeningGate').hidden=true;document.querySelector('.gv-home-opening-tools').style.display='none'"></script>
 </body>
 </html>

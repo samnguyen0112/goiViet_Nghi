@@ -196,6 +196,6 @@
   $('btnProceedToGuide')?.addEventListener('click',event=>{event.preventDefault();event.stopImmediatePropagation();begin();},true);
   $('memoryOpenMap').addEventListener('click', enterMap, true);
 
-  window.GoiVietMemoryChapter = { begin, enterMap, getState:() => ({ questionIndex, flipping, exiting, unlocked:intro.dataset.memoryUnlocked==='true', layerCount:chapter.querySelectorAll('[data-ref-layer]').length, heroVisible:artworkVisible, questionCount:questions.length }) };
+  window.GoiVietMemoryChapter = { begin, enterMap, reset: lock, getState:() => ({ questionIndex, flipping, exiting, unlocked:intro.dataset.memoryUnlocked==='true', layerCount:chapter.querySelectorAll('[data-ref-layer]').length, heroVisible:artworkVisible, questionCount:questions.length }) };
   lock(); fitQuestion(); preferenceChanged();
 })();

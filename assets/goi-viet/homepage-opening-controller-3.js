@@ -9,6 +9,7 @@
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const entries = [...content.querySelectorAll('[data-home-enter]')].map(node => ({ node, timing: node.dataset.homeEnter.split(',').map(Number), last: -1 }));
   let phase = 'waiting', elapsed = 0, scene = null, pending = null, failed = false, startRequested = false;
+  let gateFadeTimer = 0;
   let frame = 0, startedAt = 0, lastDraw = -Infinity, nextDrawAt = -Infinity, seen = false, manualHold = false, lastPhaseLabel = '', artworkVisible = true;
   const visible = () => !document.hidden && !intro.classList.contains('intro-hidden') && intro.dataset.introStage === 'welcome' && !intro.classList.contains('intro-stage-leaving');
   const motionAllowed = () => !reduced.matches && !document.body.classList.contains('reduced-motion');
@@ -26,7 +27,7 @@
   // Write only real changes: reveal() runs on every frame of the fade, and replacing even identical text restyles the whole page.
   const assign = (node, key, value) => { if (node[key] !== value) node[key] = value; };
   function reveal(time) {
-    content.inert = phase === 'waiting' || phase === 'preparing';
+    content.inert = ['waiting', 'preparing', 'fading'].includes(phase);
     for (const entry of entries) {
       const [start, end, dy] = entry.timing;
       const p = phase === 'complete' ? 1 : phase === 'playing' ? window.GoiVietHomeOpening.progress(time, start, end) : 0;
@@ -41,10 +42,13 @@
     }
   }
   function setPhase(next) {
+    if (next !== 'fading') { clearTimeout(gateFadeTimer); gateFadeTimer = 0; }
     phase = next; assign(intro.dataset, 'homeOpening', next);
-    assign(gate, 'hidden', next === 'playing' || next === 'complete'); assign(gate, 'disabled', next === 'preparing');
+    assign(gate, 'hidden', next === 'playing' || next === 'complete'); assign(gate, 'disabled', next === 'preparing' || next === 'fading');
+    assign($('homeOpeningGate'), 'hidden', next === 'playing' || next === 'complete');
+    if (gate.getAttribute('aria-busy') !== String(next === 'preparing')) gate.setAttribute('aria-busy', String(next === 'preparing'));
     assign(skipButton, 'hidden', next === 'complete'); assign(replayButton, 'hidden', next !== 'complete');
-    assign($('homeOpeningHint'), 'textContent', next === 'preparing' ? 'Đang chuẩn bị phong cảnh…' : 'Chạm vào màn hình để mở hành trình');
+    assign($('homeOpeningHint'), 'textContent', next === 'preparing' ? 'Đang chuẩn bị phong cảnh…' : 'Một chạm, mở chuyện quê mình.');
     if (next === 'complete') seen = true;
     reveal(elapsed);
   }
@@ -119,20 +123,27 @@
     if (!artworkVisible) { stop(); scene?.native?.layerRenderer?.suspend?.(); music?.sync(); return; }
     if (scene?.native?.layerRenderer?.resume?.()) layout();
     assign(retry, 'hidden', !(failed && phase === 'complete'));
-    if (phase === 'playing' && !motionAllowed()) { stop(); elapsed = config.duration; setPhase('complete'); draw(); }
+    if (['playing', 'fading'].includes(phase) && !motionAllowed()) { stop(); elapsed = config.duration; setPhase('complete'); draw(); }
     if (!motionAllowed() || manualHold || failed) { stop(); music?.sync(); return; }
     if (!scene) { if (!pending) ensureScene(); return; }
-    if (phase === 'waiting' || phase === 'preparing') { stop(); return; }
+    if (['waiting', 'preparing', 'fading'].includes(phase)) { stop(); return; }
     if (frame) return;
     startedAt = performance.now() - elapsed * 1000; lastDraw = nextDrawAt = -Infinity;
     frame = requestAnimationFrame(tick); music?.sync(true);
   }
   function begin() {
+    startRequested = false; stop(); elapsed = 0; manualHold = false;
+    setPhase('fading');
+    // Start music within the user gesture; hold the landscape clock until the paper is clear.
+    music?.begin(); focusAfterAction(skipButton);
+    gateFadeTimer = setTimeout(() => { if (phase === 'fading') playScene(); }, 350);
+  }
+  function playScene() {
     startRequested = false; stop(); elapsed = 0; manualHold = false; setPhase('playing');
     draw(); music?.begin(); focusAfterAction(skipButton); sync();
   }
   function start() {
-    if (phase === 'playing' || phase === 'preparing') return;
+    if (['playing', 'preparing', 'fading'].includes(phase)) return;
     $('homeMusicSettings').open = false; intro.scrollTo({ top: 0 }); manualHold = false;
     if (!motionAllowed()) { skip(); return; }
     if (failed) { skip(); return; }
@@ -143,7 +154,7 @@
     stop(); startRequested = false; manualHold = false; elapsed = Math.max(config.duration, elapsed); setPhase('complete');
     music?.pause(); draw(); focusAfterAction($('btnQuickStartWelcome')); sync();
   }
-  function replay() { stop(); elapsed = 0; setPhase('waiting'); start(); }
+  function replay() { window.GoiVietMemoryChapter?.reset?.(); stop(); elapsed = 0; if (scene && motionAllowed() && !failed) playScene(); else { setPhase('waiting'); start(); } }
   function seek(time, hold = true) {
     stop(); startRequested = false; manualHold = hold; elapsed = Math.max(0, Number(time) || 0);
     setPhase(elapsed >= config.duration ? 'complete' : 'playing'); draw(); music?.sync(true); sync();
@@ -176,7 +187,7 @@
     }
     targets[next].focus({ preventScroll: false });
   }, true);
-  setPhase('waiting'); layout(); gate.focus({ preventScroll: true });
+  setPhase('waiting'); layout();
   const ready = Promise.all([music?.ready, motionAllowed() ? ensureScene() : Promise.resolve(null)]);
   window.GoiVietHomeIntro = { ready, start, skip, replay, seek,
     setArtworkVisible(value) {

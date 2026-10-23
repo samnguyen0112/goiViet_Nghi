@@ -1,0 +1,4 @@
+/* T7: one red voice per screen. Red stays with the logo, the invitation kicker,
+   the primary action and the Hà Nội pin; reading copy uses forest green. */
+body[data-preview-version="3"] #introWelcomeStage .gv-home-verse > span:first-child { color:#143f35; }
+body[data-preview-version="3"] #introWelcomeStage #homepageContent #homepageHeading { color:#143f35; }

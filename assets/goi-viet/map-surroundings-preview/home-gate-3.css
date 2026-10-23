@@ -1,0 +1,126 @@
+/* Preview 3 only. Keep the paper background continuous with the opening's first frame.
+   Only the native start button owns the gesture; the surrounding paper is passive. */
+body[data-preview-version="3"] #introWelcomeStage #homeOpeningGate {
+  box-sizing: border-box;
+  min-height: 0;
+  padding: max(80px, calc(env(safe-area-inset-top) + 64px)) max(24px, env(safe-area-inset-right)) max(48px, env(safe-area-inset-bottom)) max(24px, env(safe-area-inset-left));
+  align-items: center;
+  isolation: isolate;
+  -webkit-tap-highlight-color: transparent;
+}
+body[data-preview-version="3"] #homeOpeningGate::before { content: none; }
+body[data-preview-version="3"] #introWelcomeStage #homeOpeningGate > .gv-gate-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 0;
+  text-align: center;
+}
+body[data-preview-version="3"] #homeOpeningGate .gv-gate-logo {
+  display: block;
+  width: clamp(280px, 34vw, 640px);
+  max-width: 100%;
+  height: auto;
+  aspect-ratio: 1902 / 827;
+  object-fit: contain;
+  margin: 0;
+  filter: drop-shadow(0 4px 8px rgb(116 42 32 / 8%));
+}
+body[data-preview-version="3"] #homeOpeningGate .gv-gate-tagline {
+  display: block;
+  margin-top: clamp(18px, 2.6vh, 30px);
+  color: #795335;
+  font: italic 500 clamp(17px, 1.25vw, 22px) / 1.5 var(--font-display, Georgia, serif);
+  letter-spacing: .025em;
+  text-wrap: balance;
+}
+body[data-preview-version="3"] #homeOpeningGate .gv-gate-tagline > span { margin-inline: .3em; }
+body[data-preview-version="3"] #homeOpeningGate .gv-gate-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  box-sizing: border-box;
+  min-width: 232px;
+  min-height: 56px;
+  max-width: 100%;
+  margin-top: clamp(26px, 3.6vh, 38px);
+  padding: 14px 25px;
+  border: 1px solid #912c35;
+  border-radius: 999px;
+  background: #a3323d;
+  box-shadow: 0 6px 18px rgb(130 42 38 / 14%), inset 0 1px 0 rgb(255 248 225 / 16%);
+  color: #fff5df;
+  font: 600 16px / 1.5 var(--font-sans, sans-serif);
+  transition: background .18s ease, box-shadow .18s ease, transform .18s ease;
+}
+body[data-preview-version="3"] #homeOpeningGate .gv-gate-arrow { width: 22px; height: 22px; flex-shrink: 0; }
+body[data-preview-version="3"] #homeOpeningGate .gv-gate-action-busy,
+body[data-preview-version="3"] #homeOpeningGate .gv-gate-spinner { display: none; }
+body[data-preview-version="3"] #homeOpeningGate #homeOpeningHint {
+  display: block;
+  min-height: 22px;
+  margin-top: 16px;
+  color: #806546;
+  font: 400 13px / 1.7 var(--font-sans, sans-serif);
+  text-wrap: balance;
+}
+body[data-preview-version="3"] #homeOpeningGate .gv-gate-action { appearance: none; cursor: pointer; outline: none !important; }
+body[data-preview-version="3"] #homeOpeningGate .gv-gate-action:focus-visible { outline: 2px solid #a3323d !important; outline-offset: 4px; }
+body[data-preview-version="3"] #introWelcomeStage #homeOpeningGate { cursor: default; }
+@media (hover: hover) {
+  body[data-preview-version="3"] #homeOpeningGate .gv-gate-action:not(:disabled):hover {
+    background: #8e2732;
+    box-shadow: 0 9px 22px rgb(130 42 38 / 20%), inset 0 1px 0 rgb(255 248 225 / 16%);
+    transform: translateY(-2px);
+  }
+}
+body[data-preview-version="3"] #homeOpeningGate .gv-gate-action:not(:disabled):active { transform: translateY(1px); }
+body[data-preview-version="3"] #introScreen[data-home-opening="preparing"] #homeOpeningGate { cursor: progress; }
+body[data-preview-version="3"] #introScreen[data-home-opening="preparing"] #homeOpeningGate .gv-gate-logo,
+body[data-preview-version="3"] #introScreen[data-home-opening="preparing"] #homeOpeningGate .gv-gate-tagline { opacity: .65; }
+body[data-preview-version="3"] #introScreen[data-home-opening="preparing"] #homeOpeningGate .gv-gate-action { background: #854a48; border-color: #854a48; box-shadow: none; }
+body[data-preview-version="3"] #introScreen[data-home-opening="preparing"] #homeOpeningGate .gv-gate-action-label,
+body[data-preview-version="3"] #introScreen[data-home-opening="preparing"] #homeOpeningGate .gv-gate-arrow { display: none; }
+body[data-preview-version="3"] #introScreen[data-home-opening="preparing"] #homeOpeningGate .gv-gate-action-busy { display: inline; }
+body[data-preview-version="3"] #introScreen[data-home-opening="preparing"] #homeOpeningGate .gv-gate-spinner {
+  display: block;
+  box-sizing: border-box;
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgb(255 245 223 / 35%);
+  border-top-color: #fff5df;
+  border-radius: 50%;
+  animation: gv-gate-spin-3 .9s linear infinite;
+}
+@keyframes gv-gate-spin-3 { to { transform: rotate(360deg); } }
+@media (max-width: 760px) {
+  body[data-preview-version="3"] #homeOpeningGate::before { right: 14px; left: 14px; bottom: max(20px, env(safe-area-inset-bottom)); }
+  body[data-preview-version="3"] #homeOpeningGate .gv-gate-logo { width: 80vw; }
+  body[data-preview-version="3"] #homeOpeningGate .gv-gate-action { min-height: 52px; min-width: 220px; padding: 12px 22px; }
+}
+@media (max-height: 500px) {
+  body[data-preview-version="3"] #introWelcomeStage #homeOpeningGate { padding-top: max(64px, calc(env(safe-area-inset-top) + 56px)); padding-bottom: max(24px, env(safe-area-inset-bottom)); }
+  body[data-preview-version="3"] #homeOpeningGate::before { top: max(60px, calc(env(safe-area-inset-top) + 52px)); right: 16px; bottom: 12px; left: 16px; }
+  body[data-preview-version="3"] #homeOpeningGate .gv-gate-logo { width: min(320px, 64vw, 62dvh); }
+  body[data-preview-version="3"] #homeOpeningGate .gv-gate-tagline { margin-top: 10px; font-size: 16px; }
+  body[data-preview-version="3"] #homeOpeningGate .gv-gate-action { margin-top: 16px; min-height: 44px; padding: 9px 20px; font-size: 14px; }
+  body[data-preview-version="3"] #homeOpeningGate #homeOpeningHint { margin-top: 10px; font-size: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  body[data-preview-version="3"] #homeOpeningGate .gv-gate-action { transition: none; transform: none !important; }
+  body[data-preview-version="3"] #homeOpeningGate .gv-gate-spinner { animation: none; }
+}
+body.reduced-motion[data-preview-version="3"] #homeOpeningGate .gv-gate-action { transition: none; transform: none !important; }
+body.reduced-motion[data-preview-version="3"] #homeOpeningGate .gv-gate-spinner { animation: none; }
+
+body[data-preview-version="3"] #introWelcomeStage #homeOpeningGate[hidden],
+body[data-preview-version="3"] #homeOpeningGate .gv-gate-action[hidden] { display: none; }
+
+/* Fade only the waiting copy; keep the paper stationary until the scene starts. */
+body[data-preview-version="3"] #homeOpeningGate .gv-gate-content { opacity: 1; transition: opacity 350ms ease-out; }
+body[data-preview-version="3"] #introScreen[data-home-opening="fading"] .gv-gate-content { opacity: 0; pointer-events: none; }
+body[data-preview-version="3"] #introScreen[data-home-opening="fading"] .gv-home-content { visibility: hidden; pointer-events: none; }
+@media (prefers-reduced-motion: reduce) { body[data-preview-version="3"] #homeOpeningGate .gv-gate-content { transition: none; } }
+body.reduced-motion[data-preview-version="3"] #homeOpeningGate .gv-gate-content { transition: none; }

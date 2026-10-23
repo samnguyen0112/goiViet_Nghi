@@ -58,14 +58,14 @@
       // A status region: write the per-frame warning once; event messages below always rewrite.
       const rangeNote = label + ' · điểm bắt đầu vượt thời lượng bản nhạc';
       if (outOfRange && name.textContent !== rangeNote) name.textContent = rangeNote;
-      const active = state.visible && (previewing || state.phase === 'playing' || (state.phase === 'complete' && keep.checked));
+      const active = state.visible && (previewing || state.phase === 'fading' || state.phase === 'playing' || (state.phase === 'complete' && keep.checked));
       const wants = active && !userPaused && !failed && !ended && !outOfRange;
       const target = start + (previewing ? 0 : state.time);
       if (force && Number.isFinite(audio.duration) && !outOfRange) {
         try { audio.currentTime = Math.min(target, Math.max(0, audio.duration - .05)); } catch (_) {}
       }
       const fade = previewing || keep.checked ? 1 : clamp((config.duration - state.time) / config.musicFadeOut, 0, 1);
-      audio.volume = clamp(volume.value, 0, 1) * fade;
+      audio.volume = state.phase === 'fading' ? 0 : clamp(volume.value, 0, 1) * fade;
       if (!wants || fade === 0) { audio.pause(); updateButtons(); return; }
       if (gesture) blocked = false;
       if (audio.paused && !playPending && !blocked) {

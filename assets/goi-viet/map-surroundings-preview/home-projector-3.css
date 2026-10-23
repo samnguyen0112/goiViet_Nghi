@@ -1,0 +1,24 @@
+/* T4: two height tiers, isolated from phones, short laptops and ultrawide layouts. */
+@media (min-width:1280px) and (max-width:2199px) and (min-height:800px) {
+ body[data-preview-version="3"] #introWelcomeStage { --projector-title:40px; --projector-description:17px; --projector-feature:15px; --projector-detail:13px; --projector-kicker:14px; --projector-button:19px; --projector-hint:15px; }
+ body[data-preview-version="3"] #introWelcomeStage #homepageContent { width:clamp(880px,56vw,900px); }
+ body[data-preview-version="3"] #introWelcomeStage #homepageContent .gv-invitation-copy { padding:24px 0 28px; }
+ body[data-preview-version="3"] #introWelcomeStage #homepageContent #homepageHeading { font-size:var(--projector-title); margin-top:14px; }
+ body[data-preview-version="3"] #introWelcomeStage #homepageContent .gv-home-description { font-size:var(--projector-description); margin-top:10px; }
+ body[data-preview-version="3"] #introWelcomeStage #homepageContent .gv-home-kicker { font-size:var(--projector-kicker); }
+ body[data-preview-version="3"] #introWelcomeStage #homepageContent .gv-home-features { grid-template-columns:repeat(3,minmax(0,1fr)); margin:14px 3% 0; padding:8px 0; min-height:56px; }
+ body[data-preview-version="3"] #introWelcomeStage #homepageContent .gv-home-features li { font-size:var(--projector-feature); padding:0 6px; gap:5px; }
+ body[data-preview-version="3"] #introWelcomeStage #homepageContent .gv-invitation-feature-copy small { font-size:var(--projector-detail); white-space:nowrap; }
+ body[data-preview-version="3"] #introWelcomeStage #homepageContent .gv-invitation-feature-icon { width:28px; height:30px; flex-basis:28px; }
+ body[data-preview-version="3"] #introWelcomeStage #homepageContent .gv-home-actions { margin-top:18px; }
+ body[data-preview-version="3"] #introWelcomeStage #homepageContent #btnQuickStartWelcome,
+ body[data-preview-version="3"] #introWelcomeStage #homepageContent #btnHomeExploreMemory { font-size:var(--projector-button); }
+ body[data-preview-version="3"] #introWelcomeStage .gv-home-station-hint { font-size:var(--projector-hint); }
+}
+@media (min-width:1280px) and (max-width:2199px) and (min-height:1000px) {
+ body[data-preview-version="3"] #introWelcomeStage { --projector-title:44px; --projector-description:18px; --projector-feature:16px; --projector-detail:14px; --projector-kicker:16px; --projector-button:22px; --projector-hint:16px; }
+ body[data-preview-version="3"] #introWelcomeStage #homepageContent { width:clamp(880px,56vw,1120px); }
+ body[data-preview-version="3"] #introWelcomeStage #homepageContent .gv-invitation-copy { padding:32px 0 36px; }
+ body[data-preview-version="3"] #introWelcomeStage .gv-home-logo { width:clamp(440px,25vw,540px); }
+ body[data-preview-version="3"] #introWelcomeStage #homepageContent #btnHomeExploreMemory { width:auto; min-width:183px; }
+}

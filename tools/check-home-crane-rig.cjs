@@ -19,7 +19,8 @@ const root=path.resolve(__dirname,'..'),out=path.join(root,'verification/crane-r
    await page.goto('file:///'+root.replaceAll('\\','/')+'/'+file);await page.waitForFunction(()=>window.GoiVietHomeIntro);
    await page.evaluate(async()=>{await GoiVietHomeIntro.ready;await document.fonts.ready;});
    assert.equal(await page.locator('#homeSceneCanvas').getAttribute('data-crane-animation'),'approved-ivory-gold');
-   await page.locator('#btnHomeOpeningStart').click();assert.equal(await page.evaluate(()=>GoiVietHomeIntro.getState().phase),'playing');
+   // Preview 3 fades the gate copy for 350 ms before the scene clock starts.
+   await page.locator('#btnHomeOpeningStart').click();await page.waitForFunction(()=>GoiVietHomeIntro.getState().phase!=='fading',null,{timeout:2000});assert.equal(await page.evaluate(()=>GoiVietHomeIntro.getState().phase),'playing');
    await page.locator('#btnHomeOpeningSkip').click();assert.equal(await page.evaluate(()=>GoiVietHomeIntro.getState().phase),'complete');
    await page.locator('#btnHomeOpeningReplay').click();assert.equal(await page.evaluate(()=>GoiVietHomeIntro.getState().phase),'playing');
    await page.evaluate(()=>GoiVietHomeIntro.seek(12,true));const item={file,controls:true};
