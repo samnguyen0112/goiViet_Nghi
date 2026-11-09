@@ -1,0 +1,48 @@
+{
+  "trainSourceBounds": {
+    "left": 6,
+    "top": 236,
+    "width": 2148,
+    "height": 236
+  },
+  "bodySourceBounds": {
+    "left": 22,
+    "top": 133,
+    "width": 2028,
+    "height": 513
+  },
+  "bodyTile": {
+    "x": 32,
+    "y": 215,
+    "width": 460,
+    "height": 116
+  },
+  "trainRect": [
+    1245,
+    1157,
+    1387,
+    137
+  ],
+  "smokeRect": [
+    1320,
+    1160,
+    70,
+    45
+  ],
+  "railY": 1294,
+  "rigTexture": [
+    2048,
+    512
+  ],
+  "wingPixelsUnchanged": true,
+  "sourceHashes": [
+    {
+      "file": "train-restored-source.png",
+      "sha256": "d2c07f7956e738c89559a13e8636d870fbb50cedbdc68e32bd54de3fbd6721cc"
+    },
+    {
+      "file": "crane-body-source.png",
+      "sha256": "65b3b762ec222ef75bf81af6a8a0509648ecc344cacfcf6779327a6d5064339a"
+    }
+  ]
+}
