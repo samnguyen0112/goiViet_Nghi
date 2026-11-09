@@ -1,0 +1,922 @@
+[
+  {
+    "quality": "2k",
+    "encoding": "Hue-safe RGB12 prepass + lossless WebP; alpha exact",
+    "geometryAndOrderUnchanged": true,
+    "layers": 64,
+    "graded": 48,
+    "originalBundleBytes": 2850038,
+    "bundleBytes": 2946005,
+    "bundleChangePercent": 3.3672182616512503,
+    "checks": [
+      {
+        "id": "sky",
+        "graded": false,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": true,
+        "bytes": 220234
+      },
+      {
+        "id": "mountains-far-left",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 180552
+      },
+      {
+        "id": "mountains-far-right",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 194732
+      },
+      {
+        "id": "mountains-mid-left",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 248568
+      },
+      {
+        "id": "mountains-mid-right",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 322492
+      },
+      {
+        "id": "mountains-near-left",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 40680
+      },
+      {
+        "id": "mountains-near-right",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 60196
+      },
+      {
+        "id": "river-valley",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 334754
+      },
+      {
+        "id": "hanoi",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 7206
+      },
+      {
+        "id": "hue",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 13696
+      },
+      {
+        "id": "saigon",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 6050
+      },
+      {
+        "id": "train",
+        "graded": false,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": true,
+        "bytes": 99660
+      },
+      {
+        "id": "bridge",
+        "graded": false,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": true,
+        "bytes": 94776
+      },
+      {
+        "id": "cloud-01",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 5194
+      },
+      {
+        "id": "cloud-02",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 7622
+      },
+      {
+        "id": "cloud-03",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 6280
+      },
+      {
+        "id": "cloud-04",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 6184
+      },
+      {
+        "id": "cloud-05",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 2404
+      },
+      {
+        "id": "cloud-06",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 15330
+      },
+      {
+        "id": "cloud-07",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 5208
+      },
+      {
+        "id": "cloud-08",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 6252
+      },
+      {
+        "id": "cloud-09",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 7050
+      },
+      {
+        "id": "cloud-10",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 6240
+      },
+      {
+        "id": "cloud-11",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 6488
+      },
+      {
+        "id": "cloud-12",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 4810
+      },
+      {
+        "id": "cloud-13",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 14036
+      },
+      {
+        "id": "cloud-14",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 10196
+      },
+      {
+        "id": "cloud-15",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 10112
+      },
+      {
+        "id": "cloud-16",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 3506
+      },
+      {
+        "id": "cloud-17",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 12002
+      },
+      {
+        "id": "cloud-18",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 11366
+      },
+      {
+        "id": "tree-left-bridge-01",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 7172
+      },
+      {
+        "id": "tree-left-bridge-02",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 4984
+      },
+      {
+        "id": "tree-left-valley-01",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 1042
+      },
+      {
+        "id": "tree-left-valley-02",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 1702
+      },
+      {
+        "id": "tree-left-valley-03",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 2442
+      },
+      {
+        "id": "tree-right-bridge-01",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 2154
+      },
+      {
+        "id": "tree-right-bridge-02",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 7264
+      },
+      {
+        "id": "tree-right-bridge-03",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 1176
+      },
+      {
+        "id": "tree-right-valley-01",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 1376
+      },
+      {
+        "id": "tree-right-valley-02",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 3072
+      },
+      {
+        "id": "tree-right-valley-03",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 1500
+      },
+      {
+        "id": "bird-one",
+        "graded": false,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": true,
+        "bytes": 44262
+      },
+      {
+        "id": "bird-two",
+        "graded": false,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": true,
+        "bytes": 44262
+      },
+      {
+        "id": "leaf-one",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 5230
+      },
+      {
+        "id": "leaf-two",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 5230
+      },
+      {
+        "id": "leaf-three",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 5230
+      },
+      {
+        "id": "leaf-four",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 5230
+      },
+      {
+        "id": "leaf-five",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 5230
+      },
+      {
+        "id": "leaf-six",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 5230
+      },
+      {
+        "id": "leaf-seven",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 5230
+      },
+      {
+        "id": "leaf-eight",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 5230
+      },
+      {
+        "id": "petal-one",
+        "graded": false,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": true,
+        "bytes": 5158
+      },
+      {
+        "id": "petal-two",
+        "graded": false,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": true,
+        "bytes": 5158
+      },
+      {
+        "id": "petal-three",
+        "graded": false,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": true,
+        "bytes": 5158
+      },
+      {
+        "id": "petal-four",
+        "graded": false,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": true,
+        "bytes": 5158
+      },
+      {
+        "id": "petal-five",
+        "graded": false,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": true,
+        "bytes": 5158
+      },
+      {
+        "id": "petal-six",
+        "graded": false,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": true,
+        "bytes": 5158
+      },
+      {
+        "id": "petal-seven",
+        "graded": false,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": true,
+        "bytes": 5158
+      },
+      {
+        "id": "petal-eight",
+        "graded": false,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": true,
+        "bytes": 5158
+      },
+      {
+        "id": "petal-nine",
+        "graded": false,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": true,
+        "bytes": 5158
+      },
+      {
+        "id": "petal-ten",
+        "graded": false,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": true,
+        "bytes": 5158
+      },
+      {
+        "id": "smoke",
+        "graded": false,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": true,
+        "bytes": 1774
+      },
+      {
+        "id": "leaf-nine",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 5230
+      }
+    ]
+  },
+  {
+    "quality": "4k",
+    "encoding": "Hue-safe RGB12 prepass + lossless WebP; alpha exact",
+    "geometryAndOrderUnchanged": true,
+    "layers": 64,
+    "graded": 48,
+    "originalBundleBytes": 11378447,
+    "bundleBytes": 10329089,
+    "bundleChangePercent": -9.222330604519225,
+    "checks": [
+      {
+        "id": "sky",
+        "graded": false,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": true,
+        "bytes": 616112
+      },
+      {
+        "id": "mountains-far-left",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 559186
+      },
+      {
+        "id": "mountains-far-right",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 601332
+      },
+      {
+        "id": "mountains-mid-left",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 791336
+      },
+      {
+        "id": "mountains-mid-right",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 1008852
+      },
+      {
+        "id": "mountains-near-left",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 136782
+      },
+      {
+        "id": "mountains-near-right",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 203870
+      },
+      {
+        "id": "river-valley",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 996436
+      },
+      {
+        "id": "hanoi",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 21320
+      },
+      {
+        "id": "hue",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 40828
+      },
+      {
+        "id": "saigon",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 16458
+      },
+      {
+        "id": "train",
+        "graded": false,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": true,
+        "bytes": 641718
+      },
+      {
+        "id": "bridge",
+        "graded": false,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": true,
+        "bytes": 246546
+      },
+      {
+        "id": "cloud-01",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 11274
+      },
+      {
+        "id": "cloud-02",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 14700
+      },
+      {
+        "id": "cloud-03",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 12606
+      },
+      {
+        "id": "cloud-04",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 13166
+      },
+      {
+        "id": "cloud-05",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 4988
+      },
+      {
+        "id": "cloud-06",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 47394
+      },
+      {
+        "id": "cloud-07",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 10092
+      },
+      {
+        "id": "cloud-08",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 13184
+      },
+      {
+        "id": "cloud-09",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 21382
+      },
+      {
+        "id": "cloud-10",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 15218
+      },
+      {
+        "id": "cloud-11",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 13602
+      },
+      {
+        "id": "cloud-12",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 10812
+      },
+      {
+        "id": "cloud-13",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 41054
+      },
+      {
+        "id": "cloud-14",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 33160
+      },
+      {
+        "id": "cloud-15",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 38058
+      },
+      {
+        "id": "cloud-16",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 7996
+      },
+      {
+        "id": "cloud-17",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 26920
+      },
+      {
+        "id": "cloud-18",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 41884
+      },
+      {
+        "id": "tree-left-bridge-01",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 13550
+      },
+      {
+        "id": "tree-left-bridge-02",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 12002
+      },
+      {
+        "id": "tree-left-valley-01",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 1942
+      },
+      {
+        "id": "tree-left-valley-02",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 3580
+      },
+      {
+        "id": "tree-left-valley-03",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 4140
+      },
+      {
+        "id": "tree-right-bridge-01",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 4450
+      },
+      {
+        "id": "tree-right-bridge-02",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 14112
+      },
+      {
+        "id": "tree-right-bridge-03",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 2096
+      },
+      {
+        "id": "tree-right-valley-01",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 2266
+      },
+      {
+        "id": "tree-right-valley-02",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 4800
+      },
+      {
+        "id": "tree-right-valley-03",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 3014
+      },
+      {
+        "id": "bird-one",
+        "graded": false,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": true,
+        "bytes": 436910
+      },
+      {
+        "id": "bird-two",
+        "graded": false,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": true,
+        "bytes": 436910
+      },
+      {
+        "id": "leaf-one",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 15758
+      },
+      {
+        "id": "leaf-two",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 15758
+      },
+      {
+        "id": "leaf-three",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 15758
+      },
+      {
+        "id": "leaf-four",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 15758
+      },
+      {
+        "id": "leaf-five",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 15758
+      },
+      {
+        "id": "leaf-six",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 15758
+      },
+      {
+        "id": "leaf-seven",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 15758
+      },
+      {
+        "id": "leaf-eight",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 15758
+      },
+      {
+        "id": "petal-one",
+        "graded": false,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": true,
+        "bytes": 37450
+      },
+      {
+        "id": "petal-two",
+        "graded": false,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": true,
+        "bytes": 37450
+      },
+      {
+        "id": "petal-three",
+        "graded": false,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": true,
+        "bytes": 37450
+      },
+      {
+        "id": "petal-four",
+        "graded": false,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": true,
+        "bytes": 37450
+      },
+      {
+        "id": "petal-five",
+        "graded": false,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": true,
+        "bytes": 37450
+      },
+      {
+        "id": "petal-six",
+        "graded": false,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": true,
+        "bytes": 37450
+      },
+      {
+        "id": "petal-seven",
+        "graded": false,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": true,
+        "bytes": 37450
+      },
+      {
+        "id": "petal-eight",
+        "graded": false,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": true,
+        "bytes": 37450
+      },
+      {
+        "id": "petal-nine",
+        "graded": false,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": true,
+        "bytes": 37450
+      },
+      {
+        "id": "petal-ten",
+        "graded": false,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": true,
+        "bytes": 37450
+      },
+      {
+        "id": "smoke",
+        "graded": false,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": true,
+        "bytes": 9670
+      },
+      {
+        "id": "leaf-nine",
+        "graded": true,
+        "alphaUnchanged": true,
+        "protectedBytesUnchanged": null,
+        "bytes": 15758
+      }
+    ]
+  }
+]
