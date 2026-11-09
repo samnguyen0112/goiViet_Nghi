@@ -1,0 +1,84 @@
+/* Preview 3: one warm-gold outline joined to the existing painted corners.
+   The card silhouette and live layout stay intact. */
+body[data-preview-version="3"] #introWelcomeStage #homepageContent {
+  --inv-frame-gold: #ac8e50;
+  --inv-frame-rule: #b1976252;
+  --inv-frame-radius: clamp(18px, 1.6vw, 28px);
+  border-radius: var(--inv-frame-radius);
+  box-shadow: 0 8px 24px #173f3521, 0 2px 5px #173f3512;
+}
+
+body[data-preview-version="3"] #introWelcomeStage #homepageContent .gv-invitation-border {
+  display: block;
+  box-sizing: border-box;
+  border: 0;
+  border-radius: inherit;
+  /* A continuous fractional-width stroke stays visible at standard zoom. */
+  box-shadow: inset 0 0 0 1.5px var(--inv-frame-gold);
+}
+
+body[data-preview-version="3"] #introWelcomeStage #homepageContent .gv-invitation-border::after {
+  content: none;
+}
+
+/* Remove the source's old rim, then register the remaining paint at the outer
+   outline. Only the inward edges fade: no pale halo along the outer frame.
+   Move the art outward, never further into the text or controls. */
+body[data-preview-version="3"] #introWelcomeStage #homepageContent .gv-invitation-ornament {
+  mask-composite: intersect;
+}
+
+body[data-preview-version="3"] #introWelcomeStage #homepageContent .gv-invitation-ornament[data-piece="tl"] {
+  left: -1.45cqi;
+  top: -.45cqi;
+  clip-path: inset(.5cqi 0 0 1.5cqi);
+  mask-image: linear-gradient(to right, #000 65%, transparent), linear-gradient(to bottom, #000 65%, transparent);
+}
+
+body[data-preview-version="3"] #introWelcomeStage #homepageContent .gv-invitation-ornament[data-piece="tr"] {
+  right: -1.45cqi;
+  top: -.45cqi;
+  clip-path: inset(.5cqi 1.5cqi 0 0);
+  mask-image: linear-gradient(to left, #000 65%, transparent), linear-gradient(to bottom, #000 65%, transparent);
+}
+
+body[data-preview-version="3"] #introWelcomeStage #homepageContent .gv-invitation-ornament[data-piece="bl"] {
+  left: -1.45cqi;
+  bottom: -1.45cqi;
+  clip-path: inset(0 0 1.5cqi 1.5cqi);
+  mask-image: linear-gradient(to right, #000 70%, transparent), linear-gradient(to top, #000 70%, transparent);
+}
+
+body[data-preview-version="3"] #introWelcomeStage #homepageContent .gv-invitation-ornament[data-piece="br"] {
+  right: -1.45cqi;
+  bottom: -1.45cqi;
+  clip-path: inset(0 1.5cqi 1.5cqi 0);
+  mask-image: linear-gradient(to left, #000 70%, transparent), linear-gradient(to top, #000 70%, transparent);
+}
+
+body[data-preview-version="3"] #introWelcomeStage #homepageContent .gv-home-features {
+  border-color: var(--inv-frame-rule);
+  border-radius: 12px;
+  background: #fbf7eacf;
+}
+
+body[data-preview-version="3"] #introWelcomeStage #homepageContent .gv-home-features li + li {
+  border-color: transparent;
+}
+
+body[data-preview-version="3"] #introWelcomeStage #homepageContent .gv-home-features li + li::before {
+  width: 1px;
+  height: 70%;
+  border: 0;
+  rotate: none;
+  background: linear-gradient(transparent, var(--inv-frame-rule) 20% 80%, transparent);
+}
+
+body[data-preview-version="3"] #introWelcomeStage #homepageContent .gv-home-kicker::before,
+body[data-preview-version="3"] #introWelcomeStage #homepageContent .gv-home-kicker::after {
+  background: linear-gradient(90deg, transparent, var(--inv-frame-gold), transparent);
+}
+
+body[data-preview-version="3"] #introWelcomeStage #homepageContent .gv-home-guide {
+  border-color: var(--inv-frame-gold);
+}

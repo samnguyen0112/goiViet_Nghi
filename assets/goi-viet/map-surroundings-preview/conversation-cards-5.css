@@ -1,0 +1,162 @@
+/* Preview-5 copy of conversation-cards-3.css. Official reference: card-testing.html — elastic deck and sealed diptych.
+   Every rule is scoped to the conversation modal (#deckModal). Identical to the -3 file apart from this header. */
+#deckModal {
+  --paper-bg: #f7f0de;
+  --paper-elevated: #fffcf4;
+  --paper-warm: #efe6ce;
+  --wood-border: #d8d0b5;
+  --wood-border-strong: #938362;
+  --ink-primary: #293b32;
+  --ink-secondary: #4b5b4c;
+  --ink-muted: #596b5c;
+  --son-red: #9e2835;
+  --com-green: #2b6e48;
+  --card-front-bg: #8a1e26;
+  --card-front-ink: #fff9f3;
+  --card-front-muted: #f8d5c8;
+  --card-front-line: #fff9f38c;
+  --card-front-soft: #fff9f314;
+  padding: 24px;
+}
+#deckModal .modal-sheet { width: min(1140px, 100%); max-width: 1140px; max-height: 92dvh; background: var(--paper-elevated); border: 1px solid var(--wood-border-strong); border-radius: 20px; box-shadow: 0 24px 80px #1c271e55; }
+#deckModal .modal-header { padding: 22px 28px; border-bottom: 1px solid var(--wood-border); background: var(--paper-elevated); }
+#deckModal .modal-body { padding: 28px; background: radial-gradient(ellipse at 50% 0%, #e5a93c0d, transparent 65%), var(--paper-bg); overscroll-behavior: contain; }
+#deckModal .deck-stage { width: 100%; gap: 0; }
+#deckModal .deck-turn-label { color: var(--ink-secondary); font-size: 13px; }
+#deckModalHeading { color: var(--ink-primary); font-size: 26px; }
+#deckModal .deck-header-actions { flex-wrap: wrap; justify-content: flex-end; }
+#deckModal #deckRemainingBadge { color: var(--ink-secondary); font-size: 13px; }
+#deckModal #deckClosedState { padding: 26px 20px 22px; border: 1px solid var(--wood-border); border-radius: 20px; background: var(--paper-elevated); box-shadow: 0 10px 32px #432a1514; }
+#deckModal .conversation-deck-kicker { color: var(--son-red); font-size: 11px; font-weight: 700; letter-spacing: .14em; margin-bottom: 8px; }
+#deckModal #conversationDeckTitle { font: 700 26px/1.4 var(--font-display); color: var(--ink-primary); }
+#deckModal #deckPromptParagraph { max-width: 650px !important; font-size: 14px !important; line-height: 1.7; }
+#deckModal .conversation-fan-stage { width: 100%; height: 352px; margin-bottom: 18px; display: grid; place-items: center; perspective: 1200px; padding-top: 20px; }
+#deckModal .fanned-deck-container { width: 100%; max-width: 580px; height: 290px; margin: 0; perspective: 1200px; }
+#deckModal .fanned-card { width: 200px; height: 275px; border: 2px solid #ffdf8e; border-radius: 16px; padding: 16px; flex-direction: column; justify-content: space-between; background: linear-gradient(145deg, #962516 0%, #761b0e 50%, #581208 100%); color: #fff9ee; box-shadow: 0 10px 26px #2c242052, inset 0 0 0 2px #ffdf8e73; transform-origin: 50% 90%; transform: translate3d(var(--fan-x),var(--fan-y),0) rotate(var(--fan-angle)); z-index: var(--fan-order); transition: transform .42s cubic-bezier(.22,1,.36,1),box-shadow .3s; font-family: var(--font-sans); }
+#deckModal .fanned-card::before { inset: 6px; border-color: #ffdf8e8c; }
+#deckModal .conversation-card-badge { font-size: 11px; font-weight: 700; letter-spacing: 1px; color: #ffdf8e; background: #0004; padding: 3px 8px; border: 1px solid #ffdf8e4d; border-radius: 20px; }
+#deckModal .conversation-card-core { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+#deckModal .conversation-card-emblem { font-size: 32px; filter: drop-shadow(0 2px 4px #0006); }
+#deckModal .conversation-card-title { font: 700 18px/1.5 var(--font-display); color: #fffdf8; text-shadow: 0 2px 4px #0008; }
+#deckModal .conversation-card-sub { font-size: 12px; color: #f8d3b8; }
+#deckModal .conversation-card-footer { font-size: 12px; color: #ffffffb3; }
+@media (hover: hover) and (pointer: fine) and (min-width: 701px) {
+  #deckModal .conversation-fan-stage:hover .fanned-card { transform: translate3d(var(--fan-expanded-x),var(--fan-y),0) rotate(var(--fan-expanded-angle)); }
+  #deckModal .fanned-card:not(:disabled):hover { transform: translate3d(var(--fan-expanded-x),-40px,40px) rotate(0deg) scale(1.08); z-index: 20; box-shadow: 0 24px 50px #2c1e1680,0 0 25px #ffdf8e80; border-color: #fff3c4; }
+}
+#deckModal .fanned-deck-container:focus-within .fanned-card { transform: translate3d(var(--fan-expanded-x),var(--fan-y),0) rotate(var(--fan-expanded-angle)); }
+#deckModal .fanned-card:focus-visible { transform: translate3d(var(--fan-expanded-x),-30px,40px) rotate(0deg) scale(1.04) !important; z-index: 30; }
+#deckModal :is(button,input,summary):focus-visible { outline: 3px solid #c48224; outline-offset: 4px; }
+#deckModal :is(.btn-lg,.craft-btn,.small-wood-btn) { font-family: var(--font-sans); min-height: 44px; border-radius: 8px; font-size: 13px; padding: 10px 14px; line-height: 1.5; }
+#deckModal .btn-primary, #deckModal #btnRevealAnswer { background: linear-gradient(180deg,#af3644 0%,#9e2835 60%,#75202c 100%); color: #fffdf8; border: 1.5px solid #ffdf8e; box-shadow: 0 4px 0 #52140a,0 8px 20px #83231433; }
+#deckModal .btn-primary:hover, #deckModal #btnRevealAnswer:not(:disabled):hover { background: linear-gradient(180deg,#b83c49,#7a1d2a); transform: translateY(-2px); }
+#deckModal button:disabled { cursor: default; }
+#deckModal #btnDrawCard:disabled { opacity: .7; cursor: wait; transform: none; }
+#deckModal #conversationShuffleStatus { min-height: 30px; margin-top: 14px; color: var(--son-red); font-size: 13px; font-weight: 600; }
+#deckModal #conversationShuffleStatus:empty { min-height: 0; margin: 0; }
+
+/* Gather, riffle, highlight, draw — the four phases of the reference. */
+#deckModal .is-shuffling { pointer-events: none; }
+#deckModal .is-shuffling.phase-gather .fanned-card { transform: translate3d(0,0,0) rotate(0deg) !important; transition-duration: .32s; }
+#deckModal .is-shuffling.phase-shuffle .fanned-card { animation: conversation-shuffle-left .52s ease-in-out infinite alternate; }
+#deckModal .is-shuffling.phase-shuffle .fanned-card:nth-child(even) { animation-name: conversation-shuffle-right; animation-duration: .48s; }
+#deckModal .is-shuffling.phase-shuffle .fanned-card:nth-child(3) { animation-duration: .45s; animation-delay: -.2s; }
+#deckModal .is-shuffling.phase-shuffle .fanned-card:nth-child(4) { animation-delay: -.25s; }
+#deckModal .is-shuffling.phase-pick .fanned-card { opacity: .4; transform: translate3d(0,10px,0) scale(.95) !important; }
+#deckModal .is-shuffling.phase-pick .fanned-card.is-picked { opacity: 1; z-index: 50; transform: translate3d(0,-32px,70px) scale(1.08) !important; box-shadow: 0 0 35px #ffdf8eb3,0 20px 45px #2c1e1680; border-color: #fff6d0; }
+#deckModal .is-shuffling.phase-draw .fanned-card.is-picked { transform: translate3d(0,-100px,140px) scale(1.18) !important; transition: transform .65s cubic-bezier(.18,.89,.32,1.25); box-shadow: 0 35px 65px #2c1e16a6,0 0 45px #ffdf8ee6; }
+@keyframes conversation-shuffle-left { 0% { transform: translate3d(-10px,0,0) rotate(-2deg); z-index: 1; } 50% { transform: translate3d(-110px,-20px,30px) rotate(-14deg); z-index: 4; } 100% { transform: translate3d(24px,8px,10px) rotate(5deg); z-index: 2; } }
+@keyframes conversation-shuffle-right { 0% { transform: translate3d(10px,0,0) rotate(2deg); z-index: 2; } 50% { transform: translate3d(110px,-14px,40px) rotate(14deg); z-index: 3; } 100% { transform: translate3d(-20px,6px,15px) rotate(-4deg); z-index: 4; } }
+
+#deckModal #drawnCardViewport { max-width: none; perspective: none; }
+#deckModal #card3DFlipper { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 24px; transform: none; transform-style: flat; transition: none; }
+#deckModal #card3DFlipper .card-3d-face { position: relative; inset: auto; min-width: 0; min-height: 480px; height: auto; padding: 24px; border-radius: 18px; transform: none; backface-visibility: visible; pointer-events: auto; overflow-wrap: anywhere; }
+#deckModal #cardFrontState { background: url('../corner.svg') right 8px top 8px / 32px 32px no-repeat,#8a1e26; color: #fff9f3; border: 1.5px solid #b53644; box-shadow: 0 12px 32px #7a1d2a40; }
+#deckModal #cardBackState { background: url('../corner.svg') right 8px top 8px / 32px 32px no-repeat,var(--paper-elevated); border: 1.5px solid var(--wood-border-strong); box-shadow: 0 4px 16px #432a1514; }
+#deckModal .card-kicker-row { gap: 10px; font-size: 13px; margin-bottom: 16px; }
+#deckModal .card-side-badge { font-size: 12px; padding: 4px 8px; }
+#deckModal #cardFrontTopicTag { font-size: 12px !important; color: #f8d5c8; }
+#deckModal .question-text { font-size: 21px; line-height: 1.5; margin: 18px 0; }
+#deckModal .linked-story-context-box { --com-green: #2b6e48; padding: 14px 16px; margin-bottom: 18px; border: 1px solid #ffdf8e; border-radius: 12px; background: #fffffff0; color: #293b32; font-size: 13px; line-height: 1.55; }
+#deckModal .linked-story-context-box .small-wood-btn { background: #fffcf4; color: #293b32; border-color: #938362; }
+#deckModal .linked-story-context-box > div { color: #4b5b4c; }
+#deckModal #cardFrontState .option-btn { background: #fff9f314; color: #fffdf8; border: 1.5px solid #fff9f38c; border-radius: 12px; padding: 12px 14px; min-height: 50px; font-size: 15px; }
+#deckModal #cardFrontState .option-btn:hover { background: #fff9f333; border-color: #ffdf8e; }
+#deckModal #cardFrontState .option-btn.selected { background: #ffdf8e47; border-color: #ffdf8e; box-shadow: 0 0 14px #ffdf8e40; }
+#deckModal #cardFrontState .option-btn.correct-reveal { background: #2b6e48d9; border-color: #9de0b7; }
+#deckModal #cardFrontState .option-btn.wrong-reveal { background: #8c1414cc; border-color: #f89b9b; }
+#deckModal #cardFrontState .option-letter { width: 26px; height: 26px; background: #fff3; color: #fffdf8; border: 0; font-size: 13px; }
+#deckModal #cardSelectHint { font-size: 12px !important; color: #f8d5c8; }
+#deckModal .card-actions { margin-top: 14px; width: 100%; gap: 10px; }
+#deckModal #cardFrontState .btn-secondary { color: #fffdf8; background: #ffffff26; border: 1px solid #ffffff4d; box-shadow: none; }
+#deckModal #cardFrontState .btn-secondary:hover { background: #ffffff40; }
+#deckModal #answerExplanationBox { padding: 14px; border: 0; border-left: 4px solid #c48224; border-radius: 0 8px 8px 0; background: #fffffff2; color: #293b32; box-shadow: none; }
+#deckModal #answerExplanationBox :is(p,span) { font-size: 13px !important; line-height: 1.6 !important; color: #4b5b4c !important; }
+#deckModal #answerExplanationBox > div:last-child > span { display: none; }
+#deckModal #answerExplanationBox .btn-primary { font-size: 12px; }
+#deckModal #answerStatusHeading { font-size: 14px !important; color: #2b6e48 !important; }
+#deckModal #cardBackTurnTag { font-size: 12px !important; }
+#deckModal .activity-prompt-box { padding: 18px; border-radius: 14px; background: var(--paper-warm); border: 1.5px solid var(--wood-border); }
+#deckModal .activity-type-tag { color: var(--com-green); font-size: 12px; font-weight: 700; background: #2b6e4814; padding: 3px 10px; border-radius: 20px; }
+#deckModal .activity-main-text { font-size: 15px; line-height: 1.7; }
+#deckModal .activity-gentle-note { font-size: 12px; line-height: 1.6; }
+#deckModal :is(.listening-drum-details,.memory-details-drawer) { margin-top: 18px; font-size: 13px; }
+#deckModal :is(.listening-drum-details,.memory-details-drawer) summary { min-height: 44px; padding: 10px 0; color: var(--ink-secondary); font-size: 13px; }
+#deckModal .memory-input-row { display: flex; flex-direction: column; align-items: stretch !important; }
+#deckModal .memory-field-group { width: 100%; min-width: 0; flex: 0 0 auto; }
+#deckModal .memory-input { width: 100%; min-width: 0; font-size: 16px; }
+#deckModal .memory-bridge-box :is(p,label), #deckModal .listening-drum-bar div { font-size: 12px !important; line-height: 1.6; }
+#deckModal .listening-drum-bar { flex-wrap: wrap; }
+#deckModal .conversation-seal { position: absolute; inset: 0; z-index: 2; padding: 30px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 16px; text-align: center; background: linear-gradient(135deg,#f7f0def5,#efe6cefa); border-radius: 17px; }
+#deckModal .conversation-seal[hidden] { display: none; }
+#deckModal .conversation-seal h3 { color: var(--son-red); font: 700 20px/1.5 var(--font-display); }
+#deckModal .conversation-seal p { max-width: 320px; font-size: 13px; line-height: 1.7; color: var(--ink-secondary); }
+#deckModal .conversation-wax-seal { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 90px; height: 90px; flex-shrink: 0; border-radius: 50%; background: radial-gradient(circle at 35% 35%,#be3847,#90212f 60%,#60121d); border: 3px solid #ffdf8e; color: #fff9e6; box-shadow: 0 8px 24px #83231466,inset 0 2px 6px #fff6; cursor: pointer; transition: transform .3s; }
+#deckModal .conversation-wax-seal:hover { transform: scale(1.08) rotate(4deg); }
+#deckModal .conversation-wax-seal > span { font-size: 28px; }
+#deckModal .conversation-wax-seal small { font: 800 10px/1.5 var(--font-sans); letter-spacing: 1px; }
+#deckModal #conversationConnectionContent[aria-hidden=true] { visibility: hidden; }
+#deckModal .connection-open #conversationConnectionContent { animation: conversation-open .45s ease both; }
+#deckModal :is(#cardQuestionText,.activity-prompt-box):focus { outline: none; }
+@keyframes conversation-open { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+html[data-theme=dark] #deckModal { --paper-bg: #152720; --paper-elevated: #20362c; --paper-warm: #2a4336; --wood-border: #4b6552; --wood-border-strong: #8ba28b; --ink-primary: #f7f0de; --ink-secondary: #d2d9c6; --ink-muted: #bbcbb8; --son-red: #f0ab97; --com-green: #89c7a1; }
+html[data-theme=dark] #deckModal .conversation-seal { background: linear-gradient(135deg,#20362c,#2a4336); }
+@media (max-width: 860px) {
+  #deckModal { padding: 12px; }
+  #deckModal #card3DFlipper { grid-template-columns: minmax(0,1fr); gap: 20px; }
+  #deckModal .modal-body { padding: 20px; }
+  #deckModal #cardBackState { min-height: 420px; }
+}
+@media (max-width: 700px) {
+  #deckModal .conversation-fan-stage { height: 310px; margin-bottom: 0; padding-top: 0; }
+  #deckModal .fanned-deck-container { height: 270px; }
+  #deckModal .fanned-card { width: 156px; height: 224px; padding: 14px 10px; transform: translate3d(calc(var(--fan-x) * .64),var(--fan-y),0) rotate(var(--fan-angle)); }
+  #deckModal .fanned-deck-container:focus-within .fanned-card { transform: translate3d(calc(var(--fan-x) * .64),var(--fan-y),0) rotate(var(--fan-angle)); }
+  #deckModal .fanned-card:focus-visible { transform: translate3d(calc(var(--fan-x) * .64),-24px,0) rotate(0deg) !important; }
+  #deckModal .conversation-card-title { font-size: 16px; }
+  #deckModal .conversation-card-badge { font-size: 10px; }
+  #deckModal .deck-header { grid-template-columns: 1fr; gap: 12px; }
+  #deckModal .deck-header-actions { justify-content: space-between; }
+}
+@media (max-width: 600px) {
+  #deckModal { padding: 0; }
+  #deckModal .modal-sheet { width: 100%; max-height: 100dvh; height: 100dvh; border-radius: 0; }
+  #deckModal .modal-header { padding: calc(14px + env(safe-area-inset-top,0px)) 18px 14px; }
+  #deckModalHeading { font-size: 21px; }
+  #deckModal .modal-body { padding: 18px 12px calc(24px + env(safe-area-inset-bottom,0px)); }
+  #deckModal #deckClosedState { padding: 22px 10px; }
+  #deckModal #conversationDeckTitle { font-size: 22px; }
+  #deckModal #card3DFlipper .card-3d-face { padding: 20px 16px; }
+  #deckModal .question-text { font-size: 20px; }
+  #deckModal .conversation-seal { padding: 24px 18px; }
+}
+@media (max-width: 359px) {
+  #deckModal .fanned-card { width: 140px; height: 210px; }
+  #deckModal .conversation-card-title { font-size: 14px; }
+  #deckModal .fanned-card { transform: translate3d(calc(var(--fan-x) * .48),var(--fan-y),0) rotate(var(--fan-angle)); }
+  #deckModal .fanned-deck-container:focus-within .fanned-card { transform: translate3d(calc(var(--fan-x) * .48),var(--fan-y),0) rotate(var(--fan-angle)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  #deckModal *, #deckModal *::before { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}
+body.reduced-motion #deckModal *, body.reduced-motion #deckModal *::before { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
