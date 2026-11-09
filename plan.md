@@ -1,7 +1,7 @@
 # Gói Việt preview-5 — Kế hoạch song ngữ, hai chế độ và khung sách văn hóa
 
 - **Ngày lập** 09/11/2026 (Codex). **Sửa lần 2** cùng ngày (Claude): làm **khung sách trước, nội dung và tranh nhập sau**; áp dụng các góp ý review (tranh không chữ, dịch thẻ theo mẫu, danh sách tệp cần tách, nội dung là đường găng, nghiệm thu gọn, URL fanpage).
-- **Trạng thái** Kế hoạch. Chưa giai đoạn nào được thực hiện.
+- **Trạng thái** P5-00 đã làm ([BAO-CAO-P5-00.md](BAO-CAO-P5-00.md)); P5-01 đã làm ([BAO-CAO-P5-01.md](BAO-CAO-P5-01.md)). Khung dữ liệu sách chính thức nằm ở `assets/goi-viet/books-5/_mau/HUONG-DAN-NHAP-NOI-DUNG.md`; đoạn mã mẫu ở mục 2 chỉ là phác thảo ban đầu.
 - **Bản triển khai và nghiệm thu** `map-surroundings-preview-5.html` và tài nguyên dành riêng cho bản 5.
 - **Tham chiếu** `D:/Download/Goi-Viet-Ha-Noi.html`: chỉ tham chiếu **phong cách** sách (bìa xanh, giấy kem, gáy, dấu đỏ, ảnh xen chữ), không dùng làm định dạng sản xuất. `card-testing.html`: bộ thẻ.
 
@@ -74,6 +74,7 @@ Mọi thay đổi chỉ gồm preview-5 và tài nguyên `-5`. Tệp dùng chung
 - Tranh không có chữ. Chữ là văn bản HTML trên trang, nên luôn nét trên máy chiếu và 4K, chọn và tìm được, đổi ngôn ngữ tức thì.
 - VI và EN dùng **chung cấu trúc trang**: cùng số trang, cùng mã trang, cùng tranh. Mỗi trang có ô chữ VI và EN riêng. Nhờ vậy số trang, mục lục và vị trí đọc giữ nguyên khi đổi ngôn ngữ.
 - Khung chạy được trước khi có nội dung. Ô chưa có nội dung hiện **khung giữ chỗ** ghi tỉ lệ tranh và giới hạn chữ.
+- *Cập nhật 09/11 (sau P5-01):* trình đọc hỗ trợ thêm `editions` (ảnh trang đôi dàn sẵn, riêng từng ngôn ngữ). Tập Hà Nội bản VI đang dùng cách này. Trang HTML vẫn là nguồn chữ cho Đọc chữ lớn, trình đọc màn hình và ngôn ngữ chưa có bản ảnh. Lưu ý về font, dung lượng và việc sửa đồng bộ ở `BAO-CAO-P5-01.md` mục 10.
 
 **Tệp và thư mục**
 
@@ -81,6 +82,7 @@ Mọi thay đổi chỉ gồm preview-5 và tài nguyên `-5`. Tệp dùng chung
 | --- | --- |
 | `assets/goi-viet/map-surroundings-preview/i18n-5.js` | Lõi song ngữ: `t(key, vars)`, ngôn ngữ hiện tại, đọc `?lang=`, ghi nhớ, sự kiện đổi ngôn ngữ, từ điển giao diện. |
 | `assets/goi-viet/books-5/catalog-5.js` | Danh mục nhỏ nạp cùng trang. **Nguồn duy nhất** cho trạng thái sách của từng địa phương. |
+| `assets/goi-viet/books-5/layouts-5.js` | Mô tả 7 bố cục (tỉ lệ ô tranh, ô chữ, giới hạn ký tự đã đo), dùng chung cho trình đọc và công cụ kiểm tra. |
 | `assets/goi-viet/books-5/book-reader-5.js`, `book-reader-5.css` | Trình đọc dùng chung. |
 | `assets/goi-viet/books-5/<mã tỉnh>/book.js` | Nội dung một tập, nạp theo yêu cầu bằng `<script>` khi mở lần đầu. |
 | `assets/goi-viet/books-5/<mã tỉnh>/art/` | Tranh không chữ, WebP hai cỡ: thường và nét. |

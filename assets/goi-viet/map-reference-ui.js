@@ -5,6 +5,7 @@
   const intro = document.getElementById('introScreen');
   const list = document.getElementById('demoPlaceList');
   if (!intro || !list) return;
+  const legacyStation = !list.closest('.gv-station-v5');
   const originals = new Map();
   const cardOriginals = new WeakMap();
   const openStories = new Set();
@@ -27,6 +28,9 @@
   const active = () => intro.classList.contains('intro-hidden');
   let applying = false;
   const observer = new MutationObserver(() => { if (active()) apply(); });
+  function observeCards() {
+    if (legacyStation) observer.observe(list, { childList: true, subtree: true });
+  }
   function setFace(node, content) {
     if (!node || originals.has(node)) return;
     originals.set(node, node.innerHTML);
@@ -36,6 +40,7 @@
     setFace(document.querySelector('#mapScene .turn-banner .small-wood-btn'), icon('turn')+'<span>Đổi lượt</span>');
     setFace(document.querySelector('#mapScene .header-actions > .craft-btn-red'), icon('train')+'<span class="ui-ref-ticket-short">Rút vé</span><span class="ui-ref-ticket-full">Rút vé ngẫu nhiên</span>');
     setFace(document.querySelector('#mapScene .header-actions > .craft-btn-green'), icon('mail')+'<span>Bưu Thiếp</span>');
+    if (!legacyStation) return;
     setFace(document.getElementById('tabScopeFeatured'), icon('star')+'<span>3 ga khởi đầu</span>');
     const allScope = document.getElementById('tabScopeAll');
     setFace(allScope, allScope?.dataset.scopeLabel ? '<span>'+escape(allScope.dataset.scopeLabel)+'</span>' : '<span>Tất cả 36 ga tỉnh &amp; đảo</span>');
@@ -96,19 +101,25 @@
   function apply() {
     if (applying || !active()) return;
     applying = true; observer.disconnect();
-    try { decorateControls(); list.querySelectorAll('.place-card.selected').forEach(decorateCard); }
-    finally { applying = false; observer.observe(list,{childList:true,subtree:true}); }
+    try {
+      decorateControls();
+      if (legacyStation) list.querySelectorAll('.place-card.selected').forEach(decorateCard);
+    } finally {
+      applying = false;
+      observeCards();
+    }
   }
   function restore() {
     observer.disconnect();
     originals.forEach((html,node) => { if (node.isConnected) node.innerHTML = html; }); originals.clear();
+    if (!legacyStation) return;
     list.querySelectorAll('.place-card.selected').forEach(card => {
       const html = cardOriginals.get(card); if (html === undefined) return;
       card.innerHTML = html; cardOriginals.delete(card);
     });
-    observer.observe(list,{childList:true,subtree:true});
+    observeCards();
   }
   new MutationObserver(() => { if (active()) apply(); else restore(); }).observe(intro,{attributes:true,attributeFilter:['class']});
-  observer.observe(list,{childList:true,subtree:true});
+  observeCards();
   if (active()) apply();
 })();

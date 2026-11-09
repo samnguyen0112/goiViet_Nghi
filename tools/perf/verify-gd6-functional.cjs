@@ -1,6 +1,6 @@
 // GD6: differential functional check. Drives the same user-level script against two pages and diffs everything observable.
 // node tools/perf/verify-gd6-functional.cjs [--a map-surroundings-preview-4.html] [--b map-surroundings-preview-5.html] [--cpu 1]
-// Covers: place scope tabs, accent-less search, empty search, topic filters, place selection, memory save (place + note), 'R' recenter,
+// Covers: place scope tabs, accent-less search, empty search, topic filters when present, place selection, memory save (place + note), 'R' recenter,
 // Escape (deck modal, journey clear), music file choose, page errors. Observes only; nothing in the site is edited.
 const { fs, path, launch, BASE, ROOT, os } = require('./lib.cjs');
 const arg = (k, d) => { const i = process.argv.indexOf('--' + k); return i > 0 ? process.argv[i + 1] : d; };
@@ -55,23 +55,30 @@ async function run(target) {
   await page.fill('#provSearchInput', ''); await wait(250);
   R.steps.search.cleared = { ids: await ids() };
 
-  // ---- topic filters
-  R.steps.topics = {};
-  for (const t of ['Ẩm thực', 'Nghệ thuật', 'Lễ hội', 'Nghề truyền thống', 'all']) {
-    await page.click(`.topic-btn[data-topic="${t}"]`); await wait(250);
-    R.steps.topics[t] = { ids: await ids(), pressed: await page.evaluate(() => Array.from(document.querySelectorAll('.topic-btn')).filter(b => b.getAttribute('aria-pressed') === 'true').map(b => b.dataset.topic)) };
+  // ---- older previews still expose topic filters
+  if (await page.locator('.topic-btn').count()) {
+    R.steps.topics = {};
+    for (const t of ['Ẩm thực', 'Nghệ thuật', 'Lễ hội', 'Nghề truyền thống', 'all']) {
+      await page.click(`.topic-btn[data-topic="${t}"]`); await wait(250);
+      R.steps.topics[t] = { ids: await ids(), pressed: await page.evaluate(() => Array.from(document.querySelectorAll('.topic-btn')).filter(b => b.getAttribute('aria-pressed') === 'true').map(b => b.dataset.topic)) };
+    }
+    await page.fill('#provSearchInput', 'hue'); await page.click('.topic-btn[data-topic="Lễ hội"]'); await wait(250);
+    R.steps.searchPlusTopic = { ids: await ids() };
+    await page.fill('#provSearchInput', ''); await page.click('.topic-btn[data-topic="all"]'); await wait(250);
+  } else {
+    R.steps.topics = { available: false };
   }
-  // search + topic combined
-  await page.fill('#provSearchInput', 'hue'); await page.click('.topic-btn[data-topic="Lễ hội"]'); await wait(250);
-  R.steps.searchPlusTopic = { ids: await ids() };
-  await page.fill('#provSearchInput', ''); await page.click('.topic-btn[data-topic="all"]'); await wait(250);
 
   // ---- select places by real clicks (first, a middle one, last), read selection + visible panel text
   R.steps.select = {};
   const allIds = await ids();
   for (const id of [allIds[0], allIds[Math.floor(allIds.length / 2)], allIds[allIds.length - 1], 'hue']) {
-    await page.locator(`#placeCard-${id}`).scrollIntoViewIfNeeded().catch(() => { });
-    await page.click(`#placeCard-${id}`); await wait(1800);
+    const card = page.locator(`#placeCard-${id}`);
+    await card.scrollIntoViewIfNeeded().catch(() => { });
+    const row = card.locator('.place-compact-row');
+    if (await row.count()) await row.click();
+    else if (!(await card.evaluate(element => element.classList.contains('selected')))) await card.click();
+    await wait(1800);
     R.steps.select[id] = await page.evaluate(id => {
       const c = document.getElementById('placeCard-' + id), list = document.getElementById('demoPlaceList');
       const sel = Array.from(list.querySelectorAll('.selected')).map(e => e.id);

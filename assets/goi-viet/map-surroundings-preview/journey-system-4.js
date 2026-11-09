@@ -61,6 +61,7 @@
     focus();syncControls();if(state.reducedMotion)finish(changedAt);requestMapRender(3);return true;
   }
   function clear(){
+    window.GoiVietStationPanel?.clearSelection();
     if(!selected&&!arrival)return;arrival=null;selected=null;transition(null);obstacles=[];document.getElementById('mapStationArrivalBanner')?.classList.remove('show');
     announceSR(trip?'Đã bỏ chọn. Tàu tiếp tục đến '+name(trip.route.id)+'.':'Đã bỏ chọn và ẩn tuyến hành trình.');
   }
@@ -146,8 +147,39 @@
       if(arrival){const place=CULTURAL_PLACE_MAP[arrival.id];setText(detail.querySelector('.journey-arrival-heading'),atStation?'Dừng chân và khám phá':'Đã đến '+name(arrival.id));setText(detail.querySelector('.journey-arrival-description'),place?.tagline||place?.summary||'Cùng mở câu chuyện và tìm hiểu vùng đất này.');setText(detail.querySelector('.journey-arrival-landmark'),place?.highlights?.landmark||place?.photoTitle||place?.region||name(arrival.id));const exploreButton=detail.querySelector('.journey-arrival-explore');if(exploreButton.hidden!==atStation)exploreButton.hidden=atStation;}
     }
     const card=document.querySelector('#demoPlaceList .place-card.selected'),id=card?.id.replace('placeCard-',''),button=card?.querySelector('.station-board-action');
-    if(button){const label=buttonLabel(id);const disabled=Boolean(trip)||id===currentId;if(button.disabled!==disabled)button.disabled=disabled;if(button.getAttribute('aria-label')!==label)button.setAttribute('aria-label',label);if(button.title!==label)button.title=label;setText(button.querySelector('.ui-ref-action-full'),label);setText(button.querySelector('.ui-ref-action-short'),label);if(!button.querySelector('.ui-ref-action-full'))setText(button,label+' →');
-      let note=card.querySelector('.journey-preview-note');if(!note){note=document.createElement('p');note.className='journey-preview-note';card.querySelector('.station-board-ribbon').after(note);}setText(note,trip?'Chuyến đang chạy đến '+name(trip.route.id)+'.':id===currentId?'Đã đến '+name(id)+'. Mở câu chuyện để khám phá ga.':'Xem tuyến và khởi hành trên bản đồ.');}
+    if (button) {
+      const componentLabel = button.querySelector('[data-journey-label]');
+      const atStation = id === currentId;
+      const explore = Boolean(componentLabel && !trip && atStation);
+      let label = buttonLabel(id);
+      if (componentLabel && !trip) {
+        label = state.reducedMotion ? button.dataset.arriveLabel : button.dataset.readyLabel;
+        if (explore) label = button.dataset.exploreLabel;
+        const action = explore ? 'explore' : 'depart';
+        if (button.dataset.journeyAction !== action) button.dataset.journeyAction = action;
+      }
+      const disabled = Boolean(trip) || (atStation && !explore);
+      if (button.disabled !== disabled) button.disabled = disabled;
+      if (button.getAttribute('aria-label') !== label) button.setAttribute('aria-label', label);
+      if (button.title !== label) button.title = label;
+      if (componentLabel) setText(componentLabel, label);
+      else {
+        setText(button.querySelector('.ui-ref-action-full'), label);
+        setText(button.querySelector('.ui-ref-action-short'), label);
+        if (!button.querySelector('.ui-ref-action-full')) setText(button, label + ' →');
+      }
+      let note = card.querySelector('.journey-preview-note');
+      if (!note) {
+        note = document.createElement('p');
+        note.className = 'journey-preview-note';
+        card.querySelector('.station-board-ribbon').after(note);
+      }
+      if (componentLabel) {
+        const hideNote = !trip && !(atStation && arrival?.id === id);
+        if (note.hidden !== hideNote) note.hidden = hideNote;
+      }
+      setText(note,trip?'Chuyến đang chạy đến '+name(trip.route.id)+'.':id===currentId?'Đã đến '+name(id)+'. Mở câu chuyện để khám phá ga.':'Xem tuyến và khởi hành trên bản đồ.');
+    }
     syncProgress();positionBar();if(had!==bar.hidden){invalidate();requestAnimationFrame(()=>{syncMapControlLayout();window.GoiVietMapFrame?.syncSafeArea();positionBar();});}
   }
   function screenKey(now){const c=state.cam;return JSON.stringify([cw,ch,c.zoom,c.yaw,c.pitch,c.panX,c.panY,c.targetZoom,c.targetYaw,c.targetPitch,c.targetPanX,c.targetPanY,state.theme,getMapSelectedPlaceId(),state.hoveredItem?.id,revision,window.GoiVietRegionalPreview?.isAnimating()?Math.floor(now/50):0,...getMapScreenOrigin(cw,ch)]);}
