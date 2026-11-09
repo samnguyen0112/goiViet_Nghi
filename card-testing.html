@@ -1,0 +1,1850 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nghiên cứu & Thử nghiệm Thẻ Trò Chuyện Song Diện (Dual-Face Card Testing)</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🪷%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&display=swap" rel="stylesheet">
+  
+  <style>
+    /* =========================================================
+       1. HỆ THỐNG MÀU SẮC & CHẤT LIỆU DỰ ÁN (DESIGN TOKENS)
+       ========================================================= */
+    :root, [data-theme="light"] {
+      --paper-bg: #F7F0DE;
+      --paper-elevated: #FFFCF4;
+      --paper-warm: #EFE6CE;
+      --paper-deep: #D8D0B5;
+      --wood-dark: #293B32;
+      --wood-mid: #4B5B4C;
+      --wood-border: #D8D0B5;
+      --wood-border-strong: #938362;
+      --ink-primary: #293B32;
+      --ink-secondary: #4B5B4C;
+      --ink-muted: #596B5C;
+      --son-red: #9E2835;
+      --son-red-hover: #7A1D2A;
+      --son-red-soft: rgba(158, 40, 53, 0.08);
+      --son-red-card: #8A1E26;
+      --nghe-gold: #C48224;
+      --nghe-gold-text: #80500E;
+      --nghe-gold-soft: rgba(196, 130, 36, 0.12);
+      --gold-accent: #E5A93C;
+      --gold-light: #FFDF8E;
+      --gold-sheen: linear-gradient(135deg, #FFE89E 0%, #D49B35 50%, #FFE89E 100%);
+      --cham-indigo: #164654;
+      --com-green: #2B6E48;
+      --com-green-soft: rgba(43, 110, 72, 0.12);
+      --btn-lacquer-red: linear-gradient(180deg, #AF3644 0%, #9E2835 60%, #75202C 100%);
+      --btn-lacquer-red-hover: linear-gradient(180deg, #B83C49 0%, #9E2835 60%, #7A1D2A 100%);
+      --btn-shadow-tactile: 0 4px 0 #52140A, 0 8px 20px rgba(131, 35, 20, 0.35);
+      --shadow-warm: 0 4px 16px rgba(67, 42, 21, 0.08);
+      --shadow-card: 0 10px 32px rgba(67, 42, 21, 0.15);
+      --shadow-lift: 0 20px 48px rgba(44, 36, 32, 0.28);
+      --font-sans: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-display: 'Playfair Display', Georgia, serif;
+      --card-radius: 18px;
+    }
+
+    [data-theme="dark"] {
+      --paper-bg: #152720;
+      --paper-elevated: #20362C;
+      --paper-warm: #2A4336;
+      --paper-deep: #385343;
+      --wood-dark: #F7F0DE;
+      --wood-mid: #D2D9C6;
+      --wood-border: #4B6552;
+      --wood-border-strong: #8BA28B;
+      --ink-primary: #F7F0DE;
+      --ink-secondary: #D2D9C6;
+      --ink-muted: #BBCBB8;
+      --son-red: #F0AB97;
+      --son-red-card: #712429;
+      --son-red-soft: rgba(240, 171, 151, 0.14);
+      --nghe-gold: #E5AB56;
+      --nghe-gold-text: #E5AB56;
+      --nghe-gold-soft: rgba(229, 171, 86, 0.18);
+      --cham-indigo: #A7C7C2;
+      --com-green: #89C7A1;
+      --shadow-card: 0 10px 32px rgba(0, 0, 0, 0.45);
+      --shadow-lift: 0 20px 48px rgba(0, 0, 0, 0.6);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--paper-bg);
+      color: var(--ink-primary);
+      min-height: 100vh;
+      line-height: 1.6;
+      background-image: 
+        radial-gradient(ellipse at 50% 0%, rgba(229, 169, 60, 0.12) 0%, transparent 60%),
+        radial-gradient(circle at 10% 20%, rgba(158, 40, 53, 0.05) 0%, transparent 50%);
+      padding-bottom: 80px;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    /* TOP BAR & BRANDING */
+    .top-header {
+      background: var(--paper-elevated);
+      border-bottom: 1.5px solid var(--wood-border);
+      padding: 14px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--shadow-warm);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .brand-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand-badge {
+      background: var(--son-red-soft);
+      color: var(--son-red);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 20px;
+      border: 1px solid currentColor;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .brand-title h1 {
+      font-family: var(--font-display);
+      font-size: 20px;
+      color: var(--ink-primary);
+      margin: 0;
+    }
+    .header-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .btn {
+      font-family: var(--font-sans);
+      font-size: 14px;
+      font-weight: 600;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+      border: 1px solid var(--wood-border);
+      background: var(--paper-elevated);
+      color: var(--ink-primary);
+    }
+    .btn:hover {
+      background: var(--paper-warm);
+      border-color: var(--wood-border-strong);
+      transform: translateY(-1px);
+    }
+    .btn-lacquer {
+      background: var(--btn-lacquer-red);
+      color: #FFFDF8;
+      border: 1.5px solid #FFDF8E;
+      box-shadow: var(--btn-shadow-tactile);
+      text-shadow: 0 1px 2px rgba(44, 18, 12, 0.5);
+    }
+    .btn-lacquer:hover {
+      background: var(--btn-lacquer-red-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 0 #52140A, 0 12px 24px rgba(131, 35, 20, 0.4);
+    }
+
+    /* MAIN STAGE */
+    .test-container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 10px 20px;
+    }
+
+    /* =========================================================
+       PHẦN 1: BÀN RÚT BÀI & CƠ CHẾ HOVER ĐÀN HỒI (ERGONOMICS DECK)
+       ========================================================= */
+    .deck-section {
+      background: var(--paper-elevated);
+      border: 1px solid var(--wood-border);
+      border-radius: 20px;
+      padding: 30px 24px;
+      margin-bottom: 30px;
+      box-shadow: var(--shadow-card);
+      text-align: center;
+      position: relative;
+      overflow: visible;
+    }
+    .deck-title-row {
+      margin-bottom: 24px;
+    }
+    .deck-subtitle {
+      font-size: 14px;
+      color: var(--ink-secondary);
+      margin-bottom: 6px;
+    }
+    .deck-headline {
+      font-family: var(--font-display);
+      font-size: 26px;
+      color: var(--ink-primary);
+    }
+    .deck-hint {
+      font-size: 14px;
+      color: var(--ink-muted);
+      margin-top: 8px;
+    }
+
+    /* BỘ BÀI HOVER CONTAINER */
+    .fanned-deck-stage {
+      position: relative;
+      height: 330px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 20px auto 10px;
+      perspective: 1200px;
+      /* Vùng đệm rộng để bắt sự kiện hover tự nhiên */
+      padding: 20px 40px;
+    }
+
+    /* CHẾ ĐỘ 1: QUẠT ĐÀN HỒI 2 CẤP (ELASTIC FAN-OUT - RECOMMENDED) */
+    .deck-mode-elastic .fanned-deck-wrap {
+      position: relative;
+      width: 440px;
+      height: 290px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      transition: width 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    /* Khi rê chuột vào khu vực cả bộ bài -> tự động xòe rộng */
+    .deck-mode-elastic .fanned-deck-stage:hover .fanned-deck-wrap {
+      width: 580px;
+    }
+
+    .deck-card {
+      position: absolute;
+      width: 200px;
+      height: 275px;
+      border-radius: 16px;
+      background: linear-gradient(145deg, #962516 0%, #761B0E 50%, #581208 100%);
+      border: 2px solid #FFDF8E;
+      box-shadow: 0 10px 26px rgba(44, 36, 32, 0.32), inset 0 0 0 2px rgba(255, 223, 142, 0.45);
+      cursor: pointer;
+      user-select: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px;
+      color: #FFF9EE;
+      transform-origin: 50% 90%;
+      transition: transform 0.42s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease, filter 0.3s ease;
+      will-change: transform, box-shadow;
+    }
+
+    /* Họa tiết viền chỉ và góc truyền thống */
+    .deck-card::before {
+      content: '';
+      position: absolute;
+      inset: 6px;
+      border: 1px dashed rgba(255, 223, 142, 0.55);
+      border-radius: 11px;
+      pointer-events: none;
+    }
+    .deck-card-badge {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #FFDF8E;
+      background: rgba(0,0,0,0.25);
+      padding: 3px 8px;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 223, 142, 0.3);
+      position: relative;
+      z-index: 2;
+    }
+    .deck-card-core {
+      text-align: center;
+      z-index: 2;
+    }
+    .deck-card-emblem {
+      font-size: 32px;
+      margin-bottom: 6px;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
+    }
+    .deck-card-title {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: #FFFDF8;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    }
+    .deck-card-sub {
+      font-size: 12px;
+      color: #F8D3B8;
+      margin-top: 4px;
+    }
+    .deck-card-footer {
+      font-size: 12px;
+      color: rgba(255,255,255,0.7);
+      z-index: 2;
+    }
+
+    /* TỌA ĐỘ MẶC ĐỊNH CỦA 4 LÁ (QUẠT ĐÀN HỒI) */
+    .deck-mode-elastic .deck-card:nth-child(1) { --x: -75px; --y: 12px; --rot: -14deg; z-index: 1; }
+    .deck-mode-elastic .deck-card:nth-child(2) { --x: -25px; --y: 3px;  --rot: -5deg;  z-index: 2; }
+    .deck-mode-elastic .deck-card:nth-child(3) { --x: 25px;  --y: 3px;  --rot: 5deg;   z-index: 3; }
+    .deck-mode-elastic .deck-card:nth-child(4) { --x: 75px;  --y: 12px; --rot: 14deg;  z-index: 4; }
+
+    .deck-mode-elastic .deck-card {
+      transform: translate3d(var(--x), var(--y), 0) rotate(var(--rot));
+    }
+
+    /* KHI HOVER CONTAINER: XÒE RỘNG ĐỀU (LEVEL 1) */
+    .deck-mode-elastic .fanned-deck-stage:hover .deck-card:nth-child(1) { --x: -150px; --y: 14px; --rot: -18deg; }
+    .deck-mode-elastic .fanned-deck-stage:hover .deck-card:nth-child(2) { --x: -50px;  --y: 2px;  --rot: -6deg;  }
+    .deck-mode-elastic .fanned-deck-stage:hover .deck-card:nth-child(3) { --x: 50px;   --y: 2px;  --rot: 6deg;   }
+    .deck-mode-elastic .fanned-deck-stage:hover .deck-card:nth-child(4) { --x: 150px;  --y: 14px; --rot: 18deg;  }
+
+    /* KHI HOVER TRỰC TIẾP TỪNG LÁ (LEVEL 2): NHÔ LÊN, ĐỨNG THẲNG, KHÔNG GIẬT */
+    @media (hover: hover) and (pointer: fine) {
+      .deck-mode-elastic .deck-card:hover {
+        transform: translate3d(var(--x), -40px, 40px) rotate(0deg) scale(1.08) !important;
+        z-index: 20 !important;
+        box-shadow: 0 24px 50px rgba(44, 30, 22, 0.5), 0 0 25px rgba(255, 223, 142, 0.5);
+        border-color: #FFF3C4;
+      }
+    }
+
+    /* CHẾ ĐỘ 2: BÀN TRÀ TRẢI BÀI (SHELF / SPREAD MODE) */
+    .deck-mode-table .fanned-deck-wrap {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      width: 100%;
+    }
+    .deck-mode-table .deck-card {
+      position: relative;
+      transform: none !important;
+    }
+    .deck-mode-table .deck-card:hover {
+      transform: translateY(-20px) scale(1.05) !important;
+      box-shadow: 0 20px 40px rgba(44, 30, 22, 0.45);
+      border-color: #FFF3C4;
+    }
+
+    /* CHẾ ĐỘ 3: QUẠT KIỂU CŨ (TIGHT OVERLAP - ĐỂ SO SÁNH) */
+    .deck-mode-classic .fanned-deck-wrap {
+      position: relative;
+      width: 320px;
+      height: 290px;
+    }
+    .deck-mode-classic .deck-card:nth-child(1) { transform: translate3d(-54px, 10px, 0) rotate(-12deg); z-index: 1; }
+    .deck-mode-classic .deck-card:nth-child(2) { transform: translate3d(-18px, 2px, 0) rotate(-4deg); z-index: 2; }
+    .deck-mode-classic .deck-card:nth-child(3) { transform: translate3d(18px, 2px, 0) rotate(4deg); z-index: 3; }
+    .deck-mode-classic .deck-card:nth-child(4) { transform: translate3d(54px, 10px, 0) rotate(12deg); z-index: 4; }
+    .deck-mode-classic .deck-card:hover {
+      transform: translate3d(var(--fan-x, 0), -14px, 0) scale(1.03);
+      z-index: 10;
+    }
+
+    /* =========================================================
+       HIỆU ỨNG XÀO BÀI & RÚT BÀI NGẪU NHIÊN (SHUFFLE & DRAW)
+       ========================================================= */
+    .fanned-deck-wrap.is-shuffling {
+      pointer-events: none !important;
+    }
+    
+    /* Giai đoạn 1: Gom bài về chính giữa xấp */
+    .fanned-deck-wrap.is-shuffling.phase-gather .deck-card {
+      transition: transform 0.32s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.25s ease !important;
+      transform: translate3d(0, 0, 0) rotate(0deg) scale(1) !important;
+      box-shadow: 0 8px 18px rgba(44, 36, 32, 0.35) !important;
+    }
+
+    /* Giai đoạn 2: Trộn xào qua lại liên tục (Riffle & Overhand Shuffle) */
+    .fanned-deck-wrap.is-shuffling.phase-shuffle .deck-card:nth-child(1) {
+      animation: shuffleCardLeft 0.52s ease-in-out infinite alternate !important;
+    }
+    .fanned-deck-wrap.is-shuffling.phase-shuffle .deck-card:nth-child(2) {
+      animation: shuffleCardRight 0.48s ease-in-out infinite alternate !important;
+    }
+    .fanned-deck-wrap.is-shuffling.phase-shuffle .deck-card:nth-child(3) {
+      animation: shuffleCardCutLeft 0.45s ease-in-out infinite alternate !important;
+    }
+    .fanned-deck-wrap.is-shuffling.phase-shuffle .deck-card:nth-child(4) {
+      animation: shuffleCardCutRight 0.5s ease-in-out infinite alternate !important;
+    }
+
+    @keyframes shuffleCardLeft {
+      0%   { transform: translate3d(-10px, 0, 0) rotate(-2deg); z-index: 1; }
+      50%  { transform: translate3d(-110px, -20px, 30px) rotate(-14deg); z-index: 4; }
+      100% { transform: translate3d(24px, 8px, 10px) rotate(5deg); z-index: 2; }
+    }
+    @keyframes shuffleCardRight {
+      0%   { transform: translate3d(10px, 0, 0) rotate(2deg); z-index: 2; }
+      50%  { transform: translate3d(110px, -14px, 40px) rotate(14deg); z-index: 3; }
+      100% { transform: translate3d(-20px, 6px, 15px) rotate(-4deg); z-index: 4; }
+    }
+    @keyframes shuffleCardCutLeft {
+      0%   { transform: translate3d(-6px, 6px, 0) rotate(1deg); z-index: 3; }
+      50%  { transform: translate3d(-85px, 24px, 15px) rotate(-9deg); z-index: 1; }
+      100% { transform: translate3d(18px, -12px, 30px) rotate(3deg); z-index: 3; }
+    }
+    @keyframes shuffleCardCutRight {
+      0%   { transform: translate3d(6px, -6px, 0) rotate(-1deg); z-index: 4; }
+      50%  { transform: translate3d(90px, 20px, 20px) rotate(10deg); z-index: 2; }
+      100% { transform: translate3d(-15px, -10px, 8px) rotate(-5deg); z-index: 1; }
+    }
+
+    /* Giai đoạn 3: Dừng xào & Lá bài trúng tuyển phát sáng hào quang */
+    .fanned-deck-wrap.is-shuffling.phase-pick .deck-card {
+      transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s ease, box-shadow 0.3s ease !important;
+      opacity: 0.4;
+      transform: translate3d(0, 10px, 0) scale(0.95) !important;
+    }
+    .fanned-deck-wrap.is-shuffling.phase-pick .deck-card.is-picked {
+      opacity: 1 !important;
+      z-index: 50 !important;
+      transform: translate3d(0, -32px, 70px) scale(1.08) rotate(0deg) !important;
+      border-color: #FFF6D0 !important;
+      animation: goldenAuraPulse 0.5s infinite alternate ease-in-out !important;
+    }
+
+    @keyframes goldenAuraPulse {
+      from { 
+        box-shadow: 0 0 25px rgba(255, 223, 142, 0.7), 0 20px 45px rgba(44, 30, 22, 0.5); 
+        border-color: #FFDF8E;
+      }
+      to { 
+        box-shadow: 0 0 50px rgba(255, 223, 142, 1), 0 0 20px #FFDF8E, 0 25px 50px rgba(44, 30, 22, 0.65); 
+        border-color: #FFFFFF;
+      }
+    }
+
+    /* Giai đoạn 4: Lá bài được rút bay vút lên trên */
+    .fanned-deck-wrap.is-shuffling.phase-draw .deck-card.is-picked {
+      transition: transform 0.65s cubic-bezier(0.18, 0.89, 0.32, 1.25), opacity 0.4s ease !important;
+      transform: translate3d(0, -125px, 140px) scale(1.18) rotate(0deg) !important;
+      z-index: 100 !important;
+      box-shadow: 0 35px 65px rgba(44, 30, 22, 0.65), 0 0 45px rgba(255, 223, 142, 0.9) !important;
+    }
+
+    /* Nút bấm trạng thái xào bài */
+    .btn.shuffling-btn {
+      opacity: 0.85;
+      pointer-events: none;
+      cursor: wait;
+    }
+    .shuffle-status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--son-red);
+      background: var(--son-red-soft);
+      border: 1px solid currentColor;
+      padding: 4px 12px;
+      border-radius: 20px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    /* =========================================================
+       PHẦN 2: SHOW CẢ 2 MẶT CÙNG LÚC (DUAL-FACE PRESENTATION)
+       ========================================================= */
+    .drawn-card-section {
+      background: var(--paper-elevated);
+      border: 1px solid var(--wood-border);
+      border-radius: 20px;
+      padding: 28px 24px 34px;
+      box-shadow: var(--shadow-card);
+      position: relative;
+    }
+    .drawn-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 14px;
+      border-bottom: 1.5px solid var(--wood-border);
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .active-topic-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .topic-pill {
+      background: var(--son-red);
+      color: #FFF;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .station-name {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    /* --- CẤU TRÚC 1: THIỆP SONG HOA GẬP ĐÔI (DIPTYCH LAYOUT) --- */
+    .diptych-card-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      position: relative;
+      perspective: 1600px;
+    }
+    @media (max-width: 860px) {
+      .diptych-card-container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* MẶT TRÁI (MẶT TRƯỚC: TRI THỨC / THỬ THÁCH ĐỊA DANH) */
+    .face-pane {
+      background: var(--paper-warm);
+      border-radius: var(--card-radius);
+      padding: 24px;
+      border: 1.5px solid var(--wood-border);
+      box-shadow: var(--shadow-warm);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 480px;
+      overflow: hidden;
+      transition: all 0.35s ease;
+    }
+
+    .face-front {
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80' fill='none'%3E%3Cpath d='M4 74V22Q4 4 22 4H74M12 67V25Q12 12 25 12H67M23 25Q53 4 47 31Q31 52 23 25ZM25 23Q4 53 31 47Q52 31 25 23Z' stroke='%23B49355' stroke-width='1.5'/%3E%3C/svg%3E") right 8px top 8px / 32px 32px no-repeat, var(--son-red-card);
+      color: #FFF9F3;
+      border-color: #B53644;
+      box-shadow: 0 12px 32px rgba(122, 29, 42, 0.25);
+    }
+    .face-pane-tag {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      font-size: 13px;
+      color: #F8D5C8;
+    }
+    .face-pane-title-badge {
+      background: rgba(255,255,255,0.15);
+      padding: 3px 10px;
+      border-radius: 6px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    /* Hộp ngữ cảnh câu chuyện dẫn nhập */
+    .context-story-box {
+      background: rgba(255, 255, 255, 0.94);
+      color: var(--ink-primary);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 18px;
+      border: 1px solid #FFDF8E;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .context-story-heading {
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--com-green);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 4px;
+    }
+    .context-story-desc {
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--ink-secondary);
+    }
+
+    /* Câu hỏi & Thử thách */
+    .challenge-question {
+      font-family: var(--font-display);
+      font-size: 19px;
+      font-weight: 700;
+      line-height: 1.45;
+      margin-bottom: 20px;
+      color: #FFFDF8;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+    }
+
+    /* Danh sách trắc nghiệm */
+    .options-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .option-item {
+      background: rgba(255, 249, 243, 0.08);
+      border: 1.5px solid rgba(255, 249, 243, 0.55);
+      border-radius: 12px;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      color: #FFFDF8;
+      font-size: 15px;
+      transition: all 0.2s ease;
+      text-align: left;
+    }
+    .option-item:hover {
+      background: rgba(255, 249, 243, 0.2);
+      border-color: #FFDF8E;
+      transform: translateX(4px);
+    }
+    .option-item.selected {
+      background: rgba(255, 223, 142, 0.28);
+      border-color: #FFDF8E;
+      font-weight: 600;
+      box-shadow: 0 0 14px rgba(255, 223, 142, 0.35);
+    }
+    .option-item.correct {
+      background: rgba(43, 110, 72, 0.85) !important;
+      border-color: #9DE0B7 !important;
+    }
+    .option-item.wrong {
+      background: rgba(140, 20, 20, 0.8) !important;
+      border-color: #F89B9B !important;
+      opacity: 0.7;
+    }
+    .opt-letter {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    /* Minigame vòng tròn hoặc câu tự trả lời */
+    .open-challenge-box {
+      background: rgba(255, 255, 255, 0.12);
+      border: 1.5px dashed rgba(255, 223, 142, 0.6);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 20px;
+    }
+    .open-challenge-title {
+      font-weight: 700;
+      color: #FFDF8E;
+      margin-bottom: 8px;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .open-challenge-body {
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    /* Hàng nút bấm mặt trước */
+    .front-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: auto;
+    }
+    .front-actions .btn {
+      flex: 1 1 auto;
+      font-size: 13px;
+      justify-content: center;
+    }
+    .btn-front-secondary {
+      background: rgba(255,255,255,0.15);
+      border-color: rgba(255,255,255,0.3);
+      color: #FFFDF8;
+    }
+    .btn-front-secondary:hover {
+      background: rgba(255,255,255,0.28);
+    }
+
+    /* MẶT PHẢI (MẶT SAU: GẮN KẾT GIA ĐÌNH & TƯƠNG TÁC XÃ HỘI) */
+    .face-back {
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80' fill='none'%3E%3Cpath d='M4 74V22Q4 4 22 4H74M12 67V25Q12 12 25 12H67M23 25Q53 4 47 31Q31 52 23 25ZM25 23Q4 53 31 47Q52 31 25 23Z' stroke='%23B49355' stroke-width='1.5'/%3E%3C/svg%3E") right 8px top 8px / 32px 32px no-repeat, var(--paper-elevated);
+      color: var(--ink-primary);
+      border-color: var(--wood-border-strong);
+      position: relative;
+    }
+
+    /* LỚP GIẤY DÓ CHE MỜ BÍ MẬT KẾT NỐI */
+    .seal-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(247, 240, 222, 0.96) 0%, rgba(239, 230, 206, 0.98) 100%);
+      backdrop-filter: blur(4px);
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 30px;
+      text-align: center;
+      transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+      border-radius: var(--card-radius);
+    }
+    .seal-overlay.unsealed {
+      opacity: 0;
+      pointer-events: none;
+      transform: scale(1.04);
+    }
+
+    .seal-wax-stamp {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #BE3847 0%, #90212F 60%, #60121D 100%);
+      border: 3px solid #FFDF8E;
+      box-shadow: 0 8px 24px rgba(131, 35, 20, 0.4), inset 0 2px 6px rgba(255, 255, 255, 0.4);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #FFF9E6;
+      cursor: pointer;
+      margin-bottom: 18px;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+    }
+    .seal-wax-stamp:hover {
+      transform: scale(1.08) rotate(4deg);
+      box-shadow: 0 12px 30px rgba(131, 35, 20, 0.55);
+    }
+    .seal-stamp-icon { font-size: 26px; }
+    .seal-stamp-text { font-size: 10px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; }
+
+    .seal-prompt-title {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--son-red);
+      margin-bottom: 8px;
+    }
+    .seal-prompt-desc {
+      font-size: 13px;
+      color: var(--ink-secondary);
+      max-width: 320px;
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+
+    /* NỘI DUNG MẶT SAU (KHI ĐÃ MỞ BÍ MẬT) */
+    .back-content-revealed {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      justify-content: space-between;
+    }
+    .action-header-badge {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .action-type-pill {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--com-green);
+      background: var(--com-green-soft);
+      padding: 3px 10px;
+      border-radius: 20px;
+      border: 1px solid rgba(43, 110, 72, 0.25);
+    }
+
+    .action-prompt-card {
+      background: var(--paper-warm);
+      border: 1.5px solid var(--wood-border);
+      border-radius: 14px;
+      padding: 18px;
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .action-prompt-card::before {
+      content: '“';
+      position: absolute;
+      top: 6px;
+      left: 12px;
+      font-family: var(--font-display);
+      font-size: 48px;
+      color: var(--nghe-gold);
+      opacity: 0.3;
+      line-height: 1;
+      pointer-events: none;
+    }
+    .action-prompt-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--son-red);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .action-prompt-text {
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--ink-primary);
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ĐẶC THÙ CHO TỪNG LOẠI THẺ (DỰA TRÊN ẢNH CỦA BẠN) */
+    /* 1. Thẻ chét nghệ */
+    .dare-art-box {
+      background: #FFF7E3;
+      border: 1.5px dashed var(--nghe-gold);
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .dare-art-icon {
+      font-size: 32px;
+      flex-shrink: 0;
+    }
+    .dare-art-desc {
+      font-size: 13px;
+      color: var(--nghe-gold-text);
+      line-height: 1.45;
+    }
+
+    /* 2. Tiện ích hẹn giờ lắng nghe 60 giây */
+    .timer-widget {
+      background: var(--paper-bg);
+      border: 1px solid var(--wood-border);
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .timer-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .timer-display {
+      font-family: monospace;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--son-red);
+      background: var(--paper-elevated);
+      padding: 2px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--wood-border);
+    }
+    .timer-label {
+      font-size: 13px;
+      color: var(--ink-secondary);
+    }
+
+    /* 3. Ô ghi lại kỷ niệm gia đình */
+    .memory-note-widget {
+      margin-bottom: 16px;
+    }
+    .memory-note-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--ink-secondary);
+      margin-bottom: 6px;
+      display: block;
+    }
+    .memory-note-textarea {
+      width: 100%;
+      height: 64px;
+      background: var(--paper-bg);
+      border: 1px solid var(--wood-border);
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-family: var(--font-sans);
+      font-size: 13px;
+      color: var(--ink-primary);
+      resize: none;
+    }
+    .memory-note-textarea:focus {
+      outline: none;
+      border-color: var(--son-red);
+      box-shadow: 0 0 0 2px var(--son-red-soft);
+    }
+
+    /* Hàng nút bấm mặt sau */
+    .back-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: auto;
+    }
+    .back-actions .btn {
+      flex: 1 1 auto;
+      justify-content: center;
+      font-size: 13px;
+    }
+
+    /* GIẢI THÍCH CHI TIẾT ĐÁP ÁN (KHI CHỌN HOẶC BẤM GIẢI THÍCH) */
+    .explanation-callout {
+      background: rgba(255, 255, 255, 0.95);
+      border-left: 4px solid var(--nghe-gold);
+      border-radius: 0 8px 8px 0;
+      padding: 10px 14px;
+      margin-top: 14px;
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--ink-primary);
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+    .explanation-callout.show {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* KÍCH HOẠT HIỆU ỨNG CON DẤU ĐÓNG XUỐNG KHI MỞ KHÓA */
+    .stamp-awarded {
+      display: inline-block;
+      padding: 4px 12px;
+      border: 2px solid #C42635;
+      color: #C42635;
+      font-weight: 800;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border-radius: 4px;
+      transform: rotate(-4deg);
+      box-shadow: 0 0 0 2px rgba(196, 38, 53, 0.2);
+    }
+
+    /* =========================================================
+       CHẾ ĐỘ THỬ NGHIỆM 2: TRƯỢT RUỘT (SLIDING KINETIC SLEEVE)
+       ========================================================= */
+    .sleeve-container {
+      position: relative;
+      max-width: 760px;
+      margin: 0 auto;
+      min-height: 520px;
+      overflow: visible;
+    }
+    .sleeve-outer {
+      position: relative;
+      width: 100%;
+      max-width: 480px;
+      z-index: 2;
+      transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .sleeve-inner {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      max-width: 480px;
+      height: 100%;
+      z-index: 1;
+      transform: translateX(0);
+      transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+      opacity: 0.4;
+    }
+    .sleeve-container.pulled .sleeve-outer {
+      transform: translateX(-160px);
+    }
+    .sleeve-container.pulled .sleeve-inner {
+      transform: translateX(260px);
+      opacity: 1;
+      z-index: 3;
+    }
+
+    /* CONFETTI CANVAS CHO KHI TRẢ LỜI ĐÚNG / HOÀN THÀNH */
+    #confettiCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 9999;
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="confettiCanvas"></canvas>
+
+  <!-- TOP BAR -->
+  <header class="top-header">
+    <div class="brand-title">
+      <span class="brand-badge">Trải nghiệm tương tác</span>
+      <h1>Thẻ Trò Chuyện • TP. Hà Nội</h1>
+    </div>
+    <div class="header-actions">
+      <button class="btn" id="themeToggleBtn" onclick="toggleTheme()">
+        <span id="themeIcon">🌙</span> <span id="themeLabel">Chế độ tối</span>
+      </button>
+    </div>
+  </header>
+
+  <div class="test-container">
+    <!-- =========================================================
+         BÀN RÚT BÀI VỚI CƠ CHẾ HOVER ĐÀN HỒI (ERGONOMICS DECK)
+         ========================================================= -->
+    <section class="deck-section deck-mode-elastic" id="deckSection">
+      <div class="deck-title-row">
+        <div class="deck-subtitle">Lượt của Ông / Bà (Ấm Trà Sen) • Còn 4/4 lá bài</div>
+        <h2 class="deck-headline">Bộ Thẻ Ký Ức Quê Hương • Hà Nội</h2>
+        <p class="deck-hint" id="deckHintText">
+          Mời <strong>Ông / Bà (Ấm Trà Sen)</strong> chọn một lá bài trên bàn hoặc bấm nút rút ngẫu nhiên. Dù trả lời đúng hay chưa đúng, cả nhà đều được mở sang mặt sau để cùng trò chuyện!
+        </p>
+      </div>
+
+      <!-- VÙNG QUẠT BÀI TƯƠNG TÁC -->
+      <div class="fanned-deck-stage" id="deckStage">
+        <div class="fanned-deck-wrap" id="deckWrap">
+          
+          <!-- LÁ 1: VĂN HÓA (TRÀNG AN) -->
+          <div class="deck-card" onclick="selectCardFromDeck(0)" title="Nhấn để rút lá bài này">
+            <span class="deck-card-badge">Văn hóa</span>
+            <div class="deck-card-core">
+              <div class="deck-card-emblem">🏛️</div>
+              <div class="deck-card-title">KÝ ỨC QUÊ HƯƠNG</div>
+              <div class="deck-card-sub">Người Tràng An</div>
+            </div>
+            <div class="deck-card-footer">Bấm để rút lá</div>
+          </div>
+
+          <!-- LÁ 2: ĐỊA DANH (SÁP NHẬP & CHÉT NGHỆ) -->
+          <div class="deck-card" onclick="selectCardFromDeck(1)" title="Nhấn để rút lá bài này">
+            <span class="deck-card-badge">Địa danh</span>
+            <div class="deck-card-core">
+              <div class="deck-card-emblem">🗺️</div>
+              <div class="deck-card-title">KÝ ỨC QUÊ HƯƠNG</div>
+              <div class="deck-card-sub">Mở rộng địa giới</div>
+            </div>
+            <div class="deck-card-footer">Bấm để rút lá</div>
+          </div>
+
+          <!-- LÁ 3: MÓN ĂN (MINIGAME VÒNG TRÒN) -->
+          <div class="deck-card" onclick="selectCardFromDeck(2)" title="Nhấn để rút lá bài này">
+            <span class="deck-card-badge">Món ăn</span>
+            <div class="deck-card-core">
+              <div class="deck-card-emblem">🍲</div>
+              <div class="deck-card-title">KÝ ỨC QUÊ HƯƠNG</div>
+              <div class="deck-card-sub">Ẩm thực phố cổ</div>
+            </div>
+            <div class="deck-card-footer">Bấm để rút lá</div>
+          </div>
+
+          <!-- LÁ 4: TRUYỀN THỐNG (CỐM MÙA THU) -->
+          <div class="deck-card" onclick="selectCardFromDeck(3)" title="Nhấn để rút lá bài này">
+            <span class="deck-card-badge">Ẩm thực</span>
+            <div class="deck-card-core">
+              <div class="deck-card-emblem">🌾</div>
+              <div class="deck-card-title">KÝ ỨC QUÊ HƯƠNG</div>
+              <div class="deck-card-sub">Hương cốm mùa thu</div>
+            </div>
+            <div class="deck-card-footer">Bấm để rút lá</div>
+          </div>
+
+        </div>
+      </div>
+
+      <div style="margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap;">
+        <button class="btn btn-lacquer" id="btnRandomDraw" onclick="drawRandomCardWithShuffle()">
+          🎲 Xào & Rút ngẫu nhiên một lá bài
+        </button>
+        <span id="shuffleStatusRow"></span>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         KHU VỰC HIỂN THỊ SONG SONG CẢ 2 MẶT (DUAL-FACE PLAYGROUND)
+         ========================================================= -->
+    <section class="drawn-card-section" id="drawnCardSection">
+      
+      <!-- HEADER THẺ BÀI -->
+      <div class="drawn-card-header">
+        <div class="active-topic-info">
+          <span class="topic-pill" id="cardCategoryPill">🏛️ Văn hóa</span>
+          <span class="station-name" id="cardTopicTitle">Thành phố Hà Nội • Ký ức quê hương</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:13px; color:var(--ink-secondary);">Hiển thị song song:</span>
+          <span class="stamp-awarded" id="revealStatusBadge">Mặt trước + Mặt sau</span>
+        </div>
+      </div>
+
+      <!-- CHẾ ĐỘ 1: THIỆP SONG HOA GẬP ĐÔI (DIPTYCH SPLIT) -->
+      <div class="diptych-card-container" id="diptychContainer">
+
+        <!-- ==================== CÁNH TRÁI: MẶT TRƯỚC (TRI THỨC & THỬ THÁCH) ==================== -->
+        <div class="face-pane face-front" id="faceFrontPane">
+          <div>
+            <div class="face-pane-tag">
+              <span class="face-pane-title-badge">Mặt trước • Thử thách địa danh</span>
+              <span id="frontSubLabel">Hà Nội nghìn năm</span>
+            </div>
+
+            <!-- Ngữ cảnh dẫn nhập -->
+            <div class="context-story-box" id="contextStoryBox">
+              <div class="context-story-heading" id="storyBoxHeading">
+                📖 Hương cốm mùa thu Hà Nội
+              </div>
+              <div class="context-story-desc" id="storyBoxDesc">
+                Một thức quà nhỏ, gợi nhiều ký ức bên chén trà thu của người Tràng An.
+              </div>
+            </div>
+
+            <!-- Câu hỏi chính -->
+            <div class="challenge-question" id="challengeQuestionText">
+              Người Hà Nội còn được gọi là người gì?
+            </div>
+
+            <!-- Khung trắc nghiệm (Nếu có) -->
+            <div class="options-grid" id="optionsGrid">
+              <!-- Render động bằng JS -->
+            </div>
+
+            <!-- Khung câu hỏi mở / Minigame (Nếu không có trắc nghiệm) -->
+            <div class="open-challenge-box" id="openChallengeBox" style="display:none;">
+              <div class="open-challenge-title" id="openTitle">🎲 Thử thách phản xạ vòng tròn</div>
+              <div class="open-challenge-body" id="openBody">
+                Lần lượt từng người trong bàn kể tên 1 món ăn đặc biệt của Hà Nội theo chiều kim đồng hồ. Ai ngập ngừng quá 5 giây sẽ là người thua cuộc!
+              </div>
+            </div>
+
+            <!-- Giải thích đáp án sau khi kiểm tra -->
+            <div class="explanation-callout" id="explanationCallout">
+              <strong>Giải thích chi tiết:</strong> <span id="explanationText"></span>
+            </div>
+          </div>
+
+          <!-- Nút bấm mặt trước -->
+          <div class="front-actions">
+            <button class="btn btn-front-secondary" onclick="askFamilyHint()">
+              ★ Hỏi người thân
+            </button>
+            <button class="btn btn-front-secondary" onclick="showExplanationDirectly()">
+              Chưa biết, xem giải thích
+            </button>
+            <button class="btn btn-lacquer" id="btnCheckAnswer" onclick="checkAnswer()">
+              Kiểm tra & Mở kết nối →
+            </button>
+          </div>
+        </div>
+
+        <!-- ==================== CÁNH PHẢI: MẶT SAU (GẮN KẾT & TƯƠNG TÁC) ==================== -->
+        <div class="face-pane face-back" id="faceBackPane">
+
+          <!-- LỚP GIẤY DÓ CHE BÍ MẬT BAN ĐẦU (SECRET MASK OVERLAY) -->
+          <div class="seal-overlay" id="sealOverlay">
+            <div class="seal-wax-stamp" onclick="forceUnseal()" title="Chạm để mở thử thách gắn kết ngay">
+              <span class="seal-stamp-icon">🪷</span>
+              <span class="seal-stamp-text">Hoa Sen</span>
+            </div>
+            <div class="seal-prompt-title">Thử Thách Gắn Kết Đang Chờ Mở</div>
+            <div class="seal-prompt-desc">
+              Chọn đáp án ở <strong>Mặt trước</strong> hoặc chạm vào <strong>Huy hiệu Hoa Sen</strong> để cùng cả nhà mở ra hoạt động gắn kết!
+            </div>
+            <button class="btn btn-lacquer" onclick="forceUnseal()">
+              Mở xem thử thách ngay
+            </button>
+          </div>
+
+          <!-- NỘI DUNG ĐÃ MỞ BÍ MẬT -->
+          <div class="back-content-revealed">
+            <div>
+              <div class="action-header-badge">
+                <span class="action-type-pill" id="actionTypePill">❤️ Gắn kết gia đình</span>
+                <span class="stamp-awarded" id="stampAwardedTag" style="display:none;">GẮN KẾT</span>
+              </div>
+
+              <!-- Lời nhắc hành động chính -->
+              <div class="action-prompt-card">
+                <div class="action-prompt-title" id="actionPromptTitle">
+                  【Kể chuyện】Ấn tượng về người Hà Nội
+                </div>
+                <div class="action-prompt-text" id="actionPromptText">
+                  Người Tràng An: Hãy kể về những ấn tượng tốt và xấu của bạn khi tiếp xúc hoặc trò chuyện với người gốc Hà Nội!
+                </div>
+              </div>
+
+              <!-- Widget hình phạt / Thử thách dân gian (VD: Chét nghệ) -->
+              <div class="dare-art-box" id="dareArtBox" style="display:none;">
+                <div class="dare-art-icon">🟡</div>
+                <div class="dare-art-desc" id="dareArtDesc">
+                  <strong>Thử thách chét lọ nghệ:</strong> Mỗi người trong vòng tròn lấy một chút lọ nghệ (hoặc chấm ngón tay) chét nhẹ lên má người vừa trả lời để lưu dấu ấn vui nhộn!
+                </div>
+              </div>
+
+              <!-- Tiện ích đếm giờ lắng nghe 60s -->
+              <div class="timer-widget" id="timerWidget">
+                <div class="timer-info">
+                  <span>⏱️</span>
+                  <div>
+                    <div style="font-weight:700; font-size:13px;">Hẹn giờ lắng nghe / phản xạ</div>
+                    <div class="timer-label" id="timerStatusLabel">Dành trọn vẹn 60 giây lắng nghe</div>
+                  </div>
+                </div>
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <span class="timer-display" id="timerDisplay">01:00</span>
+                  <button class="btn" style="padding:4px 10px; font-size:12px;" id="btnTimerControl" onclick="toggleTimer()">
+                    Bắt đầu
+                  </button>
+                </div>
+              </div>
+
+              <!-- Tiện ích ghi chú kỷ niệm gắn với bản đồ -->
+              <div class="memory-note-widget">
+                <label class="memory-note-label">✦ Ghi lại một kỷ niệm của cả nhà (Tùy chọn):</label>
+                <textarea class="memory-note-textarea" placeholder="Nhập kỷ niệm ấm áp của bạn về câu chuyện này..."></textarea>
+              </div>
+            </div>
+
+            <!-- Nút bấm mặt sau -->
+            <div class="back-actions">
+              <button class="btn" onclick="resealCard()">
+                🔒 Che lại thử thách
+              </button>
+              <button class="btn" onclick="nextActionVariant()">
+                ↺ Đổi hoạt động khác
+              </button>
+              <button class="btn btn-lacquer" onclick="completeCardTurn()">
+                Xong, qua lượt tiếp theo →
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </div>
+
+  <!-- =========================================================
+       JAVASCRIPT LOGIC CHO DEMO TESTING
+       ========================================================= -->
+  <script>
+    /* BỘ DỮ LIỆU CHUẨN XÁC DỰA TRÊN ẢNH CỦA NHÓM BẠN */
+    const CARDS_DATA = [
+      {
+        id: 'card-1',
+        category: 'Văn hóa',
+        icon: '🏛️',
+        topic: 'Thành phố Hà Nội • Lối sống & Con người',
+        storyTitle: '📖 Nét đẹp ngàn năm văn hiến',
+        storyDesc: 'Lời ăn tiếng nói, cốt cách thanh lịch của người dân kinh kỳ xưa và nay.',
+        question: 'Người Hà Nội còn được gọi là người gì?',
+        type: 'quiz',
+        options: [
+          { letter: 'A', text: 'Người Kinh Bắc' },
+          { letter: 'B', text: 'Người Tràng An' },
+          { letter: 'C', text: 'Người Phố Hiến' },
+          { letter: 'D', text: 'Người Đông Đô' }
+        ],
+        correctIndex: 1,
+        explanation: 'Người Tràng An xuất phát từ câu ca dao xưa: "Chẳng thơm cũng thể hoa nhài / Dẫu không thanh lịch cũng người Tràng An", ngụ ý nét thanh tao của người kinh đô.',
+        backType: 'Kể chuyện & Chiêm nghiệm',
+        actionTitle: '【Kể chuyện】Ấn tượng về người Hà Nội',
+        actionText: 'Người Tràng An: Hãy kể về những ấn tượng tốt và xấu của bạn khi tiếp xúc với người gốc Hà Nội (hoặc người dân một vùng đất bạn từng đến)!',
+        hasDare: false
+      },
+      {
+        id: 'card-2',
+        category: 'Địa danh',
+        icon: '🗺️',
+        topic: 'Thành phố Hà Nội • Địa giới hành chính',
+        storyTitle: '📖 Dấu mốc lịch sử năm 2008',
+        storyDesc: 'Quyết định mở rộng địa giới hành chính Thủ đô với quy mô lớn chưa từng có.',
+        question: 'Hà Nội có từng sáp nhập với tỉnh nào không?',
+        type: 'yesno',
+        options: [
+          { letter: 'A', text: 'Có, sáp nhập toàn bộ tỉnh Hà Tây và một phần Vĩnh Phúc, Hòa Bình' },
+          { letter: 'B', text: 'Không, địa giới Hà Nội được giữ nguyên vẹn từ năm 1954 đến nay' }
+        ],
+        correctIndex: 0,
+        explanation: 'Đúng vậy! Vào ngày 1/8/2008, toàn bộ diện tích tỉnh Hà Tây, huyện Mê Linh (Vĩnh Phúc) và 4 xã của huyện Lương Sơn (Hòa Bình) chính thức sáp nhập vào Hà Nội.',
+        backType: 'Thử thách Dám Làm (Dare)',
+        actionTitle: '【Hình phạt vui】Lọ nghệ dân gian',
+        actionText: 'Nếu bạn trả lời là CÓ, bạn sẽ được mỗi người trong vòng tròn lấy một chút bột nghệ (hoặc chấm nhẹ ngón tay) chét lên mặt để đánh dấu kỷ niệm!',
+        hasDare: true,
+        dareDesc: 'Lấy lọ nghệ (hoặc giả vờ chấm ngón tay) quẹt một vệt vui tươi lên má người trả lời!'
+      },
+      {
+        id: 'card-3',
+        category: 'Món ăn',
+        icon: '🍲',
+        topic: 'Thành phố Hà Nội • Tinh hoa ẩm thực',
+        storyTitle: '📖 36 phố phường ẩm thực',
+        storyDesc: 'Mỗi ngõ nhỏ, phố nhỏ Hà Nội đều cất giấu những thức quà đặc sản lưu truyền qua nhiều thế hệ.',
+        question: 'Kể tên món ăn đặc biệt ở Hà Nội theo một vòng, ai kết thúc sẽ là người thua cuộc!',
+        type: 'roundtable',
+        openTitle: '🎲 Minigame Vòng Tròn Ẩm Thực',
+        openBody: 'Lần lượt từng người trong bàn kể tên một món ăn đặc sản Hà Nội (Phở, Bún chả, Chả cá Lã Vọng, Cốm...). Không được trùng món đã kể, ai ngập ngừng quá 5 giây sẽ là người thua cuộc!',
+        explanation: 'Hà Nội có kho tàng ẩm thực vô cùng phong phú: từ Phở, Bún đậu mắm tôm, Bánh tôm Hồ Tây đến Cà phê trứng, Bún thang...',
+        backType: 'Phạt người thua cuộc',
+        actionTitle: '【Trách nhiệm người thua】Tuân theo tập thể',
+        actionText: 'Người thua cuộc trong vòng chơi món ăn vừa rồi sẽ phải thực hiện theo một yêu cầu bất kỳ của mọi người trong bàn (ví dụ: rót nước mời cả nhà, hát một câu hoặc kể một kỷ niệm xưa)!',
+        hasDare: true,
+        dareDesc: 'Cả nhà cùng ra đề bài nhỏ (hát 1 câu, rót một tuần trà) để người thua thực hiện!'
+      },
+      {
+        id: 'card-4',
+        category: 'Ẩm thực',
+        icon: '🌾',
+        topic: 'Thành phố Hà Nội • Thức quà mùa thu',
+        storyTitle: '📖 Hương cốm mùa thu Hà Nội',
+        storyDesc: 'Một thức quà nhỏ gói trong lá sen, gợi nhiều kỷ ức bên chén trà thu.',
+        question: 'Theo cách gói cốm tươi truyền thống ở Hà Nội, người làm cốm thường kết hợp hai lớp lá nào để vừa giữ độ mềm ẩm vừa ướp hương thơm tự nhiên?',
+        type: 'quiz',
+        options: [
+          { letter: 'A', text: 'Lớp lá ráy non bên trong giữ ẩm và lớp lá sen bên ngoài tạo hương thơm thanh mát' },
+          { letter: 'B', text: 'Lớp lá chuối khô bên trong hút nước và lớp lá bàng bên ngoài giữ nhiệt ẩm' },
+          { letter: 'C', text: 'Lớp lá dong riềng bên trong định hình và lớp lá tre bên ngoài chắn gió' }
+        ],
+        correctIndex: 0,
+        explanation: 'Người làng Vòng dùng lá ráy non bóng mượt bên trong để hạt cốm không bị dính và giữ nguyên độ dẻo mềm, bên ngoài bọc lá sen già thơm ngát buộc sợi rơm vàng.',
+        backType: 'Gắn kết gia đình',
+        actionTitle: '【Kể chuyện】Kỷ niệm về thức quà quê',
+        actionText: 'Mời một người cùng chơi kể về một thức quà quê hoặc món ăn theo mùa mà họ nhớ nhất thời thơ ấu, rồi cùng nhau tìm địa danh gắn với món ăn đó trên bản đồ.',
+        hasDare: false
+      }
+    ];
+
+    let currentCardIndex = 0;
+    let selectedOptionIndex = null;
+    let isUnsealed = false;
+    let timerInterval = null;
+    let timerSeconds = 60;
+    let isTimerRunning = false;
+
+    // ÂM THANH MÔ PHỎNG (WEB AUDIO API KHÔNG CẦN FILE NGOÀI)
+    function playTone(freq, type, duration) {
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) { }
+    }
+
+    /* RENDER DỮ LIỆU LÁ BÀI RA MÀN HÌNH */
+    function loadCardByIndex(index) {
+      currentCardIndex = index;
+      selectedOptionIndex = null;
+      isUnsealed = false;
+      resetTimer();
+
+      const card = CARDS_DATA[index];
+
+      // Cập nhật thông tin tiêu đề
+      document.getElementById('cardCategoryPill').innerHTML = `${card.icon} ${card.category}`;
+      document.getElementById('cardTopicTitle').textContent = card.topic;
+      document.getElementById('storyBoxHeading').textContent = card.storyTitle;
+      document.getElementById('storyBoxDesc').textContent = card.storyDesc;
+      document.getElementById('challengeQuestionText').textContent = card.question;
+
+      // Cập nhật giao diện câu hỏi (Trắc nghiệm hoặc Minigame vòng tròn)
+      const optionsGrid = document.getElementById('optionsGrid');
+      const openBox = document.getElementById('openChallengeBox');
+      const expCallout = document.getElementById('explanationCallout');
+      expCallout.classList.remove('show');
+      document.getElementById('explanationText').textContent = card.explanation;
+
+      if (card.type === 'roundtable') {
+        optionsGrid.style.display = 'none';
+        openBox.style.display = 'block';
+        document.getElementById('openTitle').textContent = card.openTitle;
+        document.getElementById('openBody').textContent = card.openBody;
+        document.getElementById('btnCheckAnswer').textContent = 'Xác nhận xong vòng chơi →';
+      } else {
+        optionsGrid.style.display = 'flex';
+        openBox.style.display = 'none';
+        document.getElementById('btnCheckAnswer').textContent = 'Kiểm tra & Mở kết nối →';
+
+        optionsGrid.innerHTML = card.options.map((opt, i) => `
+          <div class="option-item" onclick="selectOption(${i})">
+            <span class="opt-letter">${opt.letter}</span>
+            <span>${opt.text}</span>
+          </div>
+        `).join('');
+      }
+
+      // Cập nhật nội dung Mặt sau
+      document.getElementById('actionTypePill').textContent = card.backType;
+      document.getElementById('actionPromptTitle').textContent = card.actionTitle;
+      document.getElementById('actionPromptText').textContent = card.actionText;
+
+      // Widget hình phạt
+      const dareBox = document.getElementById('dareArtBox');
+      if (card.hasDare) {
+        dareBox.style.display = 'flex';
+        document.getElementById('dareArtDesc').innerHTML = `<strong>Thử thách:</strong> ${card.dareDesc}`;
+      } else {
+        dareBox.style.display = 'none';
+      }
+
+      // Che lại thử thách cho lá bài mới
+      resealCard();
+      playTone(520, 'sine', 0.15);
+    }
+
+    /* CHỌN ĐÁP ÁN TRẮC NGHIỆM */
+    function selectOption(index) {
+      selectedOptionIndex = index;
+      const items = document.querySelectorAll('#optionsGrid .option-item');
+      items.forEach((item, i) => {
+        item.classList.toggle('selected', i === index);
+      });
+      playTone(600, 'sine', 0.08);
+    }
+
+    /* KIỂM TRA ĐÁP ÁN & MỞ KHÓA MẶT SAU */
+    function checkAnswer() {
+      const card = CARDS_DATA[currentCardIndex];
+      const expCallout = document.getElementById('explanationCallout');
+
+      if (card.type === 'quiz' || card.type === 'yesno') {
+        if (selectedOptionIndex === null) {
+          alert('Mời bạn chọn một đáp án trước khi kiểm tra!');
+          return;
+        }
+
+        const items = document.querySelectorAll('#optionsGrid .option-item');
+        items.forEach((item, i) => {
+          if (i === card.correctIndex) {
+            item.classList.add('correct');
+          } else if (i === selectedOptionIndex) {
+            item.classList.add('wrong');
+          }
+        });
+
+        if (selectedOptionIndex === card.correctIndex) {
+          fireConfetti();
+          playTone(880, 'triangle', 0.35);
+        } else {
+          playTone(300, 'sawtooth', 0.25);
+        }
+      }
+
+      expCallout.classList.add('show');
+      forceUnseal();
+    }
+
+    /* MỞ THỬ THÁCH GẮN KẾT MẶT SAU (ĐỒNG HIỆN 2 MẶT) */
+    function forceUnseal() {
+      isUnsealed = true;
+      const overlay = document.getElementById('sealOverlay');
+      const badge = document.getElementById('stampAwardedTag');
+      overlay.classList.add('unsealed');
+      badge.style.display = 'inline-block';
+      badge.textContent = 'GẮN KẾT';
+      playTone(700, 'sine', 0.25);
+    }
+
+    /* CHE LẠI THỬ THÁCH MẶT SAU */
+    function resealCard() {
+      isUnsealed = false;
+      const overlay = document.getElementById('sealOverlay');
+      const badge = document.getElementById('stampAwardedTag');
+      overlay.classList.remove('unsealed');
+      badge.style.display = 'none';
+    }
+
+    function showExplanationDirectly() {
+      document.getElementById('explanationCallout').classList.add('show');
+      forceUnseal();
+    }
+
+    function askFamilyHint() {
+      alert('💡 Bạn có thể hỏi ông bà, cha mẹ hoặc người ngồi bên cạnh: "Nhà mình ơi, câu này theo cả nhà chọn phương án nào là đúng nhất?"');
+    }
+
+    function nextActionVariant() {
+      const prompts = [
+        "Hãy kể về một lần bạn cùng người thân đi ăn món này và có kỷ niệm vui nhất!",
+        "Nếu được mời một người bạn phương xa đến Hà Nội trong 1 ngày, bạn sẽ dẫn họ đi đâu?",
+        "Cả nhà cùng biểu quyết xem ai trong phòng phát âm chuẩn giọng kinh kỳ xưa nhất!"
+      ];
+      const randomPrompt = prompts[Math.floor(Math.random() * prompts.length)];
+      document.getElementById('actionPromptText').textContent = randomPrompt;
+      playTone(650, 'sine', 0.12);
+    }
+
+    function completeCardTurn() {
+      fireConfetti();
+      playTone(950, 'sine', 0.4);
+      setTimeout(() => {
+        alert('🎉 Chúc mừng cả nhà đã hoàn thành lá bài! Chuyển lượt sang thành viên tiếp theo.');
+        const nextIdx = (currentCardIndex + 1) % CARDS_DATA.length;
+        loadCardByIndex(nextIdx);
+      }, 500);
+    }
+
+    /* HẸN GIỜ LẮNG NGHE / ĐẾM GIÂY */
+    function toggleTimer() {
+      const btn = document.getElementById('btnTimerControl');
+      if (isTimerRunning) {
+        clearInterval(timerInterval);
+        isTimerRunning = false;
+        btn.textContent = 'Tiếp tục';
+      } else {
+        isTimerRunning = true;
+        btn.textContent = 'Tạm dừng';
+        timerInterval = setInterval(() => {
+          if (timerSeconds > 0) {
+            timerSeconds--;
+            updateTimerDisplay();
+            if (timerSeconds <= 5) playTone(440, 'sine', 0.05);
+          } else {
+            clearInterval(timerInterval);
+            isTimerRunning = false;
+            btn.textContent = 'Hết giờ!';
+            playTone(880, 'triangle', 0.5);
+            alert('⏰ Hết 60 giây! Cảm ơn người chơi đã lắng nghe và chia sẻ.');
+          }
+        }, 1000);
+      }
+    }
+
+    function updateTimerDisplay() {
+      const m = Math.floor(timerSeconds / 60).toString().padStart(2, '0');
+      const s = (timerSeconds % 60).toString().padStart(2, '0');
+      document.getElementById('timerDisplay').textContent = `${m}:${s}`;
+    }
+
+    function resetTimer() {
+      clearInterval(timerInterval);
+      isTimerRunning = false;
+      timerSeconds = 60;
+      updateTimerDisplay();
+      const btn = document.getElementById('btnTimerControl');
+      if (btn) btn.textContent = 'Bắt đầu';
+    }
+
+    function selectCardFromDeck(idx) {
+      loadCardByIndex(idx);
+      const section = document.getElementById('drawnCardSection');
+      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    /* =========================================================
+       HIỆU ỨNG XÀO BÀI & RÚT BÀI TỰ ĐỘNG CHUYÊN SÂU
+       ========================================================= */
+    let isShufflingDeck = false;
+
+    // Âm thanh vỗ tập bài ban đầu
+    function playCardTapSound() {
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(240, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(80, audioCtx.currentTime + 0.08);
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.08);
+      } catch (e) {}
+    }
+
+    // Âm thanh sột soạt xào bài liên tục (Card Riffle Flutter)
+    function playCardShuffleSound() {
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        for (let i = 0; i < 9; i++) {
+          setTimeout(() => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = i % 2 === 0 ? 'sine' : 'triangle';
+            osc.frequency.setValueAtTime(320 + Math.random() * 260, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.09, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.05);
+          }, i * 110);
+        }
+      } catch (e) {}
+    }
+
+    // Âm thanh tiếng gió rút bài vút lên
+    function playDrawWhooshSound() {
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(260, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(820, audioCtx.currentTime + 0.35);
+        gain.gain.setValueAtTime(0.18, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.4);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.4);
+      } catch (e) {}
+    }
+
+    // Chuông khánh mừng rỡ khi rút được lá bài
+    function playChimeTones() {
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+        notes.forEach((freq, idx) => {
+          setTimeout(() => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.45);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.45);
+          }, idx * 90);
+        });
+      } catch (e) {}
+    }
+
+    // Hiệu ứng tia kim tuyến vàng trên bộ bài
+    function fireDeckSparkles() {
+      const canvas = document.getElementById('confettiCanvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const deckRect = document.getElementById('deckStage').getBoundingClientRect();
+      const centerX = deckRect.left + deckRect.width / 2;
+      const centerY = deckRect.top + deckRect.height / 2;
+
+      const sparkles = [];
+      for (let i = 0; i < 35; i++) {
+        sparkles.push({
+          x: centerX,
+          y: centerY - 40,
+          vx: (Math.random() - 0.5) * 8,
+          vy: (Math.random() - 0.7) * 9,
+          size: Math.random() * 5 + 3,
+          color: ['#FFDF8E', '#FFE89E', '#FFB703', '#FFF9E6'][Math.floor(Math.random() * 4)],
+          alpha: 1
+        });
+      }
+
+      function step() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        let active = false;
+        sparkles.forEach(s => {
+          s.x += s.vx;
+          s.y += s.vy;
+          s.vy += 0.2;
+          s.alpha -= 0.025;
+          if (s.alpha > 0) {
+            active = true;
+            ctx.fillStyle = s.color;
+            ctx.globalAlpha = s.alpha;
+            ctx.beginPath();
+            ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        });
+        if (active) requestAnimationFrame(step);
+        else ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+      step();
+    }
+
+    // HÀM CHÍNH: XÀO VÀ RÚT BÀI NGẪU NHIÊN
+    function drawRandomCardWithShuffle() {
+      if (isShufflingDeck) return;
+      isShufflingDeck = true;
+
+      const btn = document.getElementById('btnRandomDraw');
+      const deckWrap = document.getElementById('deckWrap');
+      const cards = deckWrap.querySelectorAll('.deck-card');
+      const statusPill = document.getElementById('shuffleStatusRow');
+
+      // Vô hiệu hóa nút và hiện trạng thái
+      btn.classList.add('shuffling-btn');
+      btn.innerHTML = '✨ Đang xào bài...';
+      statusPill.innerHTML = '<span class="shuffle-status-pill">🔀 Đang đảo xào 4 lá bài...</span>';
+
+      // Chọn ngẫu nhiên 1 lá khác lá hiện tại (nếu có thể) để tạo trải nghiệm mới mẻ
+      let chosenIdx = Math.floor(Math.random() * CARDS_DATA.length);
+      if (chosenIdx === currentCardIndex && CARDS_DATA.length > 1) {
+        chosenIdx = (chosenIdx + 1 + Math.floor(Math.random() * (CARDS_DATA.length - 1))) % CARDS_DATA.length;
+      }
+
+      // 1. Âm thanh chạm bài
+      playCardTapSound();
+
+      // BƯỚC 1: Thu toàn bộ bài về chính giữa (0s -> 0.32s)
+      deckWrap.classList.add('is-shuffling', 'phase-gather');
+
+      // BƯỚC 2: Bắt đầu xào bài qua lại liên tục (0.32s -> 1.5s)
+      setTimeout(() => {
+        deckWrap.classList.remove('phase-gather');
+        deckWrap.classList.add('phase-shuffle');
+        playCardShuffleSound();
+      }, 340);
+
+      // BƯỚC 3: Dừng xào, hào quang vàng phát sáng tại lá bài được chọn (1.5s -> 2.1s)
+      setTimeout(() => {
+        deckWrap.classList.remove('phase-shuffle');
+        deckWrap.classList.add('phase-pick');
+
+        // Gắn class is-picked cho đúng lá bài chiến thắng
+        cards.forEach((card, idx) => {
+          if (idx === chosenIdx) {
+            card.classList.add('is-picked');
+          } else {
+            card.classList.remove('is-picked');
+          }
+        });
+
+        statusPill.innerHTML = `<span class="shuffle-status-pill">🎯 Đã chọn: Lá ${chosenIdx + 1} (${CARDS_DATA[chosenIdx].category})!</span>`;
+        playChimeTones();
+      }, 1500);
+
+      // BƯỚC 4: Rút lá bài vút lên cao (2.1s -> 2.75s)
+      setTimeout(() => {
+        deckWrap.classList.add('phase-draw');
+        playDrawWhooshSound();
+        fireDeckSparkles();
+      }, 2100);
+
+      // BƯỚC 5: Nạp dữ liệu lá bài và lướt xuống xem 2 mặt đồng hiện (2.8s)
+      setTimeout(() => {
+        loadCardByIndex(chosenIdx);
+
+        // Cuộn mượt xuống khu vực hiển thị chi tiết thiệp đôi
+        const section = document.getElementById('drawnCardSection');
+        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        // Trả lại trạng thái bình thường cho bộ bài trên bàn
+        deckWrap.classList.remove('is-shuffling', 'phase-pick', 'phase-draw');
+        cards.forEach(c => c.classList.remove('is-picked'));
+
+        btn.classList.remove('shuffling-btn');
+        btn.innerHTML = '🎲 Xào & Rút ngẫu nhiên một lá bài';
+        statusPill.innerHTML = '';
+        isShufflingDeck = false;
+      }, 2850);
+    }
+
+    /* DARK/LIGHT THEME TOGGLE */
+    function toggleTheme() {
+      const html = document.documentElement;
+      const isDark = html.getAttribute('data-theme') === 'dark';
+      html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+      document.getElementById('themeIcon').textContent = isDark ? '🌙' : '☀️';
+      document.getElementById('themeLabel').textContent = isDark ? 'Chế độ tối' : 'Chế độ sáng';
+    }
+
+    /* PHÁO HOA GIẤY THUẦN (CONFETTI ANIMATION) */
+    function fireConfetti() {
+      const canvas = document.getElementById('confettiCanvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const particles = [];
+      const colors = ['#C48224', '#FFDF8E', '#9E2835', '#2B6E48', '#FF6B6B', '#FFD93D'];
+
+      for (let i = 0; i < 70; i++) {
+        particles.push({
+          x: canvas.width / 2,
+          y: canvas.height * 0.45,
+          vx: (Math.random() - 0.5) * 14,
+          vy: (Math.random() - 0.8) * 16,
+          size: Math.random() * 8 + 4,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          rotation: Math.random() * 360,
+          vRot: (Math.random() - 0.5) * 10,
+          opacity: 1
+        });
+      }
+
+      function render() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        let alive = false;
+        particles.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += 0.4;
+          p.rotation += p.vRot;
+          p.opacity -= 0.015;
+
+          if (p.opacity > 0) {
+            alive = true;
+            ctx.save();
+            ctx.translate(p.x, p.y);
+            ctx.rotate((p.rotation * Math.PI) / 180);
+            ctx.fillStyle = p.color;
+            ctx.globalAlpha = p.opacity;
+            ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+            ctx.restore();
+          }
+        });
+
+        if (alive) {
+          requestAnimationFrame(render);
+        } else {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+      }
+      render();
+    }
+
+    // Khởi tạo hiển thị bài đầu tiên
+    window.addEventListener('DOMContentLoaded', () => {
+      loadCardByIndex(0);
+    });
+  </script>
+</body>
+</html>

@@ -4499,6 +4499,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 <link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/home-classic-3.css?v=20261023-wide-stations-1">
 <link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/home-projector-3.css?v=20261023-t4-1">
 <link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/home-hierarchy-3.css?v=20261023-t7-1">
+<link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/home-invitation-frame-3.css?v=20261024-rim3">
 <link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/postcard-logo-3.css?v=20261023-1">
 <link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/home-controls-3.css?v=20261019-restored">
 <link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/home-gate-3.css?v=20261023-gate-fade-3">
@@ -4507,8 +4508,56 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 <link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/memory-rail-v6.css?v=20261021-all-native-wheels-1">
 <script src="assets/goi-viet/map-surroundings-preview/memory-train-smoke-v6.js?v=20261021-soft-white-3" defer></script>
 <script src="assets/goi-viet/map-surroundings-preview/memory-train-wheels-v7.js?v=20261021-all-native-wheels-1" defer></script>
+<!-- Official card design reference: card-testing.html. Preview-3 only. -->
+<link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/conversation-cards-3.css?v=20261028-1">
+<script src="assets/goi-viet/map-surroundings-preview/conversation-cards-3.js?v=20261028-1" defer></script>
+<style id="preview3-island-button-alignment">
+  /* Keep the island toolbar aligned without changing the other previews. */
+  #naturalIslandModal .natural-detail-controls {
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  #naturalIslandModal .natural-detail-controls select {
+    flex: 1 1 220px;
+    height: 44px;
+    box-sizing: border-box;
+  }
+  #naturalIslandModal .natural-detail-controls button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    box-sizing: border-box;
+    height: 44px;
+    min-height: 44px;
+    margin: 0;
+    padding: 0 14px;
+    font-size: 14px;
+    line-height: 1.25;
+    text-align: center;
+    white-space: nowrap;
+  }
+  #naturalIslandModal #naturalMinus,
+  #naturalIslandModal #naturalPlus {
+    flex: 0 0 44px;
+    width: 44px;
+    padding: 0;
+    font-size: 20px;
+  }
+  @media (max-width: 720px) {
+    #naturalIslandModal #naturalFeatureSelect { flex-basis: 100%; }
+    #naturalIslandModal #naturalFit,
+    #naturalIslandModal #naturalOverview {
+      flex: 1 1 0;
+      min-width: 0;
+      padding: 0 8px;
+      font-size: 12px;
+    }
+  }
+</style>
 </head>
-<body data-regional-preview="true" data-preview-version="3" data-home-theme="classic" data-home-art="reference-v8">
+<body data-regional-preview="true" data-preview-version="3" data-home-theme="classic" data-home-art="reference-v9">
 
 <div id="srAnnouncer" aria-live="polite" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)"></div>
 
@@ -4792,8 +4841,8 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
       <div id="homeClipFilm" class="gv-home-film" data-clip-ready="false" data-clip-status="idle" aria-hidden="true">
         <div class="gv-home-scene-plane">
           <picture>
-            <source media="(min-resolution: 1.5dppx) and (min-width: 1000px), (min-width: 2200px)" srcset="assets/goi-viet/homepage-reference-v8/poster-4k.webp?v=reference-layers-v8-20261021-1">
-            <img class="gv-home-poster" src="assets/goi-viet/homepage-reference-v8/poster-2k.webp?v=reference-layers-v8-20261021-1" width="1920" height="1189" alt="" fetchpriority="high">
+            <source media="(min-resolution: 1.5dppx) and (min-width: 1000px), (min-width: 2200px)" srcset="assets/goi-viet/homepage-transport-3/poster-4k.webp?v=preview2-transport-20261023-1">
+            <img class="gv-home-poster" src="assets/goi-viet/homepage-transport-3/poster-2k.webp?v=preview2-transport-20261023-1" width="1920" height="1189" alt="" fetchpriority="high">
           </picture>
           <canvas id="homeSceneCanvas" width="1920" height="1189"></canvas>
         </div>
@@ -4834,16 +4883,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
             <img class="gv-invitation-ornament" data-piece="tr" src="assets/goi-viet/map-surroundings-preview/invitation/art-tr.png" width="284" height="396" alt="" decoding="async">
             <img class="gv-invitation-ornament" data-piece="bl" src="assets/goi-viet/map-surroundings-preview/invitation/art-bl.png" width="507" height="381" alt="" decoding="async">
             <img class="gv-invitation-ornament" data-piece="br" src="assets/goi-viet/map-surroundings-preview/invitation/art-br.png" width="506" height="381" alt="" decoding="async">
-            <div class="gv-invitation-border">
-              <img data-piece="tl" src="assets/goi-viet/map-surroundings-preview/invitation/border-tl.png" alt="">
-              <img data-piece="top" src="assets/goi-viet/map-surroundings-preview/invitation/border-top.png" alt="">
-              <img data-piece="tr" src="assets/goi-viet/map-surroundings-preview/invitation/border-tr.png" alt="">
-              <img data-piece="left" src="assets/goi-viet/map-surroundings-preview/invitation/border-left.png" alt="">
-              <img data-piece="right" src="assets/goi-viet/map-surroundings-preview/invitation/border-right.png" alt="">
-              <img data-piece="bl" src="assets/goi-viet/map-surroundings-preview/invitation/border-bl.png" alt="">
-              <img data-piece="bottom" src="assets/goi-viet/map-surroundings-preview/invitation/border-bottom.png" alt="">
-              <img data-piece="br" src="assets/goi-viet/map-surroundings-preview/invitation/border-br.png" alt="">
-            </div>
+            <div class="gv-invitation-border"></div>
           </div>
           <div class="gv-invitation-copy">
           <p class="gv-home-kicker" data-home-enter="8.25,9.2,7"><img class="gv-invitation-train" src="assets/goi-viet/map-surroundings-preview/invitation/icon-train.png" width="46" height="44" alt=""> <span>Gói tinh hoa · Mở kết nối</span></p>
@@ -5170,7 +5210,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 </div>
 
 <!-- =========================================================
-     4. CARD DRAW & TRUE 3D FLIP MODAL (MÀN HÌNH RÚT BÀI & LẬT BÀI 3D)
+     4. CONVERSATION CARDS — OFFICIAL card-testing.html REFERENCE
      ========================================================= -->
 <div id="deckModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="deckModalHeading">
   <div class="modal-sheet giay-do-surface khung-moc">
@@ -5196,27 +5236,19 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 
         <!-- STATE 4A: FANNED 3D FACE-DOWN DECK (BỘ BÀI ÚP XÒE QUẠT) -->
         <div id="deckClosedState" style="display:flex;flex-direction:column;align-items:center;text-align:center;width:100%">
-          <div class="fanned-deck-container" id="fannedDeckBox" role="button" tabindex="0" aria-label="Bộ bài úp — Nhấp để rút một lá bài" onclick="triggerDrawCardWithAnim(event.target.closest('.fanned-card') || this.children[2])" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();triggerDrawCardWithAnim();}">
-            <div class="fanned-card"><div class="card-back-ornament"><div style="font-family:var(--font-heading);font-size:15px;font-weight:700">GÓI VIỆT</div></div></div>
-            <div class="fanned-card"><div class="card-back-ornament"><div style="font-family:var(--font-heading);font-size:15px;font-weight:700">CHUYỆN GIA ĐÌNH</div></div></div>
-            <div class="fanned-card">
-              <div class="card-back-ornament">
-                <svg width="42" height="42" viewBox="0 0 64 64" fill="#FFDF8E">
-                  <path d="M32 10 C38 22 50 26 50 37 C50 47 41 52 32 52 C23 52 14 47 14 37 C14 26 26 22 32 10 Z"/>
-                </svg>
-                <div style="font-family:var(--font-heading);font-size:17px;font-weight:700" id="deckBackPlaceName">HÀ NỘI</div>
-                <div style="font-size:14px;opacity:0.92;line-height:1.35">Mặt trước: Câu đố văn hóa<br>Mặt sau: Kết nối người thân</div>
-              </div>
-            </div>
-            <div class="fanned-card"><div class="card-back-ornament"><div style="font-family:var(--font-heading);font-size:15px;font-weight:700">KÝ ỨC QUÊ HƯƠNG</div></div></div>
+          <div class="conversation-deck-kicker">MỘT LÁ BÀI · MỘT CÂU CHUYỆN</div>
+          <h3 id="conversationDeckTitle">Bộ Thẻ Ký Ức Quê Hương</h3>
+          <div class="conversation-fan-stage">
+            <div class="fanned-deck-container" id="fannedDeckBox" role="group" aria-label="Chọn một lá bài theo chủ đề"></div>
           </div>
 
           <p id="deckPromptParagraph" style="font-size:15.5px;color:var(--ink-secondary);max-width:490px;margin-bottom:16px">
-            Mời <strong id="deckPromptPlayerName" style="color:var(--son-red)">Người chơi 1</strong> chọn một lá bài trên bàn. Dù trả lời đúng hay chưa đúng, cả nhà đều được lật sang mặt sau để trò chuyện!
+            Mời <strong id="deckPromptPlayerName" style="color:var(--son-red)">Người chơi 1</strong> chọn một lá bài trên bàn. Dù trả lời đúng hay chưa đúng, cả nhà đều được mở phần gắn kết để trò chuyện!
           </p>
           <button id="btnDrawCard" class="btn-lg btn-primary" onclick="triggerDrawCardWithAnim()">
-            <span>Rút một lá bài</span>
+            <span>🎲 Xáo & Rút ngẫu nhiên một lá bài</span>
           </button>
+          <div id="conversationShuffleStatus" role="status" aria-live="polite" aria-atomic="true"></div>
 
           <!-- Explicit choice when all cards in this station's deck have been drawn -->
           <div id="deckExhaustedBox" class="deck-exhausted-box" style="display:none" role="region" aria-live="polite">
@@ -5237,7 +5269,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
           </div>
         </div>
 
-        <!-- STATE 4B & 4C: TRUE 3D TWO-SIDED FLIP CARD (LÁ BÀI 2 MẶT LẬT 3D THẬT) -->
+        <!-- Two faces shown together; the connection is initially sealed. -->
         <div id="drawnCardViewport" class="card-3d-viewport" style="display:none">
           <div id="card3DFlipper" class="card-3d-flipper">
 
@@ -5266,11 +5298,11 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
                   <button id="btnAskFamilyHint" type="button" class="btn-lg btn-secondary" onclick="useFamilyLifelineHint()" title="Nhờ người ngồi cạnh gợi ý và lược bớt 1 phương án">
                     <span>★ Hỏi người thân</span>
                   </button>
-                  <button id="btnDontKnowReveal" type="button" class="btn-lg btn-secondary" onclick="revealCardAnswer(true)" title="Không bắt buộc đoán mò — Xem lời giải thích và lật bài ngay">
+                  <button id="btnDontKnowReveal" type="button" class="btn-lg btn-secondary" onclick="revealCardAnswer(true)" title="Xem lời giải thích và mở hoạt động gắn kết">
                     <span>Chưa biết, xem giải thích</span>
                   </button>
                   <button id="btnRevealAnswer" type="button" class="btn-lg btn-teal" onclick="revealCardAnswer(false)" disabled style="opacity:0.55">
-                    <span>Kiểm tra đáp án</span>
+                    <span>Kiểm tra & Mở kết nối →</span>
                   </button>
                 </div>
               </div>
@@ -5278,13 +5310,20 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 
             <!-- BACK FACE OF CARD (MẶT SAU: HOẠT ĐỘNG TƯƠNG TÁC GIA ĐÌNH) -->
             <div id="cardBackState" class="card-3d-face card-3d-back" style="display:none">
+              <div id="conversationSeal" class="conversation-seal">
+                <button type="button" class="conversation-wax-seal" onclick="flipCardToBack()" aria-label="Chạm dấu Hoa Sen để mở thử thách gắn kết"><span aria-hidden="true">🪷</span><small>HOA SEN</small></button>
+                <h3>Thử thách gắn kết đang chờ mở</h3>
+                <p>Chọn đáp án ở mặt trước hoặc chạm vào dấu Hoa Sen để cùng cả nhà mở ra hoạt động gắn kết.</p>
+                <button type="button" class="btn-lg btn-primary" onclick="flipCardToBack()">Mở xem thử thách ngay →</button>
+              </div>
+              <div id="conversationConnectionContent">
               <div id="cardPostmarkSeal" class="postmark-seal">DẤU KỶ NIỆM GIA ĐÌNH</div>
 
               <div class="card-kicker-row">
                 <span class="card-side-badge back">Mặt sau • Hoạt động gắn kết gia đình</span>
                 <div style="display:flex;align-items:center;gap:8px">
                   <span id="cardBackTurnTag" style="font-size:14px;font-weight:700;color:var(--son-red)">Lượt của Người chơi 1</span>
-                  <button type="button" class="small-wood-btn" onclick="flipCardToFront()" title="Lật lại mặt trước để xem câu hỏi (không mất nội dung kỷ niệm đang nhập)">↺ Xem mặt trước</button>
+                  <button type="button" class="small-wood-btn" onclick="flipCardToFront()" title="Trở lại câu hỏi, giữ nguyên kỷ niệm đang nhập">↑ Xem câu hỏi</button>
                 </div>
               </div>
 
@@ -5334,7 +5373,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
                 </summary>
                 <div class="memory-bridge-box" id="memoryBridgeBox" style="margin-top:10px;border:none;padding:0;background:transparent">
                   <p style="font-size:14px;color:var(--ink-secondary);line-height:1.45;margin-bottom:8px">
-                    Nếu cuộc trò chuyện gợi nhắc một vùng đất kỷ niệm, cả nhà có thể ghi lại. Nội dung đang gõ được giữ nguyên khi lật qua lại hai mặt bài.
+                    Nếu cuộc trò chuyện gợi nhắc một vùng đất kỷ niệm, cả nhà có thể ghi lại. Nội dung đang gõ được giữ nguyên khi xem lại câu hỏi hoặc đóng rồi mở lại lá bài.
                   </p>
                   <p id="memorySessionNotice" class="session-storage-note">Kỷ niệm chỉ được giữ trong lần mở này; tải bưu thiếp để giữ lại. Tải lại hoặc đóng trang sẽ mất nội dung của phiên.</p>
                   <div class="memory-input-row" style="align-items:flex-end">
@@ -5367,11 +5406,12 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
                   <div id="memoryFeedbackBox" class="memory-feedback" role="status" aria-live="polite"></div>
                 </div>
               </details>
+              </div>
             </div>
 
           </div>
 
-          <!-- SHORT EXPLANATION OUTSIDE THE CARD (GIẢI THÍCH NGẮN BÊN NGOÀI LÁ BÀI) -->
+          <!-- Explanation is placed inside the question face by conversation-cards-3.js. -->
           <div id="answerExplanationBox" class="external-explanation-box" style="margin-top:16px" role="region" aria-live="polite">
             <div style="font-family:var(--font-heading);font-size:15.5px;font-weight:700;color:var(--com-green)" id="answerStatusHeading">
               Giải thích ngắn
@@ -5382,7 +5422,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
                 Dù trả lời đúng hay chưa biết, cả nhà đều có thể lật bài sang mặt sau!
               </span>
               <button type="button" id="btnFlipToBack" class="btn-lg btn-primary" onclick="flipCardToBack()">
-                <span>Lật bài ↻</span>
+                <span>Xem hoạt động gắn kết →</span>
               </button>
             </div>
           </div>
@@ -7597,6 +7637,7 @@ function updateDeckRemainingUI(place) {
   const drawBtn = document.getElementById('btnDrawCard');
   const promptP = document.getElementById('deckPromptParagraph');
   const fanBox = document.getElementById('fannedDeckBox');
+  if (!state.isDrawingCardLock) window.GoiVietConversationCards?.renderDeck(place);
   if (remaining === 0 && !state.activeCard) {
     if (exhBox) exhBox.style.display = 'block';
     if (drawBtn) drawBtn.style.display = 'none';
@@ -7620,9 +7661,11 @@ function reshuffleCurrentPlaceDeck() {
   renderDemoPlaceList();
   FolkAudio.playBambooClack();
   announceSR(`Đã xào lại bộ bài ${place.name}. Bạn có thể rút lá bài mới.`);
+  triggerDrawCardWithAnim();
 }
 
 function openDeckModal(rawPlaceId, sourceTrigger = document.activeElement) {
+  window.GoiVietConversationCards?.cancelDraw();
   const place = CULTURAL_PLACE_MAP[rawPlaceId || state.selectedPlaceId] || CULTURAL_PLACES[0];
   state.selectedPlaceId = place.id;
   if (!state.exploredPlaceIds.includes(place.id)) {
@@ -7631,7 +7674,7 @@ function openDeckModal(rawPlaceId, sourceTrigger = document.activeElement) {
 
   document.getElementById('deckTurnIndicator').textContent = `Lượt của ${getCurrentPlayerName()}`;
   document.getElementById('deckModalHeading').textContent = `Thẻ trò chuyện · ${place.short || place.name}`;
-  document.getElementById('deckBackPlaceName').textContent = (place.short || place.name).toUpperCase();
+  document.getElementById('conversationDeckTitle').textContent = `Bộ Thẻ Ký Ức Quê Hương • ${place.short || place.name}`;
   document.getElementById('deckPromptPlayerName').textContent = getCurrentPlayerName();
 
   // Preserve in-progress card if user closed & reopened #deckModal on the same station!
@@ -7657,6 +7700,7 @@ function openDeckModal(rawPlaceId, sourceTrigger = document.activeElement) {
     }
     updateGameStepPills(3);
     document.getElementById('deckModal').classList.add('open');
+    window.GoiVietConversationCards?.syncFaces();
     pushModalFocus('deckModal', sourceTrigger);
     return;
   }
@@ -7687,6 +7731,7 @@ function openDeckModal(rawPlaceId, sourceTrigger = document.activeElement) {
 }
 
 function closeDeckModal() {
+  window.GoiVietConversationCards?.cancelDraw();
   syncMemoryDraftFromInputs();
   stopListeningDrumTimer();
   const modal = document.getElementById('deckModal');
@@ -7696,30 +7741,7 @@ function closeDeckModal() {
 }
 
 function triggerDrawCardWithAnim(clickedCardEl) {
-  if (state.isDrawingCardLock) return;
-  const place = CULTURAL_PLACE_MAP[state.selectedPlaceId] || CULTURAL_PLACES[0];
-  const drawnIds = state.drawnCardIdsByPlace[place.id] || [];
-  if (drawnIds.length >= place.cards.length) {
-    updateDeckRemainingUI(place);
-    return;
-  }
-  state.isDrawingCardLock = true;
-  if (state.reducedMotion) {
-    drawOneCard();
-    state.isDrawingCardLock = false;
-    return;
-  }
-  const targetEl = clickedCardEl || document.querySelector('#fannedDeckBox .fanned-card:nth-child(3)');
-  if (targetEl) {
-    targetEl.classList.add('drawing-anim');
-    setTimeout(() => {
-      drawOneCard();
-      state.isDrawingCardLock = false;
-    }, 520);
-  } else {
-    drawOneCard();
-    state.isDrawingCardLock = false;
-  }
+  window.GoiVietConversationCards?.draw(clickedCardEl);
 }
 
 function pickUnusedActivityIdx(card) {
@@ -7731,7 +7753,7 @@ function pickUnusedActivityIdx(card) {
   return 0;
 }
 
-function drawOneCard() {
+function drawOneCard(pickedCardId) {
   const place = CULTURAL_PLACE_MAP[state.selectedPlaceId] || CULTURAL_PLACES[0];
   if (!state.drawnCardIdsByPlace[place.id]) state.drawnCardIdsByPlace[place.id] = [];
   const drawnIds = state.drawnCardIdsByPlace[place.id];
@@ -7744,26 +7766,10 @@ function drawOneCard() {
     return;
   }
 
-  // Prioritize stories the player has already opened so they aren't surprised,
-  // while drawing randomly among eligible cards!
+  // Every remaining card is eligible. Direct picks match the card on the table.
   const openedStoryIds = state.openedStoryIdsByPlace[place.id] || [];
-  let candidatePool = [];
-
-  if (state.activeStory && state.activeStory.place.id === place.id && state.activeStory.story) {
-    const activeStId = state.activeStory.story.id;
-    const directMatch = availableCards.filter(c => c.storyId === activeStId || c.topic === state.activeStory.story.topic);
-    if (directMatch.length > 0) candidatePool = directMatch;
-  }
-  if (candidatePool.length === 0 && openedStoryIds.length > 0) {
-    const openedMatches = availableCards.filter(c => openedStoryIds.includes(c.storyId));
-    if (openedMatches.length > 0) candidatePool = openedMatches;
-  }
-  if (candidatePool.length === 0) {
-    candidatePool = availableCards;
-  }
-
-  const randomIndex = Math.floor(Math.random() * candidatePool.length);
-  const pickedCard = candidatePool[randomIndex] || availableCards[0];
+  const pickedCard = availableCards.find(card => card.id === pickedCardId) ||
+    availableCards[Math.floor(Math.random() * availableCards.length)];
 
   state.drawnCardIdsByPlace[place.id].push(pickedCard.id);
   state.activeCard = pickedCard;
@@ -7858,6 +7864,8 @@ function drawOneCard() {
   document.getElementById('card3DFlipper').classList.remove('is-flipped', 'flipped');
   document.getElementById('cardFrontState').style.display = 'block';
   document.getElementById('cardBackState').style.display = 'none';
+  window.GoiVietConversationCards?.prepareConnection();
+  window.GoiVietConversationCards?.syncFaces();
   renderDemoPlaceList();
   announceSR(`Đã rút lá bài câu hỏi: ${pickedCard.question}`);
 }
@@ -7897,7 +7905,7 @@ function selectCardOption(idx) {
   const revealBtn = document.getElementById('btnRevealAnswer');
   revealBtn.disabled = false;
   revealBtn.style.opacity = '1';
-  document.getElementById('cardSelectHint').textContent = 'Đã chọn phương án — Nhấn “Kiểm tra đáp án” hoặc “Lật bài”';
+  document.getElementById('cardSelectHint').textContent = 'Đã chọn phương án — Nhấn “Kiểm tra & Mở kết nối”';
 }
 
 function revealCardAnswer(asDontKnow) {
@@ -7918,15 +7926,17 @@ function revealCardAnswer(asDontKnow) {
     const isCorrect = state.selectedOptionIdx === card.correctIndex;
     statusHeading.textContent = isCorrect
       ? 'Chính xác! Giải thích ngắn:'
-      : 'Rất thú vị! Dù chọn phương án nào, cả nhà vẫn được lật bài — Giải thích ngắn:';
+      : 'Cùng tìm hiểu nhé! Cả nhà vẫn được mở hoạt động gắn kết — Giải thích ngắn:';
   }
 
   document.getElementById('answerExplanationText').textContent = card.explanation;
+  if (!asDontKnow && state.selectedOptionIdx !== card.correctIndex) {
+    document.getElementById(`cardOptBtn-${state.selectedOptionIdx}`)?.classList.add('wrong-reveal');
+  }
   document.getElementById('answerExplanationBox').classList.add('visible');
 
   setTimeout(() => {
-    const flipBtn = document.getElementById('btnFlipToBack');
-    if (flipBtn) flipBtn.focus();
+    if (state.activeCard === card && document.getElementById('deckModal').classList.contains('open')) flipCardToBack();
   }, 50);
   announceSR(card.explanation);
 }
@@ -7953,7 +7963,9 @@ function flipCardToBack() {
   flipper.classList.add('is-flipped', 'flipped');
   document.getElementById('answerExplanationBox').classList.remove('visible');
   document.getElementById('deckScrollBody').scrollTop = 0;
-  announceSR(`Đã lật sang mặt sau lá bài: ${card.activities[state.activeActivityIdx]}`);
+  window.GoiVietConversationCards?.syncFaces();
+  window.GoiVietConversationCards?.focusFace('back');
+  announceSR(`Đã mở hoạt động gắn kết: ${card.activities[state.activeActivityIdx]}`);
 }
 
 function flipCardToFront() {
@@ -7966,6 +7978,8 @@ function flipCardToFront() {
   if (state.answerRevealed) {
     document.getElementById('answerExplanationBox').classList.add('visible');
   }
+  window.GoiVietConversationCards?.syncFaces();
+  window.GoiVietConversationCards?.focusFace('front');
 }
 
 function swapCardActivity() {
@@ -8610,7 +8624,7 @@ function openPostcardModal() {
     const empty = document.createElement('div');
     empty.style.color = 'var(--ink-muted)';
     empty.style.fontSize = '14px';
-    empty.textContent = 'Chưa có kỷ niệm. Lật mặt sau thẻ bài và chọn “Ghi lại một kỷ niệm”.';
+    empty.textContent = 'Chưa có kỷ niệm. Mở phần gắn kết của thẻ bài và chọn “Ghi lại một kỷ niệm”.';
     menContainer.appendChild(empty);
   } else {
     state.mentionedPlaces.forEach((m, idx) => {
@@ -10395,9 +10409,10 @@ function animateLoop(now) {
 </script>
 <script src="assets/goi-viet/homepage-scene-layout.js"></script>
 <script src="assets/goi-viet/homepage-opening-config.js?v=gentle-cranes-v13"></script>
-<script src="assets/goi-viet/homepage-crane-flight.js?v=20261023-layer1"></script>
+<script src="assets/goi-viet/homepage-transport-3/transport.js?v=20261023-old-style-1"></script>
+<script src="assets/goi-viet/homepage-crane-flight-3.js?v=20261023-preview2-shape-1"></script>
 <script src="assets/goi-viet/homepage-layered-renderer-3.js?v=articulated-cranes-layer-20261023-1"></script>
-<script src="assets/goi-viet/homepage-layered-scene.js?v=reference-layers-v8-20261021-1"></script>
+<script src="assets/goi-viet/homepage-layered-scene-3.js?v=preview2-transport-20261023-1"></script>
 <script src="assets/goi-viet/homepage-layered-opening.js?v=phase5-20261018"></script>
 <script src="assets/goi-viet/homepage-music-3.js?v=20261023-gate-fade-3"></script>
 <script src="assets/goi-viet/homepage-opening-controller-3.js?v=20261023-t6-lock" onerror="document.getElementById('introScreen').dataset.homeOpening='complete';document.querySelector('.gv-home-content').inert=false;document.getElementById('btnHomeOpeningStart').hidden=true;document.getElementById('homeOpeningGate').hidden=true;document.querySelector('.gv-home-opening-tools').style.display='none'"></script>
