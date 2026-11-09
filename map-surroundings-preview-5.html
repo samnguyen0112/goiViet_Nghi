@@ -1817,44 +1817,6 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
     border-color: var(--son-red);
   }
 
-  /* Single-Line Compact Topic Filter Bar */
-  .topic-filter-bar {
-    display: flex;
-    gap: 5px;
-    overflow-x: auto;
-    padding: 3px 3px 8px;
-    margin: -3px -3px -5px;
-    scrollbar-width: none;
-  }
-  .topic-filter-bar::-webkit-scrollbar { display: none; }
-  .topic-btn {
-    min-height: 44px;
-    padding: 4px 6px;
-    border-radius: 7px;
-    border: 1px solid var(--wood-border-strong);
-    background: var(--paper-elevated);
-    color: var(--ink-secondary);
-    font-family: var(--font-sans);
-    font-size: 13px;
-    font-weight: 400;
-    cursor: pointer;
-    transition: all 0.15s;
-    text-align: center;
-    white-space: nowrap;
-    line-height: 1.25;
-    min-width: 0;
-    flex: 0 0 auto;
-  }
-  .topic-btn:hover {
-    border-color: var(--son-red);
-    color: var(--ink-primary);
-  }
-  .topic-btn.active {
-    background: var(--son-red-soft);
-    border-color: var(--son-red);
-    color: var(--son-red);
-  }
-
   /* =========================================================
      REDESIGNED PROVINCE CARDS (HERO VISUAL CARD + COMPACT ROWS)
      ========================================================= */
@@ -2263,47 +2225,6 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
     background: var(--com-green-soft);
     color: var(--com-green);
     border: 1px solid var(--com-green);
-  }
-
-  /* Explored vs Mentioned Tracker */
-  .journey-tracker-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 8px;
-  }
-  .tracker-box {
-    background: var(--paper-elevated);
-    border: 1px solid var(--wood-border);
-    border-radius: 9px;
-    padding: 10px;
-  }
-  .tracker-box-title {
-    font-size: 14px;
-    font-weight: 700;
-    margin-bottom: 6px;
-  }
-  .tracker-list {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    font-size: 14px;
-  }
-  .tracker-chip {
-    display: inline-block;
-    padding: 3px 8px;
-    border-radius: 5px;
-    font-weight: 500;
-    font-size: 14px;
-  }
-  .tracker-chip.explored {
-    background: var(--com-green-soft);
-    color: var(--com-green);
-  }
-  .tracker-chip.mentioned {
-    background: var(--paper-warm);
-    color: var(--ink-primary);
-    border: 0;
   }
 
   /* Left Map Legend & Bottom Bar */
@@ -3436,36 +3357,6 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
     background: var(--paper-elevated);
   }
 
-  /* 3-Stamp Seal Progress Bar in Sidebar */
-  .seal-slots-row {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 7px;
-    margin-bottom: 9px;
-  }
-  .seal-slot {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-    padding: 6px 8px;
-    border-radius: 9px;
-    border: 1.5px dashed var(--wood-border-strong);
-    background: var(--paper-bg);
-    font-family: var(--font-heading);
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--ink-muted);
-    transition: all 0.25s ease;
-  }
-  .seal-slot.stamped {
-    border-style: solid;
-    border-color: var(--son-red);
-    background: var(--son-red-soft);
-    color: var(--son-red);
-    box-shadow: inset 0 0 0 1px rgba(184, 56, 38, 0.2);
-  }
-
   /* Bamboo Fortune Cylinder Modal (#bambooRollModal) */
   .bamboo-cylinder-stage {
     display: flex;
@@ -4359,8 +4250,8 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
     #mapStationArrivalBanner .arrival-banner-title { font-size: 16px; line-height: 1.5; }
     #mapStationArrivalBanner .arrival-banner-verse, #mapStationArrivalBanner .arrival-banner-steps { display: none; }
     .dock-btn { min-height: 44px; min-width: 44px; padding: 0 10px; }
-    .craft-btn, .small-wood-btn, .topic-btn, .scope-tab { min-height: 44px; }
-    .postcard-grid, .journey-tracker-grid, .story-visual-grid { grid-template-columns: 1fr; }
+    .craft-btn, .small-wood-btn, .scope-tab { min-height: 44px; }
+    .postcard-grid, .story-visual-grid { grid-template-columns: 1fr; }
   }
 
   @media (max-width: 420px) {
@@ -4440,7 +4331,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 <link rel="stylesheet" href="assets/goi-viet/map-station-panel-phase4.css?v=20261013-1">
 <link rel="stylesheet" href="assets/goi-viet/postcard-logo-sync.css?v=20261013-1">
 <link rel="stylesheet" href="assets/goi-viet/map-reference-ui.css?v=20261013-1">
-<script src="assets/goi-viet/map-reference-ui.js?v=20261015-scope-summary" defer></script>
+<script src="assets/goi-viet/map-reference-ui.js?v=20261109-station" defer></script>
 <script src="assets/goi-viet/map-warm-terrain-palette.js?v=20261014-3" defer></script>
 <script src="assets/goi-viet/map-surroundings-preview/natural/core-3.js?v=20261022-prewarm-1" defer></script>
 <script src="assets/goi-viet/map-surroundings-preview/natural/hydrology-3.js?v=20261022-prewarm-1" defer></script>
@@ -4458,7 +4349,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 <link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/journey-preview.css?v=heritage-network-2">
 <script src="assets/goi-viet/map-surroundings-preview/journey-network-data.js?v=2" defer></script>
 <script src="assets/goi-viet/map-surroundings-preview/journey-network.js?v=2" defer></script>
-<script src="assets/goi-viet/map-surroundings-preview/journey-system-4.js?v=20261027-layout-1" defer></script>
+<script src="assets/goi-viet/map-surroundings-preview/journey-system-4.js?v=20261109-station-3" defer></script>
 <script src="assets/goi-viet/map-surroundings-preview/journey-vehicles.js?v=phase5-20261018" defer></script>
 <script src="assets/goi-viet/map-surroundings-preview/vendor/earcut-3.0.2.js" defer></script>
 <script src="assets/goi-viet/map-surroundings-preview/webgl-terrain-renderer-3.js?v=20261022-prewarm-1" defer></script>
@@ -4469,7 +4360,6 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 <link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/island-controls.css?v=2">
 <script src="assets/goi-viet/map-controls-island-reference.js?v=aligned-controls-20261015" defer></script>
 <link rel="stylesheet" href="assets/goi-viet/map-island-typography.css?v=20261014-1">
-<script src="assets/goi-viet/map-station-panel-phase4.js?v=20261013-1" defer></script>
 <link rel="stylesheet" href="assets/goi-viet/homepage-content.css?v=20261023-crane-layer-1">
 <link rel="stylesheet" href="assets/goi-viet/homepage-opening.css">
 <link rel="stylesheet" href="assets/goi-viet/homepage-polish.css?v=gentle-cranes-v13">
@@ -4478,8 +4368,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 <link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/polish.css?v=2">
 <script src="assets/goi-viet/map-surroundings-preview/webgl-coverage-3.js?v=20261022-prewarm-1" defer></script>
 <script src="assets/goi-viet/map-surroundings-preview/preview-3.js?v=20261022-overview-1" defer></script>
-<script src="assets/goi-viet/map-surroundings-preview/polish-3.js?v=20261022-level23-1" defer></script>
-<link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/heritage-tickets.css?v=20261015-3">
+<script src="assets/goi-viet/map-surroundings-preview/polish-3.js?v=20261109-station" defer></script>
 <link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/heritage-command-bar.css?v=20261015-3">
 <link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/arrival-journal.css?v=20261015-2">
 <script src="assets/goi-viet/map-surroundings-preview/heritage-command-bar-3.js?v=20261022-level23-1" defer></script>
@@ -4511,6 +4400,14 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 <!-- Official card design reference: card-testing.html. Preview-5 uses the -5 copy of the preview-3 card assets. -->
 <link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/conversation-cards-5.css?v=20261104-gd6-cards-1">
 <script src="assets/goi-viet/map-surroundings-preview/conversation-cards-5.js?v=20261104-gd6-cards-1" defer></script>
+<!-- P5-01: bilingual core and culture-book reader. Book pages load only when a book is opened (books-5/<placeId>/book.js). -->
+<link rel="stylesheet" href="assets/goi-viet/books-5/book-reader-5.css?v=20261109-station">
+<script src="assets/goi-viet/map-surroundings-preview/i18n-5.js?v=20261109-station" defer></script>
+<script src="assets/goi-viet/map-surroundings-preview/station-panel-5.js?v=20261109-3" defer></script>
+<script src="assets/goi-viet/books-5/layouts-5.js?v=20261109-1" defer></script>
+<script src="assets/goi-viet/books-5/catalog-5.js?v=20261109-9" defer></script>
+<script src="assets/goi-viet/books-5/book-reader-5.js?v=20261109-station" defer></script>
+<link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/station-panel-5.css?v=20261109-3">
 <style id="preview3-island-button-alignment">
   /* Keep the island toolbar aligned without changing the other previews. */
   #naturalIslandModal .natural-detail-controls {
@@ -5068,8 +4965,37 @@ body[data-preview-version="3"]:not([data-curtain-art]) .mc-transition>div{backgr
   </div>
 
   <!-- RIGHT ACCESSIBLE PANEL: NHÀ GA DỪNG NGHỈ & HÀNH TRÌNH GIA ĐÌNH -->
-  <aside id="stationPanel" class="SidePanel giay-do-surface khung-moc" aria-label="Thông tin nhà ga dừng nghỉ và bộ bài">
-    <div class="panel-sec panel-filters" style="padding:11px 14px">
+  <aside id="stationPanel" class="SidePanel giay-do-surface khung-moc gv-station-v5" aria-labelledby="stationPanelTitle">
+    <header class="preview-panel-heading gv-station-header">
+      <img class="gv-station-logo" src="assets/goi-viet/brand/goi-viet-logo-512.webp"
+        srcset="assets/goi-viet/brand/goi-viet-logo-512.webp 512w, assets/goi-viet/brand/goi-viet-logo-1024.webp 1024w"
+        sizes="(max-width: 768px) 65px, 96px" width="512" height="235" alt="Gói Việt" decoding="async">
+      <div class="gv-station-heading">
+        <h2 id="stationPanelTitle" data-station-text="title">Các ga di sản</h2>
+        <p data-station-text="subtitle">Mỗi điểm dừng, một miền thương nhớ.</p>
+      </div>
+      <button type="button" id="previewPanelClose" class="preview-panel-toggle" aria-controls="stationPanel" aria-expanded="true">
+        <span data-station-text="collapse">Thu gọn</span><svg class="gv-station-icon" aria-hidden="true"><use href="#gv-station-chevron"/></svg>
+      </button>
+    </header>
+    <div class="panel-sec panel-filters gv-station-filters">
+      <svg class="gv-station-symbols" width="0" height="0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+        <symbol id="gv-station-chevron" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></symbol>
+        <symbol id="gv-station-list" viewBox="0 0 24 24"><path d="M8 6h12M8 12h12M8 18h12M4 6h.1M4 12h.1M4 18h.1"/></symbol>
+        <symbol id="gv-station-star" viewBox="0 0 24 24"><path d="m12 2 3 6.5 7 1-5 5 1.2 7L12 18l-6.2 3.5L7 14.5l-5-5 7-1z" fill="currentColor" stroke="none"/></symbol>
+        <symbol id="gv-station-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4.5 4.5"/></symbol>
+        <symbol id="gv-station-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+        <symbol id="gv-station-food" viewBox="0 0 24 24"><path d="M2.5 11.5h19a9.5 8 0 0 1-19 0ZM8.5 20h7M8 8c-2-2 2-3 0-5m4 5c-2-2 2-3 0-5m4 5c-2-2 2-3 0-5"/></symbol>
+        <symbol id="gv-station-landmark" viewBox="0 0 24 24"><path d="m2 19 7-12 4 7 3-5 6 10H2Z"/><circle cx="17" cy="5" r="1.5"/></symbol>
+        <symbol id="gv-station-heritage" viewBox="0 0 24 24"><path d="M3 21h18M5 21V11h14v10M3 11h18l-3-3H6l-3 3Zm4-3V5h10v3M9 5l3-3 3 3m-5 16v-4a2 2 0 0 1 4 0v4"/></symbol>
+        <symbol id="gv-station-train" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="15" rx="3"/><path d="M5 11h14M9 3v8m6-8v8M8 18l-2 3m10-3 2 3M8.5 14.5h.1m6.8 0h.1"/></symbol>
+        <symbol id="gv-station-ship" viewBox="0 0 24 24"><path d="M12 3v13M10 4 4 13h6m4-8 5 8h-5M3 16h18l-3 4H6l-3-4Z"/></symbol>
+        <symbol id="gv-station-cards" viewBox="0 0 24 24"><rect x="10" y="6" width="11" height="15" rx="2" transform="rotate(11 15.5 13.5)"/><path d="m8 20-2 .4a2 2 0 0 1-2.3-1.5L1.8 8A2 2 0 0 1 3.3 5.7l7-1.4a2 2 0 0 1 2.1.9m3.1 5.4.5 2.1 1.9 1.2-2.1.5-1.2 1.9-.5-2.1-1.9-1.2 2.1-.5 1.2-1.9Z"/></symbol>
+        <symbol id="gv-station-book" viewBox="0 0 24 24"><path d="M12 5c-3-2-6-2-9-1v14c3-1 6-1 9 1 3-2 6-2 9-1V4c-3-1-6-1-9 1Zm0 0v14M1 7v13c4-1 8-1 11 1 3-2 7-2 11-1V7"/></symbol>
+        <symbol id="gv-station-explore" viewBox="0 0 24 24"><path d="M6 18 18 6M8 6h10v10"/></symbol>
+        <symbol id="gv-station-journal" viewBox="0 0 24 24"><rect x="6" y="3" width="15" height="18" rx="2"/><path d="M10 3v18M3 7h4m-4 5h4m-4 5h4m6-9h4m-4 4h4m-4 4h2"/></symbol>
+        <symbol id="gv-station-postcard" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M12 8v8m3-8h3v3h-3zm0 8h3M6 10h3m-3 4h3"/></symbol>
+      </svg>
       <!-- Hidden compatibility nodes for state updates -->
       <div style="display:none" aria-hidden="true">
         <span id="sidebarActivePawnIcon"></span>
@@ -5078,66 +5004,61 @@ body[data-preview-version="3"]:not([data-curtain-art]) .mc-transition>div{backgr
         <span id="stepPill1"></span><span id="stepPill2"></span><span id="stepPill3"></span>
       </div>
 
-      <div class="scope-tabs" role="group" aria-label="Chọn danh sách nhà ga" style="margin-bottom:8px">
-        <button id="tabScopeFeatured" class="scope-tab active" aria-pressed="true" onclick="setPlaceScope('featured')">
-          ★ 3 ga mẫu
+      <div class="scope-tabs" role="group" aria-label="Chọn danh sách nhà ga" data-station-label="scope">
+        <button id="tabScopeFeatured" type="button" class="scope-tab active" aria-pressed="true" onclick="setPlaceScope('featured')">
+          <svg class="gv-station-icon" aria-hidden="true"><use href="#gv-station-star"/></svg><span data-station-text="featured">3 ga khởi đầu</span>
         </button>
-        <button id="tabScopeAll" class="scope-tab" data-scope-label="34 tỉnh thành &amp; 2 quần đảo" aria-label="36 ga dừng di sản, gồm 34 tỉnh thành và 2 quần đảo" aria-pressed="false" onclick="setPlaceScope('all')">
-          34 tỉnh thành &amp; 2 quần đảo
+        <button id="tabScopeAll" type="button" class="scope-tab" aria-pressed="false" onclick="setPlaceScope('all')">
+          <svg class="gv-station-icon" aria-hidden="true"><use href="#gv-station-list"/></svg>
+          <span><strong data-station-text="allStations">Tất cả 36 ga</strong><small data-station-text="allStationAreas">34 tỉnh thành · 2 quần đảo</small></span>
         </button>
       </div>
 
-      <!-- Search & Topic Filter: Compact & Calm -->
-      <div id="searchBoxContainer" class="search-input-wrap" style="margin-bottom:7px">
-        <label for="provSearchInput" class="sr-only">Tìm nhanh ga tỉnh thành, danh thắng hoặc món ăn</label>
-        <span class="search-input-icon" aria-hidden="true">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        </span>
-        <input id="provSearchInput" type="text" class="prov-search-input" placeholder="Tìm nhanh ga tỉnh thành, danh thắng, món ăn..." oninput="onSearchProvinceInput(this.value)">
-      </div>
-
-      <div class="topic-filter-bar" role="group" aria-label="Lọc theo chủ đề văn hóa">
-        <button class="topic-btn active" data-topic="all" aria-pressed="true" onclick="setTopicFilter('all')">Tất cả</button>
-        <button class="topic-btn" data-topic="Ẩm thực" aria-pressed="false" onclick="setTopicFilter('Ẩm thực')">Ẩm thực</button>
-        <button class="topic-btn" data-topic="Nghệ thuật" aria-pressed="false" onclick="setTopicFilter('Nghệ thuật')">Nghệ thuật</button>
-        <button class="topic-btn" data-topic="Lễ hội" aria-pressed="false" onclick="setTopicFilter('Lễ hội')">Lễ hội</button>
-        <button class="topic-btn" data-topic="Nghề truyền thống" aria-pressed="false" onclick="setTopicFilter('Nghề truyền thống')">Làng nghề</button>
+      <div id="searchBoxContainer" class="search-input-wrap" role="search">
+        <label for="provSearchInput" class="sr-only" data-station-text="searchLabel">Tìm ga, danh thắng hoặc món ăn</label>
+        <svg class="gv-station-icon search-input-icon" aria-hidden="true"><use href="#gv-station-search"/></svg>
+        <input id="provSearchInput" type="search" class="prov-search-input" placeholder="Tìm ga, danh thắng, món ăn…" data-station-placeholder="searchHint" oninput="onSearchProvinceInput(this.value)">
+        <button type="button" id="stationSearchClear" aria-label="Xóa tìm kiếm" data-station-label="clear" hidden>
+          <svg class="gv-station-icon" aria-hidden="true"><use href="#gv-station-close"/></svg>
+        </button>
       </div>
     </div>
 
-    <div class="panel-sec" style="padding:12px 14px">
+    <div id="previewPanelScroll" class="preview-panel-scroll" tabindex="0" role="region" aria-label="Thẻ thông tin các ga và hành trình" data-station-label="results">
       <div class="place-list" id="demoPlaceList"></div>
-    </div>
 
-    <section class="panel-sec heritage-journal" id="heritageJournal" aria-labelledby="heritageJournalTitle">
-      <div class="journal-cover">
-        <span class="journal-bookmark" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="4" width="20" height="25" rx="3"/><path d="M11 4v25M4 9h6M4 15h6M4 21h6M16 12h6m-6 5h6m-6 5h3"/></svg></span>
-        <div><span class="journal-eyebrow">GÓI VIỆT · KÝ ỨC GIA ĐÌNH</span><h3 id="heritageJournalTitle">Sổ vé đoàn viên</h3><p>Mỗi điểm dừng, một miền nhớ.</p></div>
-      </div>
-      <div class="journal-seal-heading"><span>Ấn ga đoàn viên</span><span id="journalSealCount">0 / 3</span></div>
-      <div id="sidebarSealSlots" class="seal-slots-row" aria-label="Khay 3 ấn triện cột mốc gia đình">
-        <div class="seal-slot"><span class="seal-emblem">1</span><span class="seal-name">Ấn thứ nhất</span><span class="seal-state">Chờ đóng ấn</span></div>
-        <div class="seal-slot"><span class="seal-emblem">2</span><span class="seal-name">Ấn thứ hai</span><span class="seal-state">Chờ đóng ấn</span></div>
-        <div class="seal-slot"><span class="seal-emblem">3</span><span class="seal-name">Ấn thứ ba</span><span class="seal-state">Chờ đóng ấn</span></div>
-      </div>
-      <p class="journal-seal-hint">Hoàn thành một thẻ trò chuyện để lưu một ấn ga.</p>
-      <div class="journey-tracker-grid">
-        <div class="tracker-box journal-explored">
-          <div class="tracker-box-title"><span class="journal-tracker-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 4h6a4 4 0 0 1 3 2 4 4 0 0 1 3-2h6v15h-6a4 4 0 0 0-3 2 4 4 0 0 0-3-2H3ZM12 6v15"/></svg></span><span>Ga đã khám phá</span><span class="journal-count" id="journalExploredCount">0</span></div>
-          <ul class="tracker-list" id="sidebarExploredList">
-            <li>Chưa mở câu chuyện nào.</li>
-          </ul>
+      <details class="gv-station-journal" id="stationJournal">
+        <summary id="stationJournalToggle">
+          <span class="gv-station-journal-icon"><svg class="gv-station-icon" aria-hidden="true"><use href="#gv-station-journal"/></svg></span>
+          <span class="gv-station-journal-copy">
+            <strong data-station-text="journal">Sổ hành trình</strong>
+            <small data-station-text="journalHint">Ga đã ghé, kỷ niệm và bưu thiếp</small>
+          </span>
+          <svg class="gv-station-icon gv-station-journal-chevron" aria-hidden="true"><use href="#gv-station-chevron"/></svg>
+        </summary>
+        <div class="gv-station-journal-body">
+          <section aria-labelledby="stationVisitedTitle">
+            <h3 id="stationVisitedTitle"><span data-station-text="visited">Ga đã ghé</span><span id="journalExploredCount">0</span></h3>
+            <p id="stationVisitedEmpty" data-station-text="visitedEmpty">Mở một câu chuyện để lưu ga đầu tiên.</p>
+            <ul id="sidebarExploredList" hidden></ul>
+          </section>
+          <section aria-labelledby="stationMemoriesTitle">
+            <h3 id="stationMemoriesTitle"><span data-station-text="memories">Kỷ niệm đã lưu</span><span id="journalMentionedCount">0</span></h3>
+            <p id="stationMemoriesEmpty" data-station-text="memoriesEmpty">Cả nhà có thể ghi kỷ niệm khi chơi thẻ.</p>
+            <ul id="sidebarMentionedList" hidden></ul>
+          </section>
+          <button type="button" id="stationPostcard" class="gv-station-postcard" onclick="openPostcardModal()">
+            <svg class="gv-station-icon" aria-hidden="true"><use href="#gv-station-postcard"/></svg>
+            <span data-station-text="postcard">Mở bưu thiếp</span>
+            <svg class="gv-station-icon" aria-hidden="true"><use href="#gv-station-chevron"/></svg>
+          </button>
         </div>
-        <div class="tracker-box journal-mentioned">
-          <div class="tracker-box-title"><span class="journal-tracker-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 11a7 7 0 0 1-7 7H7l-4 3V11a8 8 0 0 1 8-8h2a7 7 0 0 1 7 8ZM7 10h9m-9 4h6"/></svg></span><span>Nơi được nhắc đến</span><span class="journal-count" id="journalMentionedCount">0</span></div>
-          <ul class="tracker-list" id="sidebarMentionedList">
-            <li>Chờ một địa danh trong lời kể.</li>
-          </ul>
-        </div>
-      </div>
-      <button type="button" class="journal-postcard" onclick="openPostcardModal(this)"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M14 5v14M17 9h1m-1 3h1M6 9h5m-5 3h5m-5 3h3"/></svg><span>Mở bưu thiếp gia đình<small>Gửi lại những điều thương nhớ</small></span><span aria-hidden="true">→</span></button>
-    </section>
+      </details>
+    </div>
   </aside>
+  <button type="button" id="previewPanelOpen" class="preview-panel-toggle giay-do-surface" aria-controls="stationPanel" aria-expanded="true">
+    <svg class="gv-station-icon" aria-hidden="true"><use href="#gv-station-list"/></svg><span data-station-text="expand">Mở danh sách ga</span>
+  </button>
 
   <!-- BOTTOM CAMERA & DRAG MODE BAR -->
   <div class="bottom-dock giay-do-surface khung-moc" aria-label="Điều khiển góc nhìn bản đồ">
@@ -5737,10 +5658,9 @@ const state = {
   reducedMotion: Boolean(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches),
   playerCount: 3,
   currentPlayerIndex: 0,
-  topicFilter: 'all',
   placeScope: 'featured',         // 'featured' (3 Điểm mẫu) | 'all' (Tất cả 36 tỉnh/đảo)
   searchQuery: '',
-  selectedPlaceId: 'hn',
+  selectedPlaceId: null,
   activeStory: null,
   activeCard: null,
   activeCardPlaceId: null,
@@ -6047,7 +5967,7 @@ document.addEventListener('click', e => {
 });
 
 function getTopOpenModalElement() {
-  const order = ['naturalIslandModal', 'resetSessionModal', 'bambooRollModal', 'postcardModal', 'milestoneModal', 'deckModal', 'storyModal', 'introScreen'];
+  const order = ['naturalIslandModal', 'resetSessionModal', 'bambooRollModal', 'postcardModal', 'milestoneModal', 'bookModal', 'deckModal', 'storyModal', 'introScreen'];
   for (const id of order) {
     const el = document.getElementById(id);
     if (!el) continue;
@@ -6076,7 +5996,7 @@ function syncBackgroundInertAndRenderState() {
   const resetModal = document.getElementById('resetSessionModal');
   const resetOpen = resetModal && resetModal.classList.contains('open');
   if (resetModal) resetModal.setAttribute('aria-hidden', String(!resetOpen));
-  for (const id of ['bambooRollModal', 'postcardModal', 'milestoneModal', 'deckModal', 'storyModal']) {
+  for (const id of ['bambooRollModal', 'postcardModal', 'milestoneModal', 'bookModal', 'deckModal', 'storyModal']) {
     const modal = document.getElementById(id);
     if (!modal) continue;
     if (resetOpen) {
@@ -6298,20 +6218,6 @@ function renderPawnTrays() {
   }
   if (sideName) sideName.textContent = getCurrentPlayerName();
   if (sideRole) sideRole.textContent = `${activePawn.subtitle} • Chọn ga dừng hoặc Rút vé ga`;
-
-  const sealSlotsEl = document.getElementById('sidebarSealSlots');
-  if (sealSlotsEl) {
-    const modCount = state.totalCardsCompleted % 3;
-    const filled = (state.totalCardsCompleted > 0 && modCount === 0) ? 3 : modCount;
-    let sHtml = '';
-    for (let s = 1; s <= 3; s++) {
-      const isStamped = s <= filled;
-      sHtml += `<div class="seal-slot ${isStamped ? 'stamped' : ''}" aria-label="Ấn ga ${s}: ${isStamped ? 'đã đóng ấn' : 'chờ đóng ấn'}"><span class="seal-emblem" aria-hidden="true">${isStamped ? '<svg viewBox="0 0 24 24"><path d="m6 12 4 4 8-9"/></svg>' : s}</span><span class="seal-name">Ấn thứ ${['nhất','hai','ba'][s-1]}</span><span class="seal-state">${isStamped ? 'Đã lưu dấu' : 'Chờ đóng ấn'}</span></div>`;
-    }
-    sealSlotsEl.innerHTML = sHtml;
-    const sealCount = document.getElementById('journalSealCount');
-    if (sealCount) sealCount.textContent = `${filled} / 3`;
-  }
 }
 
 function updateGameStepPills(stepNum) {
@@ -6989,21 +6895,10 @@ function launchMapTrainAlongSplineTo(placeId, targetPt) {
 }
 
 // ============================================================================
-// 4. SIDEBAR & TOPIC FILTER RENDERING (3 ĐIỂM MẪU + TOÀN BỘ 36 TỈNH/ĐẢO)
+// 4. STATION LIST AND SEARCH (3 ĐIỂM MẪU + TOÀN BỘ 36 TỈNH/ĐẢO)
 // ============================================================================
 function stripVN(str) {
   return (str || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/g, 'd').replace(/Đ/g, 'D').toLowerCase().trim();
-}
-
-function setTopicFilter(topic) {
-  state.topicFilter = topic;
-  document.querySelectorAll('.topic-filter-bar .topic-btn').forEach(btn => {
-    const selected = btn.getAttribute('data-topic') === topic;
-    btn.classList.toggle('active', selected);
-    setAriaPressed(btn, selected);
-  });
-  renderDemoPlaceList();
-  announceSR(`Đã lọc chủ đề: ${topic === 'all' ? 'Tất cả' : topic}`);
 }
 
 function setPlaceScope(scope) {
@@ -7039,6 +6934,10 @@ function selectDemoPlace(rawPlaceId, whistleAlreadyPlayed) {
   const placeId = normalizePlaceId(rawPlaceId);
   const place = CULTURAL_PLACE_MAP[placeId];
   if (!place) return;
+  if (state.searchQuery && !document.getElementById(`placeCard-${place.id}`)) {
+    state.searchQuery = '';
+    document.getElementById('provSearchInput').value = '';
+  }
   if (window.GoiVietJourneyPreview) {
     state.selectedPlaceId = place.id;
     window.GoiVietJourneyPreview.select(place.id);
@@ -7085,33 +6984,18 @@ function selectDemoPlace(rawPlaceId, whistleAlreadyPlayed) {
   });
 }
 
-function getTopicShortMeta(topic) {
-  if (topic === 'Ẩm thực') return { cls: 't-amthuc', label: 'Ẩm thực' };
-  if (topic === 'Nghệ thuật') return { cls: 't-nghethuat', label: 'Nghệ thuật' };
-  if (topic === 'Lễ hội') return { cls: 't-lehoi', label: 'Lễ hội' };
-  return { cls: 't-nghe', label: 'Làng nghề' };
-}
-
-let lastPlaceListMarkup4 = null, lastPlaceListNode4 = null;
-
 function renderDemoPlaceList() {
   for (const [id, placeId] of [['btnIslandHoangSa', 'hoang-sa'], ['btnIslandTruongSa', 'truong-sa']]) {
     const button = document.getElementById(id);
     if (button) setAriaPressed(button, state.selectedPlaceId === placeId);
   }
-  const listEl = document.getElementById('demoPlaceList');
-  const filter = state.topicFilter;
+  const panel = window.GoiVietStationPanel;
+  if (!panel) return;
   const q = state.searchQuery;
 
   let sourceList = state.placeScope === 'featured'
     ? CULTURAL_PLACES.slice()
     : ALL_PLAYABLE_PLACES.slice();
-
-  // Always include the currently selected place at top if not in featured
-  const selPlace = CULTURAL_PLACE_MAP[state.selectedPlaceId];
-  if (selPlace && !sourceList.includes(selPlace)) {
-    sourceList.unshift(selPlace);
-  }
 
   if (q) {
     sourceList = ALL_PLAYABLE_PLACES.filter(p => {
@@ -7125,207 +7009,96 @@ function renderDemoPlaceList() {
     });
   }
 
-  const html = sourceList.map(place => {
-    const matchingStories = (place.stories || []).filter(s => filter === 'all' || s.topic === filter);
-    if (matchingStories.length === 0) return '';
-
-    const isSelected = normalizePlaceId(state.selectedPlaceId) === place.id;
-    const four = getPlaceFourStates(place.id);
-    const isExplored = four.storyOpened || four.activityCompleted;
-    const drawnCount = (state.drawnCardIdsByPlace[place.id] || []).length;
-    const remainingCount = Math.max(0, place.cards.length - drawnCount);
-    const hl = place.highlights || {
+  // Keep the selected station in view when it matches the current search.
+  const selectedId = normalizePlaceId(state.selectedPlaceId);
+  const selectedPlace = CULTURAL_PLACE_MAP[selectedId];
+  if (selectedPlace && !q && !sourceList.includes(selectedPlace)) sourceList.unshift(selectedPlace);
+  let selectedMarkup = '';
+  const otherStations = [];
+  for (const place of sourceList) {
+    const stories = place.stories || [];
+    if (!stories.length) continue;
+    const island = Boolean(ISLAND_MAP[place.id]);
+    const highlights = place.highlights || {
       landmark: place.photoTitle || place.short || place.name,
       heritage: 'Di sản văn hóa',
       cuisine: 'Ẩm thực bản địa'
     };
-
-    const statusBadgeText = four.activityCompleted
-      ? '✓ Đã chia sẻ'
-      : (four.storyOpened
-          ? 'Đã mở chuyện'
-          : (place.isVerifiedSample ? 'Điểm mẫu có nguồn' : 'Nội dung demo'));
-
-    if (!isSelected) {
-      return `
-        <div class="place-card" id="placeCard-${place.id}">
-          <div class="place-compact-row" onclick="selectDemoPlace('${place.id}')" role="button" tabindex="0" aria-expanded="false" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectDemoPlace('${place.id}');}">
-            ${place.photoUrl ? `<div class="place-thumb-box"><img src="${escapeHTML(place.photoUrl)}" alt="${escapeHTML(place.name)}" loading="lazy" onerror="this.parentElement.style.display='none'"></div>` : ''}
-            <div class="place-compact-info">
-              <div class="place-compact-top">
-                <div class="place-compact-title">${place.isVerifiedSample ? '★ ' : ''}${escapeHTML(place.name)}</div>
-              </div>
-              <div class="place-compact-sub">${escapeHTML(hl.landmark)} • ${escapeHTML(hl.cuisine)}</div>
-            </div>
-            <span class="place-compact-badge ${isExplored ? 'explored' : ''}">
-              ${escapeHTML(statusBadgeText)}
-            </span>
-          </div>
-        </div>
-      `;
+    if (place.id === selectedId) {
+      const drawn = state.drawnCardIdsByPlace[place.id] || [];
+      const opened = state.openedStoryIdsByPlace[place.id] || [];
+      const remaining = Math.max(0, place.cards.length - drawn.length);
+      selectedMarkup = panel.renderSelectedStation({ place, highlights, stories, remaining, opened, island });
+    } else {
+      otherStations.push(panel.renderCompactStation(place, highlights, getPlaceFourStates(place.id), island));
     }
-
-    return `
-      <div class="place-card selected" id="placeCard-${place.id}">
-        <div class="station-board-ribbon">
-          <span class="station-board-name">
-            ${ISLAND_MAP[place.id] ? '⛵' : '<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 15V7a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v8a2 2 0 0 1-2 2l2 3h-2.5l-1.5-3H8l-1.5 3H4l2-3a2 2 0 0 1-2-2z"/></svg>'}
-            <span>${ISLAND_MAP[place.id] ? 'Hải trình đang chọn' : 'Ga đang chọn'}</span>
-          </span>
-          <button type="button" class="station-board-action" aria-label="${ISLAND_MAP[place.id] ? 'Xem hải trình' : 'Định vị trên bản đồ'}" title="${ISLAND_MAP[place.id] ? 'Xem hải trình' : 'Định vị trên bản đồ'}" onclick="event.stopPropagation();if(window.GoiVietJourneyPreview){window.GoiVietJourneyPreview.start('${place.id}')}else{selectDemoPlace('${place.id}')}">
-            ${ISLAND_MAP[place.id] ? 'Xem hải trình' : 'Định vị'} <span aria-hidden="true">→</span>
-          </button>
-        </div>
-        <button type="button" id="story-hero-${place.id}" class="place-hero-banner" onclick="openStoryModal('${place.id}', '${matchingStories[0].id}', this)" title="Nhấp để xem danh thắng và câu chuyện văn hóa">
-          ${place.photoUrl ? `<div class="place-hero-media"><img class="place-hero-img" src="${escapeHTML(place.photoUrl)}" alt="${escapeHTML(place.name)}" loading="lazy" onerror="this.parentElement.style.display='none'"></div>` : ''}
-          <div class="place-hero-overlay">
-            <div class="place-hero-top-row">
-              <span class="place-region-pill">${escapeHTML(place.region)}</span>
-              <span class="place-deck-pill ${isExplored ? 'explored' : ''}">
-                ${escapeHTML(statusBadgeText)}
-              </span>
-            </div>
-            <div class="place-hero-bottom">
-              <div>
-                <div class="place-hero-title">${escapeHTML(place.name)}</div>
-                <div class="place-hero-caption">
-                  <span>Danh thắng: ${escapeHTML(place.photoTitle || hl.landmark)}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </button>
-
-        <div class="place-body-inner">
-          <section class="place-overview" aria-labelledby="place-overview-${place.id}">
-          <h3 class="place-section-heading" id="place-overview-${place.id}">Về vùng đất này</h3>
-          <p class="place-tagline">${escapeHTML(place.tagline || place.summary)}</p>
-
-          <dl class="place-highlights-grid" aria-label="Điểm nhấn văn hóa tại ${escapeHTML(place.name)}">
-            <div class="highlight-chip-box">
-              <dt class="highlight-kicker k-landmark">Danh thắng</dt>
-              <dd class="highlight-val">${escapeHTML(hl.landmark)}</dd>
-            </div>
-            <div class="highlight-chip-box">
-              <dt class="highlight-kicker k-heritage">Di sản</dt>
-              <dd class="highlight-val">${escapeHTML(hl.heritage)}</dd>
-            </div>
-            <div class="highlight-chip-box">
-              <dt class="highlight-kicker k-cuisine">Hương vị</dt>
-              <dd class="highlight-val">${escapeHTML(hl.cuisine)}</dd>
-            </div>
-          </dl>
-          </section>
-
-          <button type="button" id="deck-open-${place.id}" class="quick-deck-btn" onclick="openDeckModal('${place.id}', this)">
-            <span>Rút thẻ trò chuyện <span aria-hidden="true">→</span></span>
-            <span class="quick-deck-sub">${remainingCount > 0 ? `Còn ${remainingCount} lá` : 'Đã rút hết'}</span>
-          </button>
-
-          <div class="place-stories">
-            <div class="stories-header-row">
-              <h3 class="place-section-heading">Câu chuyện văn hóa <span class="story-count">(${matchingStories.length})</span></h3>
-            </div>
-            ${matchingStories.map(st => {
-              const tm = getTopicShortMeta(st.topic);
-              const isRead = (state.openedStoryIdsByPlace[place.id] || []).includes(st.id);
-              return `
-                <button type="button" id="story-open-${st.id}" class="story-item-btn" onclick="openStoryModal('${place.id}', '${st.id}', this)">
-                  <div class="story-item-left">
-                    <span class="story-topic-pill ${tm.cls}">${escapeHTML(tm.label)}</span>
-                    <span class="story-item-title">${isRead ? '✓ ' : ''}${escapeHTML(getStoryReadingPresentation(st).title)}</span>
-                  </div>
-                  <span class="story-item-cta">${isRead ? 'Đọc lại →' : 'Đọc →'}</span>
-                </button>
-              `;
-            }).join('')}
-          </div>
-        </div>
-      </div>
-    `;
-  }).join('');
-
-  const nextMarkup = html || `<div style="padding:12px;color:var(--ink-muted)">Không tìm thấy địa danh hoặc chủ đề phù hợp.</div>`;
-  if (lastPlaceListNode4 !== listEl || lastPlaceListMarkup4 !== nextMarkup) {
-    listEl.innerHTML = nextMarkup;
-    lastPlaceListNode4 = listEl;
-    lastPlaceListMarkup4 = nextMarkup;
   }
+  panel.update(selectedMarkup + panel.renderStationList(otherStations, {
+    searching: Boolean(q),
+    hasSelection: Boolean(selectedMarkup),
+    featured: state.placeScope === 'featured'
+  }));
 }
 
-// XSS-Safe DOM rendering for Sidebar Trackers (Uses createElement & textContent, never innerHTML with user strings)
+function selectStationFromJournal(placeId) {
+  const id = normalizePlaceId(placeId);
+  state.searchQuery = '';
+  document.getElementById('provSearchInput').value = '';
+  document.getElementById('stationJournal').open = false;
+  selectDemoPlace(id);
+  document.getElementById(`station-title-${id}`)?.focus({ preventScroll: true });
+}
+
+// User-entered memories are rendered as text.
 function renderSidebarTrackers() {
-  const expEl = document.getElementById('sidebarExploredList');
-  const menEl = document.getElementById('sidebarMentionedList');
-  if (!expEl || !menEl) return;
-
-  expEl.textContent = '';
-  const uniqueExplored = Array.from(new Set(
+  const visitedList = document.getElementById('sidebarExploredList');
+  const memoryList = document.getElementById('sidebarMentionedList');
+  const visitedIds = new Set(
     state.storyOpenedPlaceIds.concat(state.activityCompletedPlaceIds).map(normalizePlaceId)
-  ));
-  const exploredCount = document.getElementById('journalExploredCount');
-  const mentionedCount = document.getElementById('journalMentionedCount');
-  if (exploredCount) exploredCount.textContent = String(uniqueExplored.length);
-  if (mentionedCount) mentionedCount.textContent = String(state.mentionedPlaces.length);
-  if (uniqueExplored.length === 0) {
-    const li = document.createElement('li');
-    li.style.color = 'var(--ink-muted)';
-    li.style.fontSize = '14px';
-    li.textContent = 'Chưa mở câu chuyện nào.';
-    expEl.appendChild(li);
-  } else {
-    uniqueExplored.forEach(pid => {
-      const p = CULTURAL_PLACE_MAP[pid];
-      const four = getPlaceFourStates(pid);
-      const li = document.createElement('li');
-      const chip = document.createElement('button');
-      chip.type = 'button';
-      chip.className = 'tracker-chip explored';
-      chip.style.cursor = 'pointer';
-      chip.style.border = 'none';
-      const prefix = four.activityCompleted ? '✓ ' : '• ';
-      chip.textContent = prefix + (p ? (p.short || p.name) : pid);
-      chip.addEventListener('click', () => selectDemoPlace(pid));
-      li.appendChild(chip);
-      expEl.appendChild(li);
-    });
+  );
+  const memories = state.mentionedPlaces;
+  document.getElementById('journalExploredCount').textContent = String(visitedIds.size);
+  document.getElementById('journalMentionedCount').textContent = String(memories.length);
+  document.getElementById('stationVisitedEmpty').hidden = Boolean(visitedIds.size);
+  document.getElementById('stationMemoriesEmpty').hidden = Boolean(memories.length);
+  visitedList.hidden = !visitedIds.size;
+  memoryList.hidden = !memories.length;
+
+  const visitedItems = document.createDocumentFragment();
+  for (const id of visitedIds) {
+    const place = CULTURAL_PLACE_MAP[id];
+    const item = document.createElement('li');
+    const station = document.createElement('button');
+    station.type = 'button';
+    station.className = 'gv-station-journal-stop';
+    station.textContent = place?.short || place?.name || id;
+    station.addEventListener('click', () => selectStationFromJournal(id));
+    item.append(station);
+    visitedItems.append(item);
   }
+  visitedList.replaceChildren(visitedItems);
 
-  menEl.textContent = '';
-  if (state.mentionedPlaces.length === 0) {
-    const li = document.createElement('li');
-    li.style.color = 'var(--ink-muted)';
-    li.style.fontSize = '14px';
-    li.textContent = 'Chờ một địa danh trong lời kể.';
-    menEl.appendChild(li);
-  } else {
-    state.mentionedPlaces.forEach(m => {
-      const li = document.createElement('li');
-      li.style.display = 'flex';
-      li.style.alignItems = 'center';
-      li.style.gap = '4px';
-      li.style.flexWrap = 'wrap';
+  const memoryItems = document.createDocumentFragment();
+  for (const memory of memories) {
+    const item = document.createElement('li');
+    item.className = 'gv-station-journal-memory';
+    const name = document.createElement('span');
+    name.textContent = memory.name;
+    if (memory.note) name.title = memory.note;
+    item.append(name);
 
-      const chip = document.createElement('span');
-      chip.className = 'tracker-chip mentioned';
-      chip.textContent = `✦ ${m.name}`;
-      if (m.note) chip.title = m.note;
-      li.appendChild(chip);
-
-      if (m.demoPlaceId && CULTURAL_PLACE_MAP[m.demoPlaceId]) {
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'small-wood-btn';
-        btn.style.fontSize = '14px';
-        btn.style.minHeight = '28px';
-        btn.style.padding = '2px 7px';
-        btn.textContent = 'Tới ga';
-        btn.addEventListener('click', () => selectDemoPlace(m.demoPlaceId));
-        li.appendChild(btn);
-      }
-      menEl.appendChild(li);
-    });
+    if (CULTURAL_PLACE_MAP[memory.demoPlaceId]) {
+      const station = document.createElement('button');
+      station.type = 'button';
+      station.className = 'gv-station-journal-stop';
+      station.dataset.stationText = 'visit';
+      station.textContent = window.GoiVietStationPanel?.visitLabel() || 'Tới ga';
+      station.addEventListener('click', () => selectStationFromJournal(memory.demoPlaceId));
+      item.append(station);
+    }
+    memoryItems.append(item);
   }
+  memoryList.replaceChildren(memoryItems);
 }
 
 // ============================================================================
@@ -8750,10 +8523,9 @@ function performSessionReset() {
   closeControlDisclosures();
   stopListeningDrumTimer();
   state.currentPlayerIndex = 0;
-  state.topicFilter = 'all';
   state.placeScope = 'featured';
   state.searchQuery = '';
-  state.selectedPlaceId = 'hn';
+  state.selectedPlaceId = null;
   state.sourceIslandId=null;
   state.seaRun = null;
   state.activeStory = null;
@@ -8782,13 +8554,12 @@ function performSessionReset() {
   const searchIn = document.getElementById('provSearchInput');
   if (searchIn) searchIn.value = '';
 
-  document.querySelectorAll('.topic-filter-bar .topic-btn').forEach(btn => {
-    const selected = btn.getAttribute('data-topic') === 'all';
-    btn.classList.toggle('active', selected);
-    setAriaPressed(btn, selected);
-  });
-
   closePostcardModal();
+  const journal = document.getElementById('stationJournal');
+  if (journal.contains(document.activeElement)) {
+    document.getElementById('stationJournalToggle').focus({ preventScroll: true });
+  }
+  journal.open = false;
   closeMilestoneAndContinue();
   closeDeckModal();
   closeStoryModal();
@@ -10149,7 +9920,7 @@ function recenterMapBestView() {
 }
 
 function focusSelectedStationOnMap() {
-  const selId = normalizePlaceId(state.selectedPlaceId) || 'hn';
+  const selId = normalizePlaceId(state.selectedPlaceId);
   const prov = P34_MAP[selId];
   const isl = ISLAND_MAP[selId];
   const targetPt = (prov && prov.center) ? prov.center : (isl ? isl.pt : null);
@@ -10325,6 +10096,7 @@ window.addEventListener('keydown', e => {
     if (document.getElementById('bambooRollModal') && document.getElementById('bambooRollModal').classList.contains('open')) closeBambooRollModal();
     else if (document.getElementById('postcardModal').classList.contains('open')) closePostcardModal();
     else if (document.getElementById('milestoneModal').classList.contains('open')) closeMilestoneAndContinue();
+    else if (document.getElementById('bookModal')?.classList.contains('open')) window.GoiVietBooks?.close();
     else if (document.getElementById('deckModal').classList.contains('open')) closeDeckModal();
     else if (document.getElementById('storyModal').classList.contains('open')) closeStoryModal();
     else if (!document.getElementById('introScreen').classList.contains('intro-hidden')) closeIntroModal();
