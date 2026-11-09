@@ -20,7 +20,7 @@ Mã tỉnh dùng đúng mã trong bộ thẻ: Hà Nội `hn`, Huế `hue`, TP. H
 2. Trong `book.js`, đổi `placeId` thành mã tỉnh, rồi thay chữ và tên tranh theo mục 3–5.
 3. Bỏ tranh vào `art/`, khai báo trong `art: { … }` (mục 5).
 4. Chạy kiểm tra: `node tools/check-books-5.cjs`. Thêm `--render` để dựng thử từng trang và báo trang tràn chữ (cần chạy `node tools/perf/server.cjs` ở cửa sổ khác).
-5. Xem bản nháp: mở `map-surroundings-preview-5.html?sach=nhap`, chọn tỉnh, bấm **📖 Đọc sách (thử nghiệm)** trong khung ga. Thêm `&lang=en` để xem bản tiếng Anh.
+5. Xem bản nháp: mở `map-surroundings-preview-5.html?sach=nhap`, chọn tỉnh, bấm nút **Đọc sách** trong khung ga. Thêm `&lang=en` để xem bản tiếng Anh. Không có `?sach=nhap` thì nút này mở trang **Sắp có** cho tập còn ở trạng thái nháp.
 6. Khi tập đủ VI **và** EN và lệnh kiểm tra không còn lỗi, đổi `status: 'draft'` thành `'published'` trong `catalog-5.js` và tăng `v` (ví dụ `'20261120-1'`) để trình duyệt tải bản mới. Tập `published` mới hiện cho người xem bình thường; tỉnh chưa xuất bản hiện trang **Sắp có**.
 
 ## 3. Cấu trúc `book.js`

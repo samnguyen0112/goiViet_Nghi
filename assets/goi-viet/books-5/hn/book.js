@@ -53,192 +53,201 @@ GoiVietBooks.register({
     },
     "cover": {
       "file": "art/cover.webp",
-      "w": 875,
-      "h": 832,
+      "hi": "art/cover@2x.webp",
+      "w": 1600,
+      "h": 1521,
       "alt": {
         "vi": "Linh cầm máy ảnh phim đứng bên hồ Gươm, phía sau là Tháp Rùa"
       }
     },
     "s01-street": {
       "file": "art/s01-street.webp",
-      "w": 667,
-      "h": 336,
+      "hi": "art/s01-street@2x.webp",
+      "w": 1600,
+      "h": 806,
       "alt": {
         "vi": "Linh đeo máy ảnh đứng trên con phố rợp bóng cây buổi sớm"
       }
     },
     "s01-sweep": {
       "file": "art/s01-sweep.webp",
-      "w": 391,
-      "h": 464,
+      "w": 1348,
+      "h": 1600,
       "alt": {
         "vi": "Bà cụ quét lá bằng chổi tre trước dãy nhà tường vàng cửa xanh"
       }
     },
     "s01-camera": {
       "file": "art/s01-camera.webp",
-      "w": 310,
-      "h": 196,
+      "w": 1240,
+      "h": 784,
       "alt": {
         "vi": "Chiếc máy ảnh phim và cuốn sổ trên bàn gỗ"
       }
     },
     "s02-shelf": {
       "file": "art/s02-shelf.webp",
-      "w": 388,
-      "h": 424,
+      "w": 1464,
+      "h": 1600,
       "alt": {
         "vi": "Linh tìm thấy cuốn sổ cũ trong chiếc tủ gỗ của ông"
       }
     },
     "s02-photos": {
       "file": "art/s02-photos.webp",
-      "w": 476,
-      "h": 298,
+      "w": 1600,
+      "h": 1002,
       "alt": {
         "vi": "Máy ảnh, cuốn sổ và tấm ảnh cũ chụp hồ Gươm"
       }
     },
     "s03-street": {
       "file": "art/s03-street.webp",
-      "w": 371,
-      "h": 434,
+      "w": 1368,
+      "h": 1600,
       "alt": {
         "vi": "Linh đứng trước cửa hiệu trên phố Hàng Bạc"
       }
     },
     "s03-smith": {
       "file": "art/s03-smith.webp",
-      "w": 671,
-      "h": 314,
+      "hi": "art/s03-smith@2x.webp",
+      "w": 1600,
+      "h": 749,
       "alt": {
         "vi": "Linh trò chuyện với bác thợ bạc trong cửa tiệm"
       }
     },
     "s04-jeweler": {
       "file": "art/s04-jeweler.webp",
-      "w": 420,
-      "h": 432,
+      "w": 1556,
+      "h": 1600,
       "alt": {
         "vi": "Người thợ bạc già tỉ mỉ chạm chiếc nhẫn"
       }
     },
     "s05-villa": {
       "file": "art/s05-villa.webp",
-      "w": 389,
-      "h": 448,
+      "w": 1389,
+      "h": 1600,
       "alt": {
         "vi": "Linh ngắm căn biệt thự kiểu Pháp màu vàng dưới tán cây"
       }
     },
     "s05-talk": {
       "file": "art/s05-talk.webp",
-      "w": 669,
-      "h": 322,
+      "hi": "art/s05-talk@2x.webp",
+      "w": 1600,
+      "h": 770,
       "alt": {
         "vi": "Linh trò chuyện với bác gái trước hàng rào biệt thự"
       }
     },
     "s06-sitting": {
       "file": "art/s06-sitting.webp",
-      "w": 395,
-      "h": 428,
+      "w": 1477,
+      "h": 1600,
       "alt": {
         "vi": "Linh và bác gái ngồi kể chuyện bên bức tường cũ"
       }
     },
     "s06-window": {
       "file": "art/s06-window.webp",
-      "w": 672,
-      "h": 311,
+      "hi": "art/s06-window@2x.webp",
+      "w": 1600,
+      "h": 740,
       "alt": {
         "vi": "Linh ngồi lặng dưới tán cây trước dãy nhà cũ"
       }
     },
     "s07-morning": {
       "file": "art/s07-morning.webp",
-      "w": 390,
-      "h": 368,
+      "w": 1560,
+      "h": 1472,
       "alt": {
         "vi": "Linh đi trên phố cũ lúc mặt trời vừa lên"
       }
     },
     "s07-vendor": {
       "file": "art/s07-vendor.webp",
-      "w": 668,
-      "h": 297,
+      "hi": "art/s07-vendor@2x.webp",
+      "w": 1600,
+      "h": 711,
       "alt": {
         "vi": "Bà cụ bán xôi đưa gói xôi cho Linh"
       }
     },
     "s08-photo": {
       "file": "art/s08-photo.webp",
-      "w": 402,
-      "h": 427,
+      "w": 1506,
+      "h": 1600,
       "alt": {
         "vi": "Linh chụp ảnh bà cụ bán xôi bên thúng xôi"
       }
     },
     "s08-taste": {
       "file": "art/s08-taste.webp",
-      "w": 669,
-      "h": 229,
+      "hi": "art/s08-taste@2x.webp",
+      "w": 1600,
+      "h": 548,
       "alt": {
         "vi": "Linh mỉm cười thưởng thức gói xôi"
       }
     },
     "s09-lake": {
       "file": "art/s09-lake.webp",
-      "w": 395,
-      "h": 444,
+      "w": 1423,
+      "h": 1600,
       "alt": {
         "vi": "Linh ngồi bên hồ Gươm, phía xa là Tháp Rùa"
       }
     },
     "s09-table": {
       "file": "art/s09-table.webp",
-      "w": 668,
-      "h": 275,
+      "hi": "art/s09-table@2x.webp",
+      "w": 1600,
+      "h": 659,
       "alt": {
         "vi": "Những tấm ảnh cũ và mới bày cạnh máy ảnh"
       }
     },
     "s10-writing": {
       "file": "art/s10-writing.webp",
-      "w": 430,
-      "h": 392,
+      "w": 1600,
+      "h": 1459,
       "alt": {
         "vi": "Linh viết vào cuốn sổ bên bờ hồ"
       }
     },
     "s11-hands": {
       "file": "art/s11-hands.webp",
-      "w": 294,
-      "h": 317,
+      "w": 1176,
+      "h": 1268,
       "alt": {
         "vi": "Đôi tay người thợ chạm hoa văn trên bát bạc"
       }
     },
     "s11-exhibit": {
       "file": "art/s11-exhibit.webp",
-      "w": 664,
-      "h": 329,
+      "hi": "art/s11-exhibit@2x.webp",
+      "w": 1600,
+      "h": 793,
       "alt": {
         "vi": "Mọi người xem triển lãm ảnh về Hà Nội xưa và nay"
       }
     },
     "s12-boy": {
       "file": "art/s12-boy.webp",
-      "w": 412,
-      "h": 398,
+      "w": 1600,
+      "h": 1546,
       "alt": {
         "vi": "Linh trò chuyện với cậu bé tại triển lãm Ký ức Hà Nội"
       }
     },
     "s12-final": {
       "file": "art/s12-final.webp",
-      "w": 336,
-      "h": 400,
+      "w": 1344,
+      "h": 1600,
       "alt": {
         "vi": "Linh cầm máy ảnh mỉm cười trên con phố cũ"
       }

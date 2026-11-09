@@ -22,6 +22,8 @@
 2. Vào bản đồ, chọn **Hà Nội**, bấm **📖 Đọc sách (thử nghiệm)** trong khung ga. Thêm `&lang=en` để xem khung trình đọc bằng tiếng Anh.
 3. Không có `?sach=nhap` thì mọi tỉnh đều hiện trang **Sắp có**: cả 4 tập đang `draft`, và chưa có nút xem thử. Nút công khai "Chơi thẻ / Đọc sách" thuộc P5-02.
 
+> *Cập nhật sau P5-01:* khung ga mới của Codex đã có nút **Đọc sách** công khai. Nút này mở sách nháp khi có `?sach=nhap`, và mở trang **Sắp có** khi không có, nên nút "Đọc sách (thử nghiệm)" ở bước 2 không còn hiện.
+
 ## 3. Tệp mới và tệp sửa
 
 | Tệp | Nội dung |
@@ -165,3 +167,24 @@ Ngoài 4 chỗ này, không đụng tệp dùng chung nào.
 | Bộ test thẻ | Đạt (`verification/p5-books/cards-final/`) |
 | `tools/check-station-panel-5.cjs` (của Codex) | PASS |
 | Ca chức năng GĐ6 so với bản mốc | 0 lỗi. Có khác biệt nhưng đều do khung ga mới thay đổi có chủ đích: bộ lọc chủ đề bị bỏ, câu báo "không tìm thấy" đổi lời, ga được chọn luôn nằm trong vùng nhìn thấy, Escape nay bỏ chọn địa danh (`gd6-functional-final.json`). |
+
+## 11. Nâng độ nét tranh Hà Nội (sau P5-01)
+
+Mục tiêu: các trang HTML (bản tiếng Anh, Đọc chữ lớn, và bản tiếng Việt khi bỏ `editions.vi` về sau) có tranh đủ nét cho máy chiếu và màn 4K, mà vẫn giữ đúng nét vẽ của bản thảo.
+
+- **Công cụ:** Real-ESRGAN `realesrgan-ncnn-vulkan-20220424-windows.zip` (45.474.481 byte, SHA-256 `abc02804…802d`, BSD-3, bản phát hành chính thức v0.2.5.0). Tải vào thư mục tạm của phiên, ngoài dự án; không đưa vào repo.
+- **Đầu vào:** 24 vùng tranh cắt lại từ ảnh PNG gốc không nén (cùng tọa độ trong `hn/art-crops.json`), không lấy từ bản WebP cũ, để khỏi phóng to cả lỗi nén.
+- **Chọn mô hình:** đã thử cả `realesrgan-x4plus-anime` và `realesrgan-x4plus` trên 3 tranh mẫu.
+  - Bản `anime` sạch nhưng làm mất chất giấy màu nước, tô đậm nét viền và làm hoa văn bát bạc trông kiểu hoạt hình.
+  - Bản `x4plus` giữ vân vải, hoa văn chạm và màu gần gốc. **Chọn `x4plus`**, phóng to 4 lần.
+- **Xuất tệp:**
+  - Bản thường có cạnh dài tối đa 1600 px (Lanczos, WebP chất lượng 86). Kết quả 1176–1600 px, trước đây là 294–875 px.
+  - 9 tranh có thêm bản nét `@2x`, cạnh dài khoảng 2650–3200 px. Các tranh dọc không có bản này vì bản phóng to không lớn hơn bản thường đủ nhiều.
+  - Bộ tranh thường tổng 5,5 MB (trước 1,6 MB); bản nét 3,3 MB, chỉ tải trên màn có mật độ điểm ảnh cao.
+- **Dữ liệu:** `hn/book.js` chỉ đổi `w`, `h` và thêm `hi` cho 24 mục tranh. Đã kiểm chứng phần còn lại không đổi (script `verification/p5-books/scripts/patch-hn-art-sizes.cjs`). `catalog-5.js` tăng `v` của tập Hà Nội.
+- **Kiểm tra:**
+  - `check-books-5.cjs`: 0 lỗi. Cảnh báo của tập Hà Nội giảm từ 126 xuống 93, phần còn lại chủ yếu là thiếu tiếng Anh. Còn một tranh dưới 1200 px là `s11-hands` (1176 px).
+  - `--render`: 0 trang tràn chữ.
+  - Ảnh so trước/sau: `verification/p5-books/` gồm `compare.jpg` (bicubic so với anime) và `compare-models.jpg` (bicubic, anime, x4plus).
+  - Ảnh chụp trang tiếng Anh: `verification/p5-books/book-shots-hd/`.
+- **Còn lại:** bản tiếng Việt hiện vẫn hiện ảnh trang đôi gốc (`editions.vi`, 1536 px). Tranh mới chỉ thấy ở trang HTML cho đến khi bỏ `editions.vi`, sau khi bạn soát so sánh (bước 4 của hướng đề xuất).
