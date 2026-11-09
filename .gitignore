@@ -1,6 +1,7 @@
 /verification/
 /scratch/
 /exports/
+/tools/perf/results/
 .vercel/
 node_modules/
 .env
