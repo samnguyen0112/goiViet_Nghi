@@ -1,3 +1,333 @@
+# Gói Việt preview-5 — Kế hoạch song ngữ, hai chế độ và khung sách văn hóa
+
+- **Ngày lập** 09/11/2026 (Codex). **Sửa lần 2** cùng ngày (Claude): làm **khung sách trước, nội dung và tranh nhập sau**; áp dụng các góp ý review (tranh không chữ, dịch thẻ theo mẫu, danh sách tệp cần tách, nội dung là đường găng, nghiệm thu gọn, URL fanpage).
+- **Trạng thái** Kế hoạch. Chưa giai đoạn nào được thực hiện.
+- **Bản triển khai và nghiệm thu** `map-surroundings-preview-5.html` và tài nguyên dành riêng cho bản 5.
+- **Tham chiếu** `D:/Download/Goi-Viet-Ha-Noi.html`: chỉ tham chiếu **phong cách** sách (bìa xanh, giấy kem, gáy, dấu đỏ, ảnh xen chữ), không dùng làm định dạng sản xuất. `card-testing.html`: bộ thẻ.
+
+## 0. Tóm tắt
+
+| Bước | Kết quả | Người làm | Cỡ việc |
+| --- | --- | --- | --- |
+| P5-00 | Mốc gốc, cập nhật AGENTS.md | Code | Nhỏ |
+| **P5-01** | **Khung sách chạy được với nội dung giữ chỗ**, hướng dẫn nhập nội dung, công cụ kiểm tra, lõi song ngữ tối thiểu | Code | Vừa–lớn |
+| P5-02 | Hai chế độ tại ga, trang chờ, link fanpage và QR, sửa lỗi mở nhầm bộ thẻ | Code | Vừa |
+| P5-03 | Song ngữ toàn website | Code, người duyệt EN | Lớn |
+| P5-04 | Nhập từng tập khi nhóm giao nội dung | Nhóm giao, Code nhập và kiểm | Nhỏ mỗi tập |
+| P5-05 | Nghiệm thu gọn, bàn giao | Code | Nhỏ–vừa |
+| **N (song song, bắt đầu ngay)** | Viết VI, tạo tranh không chữ, dịch EN cho 4 tập | Nhóm | **Lớn — đường găng** |
+
+Cỡ việc là tương đối. Điền ngày cho từng bước khi chốt ngày thuyết trình.
+
+**Bản tối thiểu cho buổi thuyết trình:** P5-00 → P5-02, phần mới viết bằng lõi song ngữ ngay từ đầu. Tập nào đủ nội dung thì xuất bản, tập chưa đủ hiện trang chờ. P5-03 đầy đủ là mục tiêu kế tiếp nếu còn thời gian.
+
+## 1. Phạm vi đã chốt
+
+| Yêu cầu | Kết quả cần bàn giao |
+| --- | --- |
+| Song ngữ toàn website | VI và EN dùng chung một phiên. Dịch giao diện, tên và tóm tắt địa phương, bộ thẻ, sách, thông báo và chữ hệ thống trên bưu thiếp. **Không dịch 132 câu chuyện demo** của 33 điểm chưa thẩm định (gồm cả Thanh Hóa) vì đường đọc công khai của chúng bị ẩn. |
+| Hai chế độ theo điểm đến | Chọn tỉnh/thành hoặc đến ga đều tiếp cận được **Chơi thẻ** và **Đọc sách văn hóa**. Hành trình tàu vẫn có đường vào riêng. |
+| Bốn tập sách mẫu | Hà Nội, Huế, TP. Hồ Chí Minh, Thanh Hóa. **Nội dung đang được nhóm soạn**, nên làm khung trước: mỗi tập có **một bộ tranh không chữ** và **chữ VI/EN là văn bản** đặt trên trang. Một trình đọc dùng cho 4 tập × 2 ngôn ngữ. |
+| Điểm chưa có sách | 30 tỉnh thành và 2 quần đảo hiện **Sắp có / Coming soon** trong nhánh sách. Quần đảo dùng trang chờ của nhánh sách, tách khỏi màn thông tin địa lý của đảo. Cả 36 điểm vẫn có thẻ. |
+| Fanpage | URL đã có và đã mở được ngày 09/11: `https://www.facebook.com/people/G%C3%B3i-Vi%E1%BB%87t/61594157551043/`. Khách chưa đăng nhập Facebook trên máy tính bị hộp đăng nhập che, nên **QR là kênh chính khi trình chiếu**, link chữ là kênh phụ. |
+
+Mọi thay đổi chỉ gồm preview-5 và tài nguyên `-5`. Tệp dùng chung với bản khác phải tách thành bản `-5` trước khi sửa (danh sách ở P5-03). Lưu mốc Git và phát hành là thao tác riêng, cần người dùng cho phép.
+
+### Hiện trạng dùng để lập kế hoạch (đã đối chiếu ngày 09/11)
+
+- **Dữ liệu thẻ** của bản 5 giống hệt bản 3: 36 điểm, 144 thẻ, 432 lựa chọn, 144 lời giải, 432 lượt hoạt động, 60 câu hoạt động khác nhau. Ba ga mẫu là Hà Nội, Huế, TP. Hồ Chí Minh.
+- **Nội dung sinh theo khuôn:** 132 câu hỏi của 33 điểm chưa thẩm định chỉ còn **8 mẫu câu** khi thay tên địa phương. Tổng chữ của bộ thẻ khoảng 17.500 từ: câu hỏi 3.854, lựa chọn 6.669, giải thích 5.065, 60 câu hoạt động 1.866. Nội dung Thanh Hóa chưa khớp nhau: thẻ ghi Thành nhà Hồ là "Khu di tích Quốc gia" trong khi câu chuyện cùng tỉnh ghi là Di sản Thế giới UNESCO, và câu chuyện mục *Nghệ thuật* lại viết về một tòa thành.
+- **Hoạt động cần tranh:** 17 lượt (16 ngoài 4 tỉnh có sách) thực chất là **một câu hoạt động duy nhất** được dùng lại: "Cùng nhìn bức tranh minh họa trong câu chuyện…".
+- **Lỗi có sẵn:** khi bấm Khám phá ở ga vừa đến, `explore()` trong `journey-system-4.js` mở câu chuyện rồi đặt lại `state.selectedPlaceId` thành ga đã chọn để đi tiếp. Sau đó `openDeckFromStory()` mở bộ thẻ theo biến này, nên mở nhầm bộ của ga kế tiếp.
+- **Sách tham chiếu Hà Nội:** 1 bìa và 12 trang đôi là ảnh PNG 1536×1024, **chữ tiếng Việt in thẳng trong ảnh**, không có lớp tranh tách chữ. Tệp nặng 46,3 MB (33 MB ảnh). Nội dung gồm 7 phần, khoảng 2.280 từ trên 24 trang, trung bình gần 100 từ mỗi trang. Đây là bản nháp đang soạn.
+- **Hạ tầng:** dự án nạp dữ liệu bằng `<script>`, không dùng `fetch`. Font nhúng sẵn trong HTML (Be Vietnam Pro, Playfair Display), nên chạy được offline và mở trực tiếp từ tệp.
+- **Chuỗi tiếng Việt đang là khóa kỹ thuật:** chủ đề (`data-topic="Ẩm thực"`, regex trong `conversation-cards-5.js`), tên vùng (`MINERAL_PALETTE['Đồng bằng sông Hồng']` trong `webgl-terrain-renderer-3.js`). Không được dịch các trường này tại chỗ trong dữ liệu.
+- **Hiệu năng lịch sử (GĐ6):** vào bản đồ ở CPU chậm 4 lần mở màn che sau 9,5 giây trên preview-5 so với 13,9 giây trên preview-4; byte tới cổng 13,53 → 9,60 MiB. Chỉ dùng tham khảo. Mốc nghiệm thu đợt này là **preview-5 trước thay đổi so với preview-5 ứng viên**. [Báo cáo GĐ6](BAO-CAO-GD6-PREVIEW-5.md)
+- **Git** chưa theo dõi HTML preview-5 và một số tài nguyên bản này đang nạp. `AGENTS.md` vẫn ghi bản mặc định là preview-3.
+
+## 2. Quy tắc trải nghiệm và dữ liệu
+
+### Chọn ga, đọc và chơi
+
+1. Bấm vùng bản đồ, ghim, kết quả tìm kiếm, hàng trong danh sách hoặc nút Khám phá sau khi tàu đến đều dẫn tới **hai lựa chọn**. Kéo, vuốt và zoom bản đồ vẫn tách biệt với thao tác chọn.
+2. **Chơi thẻ** mở đúng bộ bài của ga nguồn. Giữ kiểu xòe, gom–xáo–chọn–rút, hai mặt, dấu sen, giải thích đáp án, hoạt động, đổi lượt, bản nháp và ghi kỷ niệm.
+3. **Đọc sách** tra danh mục sách theo mã địa phương. Mọi lối cũ (ảnh ga, danh sách truyện, quẻ tre, gợi ý trên thẻ, nút cuối modal câu chuyện) đi qua **một hàm mở chung**. Trang chờ có nút Chơi thẻ và Quay lại. Chỉ ghi dấu đã mở khi đã hiển thị nội dung sách thật.
+4. **Ga đang đọc**, **ga vừa đến** và **điểm đã chọn để đi tiếp** là ba trạng thái riêng. Nút Chơi thẻ trong sách lấy ga của chính cuốn sách. Mở sách từ lá bài rồi đóng thì quay về đúng lá và phần đang xem. Mở sách từ ga rồi đóng thì về khung ga và trả tiêu điểm về nút nguồn.
+5. Chỉ liên kết lá bài tới mục sách khi nội dung khớp. Nếu chỉ cùng tỉnh thì dùng lời mời mở tập của tỉnh. Câu hoạt động "nhìn bức tranh minh họa trong câu chuyện" được **viết lại** để không phụ thuộc tranh, thay vì thêm tranh vào thẻ.
+
+### Bản dịch và trạng thái
+
+- **Một dữ liệu gốc** giữ mã tỉnh, ga, thẻ, chủ đề, liên kết, thứ tự lựa chọn, đáp án đúng, tọa độ và luật chơi. Chữ hiển thị được tra theo mã ổn định **lúc hiển thị**: từ điển giao diện và lớp phủ nội dung EN. Không ghi đè dữ liệu gốc.
+- **Dịch thẻ theo nguồn gốc nội dung:**
+  - 12 thẻ đã thẩm định của Hà Nội, Huế, TP. Hồ Chí Minh dịch tay.
+  - 33 điểm còn lại dịch theo mẫu câu, cộng bảng tên riêng (tên điểm, vùng, món ăn, danh thắng, di sản; khoảng 1.900 từ).
+  - 60 câu hoạt động dịch một lần.
+  - Sửa nội dung VI sai (đặc biệt Thanh Hóa) **trước** khi dịch.
+- **Khi đổi VI/EN**, giữ lựa chọn, mặt thẻ, dấu sen, trạng thái lời giải, lượt, nháp, ga, hành trình, kỷ niệm và trang sách đang đọc. Văn bản người dùng nhập giữ nguyên văn, kể cả khi xuất PNG.
+- **Thứ tự chọn ngôn ngữ lúc mở:** `?lang=vi|en` trên URL, sau đó lựa chọn đã ghi nhớ (localStorage, bọc try/catch), cuối cùng là VI. Đồng bộ `html lang`, tiêu đề trang, nhãn, placeholder, thông báo trình đọc màn hình và phần đang mở.
+- **Dịch máy** chỉ dùng tạo bản nháp. Bản phát hành lấy bản đã duyệt từ tài nguyên cục bộ. Trong bản nội bộ, chữ EN thiếu có thể hiện VI kèm nhãn rõ.
+- **Tìm kiếm** nhận tên có dấu, không dấu, viết tắt và tên Anh thông dụng (Hanoi, Hue, HCMC/Saigon, Thanh Hoa), cả khi tìm ga và khi đối chiếu địa danh lúc ghi kỷ niệm. Giữ tên riêng theo quy ước biên tập. Thuật ngữ văn hóa có chú giải ở lần xuất hiện đầu.
+
+### Khung sách và hợp đồng nội dung
+
+**Nguyên tắc**
+- Tranh không có chữ. Chữ là văn bản HTML trên trang, nên luôn nét trên máy chiếu và 4K, chọn và tìm được, đổi ngôn ngữ tức thì.
+- VI và EN dùng **chung cấu trúc trang**: cùng số trang, cùng mã trang, cùng tranh. Mỗi trang có ô chữ VI và EN riêng. Nhờ vậy số trang, mục lục và vị trí đọc giữ nguyên khi đổi ngôn ngữ.
+- Khung chạy được trước khi có nội dung. Ô chưa có nội dung hiện **khung giữ chỗ** ghi tỉ lệ tranh và giới hạn chữ.
+
+**Tệp và thư mục**
+
+| Tệp | Vai trò |
+| --- | --- |
+| `assets/goi-viet/map-surroundings-preview/i18n-5.js` | Lõi song ngữ: `t(key, vars)`, ngôn ngữ hiện tại, đọc `?lang=`, ghi nhớ, sự kiện đổi ngôn ngữ, từ điển giao diện. |
+| `assets/goi-viet/books-5/catalog-5.js` | Danh mục nhỏ nạp cùng trang. **Nguồn duy nhất** cho trạng thái sách của từng địa phương. |
+| `assets/goi-viet/books-5/book-reader-5.js`, `book-reader-5.css` | Trình đọc dùng chung. |
+| `assets/goi-viet/books-5/<mã tỉnh>/book.js` | Nội dung một tập, nạp theo yêu cầu bằng `<script>` khi mở lần đầu. |
+| `assets/goi-viet/books-5/<mã tỉnh>/art/` | Tranh không chữ, WebP hai cỡ: thường và nét. |
+| `assets/goi-viet/books-5/_mau/` | Tập mẫu với tranh giữ chỗ và `HUONG-DAN-NHAP-NOI-DUNG.md`. |
+| `tools/check-books-5.cjs` | Kiểm tra nội dung trước khi xuất bản. |
+
+**Trạng thái trong danh mục**
+- Không có trong danh mục: trang chờ.
+- `draft`: công chúng thấy trang chờ; nhóm xem bản nháp bằng `?sach=nhap`.
+- `published`: mở công khai. Chỉ chuyển sang trạng thái này khi `check-books-5.cjs` đạt cả VI và EN.
+
+```js
+// catalog-5.js
+window.GoiVietBookCatalog = {
+  hn:  { status: 'draft', src: 'assets/goi-viet/books-5/hn/book.js' },
+  hue: { status: 'draft', src: 'assets/goi-viet/books-5/hue/book.js' },
+  hcm: { status: 'draft', src: 'assets/goi-viet/books-5/hcm/book.js' },
+  th:  { status: 'draft', src: 'assets/goi-viet/books-5/th/book.js' }
+};
+
+// hn/book.js
+GoiVietBooks.register({
+  placeId: 'hn',
+  kind: 'fiction',                          // fiction | documentary | community
+  title:    { vi: '…', en: '…' },
+  subtitle: { vi: '…', en: '…' },
+  cover: { art: 'art/cover', alt: { vi: '…', en: '…' } },
+  sections: [{
+    id: 'hn-01',
+    label: { vi: 'Chương 01', en: 'Chapter 01' },
+    title: { vi: '…', en: '…' },
+    cardIds: [],                            // chỉ điền khi nội dung khớp lá bài
+    pages: [{
+      id: 'hn-01-a', layout: 'art-text', art: 'art/hn-01-a', alt: { vi: '…', en: '…' },
+      text: { vi: { heading: '…', body: ['…', '…'] }, en: { heading: '…', body: ['…', '…'] } }
+    }]
+  }],
+  sources: [{ id: 's1', title: '…', publisher: '…', url: 'https://…' }],
+  credits: [{ role: { vi: 'Tranh', en: 'Illustrations' }, name: '…', license: '…' }]
+});
+```
+
+**Bố cục trang**
+
+Trang dọc tỉ lệ 3:4, trang đôi 3:2 như sách tham chiếu. Tỉ lệ ô tranh và giới hạn chữ dưới đây là dự kiến. Con số chính thức được đo ở P5-01 với font thật.
+
+| Mã | Dùng cho | Ô nội dung |
+| --- | --- | --- |
+| `cover` | Bìa trước | Tranh bìa, tên tập, phụ đề, nhãn tỉnh |
+| `opener` | Mở một phần | Nhãn phần, tiêu đề, tranh lớn, một đoạn dẫn |
+| `art-text` | Trang kể chuyện chính | Tranh (trên, trái hoặc phải) và 1–3 đoạn chữ |
+| `text-quote` | Trang nhiều chữ | Chữ và một câu trích nổi bật |
+| `full-art` | Tranh trọn trang | Tranh và chú thích ngắn |
+| `notes` | Ghi chú văn hóa | Đoạn tư liệu có nguồn, tách bạch với phần hư cấu |
+| `back` | Bìa sau | Tóm tắt, nút Chơi thẻ, nguồn và ghi công |
+
+**Trình đọc**
+- **Lật trang:** lật bằng CSS 3D, cùng kỹ thuật lật thẻ đang dùng, không thêm thư viện. Hiện hai trang khi vùng đọc đủ rộng, một trang khi hẹp.
+- **Điều hướng:** nút Trang trước/Trang sau, bấm mép trang, phím ←/→ khi tiêu điểm ở vùng sách, Escape đóng lớp trên cùng.
+- **Công cụ đọc:** mục lục sinh từ dữ liệu, **Đọc chữ lớn** dùng cùng nguồn chữ, nhớ vị trí đọc trong phiên.
+- **Giảm chuyển động:** áp dụng cả tùy chọn của web và hệ điều hành.
+- **Tải ảnh:** ảnh lỗi thì chữ vẫn đọc được. Chỉ tải trước các trang kề với giới hạn rõ ràng.
+- **Cửa sổ:** sách mở trong hệ cửa sổ hiện có (`.modal-backdrop`, `pushModalFocus`), để bản đồ tự dừng vẽ khi sách mở.
+
+## 3. Lộ trình
+
+Mỗi bước theo thứ tự **ghi đầu vào → thay đổi nhỏ → chạy ca liên quan → lưu bằng chứng → đánh giá điều kiện qua bước**. Bằng chứng lưu ở `verification/p5-books/` (thư mục mới, không ghi đè kết quả GĐ cũ).
+
+### P5-00 — Mốc gốc
+
+1. Xin người dùng cho phép lưu mốc gốc bằng một commit trên nhánh riêng, gồm HTML preview-5 và các tài nguyên chưa được theo dõi. Nếu chưa được phép, sao HTML preview-5 và danh sách tài nguyên đang nạp vào `verification/p5-books/baseline/`.
+2. Xin phép cập nhật `AGENTS.md` để bản mặc định là preview-5 (phần tham chiếu thẻ cũng trỏ sang bản 5), tránh tác tử sau quay lại bản 3.
+3. Chạy `tools/verify-preview5-conversation-cards.cjs` và `tools/perf/verify-gd6-functional.cjs --a <bản mốc> --b map-surroundings-preview-5.html --out <tệp trong thư mục mới>`.
+4. Đo mốc ở desktop 1920×1080: bấm vào bản đồ → màn che mở, bấm mở bộ thẻ → thao tác được. Lấy n = 5, xen kẽ.
+5. Tái hiện và ghi lại lỗi mở nhầm bộ thẻ ở ga vừa đến.
+
+**Điều kiện qua bước:** có mốc khôi phục được, kết quả baseline và danh sách lỗi có sẵn.
+
+### P5-01 — Khung sách với nội dung giữ chỗ
+
+1. **Lõi song ngữ tối thiểu:** viết `i18n-5.js` trước, để mọi giao diện mới dùng `t()` ngay từ đầu. Nút VI/EN công khai làm ở P5-03; trong lúc này kiểm bằng `?lang=en`.
+2. **Danh mục và nạp theo yêu cầu:** viết `catalog-5.js` và hàm nạp `book.js` theo yêu cầu (chèn `<script>`, chạy được khi mở trực tiếp từ tệp).
+3. **Trình đọc và bảy bố cục:** dựng trình đọc như mục 2, kèm khung giữ chỗ cho ô trống.
+4. **Đo giới hạn chữ:** đo từng ô chữ, VI và EN, với font thật ở 1920×1080 và 1366×768. Ghi vào hướng dẫn. Khi tràn: cho phép thu cỡ chữ trong biên nhỏ; quá biên thì công cụ kiểm tra báo lỗi. Trước khi chốt, thử bằng **chữ thật** của bản Hà Nội đang soạn (lấy từ phần chữ của tệp tham chiếu).
+5. **Tập mẫu và hướng dẫn:** tạo `_mau/` và `HUONG-DAN-NHAP-NOI-DUNG.md`. Hướng dẫn gồm:
+   - Đặt tệp ở đâu, đặt tên tranh thế nào.
+   - Tỉ lệ và cỡ ảnh của từng ô, giới hạn chữ.
+   - Cách nối `cardIds`.
+   - Cách chạy công cụ kiểm tra và chuyển `draft` → `published`.
+   - Nhóm có thể gửi chữ dạng văn bản thường; phía code chuyển vào `book.js`.
+6. **Bốn tập nháp:** tạo 4 tập `hn`, `hue`, `hcm`, `th` ở trạng thái `draft`, dùng nội dung giữ chỗ và đủ bảy bố cục.
+7. **Công cụ kiểm tra `tools/check-books-5.cjs`:**
+   - Đúng cấu trúc, mã trang không trùng.
+   - Đủ VI/EN khi `published`.
+   - Không vượt giới hạn chữ.
+   - Tranh tồn tại, đúng tỉ lệ và đủ hai cỡ, có mô tả ảnh.
+   - Nguồn và ghi công có đủ.
+   - `cardIds` có thật trong dữ liệu thẻ.
+
+**Điều kiện qua bước**
+- Cổng và bản đồ khi chưa mở sách có **0 yêu cầu** tới `books-5/<mã tỉnh>/`.
+- Với `?sach=nhap` mở được 4 tập nháp, đủ bảy bố cục. Không có cờ thì hiện trang chờ.
+- **Chép `_mau` thành một tập thử, thay chữ và tranh, rồi hiển thị đúng mà không sửa code.**
+- `?lang=en` giữ đúng trang và số trang.
+- Công cụ kiểm tra bắt được các lỗi cố ý: thiếu EN, tràn chữ, thiếu tranh, sai tỉ lệ, `cardIds` sai.
+- Bản đồ dừng vẽ khi sách mở; đóng rồi mở lại vẫn thao tác được.
+
+### P5-02 — Hai chế độ, trang chờ và fanpage
+
+1. **Hai nút ở cả hai nơi:** tách `journey-system-4.js` thành `journey-system-5.js`, đặt hai nút **Chơi thẻ** và **Đọc sách văn hóa** ở thẻ ga đến, thanh hành trình và khung ga đang chọn trong panel. Rà lời chào, hướng dẫn và thông báo đang mô tả chuỗi ba bước "Chọn ga → Đọc chuyện → Rút thẻ".
+2. **Một hàm mở chung:** đưa mọi lối vào về một hàm `openPlaceMode(placeId, mode, source)`.
+   - Ẩn đường đọc công khai của câu chuyện demo.
+   - 12 câu chuyện đã thẩm định của Hà Nội, Huế, TP. Hồ Chí Minh giữ trong dữ liệu (thẻ vẫn tham chiếu) và chuyển cho nhóm làm tư liệu cho trang `notes`.
+3. **Sửa lỗi mở nhầm bộ thẻ:** lấy ga từ ngữ cảnh mở (sách hoặc câu chuyện), không lấy từ `state.selectedPlaceId`.
+4. **Viết lại câu hoạt động phụ thuộc tranh** (17 lượt dùng chung một câu), ví dụ đổi sang nhìn ảnh danh thắng của ga hoặc đồ vật quanh bàn.
+5. **Trang chờ:**
+   - Bìa sách đóng, tên ga, lời mời gửi chuyện (món ăn, tiếng gọi, phong tục, ảnh tự chụp, tên tỉnh cũ trước sáp nhập).
+   - Nút Chơi thẻ, Quay lại, link fanpage, mã QR SVG tĩnh tạo sẵn từ URL đã xác nhận.
+   - Trang chờ không ghi dấu đã đọc và vẫn hiển thị đầy đủ khi mất mạng.
+6. **Tùy chọn, làm nếu còn thời gian:** dấu 📖 trên ghim các tỉnh có sách đã xuất bản. Tách hoàn toàn khỏi cờ "3 ga mẫu"; trang chủ giữ 3 ga cho 3 miền.
+
+**Điều kiện qua bước**
+- Mọi lối vào đi đúng trạng thái.
+- Chọn ga mới khi tàu đang chạy, đọc tại ga vừa tới, bấm Chơi thẻ thì mở **đúng bộ của ga vừa tới**.
+- Đi từ lá đang mở dấu sen sang sách rồi quay lại vẫn giữ nháp và trạng thái lá.
+- Quét toàn bộ 36 điểm: chỉ tập có trong danh mục mới mở sách, còn lại vào trang chờ.
+
+### P5-03 — Song ngữ toàn website
+
+**1. Tách tệp dùng chung có chữ hiển thị thành bản `-5`** và trỏ preview-5 sang bản mới; không đụng bản 3 và bản 4. Danh sách này từ lần quét 09/11, cần rà lại trước khi làm. Bảng chỉ ghi tên tệp; đường dẫn đầy đủ xem trong các thẻ `<script>`/`<link>` của preview-5.
+
+| Nhóm | Tệp |
+| --- | --- |
+| Nhiều chữ | `fortune-ritual.js`, `natural/landscape-4.js`, `natural/island-chart.js`, `memory-reference-v2.js`, `map-reference-ui.js`, `polish-3.js`, `preview-3.js`, `postcard-design-3.js`, `homepage-music-3.js`, `heritage-command-bar-3.js`, `map-controls-island-reference.js`, `homepage-layered-opening.js`, `homepage-opening-controller-3.js` (`journey-system-4.js` đã tách ở P5-02) |
+| Ít chữ nhưng hiển thị | `natural/archipelago-renderer-3.js`, `landmark-assets.js` (title SVG), `natural/hydrology-3.js` và `natural/terrain-renderer-4.js` (ghi chú nguồn), `province-legibility.js` (chữ "(Ký ức)" được đo để tránh chồng nhãn nên phải khớp chữ vẽ), `heritage-overlays-3.js`, `home-station-feedback-3.js`, `homepage-opening-config.js` |
+| Chỉ CSS `content:` | `map-baseline-restored.css`, `arrival-journal.css`: ghi đè bằng một CSS `-5`, không tách |
+| Không dịch | `map-warm-terrain-palette.js`, `webgl-terrain-renderer-3.js` (khóa tên vùng), `map-prewarm-3.js`, `homepage-layered-scene-3.js`, `homepage-transport-3/transport.js`, `homepage-crane-flight-3.js`, `homepage-layered-renderer-5.js`: chỉ là khóa, log hoặc lỗi nội bộ |
+| Không tách | `journey-network-data.js`: tên ga tra qua bảng tên song ngữ lúc hiển thị |
+
+**2. Từ điển giao diện**
+- HTML tĩnh gắn `data-i18n`, cùng thuộc tính cho aria-label, title, placeholder, alt.
+- Chuỗi dựng trong JS chuyển sang `t()`.
+- Canvas (nhãn tỉnh, "Về giữa", nhãn ký ức, bưu thiếp PNG) và chữ trong SVG minh họa vẽ lại khi đổi ngôn ngữ.
+- Thông báo trình đọc màn hình cũng dịch.
+
+**3. Bảng tên riêng và thuật ngữ:** tên 36 điểm, vùng, món ăn, danh thắng, di sản, kèm bí danh tìm kiếm.
+
+**4. Thẻ**, lưu trong lớp phủ `content-en-5.js` theo mã:
+- Sửa VI các thẻ sai trước.
+- Dịch tay 12 thẻ đã thẩm định.
+- Với 33 điểm còn lại: đo mẫu của câu hỏi (8 mẫu), lựa chọn và giải thích, rồi dịch theo mẫu cộng bảng tên; người duyệt đọc lướt toàn bộ.
+- Dịch 60 câu hoạt động.
+- Giữ nguyên thứ tự lựa chọn và chỉ số đáp án.
+
+**5. Nút VI/EN công khai** ở header và trang chủ. Đổi tại chỗ, giữ trạng thái như mục 2.
+
+**6. Công cụ `tools/check-i18n-5.cjs`:**
+- Báo khóa thiếu hoặc thừa giữa VI và EN.
+- Mở trang với `?lang=en`, đi qua luồng chính, quét chữ hiển thị còn dấu tiếng Việt nằm ngoài danh sách cho phép (tên riêng, nguyên văn kỷ niệm).
+
+**Điều kiện qua bước:** đủ khóa; thứ tự lựa chọn và đáp án khớp dữ liệu gốc. Đổi ngôn ngữ giữa lượt chơi, khi đang đọc sách, khi đang nhập nháp và khi xuất PNG đều giữ trạng thái. Công cụ kiểm tra không còn cụm VI sót ngoài danh sách cho phép.
+
+### P5-04 — Nhập nội dung từng tập
+
+**Đầu vào nhóm giao cho mỗi tập:**
+- Chữ VI/EN theo bố cục đã chọn.
+- Tranh không chữ đúng tỉ lệ ô.
+- Nguồn cho phần tư liệu, ghi công, và sự đồng ý nếu dùng lời kể hoặc ảnh đóng góp.
+
+**Việc thực hiện:** đặt tệp → chạy `check-books-5.cjs` → xem từng trang VI/EN ở 1920×1080 → sửa tràn chữ → nối `cardIds` khi nội dung khớp → chuyển `published`.
+
+**Điều kiện qua bước (mỗi tập):** công cụ kiểm tra đạt, đọc thực tế hết tập ở hai ngôn ngữ, nguồn và ghi công hiển thị được. Sửa dữ kiện sau khi duyệt chỉ cần sửa `book.js` (và tranh nếu đổi), không phải xuất lại ảnh trang.
+
+### N — Nội dung (nhóm làm song song, bắt đầu ngay)
+
+- **Viết VI ngay**, không chờ khung. Khi P5-01 xong thì dàn chữ vào bảy bố cục theo giới hạn chữ trong hướng dẫn.
+- **Tranh tạo không có chữ**, theo tỉ lệ từng ô. Nếu dùng công cụ tạo ảnh, yêu cầu ảnh không có chữ và để trống vùng chữ.
+  - Bộ trang Hà Nội hiện có chữ in sẵn, nên cần tạo lại tranh không chữ. Cách tạm là phủ ô chữ HTML lên vùng chữ của ảnh cũ; chỉ dùng nếu thiếu thời gian, chốt ở P5-01.
+- **Phân biệt rõ hư cấu, tư liệu có nguồn và đóng góp cộng đồng.** 12 câu chuyện đã thẩm định của Hà Nội, Huế, TP. Hồ Chí Minh có thể dùng làm tư liệu cho trang `notes`.
+- **EN:** dịch máy làm nháp, người trong nhóm duyệt.
+- **Thanh Hóa** (quê giảng viên): viết mới cả tập. Khuyến nghị viết lại luôn 4 thẻ của Thanh Hóa.
+
+| Tập | Hướng biên tập đề xuất | Việc cần khóa |
+| --- | --- | --- |
+| Hà Nội | Giữ mạch Linh và chiếc máy ảnh của ông làm cơ sở. | Chốt chữ VI, bản EN, tranh không chữ; phân biệt cảnh hư cấu với ghi chú văn hóa có nguồn. |
+| Huế | Kể qua một nhân vật hoặc cuộc gặp gắn với Nhã nhạc và không gian xứ Huế. | Chọn mạch kể, xác minh thuật ngữ và chi tiết văn hóa, chốt phạm vi minh họa. |
+| TP. Hồ Chí Minh | Theo một chuyến ghe hoa về Bến Bình Đông hoặc một câu chuyện đời sống được nhóm duyệt. | Xác minh địa danh và nguồn, chốt điểm nhìn và thời điểm. |
+| Thanh Hóa | Dùng Thành nhà Hồ hoặc ký ức địa phương có tư liệu làm trục kể. | Biên tập thành tác phẩm riêng, xác minh chi tiết, có sự đồng ý nếu dùng lời kể hoặc ảnh đóng góp. |
+
+### P5-05 — Nghiệm thu gọn và bàn giao
+
+**Bắt buộc**
+- **Công cụ kiểm tra:** `tools/verify-preview5-conversation-cards.cjs`, `tools/perf/verify-gd6-functional.cjs` (bản mốc so với ứng viên, `--out` sang thư mục mới), `tools/check-books-5.cjs`, `tools/check-i18n-5.cjs`.
+- **So hiệu năng** trong cùng phiên, xen kẽ, n = 5 mỗi bên (tăng lên 10 nếu chênh lệch sát biên dao động), ở desktop 1920×1080:
+  - vào bản đồ → màn che mở;
+  - mở bộ thẻ → thao tác được;
+  - mở sách → trang đầu hiển thị.
+- **Mạng:** 0 yêu cầu ảnh và dữ liệu sách trước khi mở sách.
+- **Kiểm tay luồng trình chiếu** ở 1920×1080 và 1366×768, VI và EN, nền sáng và tối: chọn ga → hai chế độ → chơi một lượt → đọc sách → trang chờ → đổi ngôn ngữ giữa chừng → lưu bưu thiếp PNG.
+- **QR:** quét mã từ màn hình chiếu bằng điện thoại.
+
+**Nếu còn thời gian:** điện thoại 390 px, 4K, zoom 200%, mạng chậm, WebGL dự phòng.
+
+**Bàn giao:** báo cáo ngắn ghi trạng thái từng ca (Đạt, Lỗi, Bị chặn, Chưa chạy), danh sách tệp mới và tệp đã tách, phần thiết bị chưa kiểm, trạng thái Messenger.
+
+## 4. Ca kiểm thử chính
+
+| Nhóm | Ca | Kết quả mong đợi |
+| --- | --- | --- |
+| Chọn chế độ | Chuột, bàn phím qua danh sách, tìm kiếm, quẻ tre, ga vừa đến khác ga đi tiếp | Đúng ga, đúng hai lựa chọn, kéo/zoom vẫn hoạt động |
+| Thẻ | Chọn lá, xáo, hủy giữa hiệu ứng, đúng/sai/chưa biết, dấu sen, đổi hoạt động, lưu nháp, hết bài | Đúng lá và đáp án, không tiêu thụ lá ngoài ý muốn |
+| Sách | Bìa, trang trước/sau, mục lục, Đọc chữ lớn, bìa sau, nhớ vị trí, ảnh lỗi | Đúng trang và tranh, chữ vẫn đọc được khi ảnh lỗi |
+| Đổi ngôn ngữ | Trang đầu, tuyến tàu, ga, thẻ đang mở, sách đang đọc, trang chờ, bưu thiếp; qua URL và khi chặn lưu | Chữ đồng bộ, giữ trạng thái |
+| Trang chờ | Cả 36 điểm; Đà Nẵng và một quần đảo từ nhiều lối | Chỉ tập trong danh mục mở sách; trang chờ không ghi đã đọc |
+| Kỷ niệm và PNG | Lưu nháp, đổi ngôn ngữ, hoàn thành lượt, tải PNG | PNG theo ngôn ngữ giao diện, giữ nguyên văn ghi chú |
+| Fanpage | Link và QR trên máy tính và điện thoại; khi mất mạng | Đúng đích; trang chờ vẫn hiện, có đường quay lại chơi |
+
+### Công cụ và lưu ý
+
+- `tools/perf/verify-gd6-functional.cjs` mặc định so preview-4 với preview-5 và ghi vào `tools/perf/results/gd6/`. Luôn truyền `--a`, `--b`, `--out`.
+- Mỗi ca ghi môi trường, bước tái hiện, kết quả và bằng chứng. Một ảnh chụp chỉ chứng minh trường hợp đã quan sát.
+
+### Tệp cần đọc lại trước khi triển khai
+
+| Tệp | Vai trò |
+| --- | --- |
+| `map-surroundings-preview-5.html` | Dữ liệu, chọn ga, lọc, modal câu chuyện và thẻ, quẻ tre, kỷ niệm, bưu thiếp, vòng vẽ. |
+| `assets/goi-viet/map-surroundings-preview/journey-system-4.js` | Nút Khám phá khi đến ga, hàm `explore()`. |
+| `assets/goi-viet/map-surroundings-preview/conversation-cards-5.js` | Hiệu ứng xáo/rút, hai mặt, khóa tương tác, regex chủ đề. |
+| `assets/goi-viet/map-reference-ui.js`, `postcard-design-3.js` | Chữ điều khiển ga và chữ trên bưu thiếp; dùng chung nhiều bản. |
+| `D:/Download/Goi-Viet-Ha-Noi.html` | Phong cách sách và chữ thật của bản Hà Nội đang soạn. |
+| `BAO-CAO-GD6-PREVIEW-5.md` | Mốc lịch sử và giới hạn hiệu năng. |
+
+### Điểm cần chốt
+
+1. **Ngày thuyết trình**, để điền ngày cho từng bước và quyết định có làm P5-03 trước buổi đó không.
+2. **Sách chỉ có VI** có được xuất bản tạm cho buổi thuyết trình không (mặc định: không, chỉ xuất bản khi đủ VI/EN).
+3. **Người phụ trách mỗi tập:** ai viết, ai tạo tranh, ai duyệt EN; quyền ảnh và sự đồng ý với lời kể đóng góp.
+4. **Tranh Hà Nội:** tạo lại tranh không chữ (mặc định) hay phủ chữ HTML lên ảnh cũ.
+5. **Cách sửa tệp dùng chung:** tách bản `-5` (mặc định, theo quy ước dự án) hay sửa có điều kiện ngay trong tệp dùng chung (cần người dùng đồng ý riêng).
+6. **Messenger:** quản trị trang kiểm `m.me/61594157551043` có mở đúng khung nhắn tin không.
+
+---
+
+<details>
+<summary>Kế hoạch lịch sử GV-00 đến GV-07 · ngày 11/10/2026</summary>
+
 # Kế hoạch nâng cấp giao diện Gói Việt
 
 Ngày lập: 11/10/2026. Dự án: `vietnam-heritage-map-2`.
@@ -387,3 +717,5 @@ Nguồn hướng dẫn: [WCAG Pause, Stop, Hide](https://www.w3.org/WAI/WCAG22/U
 - Asset/font: 13 SVG diễn giải mood, Playfair Display/Be Vietnam Pro fallback. Chưa có binary/quyền webfont Hồn Rối và lettering logo chính xác; không cam kết giống hoàn toàn JPG. Fallback được dùng theo phạm vi đã cho phép, không chặn luồng chơi.
 - Blocked: không có blocker hành trình trong môi trường nghiệm thu; không kết luận production-ready. DATA/ALL_DECKS_MAP và luật thẻ/nháp/kỷ niệm/reset giữ nguyên.
 - Review/rollback/cleanup: xem `verification/goi-viet/report.md`, `final-results.json`, `final-review.diff`, baseline/snapshot từng GV. Đã dọn browser/server riêng; không DB/container/env. Giữ evidence để review; không commit/push/deploy hoặc dừng dịch vụ của người dùng.
+
+</details>
