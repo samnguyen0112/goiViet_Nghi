@@ -9,7 +9,8 @@
   let generation = 0;
   let openedConnection = null;
   const reduced = () => state.reducedMotion || document.body.classList.contains('reduced-motion') || matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const currentPlace = () => CULTURAL_PLACE_MAP[state.selectedPlaceId] || CULTURAL_PLACES[0];
+  // P5-02: the open deck's station (state.deckPlaceId), independent of the stop selected for the next trip.
+  const currentPlace = () => (typeof getDeckPlace === 'function' ? getDeckPlace() : CULTURAL_PLACE_MAP[state.selectedPlaceId] || CULTURAL_PLACES[0]);
   const remaining = place => place.cards.filter(card => !(state.drawnCardIdsByPlace[place.id] || []).includes(card.id));
   const later = (fn, delay) => {
     const token = generation;
@@ -93,7 +94,7 @@
     byId('btnDrawCard').disabled = true;
     const status = text => { byId('conversationShuffleStatus').textContent = text; };
     const commit = () => {
-      if (state.selectedPlaceId !== place.id) { cancelDraw(); return; }
+      if (currentPlace().id !== place.id) { cancelDraw(); return; }
       // Consume only on completion, so closing during a shuffle never loses a card.
       drawOneCard(chosen.id);
       cancelDraw();

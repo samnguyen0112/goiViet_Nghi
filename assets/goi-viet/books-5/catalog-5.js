@@ -9,3 +9,11 @@ window.GoiVietBookCatalog = {
   hcm: { status: 'draft', src: 'assets/goi-viet/books-5/hcm/book.js', v: '20261109-1' },
   th:  { status: 'draft', src: 'assets/goi-viet/books-5/th/book.js',  v: '20261109-1' }
 };
+
+/* P5-02: where visitors send stories for places whose book is not ready (shown on the coming-soon page).
+   url: the team's Facebook page (checked 09/11/2026). qr: a static SVG of the same url, made with segno
+   (verification/p5-books/scripts/make-fanpage-qr.py), so it shows without network. Remove url to hide the invitation. */
+window.GoiVietBookContribute = {
+  url: 'https://www.facebook.com/people/G%C3%B3i-Vi%E1%BB%87t/61594157551043/',
+  qr: 'assets/goi-viet/books-5/fanpage-qr.svg'
+};

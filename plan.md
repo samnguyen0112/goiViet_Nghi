@@ -1,7 +1,7 @@
 # Gói Việt preview-5 — Kế hoạch song ngữ, hai chế độ và khung sách văn hóa
 
 - **Ngày lập** 09/11/2026 (Codex). **Sửa lần 2** cùng ngày (Claude): làm **khung sách trước, nội dung và tranh nhập sau**; áp dụng các góp ý review (tranh không chữ, dịch thẻ theo mẫu, danh sách tệp cần tách, nội dung là đường găng, nghiệm thu gọn, URL fanpage).
-- **Trạng thái** P5-00 đã làm ([BAO-CAO-P5-00.md](BAO-CAO-P5-00.md)); P5-01 đã làm ([BAO-CAO-P5-01.md](BAO-CAO-P5-01.md)). Khung dữ liệu sách chính thức nằm ở `assets/goi-viet/books-5/_mau/HUONG-DAN-NHAP-NOI-DUNG.md`; đoạn mã mẫu ở mục 2 chỉ là phác thảo ban đầu.
+- **Trạng thái** P5-00 đã làm ([BAO-CAO-P5-00.md](BAO-CAO-P5-00.md)); P5-01 đã làm ([BAO-CAO-P5-01.md](BAO-CAO-P5-01.md)); P5-02 đã làm ([BAO-CAO-P5-02.md](BAO-CAO-P5-02.md)). Khung dữ liệu sách chính thức nằm ở `assets/goi-viet/books-5/_mau/HUONG-DAN-NHAP-NOI-DUNG.md`; đoạn mã mẫu ở mục 2 chỉ là phác thảo ban đầu.
 - **Bản triển khai và nghiệm thu** `map-surroundings-preview-5.html` và tài nguyên dành riêng cho bản 5.
 - **Tham chiếu** `D:/Download/Goi-Viet-Ha-Noi.html`: chỉ tham chiếu **phong cách** sách (bìa xanh, giấy kem, gáy, dấu đỏ, ảnh xen chữ), không dùng làm định dạng sản xuất. `card-testing.html`: bộ thẻ.
 

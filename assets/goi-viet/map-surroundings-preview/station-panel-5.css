@@ -682,3 +682,21 @@ html[data-theme='dark'] body[data-regional-preview]:has(#introScreen.intro-hidde
     & .gv-station-logo { width: 54px; }
   }
 }
+
+/* P5-02: the arrival card offers both modes for the station just reached (journey-system-5.js). */
+body[data-regional-preview] .journey-route-bar {
+  & .journey-arrival-modes { display: flex; flex-shrink: 0; gap: 6px; }
+  & .journey-arrival-mode { min-height: 40px; padding: 6px 11px; border: 1px solid #b8976366; border-radius: 10px; color: #933a2a; background: #fff6df; font: 600 10.5px/1.4 'Be Vietnam Pro', sans-serif; cursor: pointer; }
+  & .journey-arrival-mode:hover { background: #fffaf0; }
+  & .journey-arrival-deck { border-color: #9e2835; color: #fff8ef; background: #9e2835; }
+  & .journey-arrival-deck:hover { background: #85202c; }
+}
+html[data-theme='dark'] body[data-regional-preview] .journey-route-bar {
+  & .journey-arrival-mode { color: #f0dcab; background: #47543e; }
+  & .journey-arrival-deck { color: #fff8ef; background: #9e2835; border-color: #c56b5d; }
+}
+/* "Khám phá" at the station briefly highlights the two modes it points to. */
+@keyframes gv-station-cue { 0%, 100% { box-shadow: 0 0 0 0 transparent; } 35% { box-shadow: 0 0 0 4px #c9a25c66; } }
+#stationPanel.gv-station-v5 .gv-station-modes.is-cued { border-radius: 11px; animation: gv-station-cue 900ms ease-out 1; }
+body.reduced-motion #stationPanel.gv-station-v5 .gv-station-modes.is-cued { animation: none; outline: 2px solid #c9a25c; outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) { #stationPanel.gv-station-v5 .gv-station-modes.is-cued { animation: none; outline: 2px solid #c9a25c; outline-offset: 3px; } }

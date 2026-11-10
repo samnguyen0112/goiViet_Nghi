@@ -10,6 +10,7 @@ const target = process.env.STATION_BASE ? new URL(file, process.env.STATION_BASE
 const output = path.join(ROOT, 'verification/station-panel-5');
 const errors = [];
 const bookRequests = [];
+const postcardRequests = [];
 const station = '#demoPlaceList .place-card';
 const selection = station + '.selected';
 const modal = id => '#' + id + '.open';
@@ -19,6 +20,7 @@ async function openMap(browser, viewport, query = '', reducedMotion = 'reduce') 
   page.on('pageerror', error => errors.push(error.message));
   page.on('request', request => {
     if (/\/books-5\/[^/]+\/book\.js\?/.test(request.url())) bookRequests.push(request.url());
+    if (/\/books-5\/postcards\/[^/]+\.webp$/.test(request.url())) postcardRequests.push(request.url());
   });
   // The drawer, decks and book reader must work when third-party photos are unavailable.
   await page.route(/^https?:/, route => {
@@ -101,21 +103,14 @@ async function verifyDesktop(browser) {
   assert.match(await page.locator('#book-open-hn').innerText(), /Bản nháp/);
   await verifyLayout(page, 1440);
 
-  const drawer = page.locator('#station-stories-hn');
-  await drawer.focus();
-  await page.keyboard.press('Enter');
-  const stories = page.locator('#placeCard-hn .gv-station-story');
-  assert.equal(await stories.count(), 4);
-  assert.equal(await stories.locator('small').count(), 0);
-  await page.locator('#stationPanel').screenshot({ path: path.join(output, 'sidebar-stories-1440.png') });
-  const story = stories.first();
-  const storyId = await story.getAttribute('id');
-  await story.click();
-  await page.locator(modal('storyModal')).waitFor();
-  await page.locator('#btnStoryBack').click();
-  await waitForFocus(page, storyId);
-  assert.equal(await drawer.locator('..').getAttribute('open'), '');
-  assert.match(await story.innerText(), /Đọc lại/);
+  // P5-02: no demo-story drawer; the station picture opens the book through the shared entry.
+  assert.equal(await page.locator('#station-stories-hn, #placeCard-hn .gv-station-story').count(), 0);
+  await page.locator('#story-hero-hn').click();
+  await page.waitForFunction(() => GoiVietBooks.inspect().kind === 'book' && GoiVietBooks.inspect().placeId === 'hn');
+  assert.equal(await page.locator(modal('storyModal')).count(), 0);
+  await page.keyboard.press('Escape');
+  await waitForFocus(page, 'story-hero-hn');
+  assert.match(await page.locator('#station-pick-hn, #placeCard-hn').first().innerText(), /Đã đọc sách|Bản nháp/);
 
   await findAndSelect(page, 'hue', 'hue');
   await waitForFocus(page, 'station-title-hue');
@@ -123,10 +118,11 @@ async function verifyDesktop(browser) {
   await page.locator('#station-journey-hue').click();
   await page.waitForFunction(() => GoiVietJourneyPreview.inspect().currentId === 'hue');
   assert.match(await page.locator('#station-journey-hue').innerText(), /Khám phá/);
+  // "Khám phá" points to the two modes instead of opening a story.
   await page.locator('#station-journey-hue').click();
-  await page.locator(modal('storyModal')).waitFor();
-  await page.locator('#btnStoryBack').click();
-  await waitForFocus(page, 'station-journey-hue');
+  await waitForFocus(page, 'deck-open-hue');
+  assert.equal(await page.locator('#placeCard-hue .gv-station-modes.is-cued').count(), 1);
+  assert.equal(await page.locator(modal('storyModal') + ', ' + modal('bookModal') + ', ' + modal('deckModal')).count(), 0);
 
   await findAndSelect(page, 'hoang sa', 'hoang-sa');
   assert.match(await page.locator('#placeCard-hoang-sa .gv-station-kicker').innerText(), /Hải trình/i);
@@ -160,7 +156,9 @@ async function verifyDesktop(browser) {
   await page.locator('#stationJournalToggle').click();
   assert.equal(await page.locator('#journalMentionedCount').innerText(), '1');
   assert.match(await page.locator('#sidebarMentionedList').innerText(), /Huế/);
-  assert(await page.locator('#sidebarExploredList button').count() >= 2);
+  // P5-02: arriving at Huế and pressing "Khám phá" no longer opens a story, so only Hà Nội (book + cards) is explored.
+  assert.equal(await page.locator('#sidebarExploredList button').count(), 1);
+  assert.match(await page.locator('#sidebarExploredList').innerText(), /Hà Nội/);
   await page.locator('#stationJournal').screenshot({ path: path.join(output, 'journal-1440.png') });
   await page.locator('#stationPostcard').click();
   await page.locator(modal('postcardModal')).waitFor();
@@ -237,6 +235,7 @@ async function verifyPublicAndMobile(browser) {
   const requestsBefore = bookRequests.length;
   await page.locator('#book-open-hn').tap();
   assert.equal(await page.evaluate(() => GoiVietBooks.inspect().kind), 'soon');
+  assert.equal(await page.locator('#bookModal.gvb-open-call').count(), 0);
   assert.equal(bookRequests.length, requestsBefore);
   await page.locator('#bookModal .gvb-soon [data-act="play"]').tap();
   await page.locator(modal('deckModal')).waitFor();
@@ -248,6 +247,7 @@ async function verifyPublicAndMobile(browser) {
   await page.locator('#book-open-hoang-sa').tap();
   assert.equal(await page.evaluate(() => GoiVietBooks.inspect().placeId), 'hoang-sa');
   assert.equal(await page.evaluate(() => GoiVietBooks.inspect().kind), 'soon');
+  assert.match(await page.locator('#gvbSoonInviteTitle').innerText(), /Share your hometown story/);
   assert.equal(bookRequests.length, requestsBefore);
   await page.close();
 
@@ -255,10 +255,84 @@ async function verifyPublicAndMobile(browser) {
     const sized = await openMap(browser, { width, height }, '?sach=nhap');
     await verifyLayout(sized, width);
     await sized.locator('#station-pick-hn').click();
-    await sized.locator('#station-stories-hn').click();
-    assert(await sized.locator('#station-stories-hn + .gv-station-story-items .gv-station-story').first().isVisible());
+    await sized.locator('#book-open-hn').scrollIntoViewIfNeeded();
+    assert(await sized.locator('#deck-open-hn').isVisible() && await sized.locator('#book-open-hn').isVisible());
     await sized.close();
   }
+}
+
+async function verifyCommunityInvitation(browser) {
+  const page = await openMap(browser, { width: 1440, height: 900 }, '?sach=nhap');
+  const requestsBefore = bookRequests.length;
+  await findAndSelect(page, 'hai phong', 'hp');
+  assert.deepEqual(postcardRequests, []);
+  await page.locator('#book-open-hp').click();
+  const dialog = page.locator('#bookModal.gvb-open-call');
+  await dialog.waitFor();
+  const qr = dialog.locator('.gvb-soon-qr img');
+  await page.waitForFunction(() => document.querySelector('#bookModal .gvb-soon-qr img')?.naturalWidth > 0);
+  await page.waitForFunction(() => document.querySelector('#bookModal .gvb-call-art')?.naturalWidth > 0);
+  assert.match(await dialog.locator('.gvb-call-caption').innerText(), /Hải Phòng/);
+  assert.equal(await dialog.locator('.gvb-call-landmark').innerText(), 'Vịnh Lan Hạ · Cát Bà');
+  assert.equal(await dialog.locator('.gvb-call-signature').textContent(), 'Sắp có');
+  assert.deepEqual(postcardRequests.map(url => new URL(url).pathname.split('/').pop()), ['hp.webp']);
+  const link = dialog.locator('.gvb-soon-fanpage');
+  assert.equal(await link.getAttribute('href'), await page.evaluate(() => GoiVietBookContribute.url));
+  assert.equal(await link.getAttribute('target'), '_blank');
+  await dialog.locator('.gvb-shell').screenshot({ path: path.join(output, 'coming-soon-1440.png') });
+  await qr.screenshot({ path: path.join(output, 'coming-soon-qr.png') });
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await dialog.locator('.gvb-shell').screenshot({ path: path.join(output, 'coming-soon-390.png') });
+  await page.setViewportSize({ width: 320, height: 568 });
+  const stage = dialog.locator('.gvb-stage');
+  assert(await stage.evaluate(el => el.scrollWidth <= el.clientWidth + 1 && el.scrollHeight > el.clientHeight));
+  await dialog.locator('[data-act="play"]').click();
+  await page.locator(modal('deckModal')).waitFor();
+  assert.match(await page.locator('#deckModalHeading').innerText(), /Hải Phòng/);
+  await page.keyboard.press('Escape');
+  await waitForFocus(page, 'book-open-hp');
+  assert.equal(bookRequests.length, requestsBefore);
+
+  const checked = await page.evaluate(async () => {
+    const outside = ALL_PLAYABLE_PLACES.filter(place => GoiVietBooks.statusOf(place.id) === 'none');
+    const postcards = GoiVietCommunityPostcards;
+    const failures = [];
+    for (const lang of ['vi', 'en']) {
+      GoiVietI18n.setLang(lang, { remember: false });
+      const stamp = lang === 'vi' ? 'Sắp có' : 'Coming soon';
+      for (const place of outside) {
+        const kind = await GoiVietBooks.open(place.id);
+        const modal = document.querySelector('#bookModal.gvb-open-call');
+        const stage = modal?.querySelector('.gvb-stage');
+        const art = modal?.querySelector('.gvb-call-art');
+        await art?.decode().catch(() => {});
+        const title = (place.short || place.name).replace(/^TP\.\s*/u, '');
+        if (kind !== 'soon' || modal?.lang !== lang
+          || modal.querySelector('.gvb-call-place')?.textContent !== title
+          || modal.querySelector('.gvb-call-landmark')?.textContent !== postcards[place.id]?.[lang]
+          || modal.querySelector('.gvb-call-signature')?.textContent !== stamp
+          || !art?.currentSrc.endsWith('/postcards/' + place.id + '.webp')
+          || art.naturalWidth !== 1200 || art.naturalHeight !== 800
+          || stage.scrollWidth > stage.clientWidth + 1) failures.push(lang + ':' + place.id);
+      }
+    }
+    GoiVietBooks.close();
+    return { outside: outside.length, cards: Object.keys(postcards).length, failures };
+  });
+  assert.deepEqual(checked, { outside: 32, cards: 32, failures: [] });
+  assert.equal(new Set(postcardRequests).size, 32);
+  assert.equal(bookRequests.length, requestsBefore);
+
+  await page.evaluate(async () => {
+    await GoiVietBooks.open('hp');
+    document.querySelector('#bookModal .gvb-call-art').dispatchEvent(new Event('error'));
+  });
+  assert.equal(await dialog.locator('.gvb-call-art').count(), 0);
+  assert(await dialog.locator('.gvb-call-landmark').isVisible());
+  assert(await link.isVisible());
+  assert(await dialog.locator('[data-act="play"]').isVisible());
+  await page.close();
 }
 
 async function verifyMovingTrain(browser) {
@@ -288,11 +362,12 @@ async function verifyMovingTrain(browser) {
   process.env.TEMP = process.env.TMP = temp;
   const browser = await launch();
   try {
+    await verifyCommunityInvitation(browser);
     await verifyDesktop(browser);
     await verifyPublicAndMobile(browser);
     await verifyMovingTrain(browser);
     assert.deepEqual(errors, []);
-    console.log('PASS: preview-5 station panel, 6 sizes, journey, stories, cards, memory, postcard, draft and public book flows, and dark mode.');
+    console.log('PASS: preview-5 station panel, 6 sizes, journey, cards, memory, postcard, draft books, 32 community invitations and dark mode.');
   } finally {
     await browser.close();
   }
