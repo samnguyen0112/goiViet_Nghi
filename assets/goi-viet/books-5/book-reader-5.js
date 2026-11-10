@@ -475,10 +475,12 @@
   function syncChrome() {
     const el = R.el;
     el.lang = I.lang();
+    const openCall = R.kind === 'soon' && statusOf(R.placeId) === 'none';
+    el.classList.toggle('gvb-open-call', openCall);
     el.classList.toggle('gvb-illustrated-edition', R.kind === 'book' && Boolean(R.book?.editions?.[I.lang()]));
     el.querySelector('.gvb-bar-kicker').textContent = t('book.kicker');
     const title = R.kind === 'book' && R.book ? inLang(R.book.title, I.lang()) : R.kind === 'soon' || R.kind === 'error' ? t('book.soon.title') + ' · ' + placeName(R.placeId) : t('book.loading');
-    el.querySelector('#gvbTitle').textContent = title;
+    el.querySelector('#gvbTitle').textContent = openCall ? t('book.soon.kicker') : title;
     const badge = el.querySelector('.gvb-badge');
     badge.hidden = !(R.kind === 'book' && statusOf(R.placeId) !== 'published');
     badge.textContent = t('book.draft');
@@ -753,11 +755,100 @@
   }
 
   // ---------------------------------------------------------------- coming soon / loading / error
+  function renderSoonInvite(name, openCall = false) {
+    const contribute = window.GoiVietBookContribute;
+    if (!contribute?.url) return null;
+    let url;
+    try { url = new URL(contribute.url); } catch { return null; }
+    if (url.protocol !== 'https:') return null;
+
+    const invite = h('section', 'gvb-soon-invite');
+    invite.setAttribute('aria-labelledby', 'gvbSoonInviteTitle');
+    const heading = h('h3', 'gvb-soon-invite-title', t('book.soon.inviteTitle'));
+    heading.id = 'gvbSoonInviteTitle';
+    const ideas = h('p', 'gvb-soon-ideas', t(openCall ? 'book.soon.openCallIdeas' : 'book.soon.ideas', { place: name }));
+    const row = h('div', 'gvb-soon-contrib');
+    if (contribute.qr) {
+      const fig = h('figure', 'gvb-soon-qr');
+      const img = h('img');
+      img.src = contribute.qr;
+      img.alt = t('book.soon.qrAlt');
+      img.width = img.height = 128;
+      img.decoding = 'async';
+      fig.append(img, h('figcaption', '', t(openCall ? 'book.soon.scan' : 'book.soon.qrCaption')));
+      row.append(fig);
+    }
+    const side = h('div', 'gvb-soon-contrib-copy');
+    const link = h('a', 'gvb-btn gvb-soon-fanpage', t(openCall ? 'book.soon.send' : 'book.soon.fanpage') + ' ↗');
+    link.href = url.href;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+    side.append(link, h('p', 'gvb-soon-consent', t('book.soon.consent')));
+    if (openCall) row.prepend(side); else row.append(side);
+    invite.append(heading, ideas, row);
+    return invite;
+  }
+
+  function renderCommunityPostcard(name) {
+    const feature = h('div', 'gvb-call-postcard');
+    const caption = h('div', 'gvb-call-caption');
+    const place = h('h3', 'gvb-call-place', name.replace(/^TP\.\s*/u, ''));
+    const signature = h('div', 'gvb-call-signature');
+    const logo = h('img', 'gvb-call-logo');
+    logo.src = LOGO;
+    logo.alt = 'Gói Việt';
+    logo.width = 512;
+    logo.height = 235;
+    logo.decoding = 'async';
+    signature.append(logo);
+    caption.append(place);
+
+    const postcards = window.GoiVietCommunityPostcards;
+    const id = R.placeId;
+    if (postcards && Object.hasOwn(postcards, id)) {
+      const landmark = h('p', 'gvb-call-landmark', inLang(postcards[id], I.lang()));
+      const art = h('img', 'gvb-call-art');
+      art.alt = '';
+      art.width = 1200;
+      art.height = 800;
+      art.decoding = 'async';
+      art.addEventListener('error', () => art.remove(), { once: true });
+      art.src = 'assets/goi-viet/books-5/postcards/' + id + '.webp';
+      feature.append(art);
+      caption.append(landmark);
+    }
+    signature.append(h('span', 'gvb-call-status', t('book.soon.stamp')));
+    caption.append(signature);
+    feature.append(caption);
+    return feature;
+  }
+
+  function renderOpenCall(soon, name, play) {
+    const copy = h('div', 'gvb-call-copy');
+    copy.append(h('p', 'gvb-call-eyebrow', t('book.soon.community')));
+    const invitation = renderSoonInvite(name, true);
+    if (invitation) copy.append(invitation);
+    else copy.append(h('h3', 'gvb-soon-invite-title', t('book.soon.title')),
+      h('p', 'gvb-soon-ideas', t('book.soon.text', { place: name })));
+    const actions = h('div', 'gvb-call-actions');
+    play.classList.remove('gvb-btn-primary');
+    actions.append(h('p', '', t('book.soon.playHint')), play);
+    copy.append(actions);
+    soon.append(renderCommunityPostcard(name), copy);
+  }
+
   function renderSoon(kind) {
     const soon = R.el.querySelector('.gvb-soon');
     soon.hidden = false;
     soon.replaceChildren();
     const name = placeName(R.placeId);
+    const play = h('button', 'gvb-btn gvb-btn-primary', t('book.playCards', { place: name }));
+    play.type = 'button';
+    play.dataset.act = 'play';
+    if (R.el.classList.contains('gvb-open-call')) {
+      renderOpenCall(soon, name, play);
+      return;
+    }
     const card = h('div', 'gvb-soon-book');
     const frame = h('div', 'gvb-soon-frame');
     const logo = h('img', 'gvb-soon-logo'); logo.src = LOGO_IVORY; logo.alt = 'Gói Việt'; logo.decoding = 'async';
@@ -765,8 +856,11 @@
     card.append(frame);
     const copy = h('div', 'gvb-soon-copy');
     copy.append(h('p', '', kind === 'error' ? t('book.loadError') : t('book.soon.text', { place: name })));
+    if (kind !== 'error') {
+      const invite = renderSoonInvite(name);
+      if (invite) copy.append(invite);
+    }
     const actions = h('div', 'gvb-soon-actions');
-    const play = h('button', 'gvb-btn gvb-btn-primary', t('book.playCards', { place: name })); play.type = 'button'; play.dataset.act = 'play';
     const back = h('button', 'gvb-btn', '← ' + t('book.back')); back.type = 'button'; back.dataset.act = 'close';
     actions.append(play, back);
     copy.append(actions);
@@ -786,27 +880,33 @@
     for (const p of R.el.querySelectorAll('.gvb-panel')) p.hidden = true;
     R.el.querySelector('.gvb-soon').hidden = true;
     const status = R.el.querySelector('.gvb-status');
+    status.hidden = true;
     if (!canRead(placeId)) {
       R.kind = 'soon';
       syncChrome(); renderSoon('soon');
       show(wasOpen);
       say(t('book.announceSoon', { place: placeName(placeId) }));
-      return;
+      return R.kind;
     }
     R.kind = 'loading';
     syncChrome();
     status.hidden = false; status.textContent = t('book.loading');
     show(wasOpen);
     const book = await load(placeId);
-    if (R.placeId !== placeId || !R.el.classList.contains('open')) return;
+    if (R.placeId !== placeId || !R.el.classList.contains('open')) return null;
     status.hidden = true;
-    if (!book) { R.kind = 'error'; syncChrome(); renderSoon('error'); return; }
+    if (!book) { R.kind = 'error'; syncChrome(); renderSoon('error'); return R.kind; }
     R.book = book;
     R.kind = 'book';
     syncChrome();
     relayout();
-    setView(viewOfPage(opts.page ?? savedPosition(placeId)));
+    // P5-02: from a card, open at the section whose cardIds name that card (content-matched link); else where it was left.
+    const cardPage = opts.cardId ? book._pages.findIndex(e => e.section && (e.section.cardIds || []).includes(opts.cardId)) : -1;
+    setView(viewOfPage(opts.page ?? (cardPage >= 0 ? cardPage : savedPosition(placeId))));
     say(t('book.announceOpen', { title: inLang(book.title, I.lang()) }));
+    // Only real book content counts as "read" (the coming-soon page does not).
+    document.dispatchEvent(new CustomEvent('goiviet:bookshown', { detail: { placeId, status: statusOf(placeId) } }));
+    return R.kind;
   }
   function show(wasOpen) {
     if (wasOpen) return;

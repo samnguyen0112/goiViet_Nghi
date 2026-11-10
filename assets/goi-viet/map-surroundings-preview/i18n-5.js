@@ -100,7 +100,28 @@
       'book.soon.stamp': 'Sắp có',
       'book.soon.text': 'Câu chuyện về {place} đang chờ được kể. Trong lúc chờ, cả nhà có thể chơi bộ thẻ của ga này.',
       'book.announceOpen': 'Đang mở sách {title}',
-      'book.announceSoon': 'Sách về {place} sắp có'
+      'book.announceSoon': 'Sách về {place} sắp có',
+      // P5-02
+      'book.soon.inviteTitle': 'Gửi câu chuyện quê bạn',
+      'book.soon.community': 'Tủ sách cộng đồng',
+      'book.soon.openCallIdeas': 'Kể về một món ăn, một phong tục hay một kỷ niệm gắn với {place}. Bạn có thể gửi kèm ảnh do mình chụp.',
+      'book.soon.send': 'Gửi qua fanpage',
+      'book.soon.scan': 'Quét để mở fanpage',
+      'book.soon.playHint': 'Trong lúc chờ sách, mời cả nhà ghé chơi thẻ.',
+      'book.soon.ideas': 'Một món ăn, một tiếng gọi, một phong tục, một tấm ảnh bạn tự chụp hay tên tỉnh cũ trước khi sáp nhập: những mẩu chuyện nhỏ như thế sẽ góp nên tập sách về {place}.',
+      'book.soon.fanpage': 'Gửi qua fanpage Gói Việt',
+      'book.soon.qrAlt': 'Mã QR mở fanpage Gói Việt',
+      'book.soon.qrCaption': 'Quét bằng điện thoại để mở fanpage',
+      'book.soon.consent': 'Nhóm sẽ hỏi ý bạn trước khi đăng và ghi tên theo cách bạn chọn.',
+      'book.fromCard': 'Đọc sách về {place}',
+      'book.fromCardHint': 'Câu chuyện của vùng đất này trong sách văn hóa. Đóng sách là quay lại đúng lá bài này.',
+      'book.fromCardOpen': 'Mở sách',
+      'journey.playCards': 'Chơi thẻ',
+      'journey.readBook': 'Đọc sách',
+      'journey.modesLabel': 'Chọn cách khám phá {place}',
+      'journey.stationHint': 'Chơi thẻ hoặc đọc sách tại ga',
+      'journey.arrivalHint': 'Chơi thẻ hoặc đọc sách để tìm hiểu vùng đất này.',
+      'journey.noteAtStation': 'Chơi thẻ hoặc đọc sách để khám phá ga.'
     },
     en: {
       'book.kicker': 'Gói Việt · Culture books',
@@ -156,7 +177,28 @@
       'book.soon.stamp': 'Coming soon',
       'book.soon.text': 'The story of {place} is waiting to be told. Meanwhile, the family can play this station’s card deck.',
       'book.announceOpen': 'Opening the book {title}',
-      'book.announceSoon': 'The {place} book is coming soon'
+      'book.announceSoon': 'The {place} book is coming soon',
+      // P5-02
+      'book.soon.inviteTitle': 'Share your hometown story',
+      'book.soon.community': 'Community library',
+      'book.soon.openCallIdeas': 'Tell us about a dish, a custom or a memory from {place}. You can send a photo you took, too.',
+      'book.soon.send': 'Send via Facebook',
+      'book.soon.scan': 'Scan to open Facebook',
+      'book.soon.playHint': 'While the book is in the making, try the station’s cards together.',
+      'book.soon.ideas': 'A dish, a way of calling out, a custom, a photo you took, or the old province name from before the merger: small stories like these will build the book about {place}.',
+      'book.soon.fanpage': 'Send it via the Gói Việt Facebook page',
+      'book.soon.qrAlt': 'QR code that opens the Gói Việt Facebook page',
+      'book.soon.qrCaption': 'Scan with your phone to open the page',
+      'book.soon.consent': 'We will ask you before publishing and credit you the way you choose.',
+      'book.fromCard': 'Read the {place} book',
+      'book.fromCardHint': 'This place’s stories in the culture book. Closing the book brings you back to this card.',
+      'book.fromCardOpen': 'Open the book',
+      'journey.playCards': 'Play cards',
+      'journey.readBook': 'Read the book',
+      'journey.modesLabel': 'Choose how to explore {place}',
+      'journey.stationHint': 'Play cards or read the book at this station',
+      'journey.arrivalHint': 'Play cards or read the book to get to know this place.',
+      'journey.noteAtStation': 'Play cards or read the book to explore the station.'
     }
   });
 

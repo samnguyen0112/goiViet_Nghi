@@ -683,6 +683,182 @@
 .gvb-soon-copy { max-width: 440px; color: var(--ink-primary); }
 .gvb-soon-copy p { margin: 0 0 18px; font: 17px/1.65 var(--font-sans); }
 .gvb-soon-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+/* P5-02: invitation to send stories, with the team's page link and a local QR. */
+.gvb-soon-copy { max-width: 500px; }
+.gvb-soon-invite { margin: 0 0 20px; padding: 16px 18px; border: 1px solid var(--wood-border); border-radius: 12px; background: color-mix(in srgb, var(--paper-elevated) 88%, transparent); }
+.gvb-soon-invite-title { margin: 0 0 6px; font: 700 18px/1.3 var(--font-display); color: var(--son-red); }
+.gvb-soon-copy p.gvb-soon-ideas { margin: 0 0 12px; font: 14.5px/1.6 var(--font-sans); color: var(--ink-secondary); }
+.gvb-soon-contrib { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 18px; }
+.gvb-soon-qr { display: grid; justify-items: center; gap: 6px; margin: 0; }
+.gvb-soon-qr img { display: block; width: 128px; height: 128px; padding: 6px; border-radius: 8px; background: #fff; box-shadow: 0 0 0 1px var(--wood-border); image-rendering: pixelated; }
+.gvb-soon-qr figcaption { max-width: 150px; color: var(--ink-muted); font: 12px/1.35 var(--font-sans); text-align: center; }
+.gvb-soon-contrib-copy { flex: 1; min-width: 190px; }
+.gvb-soon-fanpage { display: inline-flex; align-items: center; text-decoration: none; }
+.gvb-soon-copy p.gvb-soon-consent { margin: 8px 0 0; color: var(--ink-muted); font: 12.5px/1.5 var(--font-sans); }
+
+/* ---------- community invitation for stations outside the book catalog */
+#bookModal.gvb-open-call {
+  --call-paper: #f8efd9;
+  --call-line: #cfb98b;
+  --call-ink: #203d32;
+  --call-muted: #63584a;
+  --call-red: #9b2d23;
+  & .gvb-shell {
+    width: min(1080px, calc(100vw - 32px));
+    height: auto;
+    max-height: calc(100dvh - 32px);
+    border: 1px solid var(--call-line);
+    border-radius: 18px;
+    background: url('../paper.svg') left top / 160px, var(--call-paper);
+  }
+  & .gvb-bar {
+    flex: none;
+    flex-wrap: nowrap;
+    gap: 12px;
+    padding: 11px clamp(14px, 3vw, 30px);
+    border-color: var(--call-line);
+    background: transparent;
+  }
+  & .gvb-bar-kicker { display: none; }
+  & #gvbTitle { margin: 0; color: var(--call-ink); white-space: normal; }
+  & .gvb-bar-actions { width: auto; }
+  & .gvb-btn {
+    min-height: 44px;
+    padding: 8px 14px;
+    border-color: var(--call-line);
+    background: transparent;
+    color: var(--call-ink);
+  }
+  & .gvb-btn:hover:not(:disabled) { background: var(--paper-elevated); }
+  & .gvb-stage {
+    display: block;
+    flex: 0 1 auto;
+    padding: 0;
+    overflow: auto;
+    overscroll-behavior: contain;
+  }
+  & .gvb-soon {
+    display: grid;
+    grid-template-columns: minmax(220px, .78fr) minmax(0, 1.22fr);
+    align-items: stretch;
+    gap: clamp(22px, 4vw, 48px);
+    height: auto;
+    padding: clamp(18px, 3vw, 32px);
+  }
+  & .gvb-call-postcard {
+    display: grid;
+    grid-template-rows: minmax(220px, 1fr) auto;
+    overflow: hidden;
+    padding: 7px;
+    border: 1px solid #c2a66e;
+    border-radius: 13px;
+    background: url('../paper.svg') left top / 160px, #fff7e6;
+    box-shadow: 0 7px 18px #513b2524;
+    color: #203d32;
+  }
+  & .gvb-call-postcard:not(:has(.gvb-call-art)) { grid-template-rows: auto; align-self: center; }
+  & .gvb-call-art {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    border-radius: 6px 6px 2px 2px;
+    background: #2c5c50;
+    object-fit: cover;
+  }
+  & .gvb-call-caption { padding: 12px 13px 6px; }
+  & .gvb-call-place {
+    margin: 0;
+    overflow-wrap: anywhere;
+    font: 700 clamp(25px, 2.65vw, 40px)/1.12 var(--font-display);
+    color: inherit;
+  }
+  & .gvb-call-landmark {
+    margin: 4px 0 0;
+    color: #4a5445;
+    font: 500 14px/1.45 var(--font-sans);
+    overflow-wrap: anywhere;
+  }
+  & .gvb-call-signature {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 6px 10px;
+    margin-top: 11px;
+    padding-top: 8px;
+    border-top: 1px solid #c7ad78;
+  }
+  & .gvb-call-logo { display: block; width: 72px; height: auto; }
+  & .gvb-call-status {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 8px;
+    border: 1px solid #b16e59;
+    border-radius: 4px;
+    color: #8e382c;
+    font: 700 10px/1.35 var(--font-sans);
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+  & .gvb-call-copy { align-self: center; min-width: 0; padding-block: 4px; color: var(--call-ink); }
+  & .gvb-call-eyebrow {
+    margin: 0;
+    color: var(--call-muted);
+    font: 700 10px/1.4 var(--font-sans);
+    letter-spacing: .13em;
+    text-transform: uppercase;
+  }
+  & .gvb-soon-invite { margin: 0; padding: 0; border: 0; background: transparent; }
+  & .gvb-soon-invite-title {
+    margin: 6px 0 9px;
+    color: var(--call-ink);
+    font: 700 clamp(25px, 3.6vw, 44px)/1.13 var(--font-display);
+    text-wrap: balance;
+  }
+  & .gvb-soon-ideas { margin: 0 0 18px; color: var(--call-muted); font: 400 15px/1.6 var(--font-sans); }
+  & .gvb-soon-contrib { align-items: center; gap: 12px 16px; max-width: 490px; }
+  & .gvb-soon-contrib-copy { min-width: 0; }
+  & .gvb-soon-fanpage { border-color: var(--call-red); background: var(--call-red); color: #fff8e8; }
+  & .gvb-soon-fanpage:hover:not(:disabled) { background: #7c261f; }
+  & .gvb-soon-consent { margin: 9px 0 0; color: var(--call-muted); font: 400 12px/1.5 var(--font-sans); }
+  & .gvb-soon-qr { flex: none; }
+  & .gvb-soon-qr img { box-sizing: content-box; width: 98px; height: 98px; padding: 3px; border-radius: 6px; }
+  & .gvb-soon-qr figcaption { max-width: 108px; color: var(--call-muted); font-size: 10.5px; }
+  & .gvb-call-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 12px;
+    margin-top: 17px;
+    padding-top: 13px;
+    border-top: 1px solid var(--call-line);
+  }
+  & .gvb-call-actions p { flex: 1 1 140px; margin: 0; color: var(--call-muted); font: 500 12px/1.5 var(--font-sans); }
+  & .gvb-call-actions button { text-align: start; }
+}
+@media (min-width: 900px) {
+  #bookModal.gvb-open-call .gvb-soon-qr img { width: 147px; height: 147px; }
+}
+[data-theme="dark"] #bookModal.gvb-open-call {
+  --call-paper: #25382f;
+  --call-line: #816e4f;
+  --call-ink: #f8edcf;
+  --call-muted: #ddd0b5;
+  --call-red: #a73b30;
+}
+@media (max-width: 670px) {
+  #bookModal.gvb-open-call {
+    & .gvb-shell { width: calc(100vw - 12px); max-height: calc(100dvh - 12px); border-radius: 12px; }
+    & .gvb-soon { grid-template-columns: minmax(0, 1fr); gap: 16px; padding: 14px; }
+    & .gvb-call-postcard { grid-template-rows: auto auto; }
+    & .gvb-call-art { height: clamp(150px, 47vw, 245px); }
+    & .gvb-call-caption { padding: 9px 9px 4px; }
+    & .gvb-call-logo { width: 62px; }
+    & .gvb-soon-ideas { margin-bottom: 13px; font-size: 14px; }
+    & .gvb-call-actions { margin-top: 12px; }
+  }
+}
 
 /* ---------- off-screen measuring host (GoiVietBooks.measure) */
 .gvb-measure { position: fixed; left: -30000px; top: 0; pointer-events: none; contain: layout style; }

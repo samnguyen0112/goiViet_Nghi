@@ -35,24 +35,21 @@
     flavor: ['Hương vị', 'Local flavor'],
     highlights: ['Điểm nhấn văn hóa', 'Cultural highlights'],
     illustration: ['Minh họa', 'Illustration'],
-    hero: ['Mở câu chuyện tại {place}', 'Open a story from {place}'],
+    hero: ['Đọc sách văn hóa về {place}', 'Read the {place} culture book'],
     cards: ['Chơi thẻ', 'Play cards'],
     remaining: ['Còn {count} lá', '{count} cards left'],
     lastCard: ['Còn 1 lá', '1 card left'],
     noCards: ['Đã rút hết', 'All cards drawn'],
     book: ['Đọc sách', 'Read book'],
     bookReady: ['Sách văn hóa', 'Culture book'],
-    stories: ['Câu chuyện văn hóa', 'Cultural stories'],
-    read: ['Đọc', 'Read'],
-    reread: ['Đọc lại', 'Read again'],
     shared: ['Đã chia sẻ', 'Shared'],
-    opened: ['Đã mở chuyện', 'Story opened'],
+    opened: ['Đã đọc sách', 'Book read'],
     verified: ['Điểm mẫu có nguồn', 'Sourced example'],
     demo: ['Nội dung demo', 'Demo content'],
     journal: ['Sổ hành trình', 'Journey journal'],
     journalHint: ['Ga đã ghé, kỷ niệm và bưu thiếp', 'Stops, memories and postcards'],
     visited: ['Ga đã ghé', 'Visited stations'],
-    visitedEmpty: ['Mở một câu chuyện để lưu ga đầu tiên.', 'Open a story to record your first stop.'],
+    visitedEmpty: ['Chơi thẻ hoặc đọc sách để lưu ga đầu tiên.', 'Play cards or read a book to record your first stop.'],
     memories: ['Kỷ niệm đã lưu', 'Saved memories'],
     memoriesEmpty: ['Cả nhà có thể ghi kỷ niệm khi chơi thẻ.', 'Save a family memory while playing cards.'],
     visit: ['Tới ga', 'Go to station'],
@@ -168,27 +165,6 @@
       </div>`;
   }
 
-  function renderStories(place, stories, opened) {
-    return `
-      <details class="gv-station-stories" data-place="${place.id}">
-        <summary id="station-stories-${place.id}"><span>${t('stories')}</span><span class="gv-station-story-count">${stories.length}</span>${icon('chevron')}</summary>
-        <div class="gv-station-story-items">
-          <div class="gv-station-story-context">
-            <p>${escapeHTML(place.tagline || place.summary)}</p>
-          </div>
-          ${stories.map((story, index) => {
-            const wasRead = opened.includes(story.id);
-            return `<button type="button" id="story-open-${story.id}" class="story-item-btn gv-station-story" data-station-action="story"
-              data-place="${place.id}" data-story="${story.id}">
-              <span class="gv-station-story-number" aria-hidden="true">${String(index + 1).padStart(2, '0')}</span>
-              <strong>${escapeHTML(getStoryReadingPresentation(story).title)}</strong>
-              <span class="gv-station-story-link">${t(wasRead ? 'reread' : 'read')}${icon('chevron')}</span>
-            </button>`;
-          }).join('')}
-        </div>
-      </details>`;
-  }
-
   function renderSelectedStation({ place, highlights, stories, remaining, opened, island }) {
     const name = place.name.replace(/^(Thành phố|Tỉnh|TP\.)\s+/i, '');
     const ready = t(island ? 'islandRoute' : 'enter');
@@ -210,11 +186,9 @@
           ${renderHighlights(highlights)}
         </section>
         ${renderModes(place, remaining)}
-        ${renderStories(place, stories, opened)}
       </div>`;
   }
 
-  const openDrawers = new Set();
   let lastMarkup;
 
   function update(markup) {
@@ -224,17 +198,10 @@
         ${icon('search')}<strong>${t('noResults')}</strong><p>${t('noResultsHint')}</p>
       </div>`;
     if (lastMarkup === nextMarkup) return;
-    const drawer = list.querySelector('.gv-station-stories');
-    if (drawer) {
-      if (drawer.open) openDrawers.add(drawer.dataset.place);
-      else openDrawers.delete(drawer.dataset.place);
-    }
     const active = document.activeElement;
     const keepFocus = list.contains(active);
     list.innerHTML = nextMarkup;
     lastMarkup = nextMarkup;
-    const newDrawer = list.querySelector('.gv-station-stories');
-    if (newDrawer) newDrawer.open = openDrawers.has(newDrawer.dataset.place);
     if (keepFocus) {
       const target = document.getElementById(active.id) || list.querySelector('.gv-station-identity h3');
       (target || list.closest('.preview-panel-scroll')).focus({ preventScroll: true });
@@ -260,12 +227,25 @@
     if (!button || button.disabled) return;
     const { place, story, stationAction, journeyAction } = button.dataset;
     if (stationAction === 'select') selectDemoPlace(place);
-    else if (stationAction === 'story' || (stationAction === 'journey' && journeyAction === 'explore')) openStoryModal(place, story, button);
+    // P5-02: the station picture opens the book (or its coming-soon page) through the shared entry.
+    else if (stationAction === 'story') openPlaceMode(place, 'book', { source: button });
+    // "Khám phá" at the station points to the two modes right below it.
+    else if (stationAction === 'journey' && journeyAction === 'explore') {
+      const modes = list.querySelector('.gv-station-modes');
+      const first = modes && modes.querySelector('.gv-station-mode');
+      if (first) {
+        modes.scrollIntoView({ block: 'nearest', behavior: state.reducedMotion ? 'auto' : 'smooth' });
+        first.focus({ preventScroll: true });
+        modes.classList.remove('is-cued');
+        void modes.offsetWidth;
+        modes.classList.add('is-cued');
+      }
+    }
     else if (stationAction === 'journey') {
       if (window.GoiVietJourneyPreview) window.GoiVietJourneyPreview.start(place);
       else selectDemoPlace(place);
-    } else if (stationAction === 'deck') openDeckModal(place, button);
-    else if (stationAction === 'book') window.GoiVietBooks?.open(place, { source: button });
+    } else if (stationAction === 'deck') openPlaceMode(place, 'deck', { source: button });
+    else if (stationAction === 'book') openPlaceMode(place, 'book', { source: button });
   });
   list.addEventListener('error', event => {
     if (event.target instanceof HTMLImageElement) event.target.hidden = true;

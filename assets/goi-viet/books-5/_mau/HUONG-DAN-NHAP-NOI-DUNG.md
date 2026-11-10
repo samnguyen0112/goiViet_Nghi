@@ -51,7 +51,8 @@ GoiVietBooks.register({
 - Chữ luôn có hai ngôn ngữ dùng **chung một cấu trúc trang**: cùng số trang, cùng tranh, chỉ khác chữ. Khi đổi ngôn ngữ, người đọc ở nguyên trang.
 - `body` là danh sách đoạn. Đoạn bắt đầu bằng `— ` hiện như lời thoại; đoạn bắt đầu bằng dấu ngoặc kép `“` hiện trong khung trích màu nhạt, giữ nguyên vị trí trong mạch truyện.
 - `heading` là câu in đậm đầu trang (không bắt buộc).
-- `cardIds` chỉ điền khi nội dung phần đó khớp đúng câu hỏi của lá bài (ví dụ `['th-c1']`); nếu chỉ cùng tỉnh thì để trống.
+- `cardIds` chỉ điền khi nội dung phần đó khớp đúng câu hỏi của lá bài (ví dụ `['th-c1']`); nếu chỉ cùng tỉnh thì để trống. Khi có, nút **Mở sách** trên lá bài đó mở thẳng tới phần này; khi trống, sách mở ở trang người đọc dừng lần trước.
+- Tư liệu sẵn có cho Hà Nội, Huế, TP. Hồ Chí Minh: 12 câu chuyện đã thẩm định (kèm nguồn và mã lá bài liên quan) chép trong `TU-LIEU-TRUYEN-DA-THAM-DINH.md` cùng thư mục.
 
 ## 4. Bảy bố cục và giới hạn chữ
 
