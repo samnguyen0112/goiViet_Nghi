@@ -69,6 +69,7 @@
       'book.draft': 'Bản nháp',
       'book.draftNote': 'Bản nháp nội bộ · nội dung đang soạn',
       'book.viOnly': 'Bản tiếng Anh đang soạn · đang hiện tiếng Việt',
+      'book.viEdition': 'Bản tiếng Việt',
       'book.loading': 'Đang mở sách…',
       'book.loadError': 'Chưa mở được cuốn sách này. Bạn vẫn có thể chơi bộ thẻ của ga.',
       'book.playCards': 'Chơi thẻ {place}',
@@ -146,6 +147,7 @@
       'book.draft': 'Draft',
       'book.draftNote': 'Internal draft · content in progress',
       'book.viOnly': 'English version in progress · showing Vietnamese',
+      'book.viEdition': 'Vietnamese edition',
       'book.loading': 'Opening the book…',
       'book.loadError': 'This book could not be opened. You can still play this station’s card deck.',
       'book.playCards': 'Play the {place} cards',
@@ -202,5 +204,8 @@
     }
   });
 
-  window.GoiVietI18n = Object.freeze({ t, pick, has, setLang, add, missing, lang: () => current, langs: () => LANGS.slice() });
+  // The raw entry of one language (no fallback, no formatting); null when that language has none.
+  function get(lang, key) { return DICT[lang] && DICT[lang][key] != null ? DICT[lang][key] : null; }
+
+  window.GoiVietI18n = Object.freeze({ t, pick, has, get, setLang, add, missing, lang: () => current, langs: () => LANGS.slice() });
 })();

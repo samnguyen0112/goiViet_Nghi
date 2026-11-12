@@ -87,6 +87,19 @@
     if (tx.vi && Object.keys(tx.vi).length) return { data: tx.vi, lang: 'vi', fallback: lang !== 'vi' };
     return { data: null, lang, fallback: false };
   }
+  // The illustrated edition shown for a language (P5-03). Until every page with Vietnamese text also has text in that
+  // language, the book keeps its Vietnamese edition: most pages would show Vietnamese anyway, and changing the language
+  // must not change how the book looks. A complete translation uses its own edition, or the text layout until one exists.
+  function editionLang(book, lang) {
+    if (!book || !book.editions) return null;
+    if (book.editions[lang]) return lang;
+    if (lang === 'vi' || !book.editions.vi) return null;
+    const filled = tx => Boolean(tx && Object.keys(tx).length);
+    const complete = (book._pages || []).every(entry => { const tx = entry.page && entry.page.text; return !tx || !filled(tx.vi) || filled(tx[lang]); });
+    return complete ? null : 'vi';
+  }
+  // Language of the book's own words (chapter tabs, contents, large text): the Vietnamese edition keeps Vietnamese.
+  function contentLang() { return R.book && editionLang(R.book, I.lang()) === 'vi' ? 'vi' : I.lang(); }
   function paragraphs(box, list) {
     for (const text of [].concat(list || [])) {
       if (typeof text !== 'string' || !text.trim()) continue;
@@ -260,7 +273,7 @@
   }
 
   function editionFile(book, item, lang) {
-    const edition = book.editions?.[lang];
+    const edition = book.editions?.[editionLang(book, lang)];
     if (!edition) return null;
     const file = item.kind === 'cover' ? edition.cover
       : item.kind === 'page' && book._pages[item.index]?.page ? edition.spreads?.[Math.floor(item.index / 2)] : null;
@@ -271,8 +284,9 @@
     const cover = item.kind === 'cover';
     const right = item.index % 2 === 1;
     const page = h('article', 'gvb-page gvb-plate ' + (cover ? 'gvb-plate-cover' : right ? 'gvb-plate-right' : ''));
-    if (!cover && book.editions[lang].trimMatte) page.classList.add('gvb-plate-trim', 'gvb-bound-leaf');
-    page.lang = lang;
+    const shown = editionLang(book, lang);
+    if (!cover && book.editions[shown].trimMatte) page.classList.add('gvb-plate-trim', 'gvb-bound-leaf');
+    page.lang = shown;
     page.setAttribute('aria-label', cover ? t('book.cover') : t('book.page', { a: item.index + 1, total: book._pages.length }));
     const copy = h('div', 'gvb-plate-copy');
     if (cover) {
@@ -411,7 +425,9 @@
         <header class="gvb-bar">
           <div class="gvb-bar-copy"><span class="gvb-bar-kicker"></span><h2 id="gvbTitle"></h2></div>
           <span class="gvb-badge" hidden></span>
+          <span class="gvb-badge gvb-badge-lang" hidden></span>
           <div class="gvb-bar-actions">
+            <div class="gv-lang-toggle gv-lang-toggle-dialog" role="group" data-lang-group aria-label="Ngôn ngữ · Language"><button type="button" data-set-lang="vi" lang="vi" title="Tiếng Việt">VI</button><button type="button" data-set-lang="en" lang="en" title="English">EN</button></div>
             <button type="button" class="gvb-btn" data-act="toc"></button>
             <button type="button" class="gvb-btn" data-act="text"></button>
             <button type="button" class="gvb-btn gvb-btn-close" data-act="close"></button>
@@ -477,7 +493,8 @@
     el.lang = I.lang();
     const openCall = R.kind === 'soon' && statusOf(R.placeId) === 'none';
     el.classList.toggle('gvb-open-call', openCall);
-    el.classList.toggle('gvb-illustrated-edition', R.kind === 'book' && Boolean(R.book?.editions?.[I.lang()]));
+    const edition = R.kind === 'book' ? editionLang(R.book, I.lang()) : null;
+    el.classList.toggle('gvb-illustrated-edition', Boolean(edition));
     el.querySelector('.gvb-bar-kicker').textContent = t('book.kicker');
     const title = R.kind === 'book' && R.book ? inLang(R.book.title, I.lang()) : R.kind === 'soon' || R.kind === 'error' ? t('book.soon.title') + ' · ' + placeName(R.placeId) : t('book.loading');
     el.querySelector('#gvbTitle').textContent = openCall ? t('book.soon.kicker') : title;
@@ -485,6 +502,17 @@
     badge.hidden = !(R.kind === 'book' && statusOf(R.placeId) !== 'published');
     badge.textContent = t('book.draft');
     badge.title = t('book.draftNote');
+    // English chosen, Vietnamese edition shown: the bar says so, the pages stay as designed.
+    const viNote = el.querySelector('.gvb-badge-lang');
+    viNote.hidden = !(edition === 'vi' && I.lang() !== 'vi');
+    viNote.textContent = t('book.viEdition');
+    viNote.title = t('book.viOnly');
+    // The reader's own VI/EN switch (the page header is behind the dialog).
+    el.querySelectorAll('[data-set-lang]').forEach(button => {
+      const on = button.dataset.setLang === I.lang();
+      button.setAttribute('aria-pressed', String(on));
+      button.classList.toggle('is-active', on);
+    });
     const isBook = R.kind === 'book';
     const toc = el.querySelector('[data-act="toc"]'), txt = el.querySelector('[data-act="text"]'), close = el.querySelector('[data-act="close"]');
     toc.textContent = t('book.toc'); toc.hidden = !isBook;
@@ -496,7 +524,7 @@
     chapters.hidden = !isBook;
     chapters.setAttribute('aria-label', t('book.toc'));
     if (isBook) chapters.replaceChildren(...sectionStarts().map(({ section, index }) => {
-      const button = h('button', 'gvb-chapter', inLang(section.label, I.lang()));
+      const button = h('button', 'gvb-chapter', inLang(section.label, contentLang()));
       button.type = 'button';
       button.dataset.act = 'goto';
       button.dataset.target = index;
@@ -673,7 +701,7 @@
   function openPanel(name) {
     finishTurn();
     R.panel = name;
-    const lang = I.lang();
+    const lang = contentLang();
     for (const p of R.el.querySelectorAll('.gvb-panel')) p.hidden = p.dataset.panel !== name;
     const panel = R.el.querySelector(`[data-panel="${name}"]`);
     if (name === 'toc') {
@@ -714,7 +742,7 @@
     if (back) back.focus();
   }
   function renderLarge() {
-    const lang = I.lang();
+    const lang = contentLang();
     const art = R.el.querySelector('.gvb-large');
     art.style.fontSize = R.fontPx + 'px';
     R.el.querySelector('.gvb-font-val').textContent = R.fontPx;

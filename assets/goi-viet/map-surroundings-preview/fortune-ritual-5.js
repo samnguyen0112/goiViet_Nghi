@@ -1,5 +1,5 @@
-/* Preview-5 copy of fortune-ritual.js (P5-02): the reading button says "Đọc sách văn hóa" because it opens the culture book.
-   Other previews keep fortune-ritual.js.
+/* Preview-5 copy of fortune-ritual.js (P5-02, P5-03): the reading button says "Đọc sách văn hóa" because it opens the
+   culture book, and the interface text follows the VI/EN choice. Other previews keep fortune-ritual.js.
    The preview's bamboo ritual. The existing place data, focus stack and destination actions remain authoritative. */
 (() => {
   'use strict';
@@ -13,6 +13,7 @@
   let busy = false;
   let generation = 0;
   let lastPick = null;
+  const T = (key, vars) => window.GoiVietI18n ? window.GoiVietI18n.t(key, vars) : key;
   const reduced = () => Boolean(state.reducedMotion || document.body.classList.contains('reduced-motion') || matchMedia('(prefers-reduced-motion: reduce)').matches);
   const icon = (name) => {
     const paths = {
@@ -123,42 +124,43 @@
   sheet.innerHTML = `
     <header class="modal-header ritual-header">
       <img class="ritual-brand" src="assets/goi-viet/brand/goi-viet-logo-512.webp" width="1850" height="850" alt="Gói Việt">
-      <div class="ritual-heading-copy"><span class="ritual-overline">NGHI THỨC KHỞI HÀNH</span><h2 id="bambooModalHeading">Rút xăm hành trình</h2></div>
-      <button type="button" class="ritual-close" aria-label="Đóng hộp rút xăm" title="Đóng">${icon('close')}</button>
+      <div class="ritual-heading-copy"><span class="ritual-overline" data-i18n="ritual.overline">NGHI THỨC KHỞI HÀNH</span><h2 id="bambooModalHeading" data-i18n="ritual.title">Rút xăm hành trình</h2></div>
+      <button type="button" class="ritual-close" aria-label="Đóng hộp rút xăm" title="Đóng" data-i18n-label="ritual.closeLabel" data-i18n-title="ritual.close">${icon('close')}</button>
     </header>
     <div class="modal-body ritual-body">
       <div class="ritual-composition">
-        <section class="ritual-stage" aria-label="Ống xăm tre hành trình">
-          <span class="ritual-stage-label">MỘT QUẺ TRE · MỘT ĐIỂM HẸN</span>
+        <section class="ritual-stage" aria-label="Ống xăm tre hành trình" data-i18n-label="ritual.stageLabel">
+          <span class="ritual-stage-label" data-i18n="ritual.stageKicker">MỘT QUẺ TRE · MỘT ĐIỂM HẸN</span>
           <span class="ritual-halo" aria-hidden="true"></span>
           <span class="ritual-orbit" aria-hidden="true"></span>
           <span class="ritual-spark ritual-spark-one" aria-hidden="true">✦</span><span class="ritual-spark ritual-spark-two" aria-hidden="true">✧</span><span class="ritual-spark ritual-spark-three" aria-hidden="true">✦</span>
-          <button type="button" id="bambooCylinderGraphic" class="ritual-cylinder" aria-label="Lắc ống xăm và rút một quẻ tre">${cylinder}</button>
-          <p id="ritualStageCaption" class="ritual-stage-caption">Chạm vào ống xăm để gieo quẻ</p>
-          <span class="ritual-stage-signature" aria-hidden="true">DỌC MIỀN DI SẢN</span>
+          <button type="button" id="bambooCylinderGraphic" class="ritual-cylinder" aria-label="${T('ritual.cylinderLabel')}">${cylinder}</button>
+          <p id="ritualStageCaption" class="ritual-stage-caption">${T('ritual.caption.idle')}</p>
+          <span class="ritual-stage-signature" aria-hidden="true" data-i18n="ritual.signature">DỌC MIỀN DI SẢN</span>
         </section>
         <section class="ritual-content">
           <p id="bambooTurnKicker" class="ritual-player"></p>
           <div id="ritualIdlePanel" class="ritual-invitation">
-            <span class="ritual-overline">ĐỂ MỘT CÂU THƠ DẪN LỐI</span>
-            <h3>Hôm nay, mình<br> ghé miền nào?</h3>
-            <p id="ritualAccessibleDescription" class="ritual-description">Lắc nhẹ ống tre, đón một quẻ xăm.<br> Mỗi điểm dừng mở ra một câu chuyện quê hương.</p>
-            <div class="ritual-scope" role="group" aria-label="Chọn phạm vi rút xăm">
-              <button type="button" data-ritual-scope="all" aria-pressed="true"><strong>${ALL_PLAYABLE_PLACES.length}</strong><span>Ga tỉnh &amp; đảo<small>Dọc khắp Việt Nam</small></span></button>
-              <button type="button" data-ritual-scope="featured" aria-pressed="false"><strong>${CULTURAL_PLACES.length}</strong><span>Ga khởi đầu<small>Hà Nội · Huế · Sài Gòn</small></span></button>
+            <span class="ritual-overline" data-i18n="ritual.inviteKicker">ĐỂ MỘT CÂU THƠ DẪN LỐI</span>
+            <h3 data-i18n="ritual.ask1|ritual.ask2">Hôm nay, mình<br> ghé miền nào?</h3>
+            <p id="ritualAccessibleDescription" class="ritual-description" data-i18n="ritual.desc1|ritual.desc2">Lắc nhẹ ống tre, đón một quẻ xăm.<br> Mỗi điểm dừng mở ra một câu chuyện quê hương.</p>
+            <div class="ritual-scope" role="group" aria-label="Chọn phạm vi rút xăm" data-i18n-label="ritual.scopeLabel">
+              <button type="button" data-ritual-scope="all" aria-pressed="true"><strong>${ALL_PLAYABLE_PLACES.length}</strong><span data-i18n="ritual.scopeAll">Ga tỉnh &amp; đảo<small data-i18n="ritual.scopeAllHint">Dọc khắp Việt Nam</small></span></button>
+              <button type="button" data-ritual-scope="featured" aria-pressed="false"><strong>${CULTURAL_PLACES.length}</strong><span data-i18n="ritual.scopeFeatured">Ga khởi đầu<small>Hà Nội · Huế · Sài Gòn</small></span></button>
             </div>
-            <button type="button" id="ritualDrawButton" class="ritual-primary"><span class="ritual-draw-glyph" aria-hidden="true">✦</span><span id="ritualDrawLabel">Lắc ống xăm</span>${icon('arrow')}</button>
-            <p class="ritual-invitation-note">Một chút bất ngờ, một miền thương nhớ.</p>
+            <button type="button" id="ritualDrawButton" class="ritual-primary"><span class="ritual-draw-glyph" aria-hidden="true">✦</span><span id="ritualDrawLabel">${T('ritual.draw')}</span>${icon('arrow')}</button>
+            <p class="ritual-invitation-note" data-i18n="ritual.note">Một chút bất ngờ, một miền thương nhớ.</p>
           </div>
           <div id="bambooResultContainer" hidden></div>
         </section>
       </div>
     </div>
     <footer class="ritual-footer">
-      <ol class="ritual-steps" aria-label="Các bước rút xăm"><li><span>01</span>Lắc ống</li><li><span>02</span>Rút quẻ</li><li><span>03</span>Mở vé</li></ol>
-      <span class="ritual-footer-note">Một câu thơ · Một chuyến đi</span>
+      <ol class="ritual-steps" aria-label="Các bước rút xăm" data-i18n-label="ritual.stepsLabel"><li data-i18n="ritual.step1"><span>01</span>Lắc ống</li><li data-i18n="ritual.step2"><span>02</span>Rút quẻ</li><li data-i18n="ritual.step3"><span>03</span>Mở vé</li></ol>
+      <span class="ritual-footer-note" data-i18n="ritual.footer">Một câu thơ · Một chuyến đi</span>
     </footer>
     <p id="ritualLiveStatus" class="ritual-sr-only" role="status" aria-live="polite" aria-atomic="true"></p>`;
+  window.GoiVietI18nDom?.apply(sheet);
 
   const result = document.getElementById('bambooResultContainer');
   const invitation = document.getElementById('ritualIdlePanel');
@@ -205,7 +207,7 @@
     composition.setAttribute('aria-busy', String(value));
     cylinderButton.disabled = value;
     drawButton.disabled = value;
-    drawLabel.textContent = value ? 'Đang lắc ống…' : 'Lắc ống xăm';
+    drawLabel.textContent = T(value ? 'ritual.drawBusy' : 'ritual.draw');
     scopes.forEach(el => { el.disabled = value; });
   }
   function resetView() {
@@ -216,8 +218,8 @@
     result.hidden = true;
     result.style.display = 'none';
     result.replaceChildren();
-    caption.textContent = 'Chạm vào ống xăm để gieo quẻ';
-    cylinderButton.setAttribute('aria-label', 'Lắc ống xăm và rút một quẻ tre');
+    caption.textContent = T('ritual.caption.idle');
+    cylinderButton.setAttribute('aria-label', T('ritual.cylinderLabel'));
     status.textContent = '';
     setScope(scope);
     modal.classList.toggle('ritual-reduced-motion', reduced());
@@ -225,7 +227,7 @@
   function open() {
     resetView();
     originalOpen();
-    document.getElementById('bambooTurnKicker').textContent = 'Lượt của ' + getCurrentPlayerName();
+    document.getElementById('bambooTurnKicker').textContent = T('ritual.turnOf', { name: getCurrentPlayerName() });
     modal.querySelector('.ritual-body').scrollTop = 0;
   }
   function close() {
@@ -238,21 +240,23 @@
     const hl = picked.highlights || {};
     const short = picked.name.replace(/^(Thành phố|Tỉnh)\s+/i, '');
     const verse = getFolkVerseForPlace(picked).split('\n').map(line => `<span>${escapeHTML(line)}</span>`).join('');
+    const glossText = typeof getFolkVerseGloss === 'function' ? getFolkVerseGloss(picked) : '';
+    const gloss = glossText ? `<small class="gv-verse-gloss">${escapeHTML(glossText)}</small>` : '';
     result.innerHTML = `
       <article class="ritual-result-card">
-        <div class="ritual-ticket-top"><span>VÉ HẸN MIỀN DI SẢN</span><span>QUẺ HÀNH TRÌNH</span></div>
+        <div class="ritual-ticket-top"><span>${T('ritual.ticketTop')}</span><span>${T('ritual.ticketType')}</span></div>
         <div class="ritual-ticket-body">
-          <span class="ritual-result-kicker">ĐIỂM DỪNG DÀNH CHO CẢ NHÀ</span>
+          <span class="ritual-result-kicker">${T('ritual.resultKicker')}</span>
           <h3 id="ritualDestinationHeading" tabindex="-1">${escapeHTML(short)}</h3>
-          <p class="ritual-result-region">${escapeHTML(picked.region || 'Dọc miền di sản')}</p>
-          <blockquote class="ritual-verse">${verse}</blockquote>
-          <div class="ritual-ticket-details"><div><span>DANH THẮNG</span><strong>${escapeHTML(hl.landmark || picked.name)}</strong></div><div><span>HƯƠNG VỊ</span><strong>${escapeHTML(hl.cuisine || 'Hương vị địa phương')}</strong></div></div>
+          <p class="ritual-result-region">${escapeHTML(picked.region || T('ritual.regionFallback'))}</p>
+          <blockquote class="ritual-verse">${verse}${gloss}</blockquote>
+          <div class="ritual-ticket-details"><div><span>${T('ritual.landmark')}</span><strong>${escapeHTML(hl.landmark || picked.name)}</strong></div><div><span>${T('ritual.flavor')}</span><strong>${escapeHTML(hl.cuisine || T('ritual.flavorFallback'))}</strong></div></div>
           <span class="ritual-ticket-seal" aria-hidden="true">GÓI<br>VIỆT</span>
         </div>
-        <div class="ritual-ticket-stub"><span>36 ga · Ba miền · Vạn câu chuyện</span><span class="ritual-ticket-barcode" aria-hidden="true"></span></div>
+        <div class="ritual-ticket-stub"><span>${T('ritual.stub')}</span><span class="ritual-ticket-barcode" aria-hidden="true"></span></div>
       </article>
-      <div class="ritual-result-actions"><button type="button" class="ritual-primary" data-ritual-action="destination"><span>Khám phá ga này</span>${icon('arrow')}</button><button type="button" class="ritual-secondary" data-ritual-action="story">${icon('book')}<span>Đọc sách văn hóa</span></button></div>
-      <button type="button" class="ritual-reroll" data-ritual-action="reroll">${icon('repeat')}<span>Gieo một quẻ khác</span></button>`;
+      <div class="ritual-result-actions"><button type="button" class="ritual-primary" data-ritual-action="destination"><span>${T('ritual.go')}</span>${icon('arrow')}</button><button type="button" class="ritual-secondary" data-ritual-action="story">${icon('book')}<span>${T('ritual.read')}</span></button></div>
+      <button type="button" class="ritual-reroll" data-ritual-action="reroll">${icon('repeat')}<span>${T('ritual.reroll')}</span></button>`;
     result.querySelector('[data-ritual-action="destination"]').addEventListener('click', () => acceptBambooRollDestination(picked.id));
     result.querySelector('[data-ritual-action="story"]').addEventListener('click', () => acceptBambooRollStory(picked.id));
     result.querySelector('[data-ritual-action="reroll"]').addEventListener('click', draw);
@@ -261,9 +265,9 @@
     result.style.display = 'block';
     setBusy(false);
     setPhase('revealed');
-    caption.textContent = 'Điểm hẹn · ' + short;
-    cylinderButton.setAttribute('aria-label', 'Gieo một quẻ khác');
-    status.textContent = 'Quẻ tre đã chọn ' + picked.name + '. Vé hành trình đã sẵn sàng.';
+    caption.textContent = T('ritual.caption.picked', { place: short });
+    cylinderButton.setAttribute('aria-label', T('ritual.reroll'));
+    status.textContent = T('ritual.status.picked', { place: picked.name });
     FolkAudio.playPentatonicChime();
     document.getElementById('ritualDestinationHeading').focus({preventScroll: true});
   }
@@ -284,16 +288,16 @@
     setPhase('shaking');
     modal.classList.toggle('ritual-reduced-motion', reduced());
     modal.querySelector('.ritual-body').scrollTo({top: 0, behavior: reduced() ? 'auto' : 'smooth'});
-    caption.textContent = 'Lắc nhẹ ống tre, gọi một miền thương nhớ…';
-    status.textContent = 'Đang lắc ống xăm.';
+    caption.textContent = T('ritual.caption.shaking');
+    status.textContent = T('ritual.status.shaking');
     FolkAudio.playBambooClack();
     if (reduced()) { reveal(picked); return; }
     for (const delay of [170, 370, 610, 850]) later(() => FolkAudio.playBambooClack(), delay);
     later(() => {
       setPhase('drawing');
-      drawLabel.textContent = 'Đang rút quẻ…';
-      caption.textContent = 'Một quẻ tre đã được chọn…';
-      status.textContent = 'Đang rút một quẻ tre và mở vé hành trình.';
+      drawLabel.textContent = T('ritual.drawing');
+      caption.textContent = T('ritual.caption.drawing');
+      status.textContent = T('ritual.status.drawing');
       FolkAudio.playDrum(110);
     }, 1100);
     later(() => reveal(picked), 1900);

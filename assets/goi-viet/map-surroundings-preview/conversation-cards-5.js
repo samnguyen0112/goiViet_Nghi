@@ -10,6 +10,9 @@
   let openedConnection = null;
   const reduced = () => state.reducedMotion || document.body.classList.contains('reduced-motion') || matchMedia('(prefers-reduced-motion: reduce)').matches;
   // P5-02: the open deck's station (state.deckPlaceId), independent of the stop selected for the next trip.
+  // P5-03: interface text follows the VI/EN choice; card topics are data and are shown through the topic labels.
+  const T = (key, vars) => window.GoiVietI18n ? window.GoiVietI18n.t(key, vars) : key;
+  const topicName = topic => (typeof uiLabel === 'function' ? uiLabel('topic', topic) : topic);
   const currentPlace = () => (typeof getDeckPlace === 'function' ? getDeckPlace() : CULTURAL_PLACE_MAP[state.selectedPlaceId] || CULTURAL_PLACES[0]);
   const remaining = place => place.cards.filter(card => !(state.drawnCardIdsByPlace[place.id] || []).includes(card.id));
   const later = (fn, delay) => {
@@ -20,7 +23,7 @@
     }, delay);
     timers.add(timer);
   };
-  const topicEmblem = topic => /ẩm thực|món ăn/i.test(topic) ? '🍲' : /lễ hội|truyền thống/i.test(topic) ? '🌾' : /địa|kiến trúc|di sản/i.test(topic) ? '🏛️' : '🪷';
+  const topicEmblem = topic => /ẩm thực|món ăn/i.test(topic) ? '🍲' : /lễ hội|truyền thống/i.test(topic) ? '🌾' : /địa|kiến trúc|di sản|danh thắng/i.test(topic) ? '🏛️' : '🪷';
   const label = (className, text) => {
     const el = document.createElement('span');
     el.className = className;
@@ -47,14 +50,14 @@
       button.style.setProperty('--fan-expanded-angle', `${offset * 12}deg`);
       button.style.setProperty('--fan-order', index + 1);
       button.disabled = !visible.length;
-      button.setAttribute('aria-label', `Rút lá ${card.topic} • ${place.short || place.name}`);
-      button.append(label('conversation-card-badge', card.topic));
+      button.setAttribute('aria-label', T('cards.drawLabel', { topic: topicName(card.topic), place: place.short || place.name }));
+      button.append(label('conversation-card-badge', topicName(card.topic)));
       const core = document.createElement('span');
       core.className = 'conversation-card-core';
       const emblem = label('conversation-card-emblem', topicEmblem(card.topic));
       emblem.setAttribute('aria-hidden', 'true');
-      core.append(emblem, label('conversation-card-title', 'KÝ ỨC QUÊ HƯƠNG'), label('conversation-card-sub', place.short || place.name));
-      button.append(core, label('conversation-card-footer', visible.length ? 'Bấm để rút lá' : 'Đã rút hết bài'));
+      core.append(emblem, label('conversation-card-title', T('cards.title')), label('conversation-card-sub', place.short || place.name));
+      button.append(core, label('conversation-card-footer', T(visible.length ? 'cards.tap' : 'cards.empty')));
       button.addEventListener('click', () => draw(button));
       deck.append(button);
     });
@@ -69,7 +72,7 @@
     deck.removeAttribute('aria-busy');
     deck.querySelectorAll('.fanned-card').forEach(card => card.classList.remove('is-picked'));
     byId('btnDrawCard').disabled = false;
-    byId('btnDrawCard').firstElementChild.textContent = '🎲 Xáo & Rút ngẫu nhiên một lá bài';
+    byId('btnDrawCard').firstElementChild.textContent = T('cards.shuffleButton');
     byId('conversationShuffleStatus').textContent = '';
     renderDeck();
   }
@@ -107,30 +110,30 @@
     if (direct) {
       target?.classList.add('is-picked');
       deck.classList.add('phase-pick');
-      status(`Đã chọn lá ${chosen.topic}. Đang mở câu chuyện…`);
+      status(T('cards.status.pickedOpening', { topic: topicName(chosen.topic) }));
       later(() => deck.classList.add('phase-draw'), 240);
       later(commit, 850);
       return;
     }
-    byId('btnDrawCard').firstElementChild.textContent = '✨ Đang xáo bài…';
-    status(`Đang gom và xáo ${pool.length} lá bài…`);
+    byId('btnDrawCard').firstElementChild.textContent = T('cards.shuffling');
+    status(T('cards.status.gathering', { n: pool.length }));
     deck.classList.add('phase-gather');
     FolkAudio.playBambooClack();
     later(() => {
       deck.classList.remove('phase-gather');
       deck.classList.add('phase-shuffle');
-      status('Đang xáo bài — câu chuyện nào sẽ được mở?');
+      status(T('cards.status.shuffling'));
     }, 340);
     later(() => {
       deck.classList.remove('phase-shuffle');
       deck.classList.add('phase-pick');
       target?.classList.add('is-picked');
-      status(`Đã chọn lá ${chosen.topic}!`);
+      status(T('cards.status.picked', { topic: topicName(chosen.topic) }));
       FolkAudio.playPentatonicChime();
     }, 1500);
     later(() => {
       deck.classList.add('phase-draw');
-      status('Đang rút lá bài dành cho cả nhà…');
+      status(T('cards.status.drawing'));
     }, 2100);
     later(commit, 2850);
   }
@@ -139,8 +142,9 @@
     openedConnection = null;
     const card = state.activeCard;
     if (!card) return;
-    byId('cardBackTurnTag').textContent = `Lượt của ${getCurrentPlayerName()}`;
-    byId('activityCategoryTag').textContent = card.activityCategories?.[state.activeActivityIdx] || card.activityCategory || 'Hoạt động gắn kết';
+    byId('cardBackTurnTag').textContent = T('js.deck.turnOf', { name: getCurrentPlayerName() });
+    const kind = card.activityCategories?.[state.activeActivityIdx] || card.activityCategory;
+    byId('activityCategoryTag').textContent = kind ? (typeof activityKindLabel === 'function' ? activityKindLabel(kind) : kind) : T('js.deck.activityFallback');
     byId('activityMainText').textContent = card.activities[state.activeActivityIdx] || card.activities[0];
     restoreMemoryInputsFromDraft();
   }
@@ -169,6 +173,12 @@
 
   // Both faces remain visible, with the answer explanation next to its question.
   byId('cardFrontState').append(byId('answerExplanationBox'));
-  byId('btnFlipToBack').firstElementChild.textContent = 'Xem hoạt động gắn kết →';
+  const labelButtons = () => {
+    byId('btnFlipToBack').firstElementChild.textContent = T('cards.seeActivity');
+    if (!byId('deckModal').classList.contains('open') || !byId('fannedDeckBox').classList.contains('is-shuffling')) byId('btnDrawCard').firstElementChild.textContent = T('cards.shuffleButton');
+  };
+  labelButtons();
+  // A language change re-labels the fan and the two deck buttons (a deck is never mid-shuffle then: it is behind the switch).
+  document.addEventListener('goiviet:langchange', () => { labelButtons(); if (deck.children.length) renderDeck(); });
   window.GoiVietConversationCards = { renderDeck, draw, cancelDraw, prepareConnection, syncFaces, focusFace };
 })();
