@@ -17,6 +17,7 @@ const html = fs.readFileSync(path.join(ROOT, PAGE), 'utf8');
 const assets = [...new Set([...html.matchAll(/(?:src|href)="([^"]+\.(?:js|css))(?:\?[^"]*)?"/g)].map(m => m[1]).filter(u => !/^https?:/.test(u)))];
 const read = rel => fs.readFileSync(path.join(ROOT, rel), 'utf8');
 const problems = [];
+let walkBrowser = null;   // closed on failure too: an open browser would keep the process alive after an error
 const fail = msg => { problems.push(msg); console.log('✗ ' + msg); };
 const ok = msg => console.log('✓ ' + msg);
 
@@ -57,7 +58,7 @@ mismatch.length ? fail(`${mismatch.length} dictionary keys exist in only one lan
 async function walk() {
   const { launch } = require('./perf/lib.cjs');
   const target = pathToFileURL(path.join(ROOT, PAGE)).href;
-  const b = await launch('real');
+  const b = walkBrowser = await launch('real');
   const ctx = await b.newContext({ viewport: { width: 1920, height: 1080 }, reducedMotion: 'reduce' });
   await ctx.addInitScript(src => {
     const re = new RegExp(src); window.__canvasVi = new Set();
@@ -76,7 +77,17 @@ async function walk() {
     await p.waitForTimeout(1200);
     return p;
   };
-  const collect = p => p.evaluate(src => {
+  // Draw a card from the open deck with the keyboard. The page ignores a keypress while the deck is still settling
+  // (draw() returns early), so press once more before failing; once a draw has started, wait for it however slow.
+  const drawCard = async p => {
+    for (let attempt = 0; attempt < 2; attempt++) {
+      await p.locator('#fannedDeckBox .fanned-card:enabled').first().focus(); await p.keyboard.press('Enter');
+      const started = await p.waitForFunction(() => state.activeCard || state.isDrawingCardLock, null, { timeout: 5000 }).then(() => true, () => false);
+      if (started) { await p.waitForFunction(() => state.activeCard, null, { timeout: 120000 }); return; }
+    }
+    throw new Error('no card opened after pressing Enter twice on the fanned deck');
+  };
+  const collect =p => p.evaluate(src => {
     const re = new RegExp(src);
     const shown = el => { for (let e = el; e && e !== document.body; e = e.parentElement) { const s = getComputedStyle(e); if (s.display === 'none' || s.visibility === 'hidden' || +s.opacity === 0) return false; } const r = el.getBoundingClientRect(); return r.width > 0 && r.height > 0 && r.bottom > 0 && r.right > 0 && r.top < innerHeight && r.left < innerWidth && !el.closest('[aria-hidden="true"],[inert],[hidden]'); };
     const out = new Set();
@@ -91,8 +102,7 @@ async function walk() {
   const p = await open('');
   await p.evaluate(() => { window.GoiVietHomeIntro.skip(); closeIntroModal(); }); await p.waitForTimeout(800);
   await p.click('#station-pick-hn'); await p.click('#deck-open-hn'); await p.waitForSelector('#deckModal.open');
-  const card = p.locator('#fannedDeckBox .fanned-card:enabled').first(); await card.focus(); await p.keyboard.press('Enter');
-  await p.waitForFunction(() => state.activeCard); await p.waitForTimeout(800);
+  await drawCard(p); await p.waitForTimeout(800);
   await p.keyboard.press('Escape'); await p.waitForTimeout(300);
   const dump = () => p.evaluate(() => { const t = []; const w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); for (let n = w.nextNode(); n; n = w.nextNode()) if (!n.parentElement.closest('script,style')) t.push(n.nodeValue); return t.join('\u0001') + '\u0002' + Array.from(document.querySelectorAll('[aria-label],[title],[placeholder],[alt]')).map(e => ['aria-label', 'title', 'placeholder', 'alt'].map(a => e.getAttribute(a) || '').join('|')).join('\u0001'); });
   const before = await dump();
@@ -125,8 +135,7 @@ async function walk() {
   await e.fill('#provSearchInput', 'hue'); await e.click('#station-pick-hue'); await e.click('#station-journey-hue');
   await e.waitForFunction(() => !window.GoiVietJourneyPreview.isMoving() && !document.querySelector('#journeyRouteBar .journey-arrival-detail')?.hidden, null, { timeout: 60000 }); await step('arrival');
   await e.click('#journeyRouteBar .journey-arrival-deck'); await e.waitForSelector('#deckModal.open'); await e.waitForTimeout(500); await step('deck');
-  const c = e.locator('#fannedDeckBox .fanned-card:enabled').first(); await c.focus(); await e.keyboard.press('Enter');
-  await e.waitForFunction(() => state.activeCard); await e.waitForTimeout(800); await step('card front');
+  await drawCard(e); await e.waitForTimeout(800); await step('card front');
   await e.click('#btnAskFamilyHint'); await e.waitForTimeout(300); await step('family hint');
   await e.click('#btnDontKnowReveal'); await e.waitForTimeout(600); await step('card back');
   await e.click('#memoryDetailsDrawer summary'); await e.fill('#memoryPlaceInput', 'Huế'); await e.click('#btnSaveMemoryPlace'); await e.waitForTimeout(300); await step('memory saved');
@@ -216,4 +225,4 @@ async function walk() {
   if (process.argv.includes('--walk')) await walk();
   console.log(problems.length ? `\nFAIL: ${problems.length} problem(s)` : '\nPASS');
   process.exitCode = problems.length ? 1 : 0;
-})().catch(e => { console.error(e); process.exitCode = 1; });
+})().catch(async e => { console.error(e); console.log('\nFAIL: the walk stopped with an error'); process.exitCode = 1; if (walkBrowser) await walkBrowser.close().catch(() => {}); });
