@@ -29,7 +29,7 @@
     const route=trip.route,last=route.legs.at(-1);compatibility({leg:last,duration:0},1);lastLeg=last;currentId=route.id;trip=null;arrivedAt=now;phaseKey='';revision++;invalidate();
     if(selected&&selected!==currentId){previous=null;plan=N.plan(currentId,selected);changedAt=now;}else if(!selected)plan=null;
     arrival={id:currentId,originId:route.originId};lastArrival=arrival;
-    announceSR('Đã đến '+name(currentId)+'. Thông tin điểm đến đã hiện trên bản đồ. '+tr('journey.arrivalHint',null,'Chơi thẻ hoặc đọc sách để tìm hiểu vùng đất này.'));FolkAudio.playPentatonicChime();syncControls();requestMapRender(3);
+    announceSR(tr('journey.sr.arrived',{place:name(currentId)},'Đã đến '+name(currentId)+'. Thông tin điểm đến đã hiện trên bản đồ.')+' '+tr('journey.arrivalHint',null,'Chơi thẻ hoặc đọc sách để tìm hiểu vùng đất này.'));FolkAudio.playPentatonicChime();syncControls();requestMapRender(3);
   }
   function tick(now=performance.now()){
     if(lastReduced!==state.reducedMotion){lastReduced=state.reducedMotion;syncControls();invalidate();}
@@ -51,22 +51,22 @@
     const id=normalizePlaceId(raw);if(!N.playable.includes(id))return false;
     tick();if(!trip&&arrival?.id!==id)arrival=null;selected=id;state.selectedPlaceId=id;transition(trip?.route.id===id?trip.route:makePlan(id));
     FolkAudio.playBambooClack();if(!trip)focus();
-    announceSR(trip?'Đã chọn '+name(id)+'. Chuyến đang chạy tiếp tục đến '+name(trip.route.id)+'.':'Đã chọn '+name(id)+'. Nhấn Khởi hành để bắt đầu.');return true;
+    announceSR(trip?tr('journey.sr.selectedDuringTrip',{place:name(id),dest:name(trip.route.id)}):tr('journey.sr.selected',{place:name(id)}));return true;
   }
   function start(raw=selected){
     const id=normalizePlaceId(raw);if(!N.playable.includes(id))return false;
-    tick();if(trip){announceSR('Tàu đang đến '+name(trip.route.id)+'. Có thể khởi hành chuyến mới sau khi đến ga.');return false;}
+    tick();if(trip){announceSR(tr('journey.sr.busy',{dest:name(trip.route.id)}));return false;}
     if(selected!==id){select(id);renderDemoPlaceList();}
     const route=N.plan(currentId,id);if(!route?.legs.length){syncControls();return false;}
     arrival=null;previous=null;plan=route;changedAt=performance.now();const phases=N.schedule(route,state.reducedMotion);
     trip={route,phases,phase:phases[0],elapsed:0,total:phases.reduce((s,p)=>s+p.duration,0),progress:0,startedAt:changedAt};lastNow=changedAt;paused=false;phaseKey='';revision++;invalidate();
-    compatibility(phases[0],0);if(!state.reducedMotion)FolkAudio.playTrainWhistle();announceSR('Khởi hành từ '+name(currentId)+' đến '+name(id)+'.');
+    compatibility(phases[0],0);if(!state.reducedMotion)FolkAudio.playTrainWhistle();announceSR(tr('journey.sr.depart',{from:name(currentId),to:name(id)}));
     focus();syncControls();if(state.reducedMotion)finish(changedAt);requestMapRender(3);return true;
   }
   function clear(){
     window.GoiVietStationPanel?.clearSelection();
     if(!selected&&!arrival)return;arrival=null;selected=null;transition(null);obstacles=[];document.getElementById('mapStationArrivalBanner')?.classList.remove('show');
-    announceSR(trip?'Đã bỏ chọn. Tàu tiếp tục đến '+name(trip.route.id)+'.':'Đã bỏ chọn và ẩn tuyến hành trình.');
+    announceSR(trip?tr('journey.sr.clearedTrip',{dest:name(trip.route.id)}):tr('journey.sr.cleared'));
   }
   function reset(){
     arrival=null;selected=null;currentId='hn';plan=null;trip=null;previous=null;lastLeg=null;changedAt=arrivedAt=-1000;phaseKey='';lastNow=performance.now();revision++;obstacles=[];
@@ -105,7 +105,7 @@
     window.GoiVietRegionalPreview?.constrainCamera();
     requestMapRender(3);
   }
-  function buttonLabel(id){return trip?id!==trip.route.id?'Chờ đến ga':paused?'Tạm dừng':trip.phase?.kind==='transfer'?'Chuyển chặng':trip.phase?.kind==='sea'?'Đang đi biển':'Đang chạy':id===currentId?(N.node(id).kind==='island'?'Đã đến đảo':'Đang ở ga'):state.reducedMotion?'Đến ngay':'Khởi hành';}
+  function buttonLabel(id){return tr(trip?id!==trip.route.id?'journey.btn.wait':paused?'journey.btn.paused':trip.phase?.kind==='transfer'?'journey.btn.transfer':trip.phase?.kind==='sea'?'journey.btn.sea':'journey.btn.running':id===currentId?(N.node(id).kind==='island'?'journey.btn.atIsland':'journey.btn.atStation'):state.reducedMotion?'journey.btn.instant':'journey.btn.depart');}
   function syncProgress(){
     if(!bar)return;const progress=trip?clamp(trip.elapsed/trip.total,0,1):selected===currentId?1:0;
     bar.querySelector('.journey-progress-fill').style.transform='scaleX('+progress+')';const meter=bar.querySelector('[role=progressbar]'),value=String(Math.round(progress*100));if(meter.getAttribute('aria-valuenow')!==value)meter.setAttribute('aria-valuenow',value);
@@ -142,12 +142,12 @@
     if(show){
       const origin=trip?.route.originId||route?.originId||currentId,destination=trip?.route.id||selected||arrival?.id,atStation=!trip&&destination===currentId;
       const mode=atStation?'station':trip?'moving':'preview';if(bar.dataset.mode!==mode)bar.dataset.mode=mode;
-      setText(bar.querySelector('.journey-status'),atStation?(arrival?'Đã đến ga':'Bạn đang ở ga'):trip?'Hành trình di sản':'Sẵn sàng khởi hành');
+      setText(bar.querySelector('.journey-status'),tr(atStation?(arrival?'journey.status.arrived':'journey.status.atStation'):trip?'journey.status.trip':'journey.status.ready'));
       setText(bar.querySelector('.journey-origin'),name(origin).replace(/^Quần đảo /,''));setText(bar.querySelector('.journey-destination'),name(destination).replace(/^Quần đảo /,''));
-      const phase=trip?.phase,caption=trip?(selected&&selected!==trip.route.id?'Tiếp theo: '+name(selected)+' · Chờ đến ga':paused?'Tạm dừng hành trình':phase?.kind==='transfer'?'Tiếp nối '+(phase.next.mode==='sea'?'hải trình':'đường sắt'):phase?.kind==='sea'?'Hải trình đến '+name(phase.leg.to):'Đang đến '+name(trip.route.id)):atStation?(arrival&&arrival.originId?name(arrival.originId)+' → '+name(currentId):CULTURAL_PLACE_MAP[currentId]?.region||tr('journey.stationHint',null,'Chơi thẻ hoặc đọc sách tại ga')):'Tuyến hành trình minh họa'+(state.reducedMotion?' · Giảm chuyển động':'');
-      setText(bar.querySelector('.journey-caption'),caption);const button=bar.querySelector('.journey-depart');setText(button,atStation?'Khám phá':buttonLabel(destination));if(button.disabled!==Boolean(trip))button.disabled=Boolean(trip);const action=atStation?'explore':'depart';if(button.dataset.action!==action)button.dataset.action=action;
+      const phase=trip?.phase,caption=trip?(selected&&selected!==trip.route.id?tr('journey.caption.next',{place:name(selected)}):paused?tr('journey.caption.paused'):phase?.kind==='transfer'?tr(phase.next.mode==='sea'?'journey.caption.continueSea':'journey.caption.continueRail'):phase?.kind==='sea'?tr('journey.caption.seaTo',{place:name(phase.leg.to)}):tr('journey.caption.goingTo',{place:name(trip.route.id)})):atStation?(arrival&&arrival.originId?name(arrival.originId)+' → '+name(currentId):CULTURAL_PLACE_MAP[currentId]?.region||tr('journey.stationHint',null,'Chơi thẻ hoặc đọc sách tại ga')):tr('journey.caption.illustrative')+(state.reducedMotion?tr('journey.caption.reducedSuffix'):'');
+      setText(bar.querySelector('.journey-caption'),caption);const button=bar.querySelector('.journey-depart');setText(button,atStation?tr('journey.btn.explore'):buttonLabel(destination));if(button.disabled!==Boolean(trip))button.disabled=Boolean(trip);const action=atStation?'explore':'depart';if(button.dataset.action!==action)button.dataset.action=action;
       const detail=bar.querySelector('.journey-arrival-detail');if(detail.hidden!==!arrival)detail.hidden=!arrival;
-      if(arrival){const place=CULTURAL_PLACE_MAP[arrival.id];setText(detail.querySelector('.journey-arrival-heading'),atStation?'Dừng chân và khám phá':'Đã đến '+name(arrival.id));setText(detail.querySelector('.journey-arrival-description'),place?.tagline||place?.summary||tr('journey.arrivalHint',null,'Chơi thẻ hoặc đọc sách để tìm hiểu vùng đất này.'));setText(detail.querySelector('.journey-arrival-landmark'),place?.highlights?.landmark||place?.photoTitle||place?.region||name(arrival.id));const modes=detail.querySelector('.journey-arrival-modes');modes.setAttribute('aria-label',tr('journey.modesLabel',{place:name(arrival.id)},'Chọn cách khám phá '+name(arrival.id)));setText(modes.querySelector('.journey-arrival-deck'),tr('journey.playCards',null,'Chơi thẻ'));setText(modes.querySelector('.journey-arrival-book'),tr('journey.readBook',null,'Đọc sách'));}
+      if(arrival){const place=CULTURAL_PLACE_MAP[arrival.id];setText(detail.querySelector('.journey-arrival-heading'),atStation?tr('journey.heading.atStation'):tr('journey.heading.arrived',{place:name(arrival.id)}));setText(detail.querySelector('.journey-arrival-description'),place?.tagline||place?.summary||tr('journey.arrivalHint',null,'Chơi thẻ hoặc đọc sách để tìm hiểu vùng đất này.'));setText(detail.querySelector('.journey-arrival-landmark'),place?.highlights?.landmark||place?.photoTitle||place?.region||name(arrival.id));const modes=detail.querySelector('.journey-arrival-modes');modes.setAttribute('aria-label',tr('journey.modesLabel',{place:name(arrival.id)},'Chọn cách khám phá '+name(arrival.id)));setText(modes.querySelector('.journey-arrival-deck'),tr('journey.playCards',null,'Chơi thẻ'));setText(modes.querySelector('.journey-arrival-book'),tr('journey.readBook',null,'Đọc sách'));}
     }
     const card=document.querySelector('#demoPlaceList .place-card.selected'),id=card?.id.replace('placeCard-',''),button=card?.querySelector('.station-board-action');
     if (button) {
@@ -181,7 +181,7 @@
         const hideNote = !trip && !(atStation && arrival?.id === id);
         if (note.hidden !== hideNote) note.hidden = hideNote;
       }
-      setText(note,trip?'Chuyến đang chạy đến '+name(trip.route.id)+'.':id===currentId?'Đã đến '+name(id)+'. '+tr('journey.noteAtStation',null,'Chơi thẻ hoặc đọc sách để khám phá ga.'):'Xem tuyến và khởi hành trên bản đồ.');
+      setText(note,trip?tr('journey.note.running',{place:name(trip.route.id)}):id===currentId?tr('journey.note.arrived',{place:name(id)})+' '+tr('journey.noteAtStation',null,'Chơi thẻ hoặc đọc sách để khám phá ga.'):tr('journey.note.preview'));
     }
     syncProgress();positionBar();if(had!==bar.hidden){invalidate();requestAnimationFrame(()=>{syncMapControlLayout();window.GoiVietMapFrame?.syncSafeArea();positionBar();});}
   }
@@ -198,6 +198,16 @@
     if(!arrival||arrival.id!==id)arrival=lastArrival&&lastArrival.id===id?lastArrival:{id,originId:null};
     syncControls();
     requestAnimationFrame(()=>bar.querySelector('.journey-arrival-deck')?.focus({preventScroll:true}));
+  }
+  function labelStatic(){
+    if(!bar)return;
+    bar.setAttribute('aria-label',tr('journey.barLabel',null,'Hành trình di sản'));
+    bar.querySelector('.journey-arrival-detail')?.setAttribute('aria-label',tr('journey.detailLabel',null,'Thông tin điểm đến'));
+    bar.querySelector('.journey-arrival-close')?.setAttribute('aria-label',tr('journey.closeLabel',null,'Đóng thông tin đến ga'));
+    bar.querySelector('.journey-progress')?.setAttribute('aria-label',tr('journey.progressLabel',null,'Tiến độ hành trình'));
+    if(clearButton){clearButton.title=tr('journey.clearTitle',null,'Bỏ chọn và ẩn tuyến (Esc)');clearButton.setAttribute('aria-label',tr('journey.clearLabel',null,'Bỏ chọn tỉnh và ẩn tuyến'));}
+    const network=document.querySelector('[data-journey-network="true"]');
+    if(network)network.textContent=tr('journey.networkNote',null,network.textContent);
   }
   function mount(){
     const scene=document.getElementById('mapScene');bar=document.createElement('section');bar.className='journey-route-bar';bar.id='journeyRouteBar';bar.hidden=true;bar.setAttribute('aria-label','Hành trình di sản');
@@ -225,7 +235,7 @@
     document.fonts.ready.then(invalidateBarLayout);
     document.addEventListener('visibilitychange',()=>{tick();barLayoutDirty=true;syncControls();if(!document.hidden)requestMapRender(2);});window.addEventListener('resize',()=>{invalidate();barLayoutDirty=true;positionBar();});
     window.GoiVietRasterTasks?.onUpdate(()=>{invalidate();});
-    document.addEventListener('goiviet:langchange',()=>syncControls());
+    labelStatic();document.addEventListener('goiviet:langchange',()=>{labelStatic();syncControls();});
     reset();
   }
   window.GoiVietJourneyPreview=Object.freeze({ownsVehicles:true,active,select,start,clear,reset,focus,tick,tracks,isAnimating,isMoving:moving,shouldPaintTrain:()=>active()&&vehicle()?.mode==='rail',syncControls,invalidate,renderFrame,afterBase,adjustControlLayout,vehicle,allLayers,paintRail:()=>{},paintSea:()=>{},paintEndpoints:()=>{},

@@ -1,0 +1,355 @@
+{
+ "verse:hn": "Ngàn năm văn hiến Thăng Long,\nHương sen cốm mới ấm lòng người thân.",
+ "verse:hue": "Sông Hương nước chảy êm đềm,\nNgân câu Nhã nhạc bên thềm cố đô.",
+ "verse:hcm": "Bến thành nhộn nhịp sớm trưa,\nNghĩa tình hào sảng nắng mưa chẳng sờn.",
+ "verse:hoang-sa": "Hoàng Sa sóng vỗ trùng khơi,\nCột mốc chủ quyền đời đời khắc ghi.",
+ "verse:truong-sa": "Trường Sa biển rộng trời cao,\nCây phong ba đứng tự hào biên cương.",
+ "verse:other stations": [
+  "if (!place) return 'Quê hương ba miền thương yêu,\\nMỗi vùng đất mở bao điều nghĩa nhân.';",
+  "return `Ghé thăm ${contentVi(place, 'short') || contentVi(place, 'name')} thân thương,\\nNhớ ${hl.landmark || 'danh thắng đẹp'}, vấn vương ${hl.cuisine || 'vị nhà'}.`;"
+ ],
+ "name:hn": [
+  "Thành phố Hà Nội",
+  "TP. Hà Nội"
+ ],
+ "hn-c1": {
+  "question": "Theo cách gói cốm tươi truyền thống ở Hà Nội, người làm cốm thường kết hợp hai lớp lá nào để vừa giữ độ mềm ẩm vừa ướp hương thơm tự nhiên?",
+  "options": [
+   "Lớp lá ráy non bên trong giữ ẩm và lớp lá sen bên ngoài tạo hương thơm thanh mát",
+   "Lớp lá chuối khô bên trong hút nước và lớp lá bàng bên ngoài giữ nhiệt ấm",
+   "Lớp lá dong riềng bên trong định hình và lớp lá tre bên ngoài chắn gió"
+  ],
+  "correctIndex": 0,
+  "explanation": "Lá ráy non giúp hạt cốm giữ độ ẩm mềm dẻo, còn lá sen tươi bọc bên ngoài cùng sợi rơm nếp mang lại hương thơm dịu đặc trưng của mùa thu Hà Nội."
+ },
+ "hn-c2": {
+  "question": "Trong nghệ thuật múa rối nước truyền thống, các nghệ nhân điều khiển quân rối di chuyển trên mặt nước bằng phương thức nào?",
+  "options": [
+   "Đứng phía sau mành tre ở buồng trò, dùng sào tre và hệ thống dây kéo ngầm dưới mặt nước",
+   "Đứng trên cầu nổi phía trên mặt hồ, dùng dây cước mảnh thả thẳng từ mái thủy đình xuống",
+   "Ngồi trên thuyền nhỏ cạnh sân khấu, dùng mái chèo tạo sóng đẩy các quân rối gỗ trôi đi"
+  ],
+  "correctIndex": 0,
+  "explanation": "Nghệ nhân đứng sau tấm mành tre (buồng trò), phối hợp điều khiển sào tre và dây kéo ngầm dưới nước để quân rối gỗ sung cử động nhịp nhàng theo tiếng trống chèo."
+ },
+ "hn-c3": {
+  "question": "Trong truyền thuyết và nghi thức Hội Gióng ở đền Phù Đổng, món ăn dân dã nào được dân làng cùng chuẩn bị để tượng trưng cho sự chung sức nuôi quân?",
+  "options": [
+   "Cơm trắng và cà muối giản dị do bà con khắp các thôn xóm cùng chuẩn bị",
+   "Bánh chưng nhân đậu xanh và giò lụa bày trên mâm đồng chạm khắc cầu kỳ",
+   "Xôi gấc đỏ và chè kho nấu từ mật mía dùng trong các kỳ đại lễ cung đình"
+  ],
+  "correctIndex": 0,
+  "explanation": "Hình ảnh nong cơm trắng và cà muối trong Hội Gióng nhắc nhớ sự đồng lòng, góp sức mộc mạc của người dân làng quê trong truyền thuyết chống giặc ngoại xâm."
+ },
+ "hn-c4": {
+  "question": "Trong quy trình làm gốm thủ công Bát Tràng, vì sao sản phẩm sau khi chuốt dáng trên bàn xoay cần được phơi sấy cho se khô đều trước khi đưa vào lò nung?",
+  "options": [
+   "Để hơi nước trong cốt đất thoát dần, giúp xương gốm săn chắc và tránh nứt vỡ khi gặp nhiệt độ cao",
+   "Để lớp đất sét tự chuyển hóa thành men bóng mà không cần tráng thêm lớp men ngoài",
+   "Để sản phẩm nhẹ đi một nửa giúp người thợ dễ dàng xếp chồng hàng trăm chiếc không cần bao nung"
+  ],
+  "correctIndex": 0,
+  "explanation": "Nếu cốt đất còn ướt mà gặp lửa lớn đột ngột, hơi nước giãn nở nhanh sẽ làm nứt vỡ sản phẩm; vì vậy khâu hong phơi đòi hỏi sự kiên nhẫn và canh thời tiết cẩn thận."
+ },
+ "name:tq": [
+  "Tỉnh Tuyên Quang",
+  "Tuyên Quang"
+ ],
+ "name:lc": [
+  "Tỉnh Lào Cai",
+  "Lào Cai"
+ ],
+ "name:tn": [
+  "Tỉnh Thái Nguyên",
+  "Thái Nguyên"
+ ],
+ "name:pt": [
+  "Tỉnh Phú Thọ",
+  "Phú Thọ"
+ ],
+ "name:bn": [
+  "Tỉnh Bắc Ninh",
+  "Bắc Ninh"
+ ],
+ "name:hy": [
+  "Tỉnh Hưng Yên",
+  "Hưng Yên"
+ ],
+ "name:hp": [
+  "Thành phố Hải Phòng",
+  "TP. Hải Phòng"
+ ],
+ "name:nb": [
+  "Tỉnh Ninh Bình",
+  "Ninh Bình"
+ ],
+ "name:cb": [
+  "Tỉnh Cao Bằng",
+  "Cao Bằng"
+ ],
+ "name:ls": [
+  "Tỉnh Lạng Sơn",
+  "Lạng Sơn"
+ ],
+ "name:lc_old": [
+  "Tỉnh Lai Châu",
+  "Lai Châu"
+ ],
+ "name:db": [
+  "Tỉnh Điện Biên",
+  "Điện Biên"
+ ],
+ "name:sl": [
+  "Tỉnh Sơn La",
+  "Sơn La"
+ ],
+ "name:qn": [
+  "Tỉnh Quảng Ninh",
+  "Quảng Ninh"
+ ],
+ "name:th": [
+  "Tỉnh Thanh Hóa",
+  "Thanh Hóa"
+ ],
+ "name:na": [
+  "Tỉnh Nghệ An",
+  "Nghệ An"
+ ],
+ "name:ht": [
+  "Tỉnh Hà Tĩnh",
+  "Hà Tĩnh"
+ ],
+ "name:qt": [
+  "Tỉnh Quảng Trị",
+  "Quảng Trị"
+ ],
+ "name:hue": [
+  "Thành phố Huế",
+  "TP. Huế"
+ ],
+ "hue-c1": {
+  "question": "Nhã nhạc cung đình Huế — di sản được UNESCO ghi danh năm 2003 — vốn được trình tấu chủ yếu trong không gian và hoàn cảnh nào?",
+  "options": [
+   "Trình tấu bởi các dàn Đại nhạc và Tiểu nhạc trong những nghi lễ trang trọng tại hoàng cung triều Nguyễn",
+   "Hát đối đáp mộc mạc không nhạc cụ đệm giữa những người chèo đò dọc sông Hương vào ban đêm",
+   "Biểu diễn độc tấu một cây đàn bầu duy nhất trong các phiên chợ quê đầu xuân ở vùng ngoại thành"
+  ],
+  "correctIndex": 0,
+  "explanation": "Nhã nhạc là âm nhạc lễ nghi cung đình được hòa tấu bởi nhiều nhạc cụ truyền thống trong các dịp lễ trọng tại Đại Nội Huế."
+ },
+ "hue-c2": {
+  "question": "Trong văn hóa ẩm thực Huế, cách trình bày nhiều món bánh và món ăn thành từng phần nhỏ nhắn mang lại ý nghĩa gì cho người thưởng thức?",
+  "options": [
+   "Giúp người ăn cảm nhận hài hòa cả hương sắc lẫn nhiều tầng vị khác nhau mà không bị ngấy",
+   "Để tất cả các món ăn đều có thể nấu chung trong một nồi nước dùng duy nhất từ sáng tới tối",
+   "Nhằm thay thế hoàn toàn việc sử dụng rau sống và các loại nước chấm đi kèm trong bữa ăn"
+  ],
+  "correctIndex": 0,
+  "explanation": "Khẩu phần vừa vặn, chăm chút giúp bữa ăn xứ Huế kết hợp hài hòa giữa vị giác, khứu giác và thị giác."
+ },
+ "hue-c3": {
+  "question": "Người thợ chằm “nón bài thơ” xứ Huế đã sử dụng kỹ thuật thủ công nào để câu thơ và hình ảnh cầu Trường Tiền hiện lên khi soi nón dưới ánh nắng?",
+  "options": [
+   "Lồng khéo léo những họa tiết và chữ cắt giấy mỏng vào giữa hai lớp lá nón trắng trước khi chằm chỉ",
+   "Khắc trực tiếp các dòng chữ sâu vào khung vành tre già rồi quét sơn mài vàng óng lên bề mặt",
+   "Thêu nổi toàn bộ bài thơ bằng chỉ tơ tằm dày ở mặt ngoài cùng của chiếc nón sau khi đã phủ dầu"
+  ],
+  "correctIndex": 0,
+  "explanation": "Hoa văn và vần thơ được cắt từ giấy mỏng, ép phẳng giữa hai lớp lá nón nên bình thường nhìn kín đáo, chỉ khi có ánh sáng chiếu qua mới hiện rõ."
+ },
+ "hue-c4": {
+  "question": "Điểm nhấn đặc trưng về không gian trình diễn của Lễ hội Điện Huệ Nam (Điện Hòn Chén) tại Huế là gì?",
+  "options": [
+   "Đoàn thuyền ghép đôi trang hoàng cờ hoa rực rỡ rước dọc trên dòng sông Hương về phía núi Ngọc Trản",
+   "Hội đua ngựa vượt đèo cao diễn ra trên các sườn núi đá vôi cách xa bờ sông Hương",
+   "Nghi thức thả đèn lồng bay lên trời từ các tháp gạch cổ nằm sâu trong rừng nguyên sinh"
+  ],
+  "correctIndex": 0,
+  "explanation": "Nghi thức rước bằng thuyền trên dòng sông Hương là nét văn hóa sông nước đặc trưng của Lễ hội Điện Huệ Nam mỗi dịp tháng Ba và tháng Bảy âm lịch."
+ },
+ "name:dn": [
+  "Thành phố Đà Nẵng",
+  "TP. Đà Nẵng"
+ ],
+ "name:qng": [
+  "Tỉnh Quảng Ngãi",
+  "Quảng Ngãi"
+ ],
+ "name:gl": [
+  "Tỉnh Gia Lai",
+  "Gia Lai"
+ ],
+ "name:dl": [
+  "Tỉnh Đắk Lắk",
+  "Đắk Lắk"
+ ],
+ "name:kh": [
+  "Tỉnh Khánh Hòa",
+  "Khánh Hòa"
+ ],
+ "name:ld": [
+  "Tỉnh Lâm Đồng",
+  "Lâm Đồng"
+ ],
+ "name:hcm": [
+  "Thành phố Hồ Chí Minh",
+  "TP. Hồ Chí Minh"
+ ],
+ "hcm-c1": {
+  "question": "Nét đặc trưng gần gũi trong không gian sinh hoạt truyền thống của nghệ thuật “Đờn ca tài tử Nam Bộ” là gì?",
+  "options": [
+   "Những người tri âm quây quần bên hiên nhà, sân vườn hay trên ghe thuyền để cùng hòa đàn, ca hát mộc mạc",
+   "Chỉ được phép biểu diễn trong các nhà hát giao hưởng khép kín với dàn nhạc hơn một trăm nhạc công",
+   "Người ca bắt buộc phải vừa hát vừa biểu diễn nhào lộn trên dây cao không có nhạc cụ đệm"
+  ],
+  "correctIndex": 0,
+  "explanation": "Đờn ca tài tử gắn bó mật thiết với đời sống thường nhật, đề cao sự đồng điệu và sẻ chia âm nhạc giữa những người bạn tri âm ngay trong không gian gần gũi."
+ },
+ "hcm-c2": {
+  "question": "Khung cảnh chợ hoa Tết “Trên bến dưới thuyền” tại Bến Bình Đông (TP. Hồ Chí Minh) phản ánh mối giao lưu văn hóa nào?",
+  "options": [
+   "Ghe thuyền chở hoa kiểng từ các nhà vườn miền Tây theo sông rạch cập bến kênh Tàu Hủ để giao thương với phố thị",
+   "Các đoàn thuyền buồm lớn từ ngoài khơi xa chở san hô và ngọc trai vào trao đổi ngay tại quảng trường trung tâm",
+   "Phiên chợ chỉ họp vào ban đêm trên các đỉnh đồi cao nguyên để trưng bày các loài hoa rừng ôn đới"
+  ],
+  "correctIndex": 0,
+  "explanation": "Chợ hoa xuân “Trên bến dưới thuyền” kết nối nhịp sống sông nước của các miệt vườn Đồng bằng sông Cửu Long với không gian đô thị TP. Hồ Chí Minh mỗi dịp Tết cổ truyền."
+ },
+ "hcm-c3": {
+  "question": "Hạt “gạo tấm” dùng để nấu món cơm tấm quen thuộc của người Sài Gòn – Nam Bộ vốn là phần nào của hạt lúa gạo?",
+  "options": [
+   "Phần đầu hạt gạo bị vỡ nhỏ trong quá trình xay xát lúa gạo truyền thống",
+   "Hạt lúa nếp non được đồ chín rồi cán dẹp bằng cối đá ngay khi vừa gặt về",
+   "Phần bột gạo tẻ nhào với nước cốt dừa rồi vo lại thành từng viên tròn nhỏ"
+  ],
+  "correctIndex": 0,
+  "explanation": "Từ sự trân quý hạt gạo của nhà nông, phần gạo tấm vỡ khi xay xát đã được người dân Nam Bộ chế biến thành món cơm tấm dẻo thơm đặc trưng."
+ },
+ "hcm-c4": {
+  "question": "Vì sao người thợ làng nghề Phú Bình thường chọn nan tre già chẻ mỏng để làm khung cho những chiếc lồng đèn giấy kiếng truyền thống?",
+  "options": [
+   "Vì nan tre già vừa nhẹ vừa có độ dẻo dai, dễ uốn cong thành hình ngôi sao, cá chép và giữ dáng bền chắc",
+   "Vì tre già có thể tự phát sáng trong đêm tối mà không cần thắp nến hay gắn đèn nhỏ bên trong",
+   "Vì nan tre già không bao giờ bắt lửa ngay cả khi đặt trực tiếp vào trong lò nung gốm nhiệt độ cao"
+  ],
+  "correctIndex": 0,
+  "explanation": "Tre già phơi khô và chẻ mỏng có độ đàn hồi tốt, giúp người thợ uốn thành nhiều hình dáng sinh động trước khi dán căng lớp giấy kiếng màu."
+ },
+ "name:dna": [
+  "Tỉnh Đồng Nai",
+  "Đồng Nai"
+ ],
+ "name:tni": [
+  "Tỉnh Tây Ninh",
+  "Tây Ninh"
+ ],
+ "name:dt": [
+  "Tỉnh Đồng Tháp",
+  "Đồng Tháp"
+ ],
+ "name:vl": [
+  "Tỉnh Vĩnh Long",
+  "Vĩnh Long"
+ ],
+ "name:ct": [
+  "Thành phố Cần Thơ",
+  "TP. Cần Thơ"
+ ],
+ "name:ag": [
+  "Tỉnh An Giang",
+  "An Giang"
+ ],
+ "name:cm": [
+  "Tỉnh Cà Mau",
+  "Cà Mau"
+ ],
+ "name:hoang-sa": [
+  "Quần đảo Hoàng Sa (Đặc khu Hoàng Sa)",
+  "Quần đảo Hoàng Sa"
+ ],
+ "hoang-sa-c1": {
+  "question": "Quần đảo Hoàng Sa (Đặc khu Hoàng Sa) hiện nay trực thuộc đơn vị hành chính tỉnh/thành phố nào của Việt Nam?",
+  "options": [
+   "Trực thuộc thành phố Đà Nẵng",
+   "Trực thuộc tỉnh Quảng Ngãi",
+   "Trực thuộc tỉnh Khánh Hòa"
+  ],
+  "correctIndex": 0,
+  "explanation": "Quần đảo Hoàng Sa (Đặc khu Hoàng Sa) là phần lãnh thổ thiêng liêng của Việt Nam, trực thuộc thành phố Đà Nẵng."
+ },
+ "hoang-sa-c2": {
+  "question": "Những hòn đảo nào sau đây nằm trong quần thể quần đảo Hoàng Sa (Đặc khu Hoàng Sa) của Việt Nam?",
+  "options": [
+   "Nhóm An Vĩnh (Phía Đông): Đảo Phú Lâm (lớn nhất), Đảo Cây, Đảo Bắc, Đảo Trung, Đảo Nam, Đảo Linh Côn (Lincoln), Đá Bông Bay, Nhóm Lưỡi Liềm (Phía Tây): Đảo Hoàng Sa (Pattle), Đảo Quang Hòa, Đảo Duy Mộng, Đảo Hữu Nhật, Đảo Quang Ảnh, Đảo Bạch Quy, Đảo Tri Tôn, Đá Lồi",
+   "Côn Đảo, Hòn Bảy Cạnh và Hòn Tre Lớn ở vùng biển Côn Sơn",
+   "Phú Quốc, Thổ Chu và Nam Du trong vịnh Thái Lan"
+  ],
+  "correctIndex": 0,
+  "explanation": "Các đảo Nhóm An Vĩnh (Phía Đông): Đảo Phú Lâm (lớn nhất), Đảo Cây, Đảo Bắc, Đảo Trung, Đảo Nam, Đảo Linh Côn (Lincoln), Đá Bông Bay, Nhóm Lưỡi Liềm (Phía Tây): Đảo Hoàng Sa (Pattle), Đảo Quang Hòa, Đảo Duy Mộng, Đảo Hữu Nhật, Đảo Quang Ảnh, Đảo Bạch Quy, Đảo Tri Tôn, Đá Lồi là những thực thể địa lý tiêu biểu thuộc quần đảo Hoàng Sa (Đặc khu Hoàng Sa) của Việt Nam."
+ },
+ "hoang-sa-c3": {
+  "question": "Dấu ấn hoặc công trình tiêu biểu nào thể hiện sức sống và chủ quyền Việt Nam tại quần đảo Hoàng Sa (Đặc khu Hoàng Sa)?",
+  "options": [
+   "Bia chủ quyền Hoàng Sa 1816/1938",
+   "Cột cờ Lũng Cú nơi cực Bắc Tổ quốc",
+   "Cột mốc tọa độ quốc gia ở Mũi Cà Mau"
+  ],
+  "correctIndex": 0,
+  "explanation": "Bia chủ quyền Hoàng Sa 1816/1938 là biểu tượng khẳng định chủ quyền lịch sử và sức sống bền bỉ của dân tộc Việt Nam nơi biển đảo quê hương."
+ },
+ "hoang-sa-c4": {
+  "question": "Vào dịp Tết cổ truyền nơi đảo xa, quân và dân biển đảo thường dùng lá của loài cây đặc trưng nào để gói bánh chưng?",
+  "options": [
+   "Lá bàng vuông — loài cây kiên cường trước sóng gió Biển Đông",
+   "Lá dong rừng như cách gói bánh quen thuộc ở đồng bằng Bắc Bộ",
+   "Lá chuối hột phơi héo như bánh tét miền Nam"
+  ],
+  "correctIndex": 0,
+  "explanation": "Bánh chưng gói bằng lá bàng vuông là nét văn hóa ẩm thực đặc sắc, ấm áp tình quân dân nơi đảo xa mỗi độ xuân về."
+ },
+ "name:truong-sa": [
+  "Quần đảo Trường Sa (Đặc khu Trường Sa)",
+  "Quần đảo Trường Sa"
+ ],
+ "truong-sa-c1": {
+  "question": "Quần đảo Trường Sa (Đặc khu Trường Sa) hiện nay trực thuộc đơn vị hành chính tỉnh/thành phố nào của Việt Nam?",
+  "options": [
+   "Trực thuộc tỉnh Khánh Hòa",
+   "Trực thuộc thành phố Đà Nẵng",
+   "Trực thuộc tỉnh Quảng Ngãi"
+  ],
+  "correctIndex": 0,
+  "explanation": "Quần đảo Trường Sa (Đặc khu Trường Sa) là phần lãnh thổ thiêng liêng của Việt Nam, trực thuộc tỉnh Khánh Hòa."
+ },
+ "truong-sa-c2": {
+  "question": "Những hòn đảo nào sau đây nằm trong quần thể quần đảo Trường Sa (Đặc khu Trường Sa) của Việt Nam?",
+  "options": [
+   "8 Cụm đảo chính: Cụm Song Tử (Song Tử Tây, Song Tử Đông), Cụm Thị Tứ, Cụm Loại Ta, Cụm Nam Yết (Nam Yết, Sơn Ca, Đá Lớn, Phan Vinh), Cụm Sinh Tồn (Sinh Tồn, Sinh Tồn Đông, Cô Lin, Len Đao, Gạc Ma), Cụm Trường Sa (Trường Sa Lớn, Đá Tây, Đá Lát, Trường Sa Đông), Cụm Thám Hiểm (An Bang, Thuyền Chài, Tiên Nữ), Cụm Bình Nguyên",
+   "Côn Đảo, Hòn Bảy Cạnh và Hòn Tre Lớn ở vùng biển Côn Sơn",
+   "Phú Quốc, Thổ Chu và Nam Du trong vịnh Thái Lan"
+  ],
+  "correctIndex": 0,
+  "explanation": "Các đảo 8 Cụm đảo chính: Cụm Song Tử (Song Tử Tây, Song Tử Đông), Cụm Thị Tứ, Cụm Loại Ta, Cụm Nam Yết (Nam Yết, Sơn Ca, Đá Lớn, Phan Vinh), Cụm Sinh Tồn (Sinh Tồn, Sinh Tồn Đông, Cô Lin, Len Đao, Gạc Ma), Cụm Trường Sa (Trường Sa Lớn, Đá Tây, Đá Lát, Trường Sa Đông), Cụm Thám Hiểm (An Bang, Thuyền Chài, Tiên Nữ), Cụm Bình Nguyên là những thực thể địa lý tiêu biểu thuộc quần đảo Trường Sa (Đặc khu Trường Sa) của Việt Nam."
+ },
+ "truong-sa-c3": {
+  "question": "Dấu ấn hoặc công trình tiêu biểu nào thể hiện sức sống và chủ quyền Việt Nam tại quần đảo Trường Sa (Đặc khu Trường Sa)?",
+  "options": [
+   "Cột mốc chủ quyền trên đảo Trường Sa Lớn",
+   "Cột cờ Lũng Cú nơi cực Bắc Tổ quốc",
+   "Cột mốc tọa độ quốc gia ở Mũi Cà Mau"
+  ],
+  "correctIndex": 0,
+  "explanation": "Cột mốc chủ quyền trên đảo Trường Sa Lớn là biểu tượng khẳng định chủ quyền lịch sử và sức sống bền bỉ của dân tộc Việt Nam nơi biển đảo quê hương."
+ },
+ "truong-sa-c4": {
+  "question": "Vào dịp Tết cổ truyền nơi đảo xa, quân và dân biển đảo thường dùng lá của loài cây đặc trưng nào để gói bánh chưng?",
+  "options": [
+   "Lá bàng vuông — loài cây kiên cường trước sóng gió Biển Đông",
+   "Lá dong rừng như cách gói bánh quen thuộc ở đồng bằng Bắc Bộ",
+   "Lá chuối hột phơi héo như bánh tét miền Nam"
+  ],
+  "correctIndex": 0,
+  "explanation": "Bánh chưng gói bằng lá bàng vuông là nét văn hóa ẩm thực đặc sắc, ấm áp tình quân dân nơi đảo xa mỗi độ xuân về."
+ }
+}

@@ -1,7 +1,7 @@
 # Gói Việt preview-5 — Kế hoạch song ngữ, hai chế độ và khung sách văn hóa
 
 - **Ngày lập** 09/11/2026 (Codex). **Sửa lần 2** cùng ngày (Claude): làm **khung sách trước, nội dung và tranh nhập sau**; áp dụng các góp ý review (tranh không chữ, dịch thẻ theo mẫu, danh sách tệp cần tách, nội dung là đường găng, nghiệm thu gọn, URL fanpage).
-- **Trạng thái** P5-00 đã làm ([BAO-CAO-P5-00.md](BAO-CAO-P5-00.md)); P5-01 đã làm ([BAO-CAO-P5-01.md](BAO-CAO-P5-01.md)); P5-02 đã làm ([BAO-CAO-P5-02.md](BAO-CAO-P5-02.md)). Khung dữ liệu sách chính thức nằm ở `assets/goi-viet/books-5/_mau/HUONG-DAN-NHAP-NOI-DUNG.md`; đoạn mã mẫu ở mục 2 chỉ là phác thảo ban đầu.
+- **Trạng thái** P5-00 đã làm ([BAO-CAO-P5-00.md](BAO-CAO-P5-00.md)); P5-01 đã làm ([BAO-CAO-P5-01.md](BAO-CAO-P5-01.md)); P5-02 đã làm ([BAO-CAO-P5-02.md](BAO-CAO-P5-02.md)); P5-03: rà soát ngày 10/11, lát 1 (khung song ngữ), lát 2 (tệp dùng chung) và lát 3 (nội dung tiếng Anh) đã làm ngày 11/11, kèm một vòng sửa sau duyệt: bố cục tiếng Anh, sách giữ bản minh họa, đổi ngôn ngữ trong hộp thoại, khóa bản dịch lỗi thời ([BAO-CAO-P5-03.md](BAO-CAO-P5-03.md)); nhóm còn duyệt bản tiếng Anh và các chỗ sửa nội dung tiếng Việt. Khung dữ liệu sách chính thức nằm ở `assets/goi-viet/books-5/_mau/HUONG-DAN-NHAP-NOI-DUNG.md`; đoạn mã mẫu ở mục 2 chỉ là phác thảo ban đầu.
 - **Bản triển khai và nghiệm thu** `map-surroundings-preview-5.html` và tài nguyên dành riêng cho bản 5.
 - **Tham chiếu** `D:/Download/Goi-Viet-Ha-Noi.html`: chỉ tham chiếu **phong cách** sách (bìa xanh, giấy kem, gáy, dấu đỏ, ảnh xen chữ), không dùng làm định dạng sản xuất. `card-testing.html`: bộ thẻ.
 
@@ -12,7 +12,7 @@
 | P5-00 | Mốc gốc, cập nhật AGENTS.md | Code | Nhỏ |
 | **P5-01** | **Khung sách chạy được với nội dung giữ chỗ**, hướng dẫn nhập nội dung, công cụ kiểm tra, lõi song ngữ tối thiểu | Code | Vừa–lớn |
 | P5-02 | Hai chế độ tại ga, trang chờ, link fanpage và QR, sửa lỗi mở nhầm bộ thẻ | Code | Vừa |
-| P5-03 | Song ngữ toàn website | Code, người duyệt EN | Lớn |
+| P5-03 | Song ngữ toàn website, chia 3 lát: khung song ngữ, tệp dùng chung, nội dung EN | Code, nhóm duyệt EN | Lớn |
 | P5-04 | Nhập từng tập khi nhóm giao nội dung | Nhóm giao, Code nhập và kiểm | Nhỏ mỗi tập |
 | P5-05 | Nghiệm thu gọn, bàn giao | Code | Nhỏ–vừa |
 | **N (song song, bắt đầu ngay)** | Viết VI, tạo tranh không chữ, dịch EN cho 4 tập | Nhóm | **Lớn — đường găng** |
@@ -60,9 +60,9 @@ Mọi thay đổi chỉ gồm preview-5 và tài nguyên `-5`. Tệp dùng chung
 - **Một dữ liệu gốc** giữ mã tỉnh, ga, thẻ, chủ đề, liên kết, thứ tự lựa chọn, đáp án đúng, tọa độ và luật chơi. Chữ hiển thị được tra theo mã ổn định **lúc hiển thị**: từ điển giao diện và lớp phủ nội dung EN. Không ghi đè dữ liệu gốc.
 - **Dịch thẻ theo nguồn gốc nội dung:**
   - 12 thẻ đã thẩm định của Hà Nội, Huế, TP. Hồ Chí Minh dịch tay.
-  - 33 điểm còn lại dịch theo mẫu câu, cộng bảng tên riêng (tên điểm, vùng, món ăn, danh thắng, di sản; khoảng 1.900 từ).
+  - 33 điểm còn lại dịch theo mẫu câu, cộng bảng tên riêng (tên điểm, vùng, món ăn, danh thắng, di sản). Số đo ngày 10/11 ở mục P5-03.
   - 60 câu hoạt động dịch một lần.
-  - Sửa nội dung VI sai (đặc biệt Thanh Hóa) **trước** khi dịch.
+  - Sửa nội dung VI sai (đặc biệt Thanh Hóa) **trước** khi dịch; danh sách lỗi ở mục P5-03.
 - **Khi đổi VI/EN**, giữ lựa chọn, mặt thẻ, dấu sen, trạng thái lời giải, lượt, nháp, ga, hành trình, kỷ niệm và trang sách đang đọc. Văn bản người dùng nhập giữ nguyên văn, kể cả khi xuất PNG.
 - **Thứ tự chọn ngôn ngữ lúc mở:** `?lang=vi|en` trên URL, sau đó lựa chọn đã ghi nhớ (localStorage, bọc try/catch), cuối cùng là VI. Đồng bộ `html lang`, tiêu đề trang, nhãn, placeholder, thông báo trình đọc màn hình và phần đang mở.
 - **Dịch máy** chỉ dùng tạo bản nháp. Bản phát hành lấy bản đã duyệt từ tài nguyên cục bộ. Trong bản nội bộ, chữ EN thiếu có thể hiện VI kèm nhãn rõ.
@@ -212,38 +212,67 @@ Mỗi bước theo thứ tự **ghi đầu vào → thay đổi nhỏ → chạy
 
 ### P5-03 — Song ngữ toàn website
 
-**1. Tách tệp dùng chung có chữ hiển thị thành bản `-5`** và trỏ preview-5 sang bản mới; không đụng bản 3 và bản 4. Danh sách này từ lần quét 09/11, cần rà lại trước khi làm. Bảng chỉ ghi tên tệp; đường dẫn đầy đủ xem trong các thẻ `<script>`/`<link>` của preview-5.
+**Rà soát ngày 10/11 (sau P5-02).** Mở preview-5 với `?lang=en`, đi qua 15 trạng thái chính (trang chủ, khung ga, tàu đến, lá bài hai mặt, ống xăm, bưu thiếp, Tủ sách cộng đồng, quần đảo), ghi mọi chữ VI còn hiện, kể cả chữ vẽ trên canvas. Script và số liệu nằm trong `verification/p5-books/`: `scan-p5-03-en.cjs`, `shared-hits-p5-03.cjs`, `inventory-p5-03*.cjs`, `p5-03-scan-en.json`.
 
-| Nhóm | Tệp |
+- **Chữ giao diện còn hiện:** khoảng 280 chuỗi, 9.000 ký tự, không tính chuỗi chỉ là tên riêng. Phần lớn nằm trong markup và JS nội tuyến của `map-surroundings-preview-5.html`, cùng các tệp `-5` (`fortune-ritual-5.js`, `journey-system-5.js`, `conversation-cards-5.js`). Khoảng 16 tệp dùng chung cũng ghi chữ lên màn hình, mỗi tệp từ 1 đến 15 cụm; có tệp ghi đè chữ của markup lúc chạy.
+- **Thiếu thêm:**
+  - Chưa có nút VI/EN công khai.
+  - `html lang` và `<title>` không đổi theo ngôn ngữ; tiêu đề còn ghi nhầm "Preview 3 WebGL".
+  - Phần đang mở không vẽ lại khi đổi ngôn ngữ, ví dụ tiêu đề bộ thẻ và nút trên lá.
+  - Tìm kiếm không nhận "hanoi", "saigon", "hcmc", "danang", "paracel", "halong".
+- **Chưa quét được:** hải đồ quần đảo, phần kỷ niệm, trạng thái nhạc sau khi chọn tệp, các thông báo lỗi. `check-i18n-5.cjs` phải đi qua các trạng thái này.
+
+**Khối lượng nội dung** (chuỗi không trùng):
+
+| Phần | Khối lượng |
 | --- | --- |
-| Nhiều chữ | `fortune-ritual.js`, `natural/landscape-4.js`, `natural/island-chart.js`, `memory-reference-v2.js`, `map-reference-ui.js`, `polish-3.js`, `preview-3.js`, `postcard-design-3.js`, `homepage-music-3.js`, `heritage-command-bar-3.js`, `map-controls-island-reference.js`, `homepage-layered-opening.js`, `homepage-opening-controller-3.js` (`journey-system-4.js` đã tách ở P5-02) |
-| Ít chữ nhưng hiển thị | `natural/archipelago-renderer-3.js`, `landmark-assets.js` (title SVG), `natural/hydrology-3.js` và `natural/terrain-renderer-4.js` (ghi chú nguồn), `province-legibility.js` (chữ "(Ký ức)" được đo để tránh chồng nhãn nên phải khớp chữ vẽ), `heritage-overlays-3.js`, `home-station-feedback-3.js`, `homepage-opening-config.js` |
+| 12 thẻ đã thẩm định (HN, Huế, TP.HCM) | ~1.450 từ, dịch tay |
+| 132 thẻ của 33 điểm còn lại | 8 mẫu câu hỏi; 117 đáp án (~1.300 từ); ~80 dạng giải thích sau khi thay tên và đáp án (~4.600 từ thô) |
+| 60 câu hoạt động | ~1.900 từ |
+| Mô tả ga: tagline, summary, vùng, tên ảnh | 80 chuỗi, ~970 từ |
+| Bảng tên riêng: 36 điểm, 102 danh thắng, di sản, món ăn | ~500 từ |
+| 144 truyện demo (~21.000 từ) | **Không dịch**: từ P5-02 không còn hiện công khai |
+
+**Sửa nội dung VI trước khi dịch** (dịch nguyên trạng sẽ chép lỗi sang EN):
+- 31 câu hỏi về danh thắng đang gắn chủ đề "Lễ hội". Lỗi hiện trên mặt thẻ và nút "Rút lá Lễ hội".
+- 124 câu hỏi chèn tên đầy đủ giữa câu, ví dụ "vùng đất Tỉnh Thanh Hóa".
+- Thanh Hóa và Hải Phòng có di sản trùng danh thắng. Thanh Hóa: câu hỏi di sản lấy Thành nhà Hồ làm đáp án; đáp án ghi "Khu di tích Quốc gia" nhưng lời giải thích ghi "Di sản Thế giới UNESCO".
+
+**Lát 1 — Khung song ngữ** (Code, không chờ nội dung):
+- Nút VI/EN công khai ở header và trang chủ. Đồng bộ `html lang`, `<title>` (sửa luôn chữ "Preview 3 WebGL") và thông báo trình đọc màn hình.
+- Markup tĩnh gắn `data-i18n`, cả `aria-label`, `title`, `placeholder`, `alt`. Chuỗi JS nội tuyến và các tệp `-5` chuyển sang `t()`.
+- Mỗi phần tự vẽ lại khi có `goiviet:langchange` mà giữ trạng thái: lá đang mở (mặt, dấu sen, lời giải, nháp), tiêu đề bộ thẻ, khung ga, thanh hành trình, ống xăm, bưu thiếp, nhãn canvas ("GA …", "Về giữa", "(Đã ghé)", "(Ký ức)").
+- Nhãn canvas được đo để tránh chồng chữ: đo lại theo chữ đang vẽ, kiểm chồng nhãn ở 1920×1080 và 1366×768.
+- Tìm kiếm nhận tên không dấu và bí danh tiếng Anh.
+- `tools/check-i18n-5.cjs`:
+  - Báo khóa thiếu hoặc thừa giữa VI và EN.
+  - Quét `?lang=en` như `scan-p5-03-en.cjs`, thêm các trạng thái chưa quét ở trên.
+  - Báo cụm VI ngoài danh sách cho phép (tên riêng, chữ người dùng nhập, "Gói Việt").
+
+**Lát 2 — Tệp dùng chung** (Code): tách bản `-5` cho tệp có chữ hiện ra, bằng script sinh lại được như `make-journey-system-5.cjs`. Mỗi lần đổi đều phải khớp đúng một chỗ, nên tệp gốc đổi thì script báo lỗi ngay. Preview 1–4 và `index.html` không đổi.
+
+| Nhóm | Tệp (số cụm VI thấy trên lượt quét EN) |
+| --- | --- |
+| Nhiều chữ | `map-reference-ui.js` (15), `postcard-design-3.js` (14, chữ trên ảnh PNG), `natural/landscape-4.js` (10, có ghi chú nguồn), `preview-3.js` (7: "BIỂN ĐÔNG", "QUẦN ĐẢO", "LÀO", "THÁI LAN"), `map-controls-island-reference.js` (6, chú giải), `natural/island-chart.js` (hải đồ, chưa quét hết), `homepage-music-3.js` (trạng thái nhạc), `polish-3.js` |
+| Ít chữ | `natural/hydrology-3.js`, `natural/terrain-renderer-4.js` (ghi chú nguồn), `natural/archipelago-renderer-3.js` ("Xem gần"), `heritage-overlays-3.js`, `heritage-command-bar-3.js`, `province-legibility.js` ("(Ký ức)", được đo nên phải khớp chữ vẽ), `landmark-assets.js` (title SVG), `homepage-opening-controller-3.js` |
+| Kiểm lại trước khi tách | `memory-reference-v2.js`, `homepage-layered-opening.js`: có chữ nhưng không thấy trên lượt quét; xác nhận preview-5 có hiện không |
 | Chỉ CSS `content:` | `map-baseline-restored.css`, `arrival-journal.css`: ghi đè bằng một CSS `-5`, không tách |
-| Không dịch | `map-warm-terrain-palette.js`, `webgl-terrain-renderer-3.js` (khóa tên vùng), `map-prewarm-3.js`, `homepage-layered-scene-3.js`, `homepage-transport-3/transport.js`, `homepage-crane-flight-3.js`, `homepage-layered-renderer-5.js`: chỉ là khóa, log hoặc lỗi nội bộ |
-| Không tách | `journey-network-data.js`: tên ga tra qua bảng tên song ngữ lúc hiển thị |
+| Không dịch | `map-prewarm-3.js`, `homepage-layered-scene-3.js`, `homepage-crane-flight-3.js`, `homepage-transport-3/transport.js`, `map-warm-terrain-palette.js`, `webgl-terrain-renderer-3.js` (khóa tên vùng), `homepage-layered-renderer-5.js`, `homepage-opening-config.js`: chỉ là khóa, log hoặc lỗi nội bộ |
+| Không tách | `journey-network-data.js`: tên ga tra qua bảng tên song ngữ lúc hiển thị. `fortune-ritual.js`, `journey-system-4.js` đã tách ở P5-02 |
 
-**2. Từ điển giao diện**
-- HTML tĩnh gắn `data-i18n`, cùng thuộc tính cho aria-label, title, placeholder, alt.
-- Chuỗi dựng trong JS chuyển sang `t()`.
-- Canvas (nhãn tỉnh, "Về giữa", nhãn ký ức, bưu thiếp PNG) và chữ trong SVG minh họa vẽ lại khi đổi ngôn ngữ.
-- Thông báo trình đọc màn hình cũng dịch.
+**Lát 3 — Nội dung EN** (Code làm bản nháp, nhóm duyệt; lưu trong `content-en-5.js` theo mã, không ghi đè dữ liệu gốc):
+1. Bảng tên riêng và thuật ngữ, kèm bí danh tìm kiếm.
+2. 16 thẻ của 4 tỉnh có sách: 12 thẻ đã thẩm định cộng 4 thẻ Thanh Hóa sau khi sửa VI.
+3. 8 mẫu câu hỏi, 117 đáp án, ~80 dạng giải thích của 132 thẻ còn lại; 60 câu hoạt động; mô tả ga.
+4. Giữ nguyên thứ tự lựa chọn và chỉ số đáp án.
 
-**3. Bảng tên riêng và thuật ngữ:** tên 36 điểm, vùng, món ăn, danh thắng, di sản, kèm bí danh tìm kiếm.
+Khâu duyệt EN là phần tốn thời gian nhất. **Nếu gấp:** lát 1 + bước 1–2 của lát 3 là đủ để trình diễn tiếng Anh trọn một vòng với 4 tỉnh có sách. Các thẻ chưa có EN hiện tiếng Việt kèm nhãn, như trình đọc sách đang làm.
 
-**4. Thẻ**, lưu trong lớp phủ `content-en-5.js` theo mã:
-- Sửa VI các thẻ sai trước.
-- Dịch tay 12 thẻ đã thẩm định.
-- Với 33 điểm còn lại: đo mẫu của câu hỏi (8 mẫu), lựa chọn và giải thích, rồi dịch theo mẫu cộng bảng tên; người duyệt đọc lướt toàn bộ.
-- Dịch 60 câu hoạt động.
-- Giữ nguyên thứ tự lựa chọn và chỉ số đáp án.
-
-**5. Nút VI/EN công khai** ở header và trang chủ. Đổi tại chỗ, giữ trạng thái như mục 2.
-
-**6. Công cụ `tools/check-i18n-5.cjs`:**
-- Báo khóa thiếu hoặc thừa giữa VI và EN.
-- Mở trang với `?lang=en`, đi qua luồng chính, quét chữ hiển thị còn dấu tiếng Việt nằm ngoài danh sách cho phép (tên riêng, nguyên văn kỷ niệm).
-
-**Điều kiện qua bước:** đủ khóa; thứ tự lựa chọn và đáp án khớp dữ liệu gốc. Đổi ngôn ngữ giữa lượt chơi, khi đang đọc sách, khi đang nhập nháp và khi xuất PNG đều giữ trạng thái. Công cụ kiểm tra không còn cụm VI sót ngoài danh sách cho phép.
+**Điều kiện qua bước:**
+- Đủ khóa VI/EN; thứ tự lựa chọn và đáp án khớp dữ liệu gốc.
+- Đổi ngôn ngữ giữa lượt chơi, khi đang đọc sách, khi đang nhập nháp và khi xuất PNG đều giữ trạng thái.
+- Công cụ kiểm tra không còn cụm VI sót ngoài danh sách cho phép.
+- Preview 1–4 và `index.html` giữ nguyên.
 
 ### P5-04 — Nhập nội dung từng tập
 
@@ -310,7 +339,7 @@ Mỗi bước theo thứ tự **ghi đầu vào → thay đổi nhỏ → chạy
 | Tệp | Vai trò |
 | --- | --- |
 | `map-surroundings-preview-5.html` | Dữ liệu, chọn ga, lọc, modal câu chuyện và thẻ, quẻ tre, kỷ niệm, bưu thiếp, vòng vẽ. |
-| `assets/goi-viet/map-surroundings-preview/journey-system-4.js` | Nút Khám phá khi đến ga, hàm `explore()`. |
+| `assets/goi-viet/map-surroundings-preview/journey-system-5.js` | Thẻ "Đã đến" với hai nút Chơi thẻ / Đọc sách, hàm `explore()` (tách từ `journey-system-4.js` ở P5-02). |
 | `assets/goi-viet/map-surroundings-preview/conversation-cards-5.js` | Hiệu ứng xáo/rút, hai mặt, khóa tương tác, regex chủ đề. |
 | `assets/goi-viet/map-reference-ui.js`, `postcard-design-3.js` | Chữ điều khiển ga và chữ trên bưu thiếp; dùng chung nhiều bản. |
 | `D:/Download/Goi-Viet-Ha-Noi.html` | Phong cách sách và chữ thật của bản Hà Nội đang soạn. |
@@ -324,6 +353,9 @@ Mỗi bước theo thứ tự **ghi đầu vào → thay đổi nhỏ → chạy
 4. **Tranh Hà Nội:** tạo lại tranh không chữ (mặc định) hay phủ chữ HTML lên ảnh cũ.
 5. **Cách sửa tệp dùng chung:** tách bản `-5` (mặc định, theo quy ước dự án) hay sửa có điều kiện ngay trong tệp dùng chung (cần người dùng đồng ý riêng).
 6. **Messenger:** quản trị trang kiểm `m.me/61594157551043` có mở đúng khung nhắn tin không.
+7. **Tên địa danh trong bản EN** (đề xuất): giữ dấu ("Hà Nội", "Huế", "Hồ Chí Minh City"); "Hanoi", "Saigon", "HCMC" chỉ làm bí danh tìm kiếm. Biển, đảo theo cách gọi của Việt Nam: "Biển Đông (East Sea)", "Hoàng Sa (Paracel) Islands", "Trường Sa (Spratly) Islands".
+8. **Câu thơ lục bát** ở ống xăm và sân ga (đề xuất): giữ tiếng Việt, thêm một dòng giải nghĩa EN, không dịch thành thơ.
+9. **Sửa nội dung VI trước khi dịch** (mục P5-03): nhóm tự sửa, hay Code đề xuất bản sửa để nhóm duyệt.
 
 ---
 

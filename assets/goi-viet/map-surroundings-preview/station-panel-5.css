@@ -61,43 +61,61 @@ body[data-regional-preview]:has(#introScreen.intro-hidden) #mapScene #stationPan
   }
 
   & .gv-station-header {
+    position: relative;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
     align-items: center;
-    gap: 5px 12px;
+    gap: 10px 8px;
     min-height: 0;
     margin: 0 var(--station-inset);
-    padding: 10px 0 12px;
+    padding: 14px 0 18px;
     border-bottom: 1px solid var(--station-brass);
   }
-  & .gv-station-logo { display: block; width: 96px; height: auto; }
-  & .gv-station-heading { grid-column: 1 / -1; }
+  & .gv-station-header::after {
+    content: '';
+    position: absolute;
+    inset: auto 0 3px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--station-rule) 18%, var(--station-rule) 82%, transparent);
+    pointer-events: none;
+  }
+  & .gv-station-logo {
+    display: block;
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: center;
+    width: 100px;
+    height: auto;
+  }
+  & .gv-station-heading { grid-column: 1 / -1; text-align: center; }
   & .gv-station-heading h2 {
     margin: 0;
     color: var(--station-ink);
-    font: 700 30px/1.12 var(--station-display);
-    letter-spacing: -.04em;
+    font: 700 32px/1.12 var(--station-display);
+    letter-spacing: -.035em;
+    text-wrap: balance;
   }
   & .gv-station-heading p {
-    margin: 4px 0 0;
+    margin: 7px 0 0;
     color: var(--station-muted);
-    font: 500 11px/1.45 var(--station-font);
+    font: 400 11px/1.5 var(--station-font);
     text-wrap: balance;
   }
   & #previewPanelClose {
-    grid-column: 2;
+    grid-column: 3;
     grid-row: 1;
+    justify-self: end;
     min-height: 44px;
-    padding: 6px 7px;
-    gap: 4px;
-    border-color: var(--station-brass);
-    border-radius: 9px;
-    background: transparent;
-    color: var(--station-ink);
-    font: 600 10.5px/1.2 var(--station-font);
+    padding: 6px 8px;
+    gap: 5px;
+    border-color: var(--station-rule);
+    border-radius: 999px;
+    background: var(--station-sheet);
+    color: var(--station-muted);
+    font: 500 10px/1.2 var(--station-font);
     white-space: nowrap;
   }
-  & #previewPanelClose:hover { background: var(--station-soft); }
+  & #previewPanelClose:hover { border-color: var(--station-brass); background: var(--station-soft); color: var(--station-ink); }
   & #previewPanelClose .gv-station-icon { width: 13px; height: 13px; }
 
   & .gv-station-filters {
@@ -663,11 +681,11 @@ html[data-theme='dark'] body[data-regional-preview]:has(#introScreen.intro-hidde
 @media (max-width: 768px) {
   body[data-regional-preview]:has(#introScreen.intro-hidden) #mapScene #stationPanel.gv-station-v5 {
     --station-inset: 6px;
-    & .gv-station-header { grid-template-columns: auto minmax(0, 1fr); gap: 9px; padding-block: 6px 7px; }
-    & .gv-station-logo { width: 65px; }
-    & .gv-station-heading { grid-column: auto; }
-    & .gv-station-heading h2 { font-size: 21px; }
-    & .gv-station-heading p { font-size: 10px; }
+    & .gv-station-header { grid-template-columns: auto minmax(0, 1fr); gap: 13px; padding-block: 10px 13px; }
+    & .gv-station-logo { grid-column: 1; width: 72px; }
+    & .gv-station-heading { grid-column: 2; grid-row: 1; padding-inline-start: 13px; border-inline-start: 1px solid var(--station-rule); text-align: start; }
+    & .gv-station-heading h2 { font-size: 23px; }
+    & .gv-station-heading p { margin-top: 4px; font-size: 10px; }
     & #previewPanelClose { display: none; }
     & .preview-panel-scroll { padding-top: 7px; }
     & .prov-search-input { font-size: 16px; }
