@@ -91,7 +91,8 @@
 #deckModal #cardFrontState .btn-secondary { color: #fffdf8; background: #ffffff26; border: 1px solid #ffffff4d; box-shadow: none; }
 #deckModal #cardFrontState .btn-secondary:hover { background: #ffffff40; }
 #deckModal #answerExplanationBox { padding: 14px; border: 0; border-left: 4px solid #c48224; border-radius: 0 8px 8px 0; background: #fffffff2; color: #293b32; box-shadow: none; }
-#deckModal #answerExplanationBox :is(p,span) { font-size: 13px !important; line-height: 1.6 !important; color: #4b5b4c !important; }
+/* P5-05: not the label inside a button, which keeps the button's own light ink (the flip button read 1.18:1 before). */
+#deckModal #answerExplanationBox :is(p,span):not(button *) { font-size: 13px !important; line-height: 1.6 !important; color: #4b5b4c !important; }
 #deckModal #answerExplanationBox > div:last-child > span { display: none; }
 #deckModal #answerExplanationBox .btn-primary { font-size: 12px; }
 #deckModal #answerStatusHeading { font-size: 14px !important; color: #2b6e48 !important; }

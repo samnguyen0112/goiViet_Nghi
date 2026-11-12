@@ -172,7 +172,9 @@ async function walk() {
   const enTable = JSON.parse(contentSrc.match(/const EN = (\{[\s\S]*?\n {2}\});/)[1]);
   const glossTable = JSON.parse(contentSrc.match(/const GLOSS = (\{[\s\S]*?\n {2}\});/)[1]);
   const geoTable = JSON.parse(contentSrc.match(/const GEO = (\{[\s\S]*?\n {2}\});/)[1]);
-  const enValues = [...Object.values(enTable), ...Object.values(glossTable.byId), glossTable.none, ...Object.values(geoTable.exact)].sort((x, y) => y.length - x.length);
+  // The English captions of the community postcards keep Vietnamese names with their diacritics in the same way.
+  const postcardEn = [...read('assets/goi-viet/books-5/community-postcards-5.js').matchAll(/"en": "([^"]+)"/g)].map(m => m[1]);
+  const enValues = [...Object.values(enTable), ...Object.values(glossTable.byId), glossTable.none, ...Object.values(geoTable.exact), ...postcardEn].sort((x, y) => y.length - x.length);
   const allowed = [...enValues, ...names.sort((x, y) => y.length - x.length), 'Gói Việt', 'GÓI VIỆT', 'lục bát', 'Ngôn ngữ · Language', 'Tiếng Việt', 'Huế', 'Hà Nội', 'Sài Gòn', 'HÀ NỘI', 'HUẾ', 'SÀI GÒN', 'Hoàng Sa', 'Trường Sa', 'HOÀNG SA', 'TRƯỜNG SA', 'Vũ Đại', 'Nam Định', 'Đà Lạt', 'Xuân La'];
   // The map wraps long province names over two lines and draws each word apart ("Thanh" / "Hóa").
   const nameWords = new Set(names.flatMap(n => n.split(/\s+/)));

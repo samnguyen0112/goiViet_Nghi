@@ -143,6 +143,12 @@ html[data-theme="dark"] #mapScene #headerSettings .control-options {
   color: var(--settings-ink);
   & > .settings-option[data-enabled="true"]::after { background: var(--settings-paper); }
 }
+#headerSettings .settings-offline { margin: 8px 0; padding: 10px; border: 1px solid var(--settings-line); border-radius: 11px; }
+#headerSettings #btnPrepareOffline { display: block; width: 100%; padding: 9px; white-space: normal; color: var(--settings-ink); background: var(--settings-soft); border: 1px solid var(--settings-brass); border-radius: 8px; font: 600 12px/1.5 var(--font-sans); }
+#headerSettings #btnPrepareOffline:focus-visible { outline: 2px solid var(--settings-on); outline-offset: 2px; }
+#headerSettings #btnPrepareOffline:disabled { cursor: default; opacity: .7; }
+#headerSettings .settings-offline small, #headerSettings #offlinePrepareStatus { display: block; margin: 7px 0 0; color: var(--settings-muted); font: 400 10px/1.5 var(--font-sans); overflow-wrap: anywhere; }
+#headerSettings #offlinePrepareProgress { width: 100%; margin-top: 8px; accent-color: var(--settings-on); }
 @media (prefers-reduced-motion: reduce) {
   #mapScene #headerSettings .settings-option::before,
   #mapScene #headerSettings .settings-option::after { transition: none; }
