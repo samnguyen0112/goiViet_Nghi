@@ -34,8 +34,10 @@
     heritage: ['Di sản', 'Heritage'],
     flavor: ['Hương vị', 'Local flavor'],
     highlights: ['Điểm nhấn văn hóa', 'Cultural highlights'],
-    illustration: ['Minh họa', 'Illustration'],
     hero: ['Đọc sách văn hóa về {place}', 'Read the {place} culture book'],
+    photoCredit: ['Ảnh: {title}', 'Photo: {title}'],
+    photoSource: ['Nguồn ảnh', 'Photo source'],
+    photoChanges: ['Ảnh được thu nhỏ, chuyển WebP và cắt khung hiển thị.', 'Resized, converted to WebP and cropped for this frame.'],
     cards: ['Chơi thẻ', 'Play cards'],
     remaining: ['Còn {count} lá', '{count} cards left'],
     lastCard: ['Còn 1 lá', '1 card left'],
@@ -119,18 +121,35 @@
 
   function renderStationArt(place, highlights, firstStoryId, island) {
     const fallback = localArt[place.id];
-    const source = place.id === 'hn' ? null : getStorySafeUrl(place.photoUrl);
+    // Only this preview's curated local directory is accepted for station photos.
+    const source = getStationPhotoUrl(place.photoUrl);
+    const title = stationPhotoTitle(place) || highlights.landmark;
+    const position = /^\d{1,3}% \d{1,3}%$/.test(place.photoPosition || '') ? place.photoPosition : '50% 50%';
+    const fit = place.photoFit === 'contain' ? 'contain' : 'cover';
+    const credit = place.photoCredit || {};
+    const sourcePage = getStorySafeUrl(credit.sourceUrl);
+    const licensePage = getStorySafeUrl(credit.licenseUrl);
     return `
       <button type="button" id="story-hero-${place.id}" class="gv-station-art" data-station-action="story"
         data-place="${place.id}" data-story="${firstStoryId}" aria-label="${escapeHTML(t('hero', { place: place.name }))}"
-        title="${escapeHTML(place.photoTitle || highlights.landmark)}">
+        title="${escapeHTML(title)}">
         <span class="gv-station-art-fallback" aria-hidden="true">
           ${fallback ? `<img src="${fallback}" alt="" loading="lazy" decoding="async">` : icon(island ? 'ship' : 'landmark')}
         </span>
-        ${source ? `<img class="gv-station-art-photo" src="${escapeHTML(source)}" alt="" loading="lazy" decoding="async">` : ''}
-        ${place.id === 'hn' ? `<span class="gv-station-art-label" aria-hidden="true">${t('illustration')}</span>` : ''}
+        ${source && fit === 'contain' ? `<span class="gv-station-art-ambience" aria-hidden="true" style="background-image:url('${escapeHTML(source)}')"></span>` : ''}
+        ${source ? `<img class="gv-station-art-photo" data-photo-place="${place.id}" src="${escapeHTML(source)}"
+          alt="${escapeHTML(title)}" width="${Number(place.photoWidth) || 1600}" height="${Number(place.photoHeight) || 900}"
+          style="object-position:${position};object-fit:${fit}" loading="eager" decoding="async">` : ''}
         <span class="gv-station-art-cue">${icon('explore')}</span>
-      </button>`;
+      </button>
+      ${source ? `<details class="gv-station-photo-credit">
+        <summary title="${escapeHTML(title)}">${escapeHTML(t('photoCredit', { title }))}</summary>
+        <div><span>${escapeHTML(credit.author || '')}</span> ·
+          ${licensePage ? `<a href="${escapeHTML(licensePage)}" target="_blank" rel="noopener noreferrer">${escapeHTML(credit.license || '')}</a>` : escapeHTML(credit.license || '')}
+          ${sourcePage ? ` · <a href="${escapeHTML(sourcePage)}" target="_blank" rel="noopener noreferrer">${t('photoSource')}</a>` : ''}
+          <p>${t('photoChanges')}</p>
+        </div>
+      </details>` : ''}`;
   }
 
   function renderHighlights(highlights) {

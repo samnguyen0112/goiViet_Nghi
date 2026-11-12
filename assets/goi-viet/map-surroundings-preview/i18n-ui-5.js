@@ -113,6 +113,15 @@
       'settings.darkHint': 'Sắc trầm dịu mắt khi khám phá.',
       'settings.motionHint': 'Tiết chế hiệu ứng và chuyển cảnh.',
       'settings.motionDevice': 'Đang theo cài đặt của thiết bị.'
+      , 'offline.prepare': 'Chuẩn bị chạy không mạng',
+      'offline.again': 'Chuẩn bị lại bộ không mạng',
+      'offline.size': 'Khoảng {mb} MB · chỉ tải khi bạn bấm nút.',
+      'offline.idle': 'Chưa tải bộ chạy không mạng.',
+      'offline.preparing': 'Đang chuẩn bị: {done}/{total} tệp.',
+      'offline.ready': 'Đã sẵn sàng chạy không mạng.',
+      'offline.error': 'Chưa chuẩn bị xong. Kiểm tra kết nối và bấm để thử lại.',
+      'offline.unavailable': 'Bản mở từ tệp dùng tài nguyên cục bộ; không cần tải bộ không mạng.',
+      'offline.progress': 'Tiến độ chuẩn bị chạy không mạng'
     },
     en: {
       'page.title': 'Gói Việt — A family journey through Vietnamese culture',
@@ -125,6 +134,15 @@
       'settings.darkHint': 'Softer colours for your journey.',
       'settings.motionHint': 'Gentler effects and transitions.',
       'settings.motionDevice': 'Following your device preference.',
+      'offline.prepare': 'Prepare for offline use',
+      'offline.again': 'Prepare offline bundle again',
+      'offline.size': 'About {mb} MB · downloads only when you press the button.',
+      'offline.idle': 'The offline bundle has not been downloaded.',
+      'offline.preparing': 'Preparing: {done}/{total} files.',
+      'offline.ready': 'Ready for offline use.',
+      'offline.error': 'Preparation did not finish. Check your connection and press to retry.',
+      'offline.unavailable': 'The file version uses local assets; no offline download is needed.',
+      'offline.progress': 'Offline preparation progress',
 
       // ---- markup: veil and home
       'ui.home.mot-doan-tau-ba-mien': 'One train • Three heritage regions',
@@ -416,6 +434,7 @@
       'js.postcard.noStations': 'Chưa có ga đã khám phá. Chọn một điểm trên bản đồ để bắt đầu.',
       'js.postcard.visited': 'GA ĐÃ GHÉ:',
       'js.postcard.stop': 'Ga #{n}: {place}',
+      'js.postcard.filename': 'goi-viet-buu-thiep-gia-dinh.png',
       'js.postcard.emptyExplored': 'Chơi thẻ hoặc đọc sách để lưu ga đầu tiên.',
       'js.postcard.played': '{name} (Đã chơi bài)',
       'js.postcard.read': '{name} (Đã đọc sách)',
@@ -512,6 +531,7 @@
       'js.postcard.noStations': 'No stations explored yet. Choose a stop on the map to begin.',
       'js.postcard.visited': 'STATIONS VISITED:',
       'js.postcard.stop': 'Stop {n}: {place}',
+      'js.postcard.filename': 'goi-viet-family-postcard.png',
       'js.postcard.emptyExplored': 'Play cards or read a book to save your first station.',
       'js.postcard.played': '{name} (cards played)',
       'js.postcard.read': '{name} (book read)',
