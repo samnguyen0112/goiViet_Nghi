@@ -79,7 +79,7 @@ Kết quả nghiệm thu ngày 13/11/2026:
 - **Gói ngoại tuyến cuối đạt** sau lần sửa CSS cuối: cài 496 tài nguyên, ngắt mạng, tải lại rồi mở/chọn/đóng dấu thư.
 - Kiểm tra song ngữ, tính đồng bộ manifest ngoại tuyến và `git diff --check` đều đạt.
 
-Ảnh đối chiếu: [màn đầu trước sửa](verification/sea-postoffice-5/before.png), [bàn thư mới 1440 px](verification/sea-postoffice-5/sealed-1440.png), [bàn thư 1024 px](verification/sea-postoffice-5/sealed-1024.png), [thư đã mở 961 px](verification/sea-postoffice-5/letter-961.png), [túi nếp nhà Trường Sa](verification/sea-postoffice-5/truong-sa-bag.png).
+Ảnh đối chiếu: [màn đầu trước sửa](../../verification/sea-postoffice-5/before.png), [bàn thư mới 1440 px](../../verification/sea-postoffice-5/sealed-1440.png), [bàn thư 1024 px](../../verification/sea-postoffice-5/sealed-1024.png), [thư đã mở 961 px](../../verification/sea-postoffice-5/letter-961.png), [túi nếp nhà Trường Sa](../../verification/sea-postoffice-5/truong-sa-bag.png).
 
 Bộ kiểm tra chính bao gồm:
 

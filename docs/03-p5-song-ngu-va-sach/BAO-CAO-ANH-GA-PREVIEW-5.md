@@ -16,7 +16,7 @@ Probe xác nhận khi chỉ vào trang chủ và chưa bấm: **0 yêu cầu do 
 
 Đã thử cố tình trả 503 cho một request hn/book.js của worker: báo lỗi đúng hai ngôn ngữ, ready=false, nút bật để thử lại. Bỏ chặn và bấm lại: 491/491, ready=true, không lỗi.
 
-[Ảnh Tùy chọn sẵn sàng VI](verification/offline-fix-5/screenshots/offline-options-ready-vi.png) · [EN](verification/offline-fix-5/screenshots/offline-options-ready-en.png) · [Ảnh lỗi](verification/offline-fix-5/screenshots/offline-options-error-vi.png)
+[Ảnh Tùy chọn sẵn sàng VI](../../verification/offline-fix-5/screenshots/offline-options-ready-vi.png) · [EN](../../verification/offline-fix-5/screenshots/offline-options-ready-en.png) · [Ảnh lỗi](../../verification/offline-fix-5/screenshots/offline-options-error-vi.png)
 
 ## Scope, cache và chống bản cũ
 
@@ -35,7 +35,7 @@ Ga hiện chỉ có biểu tượng tàu. photoTitle Việt/Anh trùng dòng Dan
 | 1 — ưu tiên ảnh địa danh | [Nhà trưng bày Hoàng Sa – Đà Nẵng](https://commons.wikimedia.org/wiki/File:Hoang_Sa_Exhibition_House,_Da_Nang.jpeg) | Linhcandng | CC BY-SA 3.0 (cũng có lựa chọn GFDL) | 4160 × 3120 | Công trình trưng bày lịch sử Hoàng Sa ở Đà Nẵng, tên tệp Hoang Sa/Da Nang. Nếu chọn, cả tiêu đề ảnh và Danh thắng sẽ ghi Nhà trưng bày Hoàng Sa – Đà Nẵng, không ghi là đảo Phú Lâm. |
 | 2 — hướng tư liệu chủ quyền | [Phủ biên tạp lục về Hoàng Sa](https://commons.wikimedia.org/wiki/File:PhuBienTapLuc-HoangSa.png) | Lê Quý Đôn; bản số hóa do Doãn Hiệu đưa lên | Public Domain / PD-old-70-expired, PDM 1.0 | 7000 × 2320 | Tư liệu cổ thư, có [bản số hóa chữ Nôm gốc](https://lib.nomfoundation.org/collection/1/volume/884/page/69); tên tệp phiên âm Việt Nam. Phải giữ đủ đoạn tư liệu và đặt cùng chú thích/Danh thắng tương ứng. |
 
-Đã đối chiếu thêm [Châu bản Hoàng Sa 1830](https://commons.wikimedia.org/wiki/File:ChauBanHoangSa2706a1830.jpg), 5500 × 1200, nhưng chưa đưa vào hai lựa chọn chính vì trang nguồn còn cảnh báo cần bổ sung căn cứ Public Domain tại Mỹ. Hồ sơ và giới hạn nằm trong [danh mục ứng viên](verification/station-photos-5/hoang-sa-candidates.md). Không dùng ảnh báo chí chưa rõ giấy phép. Không ứng viên nào đã được tải hoặc tích hợp.
+Đã đối chiếu thêm [Châu bản Hoàng Sa 1830](https://commons.wikimedia.org/wiki/File:ChauBanHoangSa2706a1830.jpg), 5500 × 1200, nhưng chưa đưa vào hai lựa chọn chính vì trang nguồn còn cảnh báo cần bổ sung căn cứ Public Domain tại Mỹ. Hồ sơ và giới hạn nằm trong [danh mục ứng viên](../../verification/station-photos-5/hoang-sa-candidates.md). Không dùng ảnh báo chí chưa rõ giấy phép. Không ứng viên nào đã được tải hoặc tích hợp.
 
 ## Đường dịch chung
 
@@ -47,33 +47,33 @@ Các tên ngắn dưới đây nằm trong verification/p5-books/scripts/. Mỗi
 
 | Bộ kiểm | Trạng thái | Kết quả / log |
 |---|---|---|
-| `tools/check-station-photos-5.cjs` | **Đạt** | 504 lượt: 490 ảnh + 14 biểu tượng; bấm chuẩn bị, mở tab mới/tải lại offline · [log](verification/offline-fix-5/logs/station-photos.log) |
-| `tools/check-station-panel-5.cjs` | **Đạt** | 6 cỡ, hành trình/thẻ/kỷ niệm/bưu thiếp/sách · [log](verification/offline-fix-5/logs/station-panel.log) |
-| `tools/verify-preview5-conversation-cards.cjs` | **Đạt** | 6 cỡ và trọn lượt chơi · [log](verification/offline-fix-5/logs/conversation-cards.log) |
-| `tools/check-i18n-5.cjs --walk` | **Đạt** | Không còn chữ Việt sót, không lỗi trang · [log](verification/offline-fix-5/logs/i18n-walk.log) |
-| `tools/build-content-en-5.cjs --check` | **Đạt** | 710 bản dịch, 36 ga, 144 thẻ; tệp sinh khớp · [log](verification/offline-fix-5/logs/content-en-check.log) |
-| `python tools/build-preview-5-offline.py --check` | **Đạt** | Manifest khớp; không ghi tệp · [log](verification/offline-fix-5/logs/offline-manifest-check.log) |
-| `tools/check-books-5.cjs --render` | **Đạt** | Không lỗi; giữ cảnh báo nội dung sách nháp · [log](verification/offline-fix-5/logs/books-render.log) |
-| `verify-p5-01.cjs` | **Đạt** | 21/21 · [log](verification/offline-fix-5/logs/verify-p5-01.log) |
-| `verify-p5-02.cjs` | **Đạt** | 43/43; ca C2 dùng đúng cardIds thử · [log](verification/offline-fix-5/logs/verify-p5-02.log) |
-| `verify-dialog-lang-5.cjs` | **Đạt** | 17/17 · [log](verification/offline-fix-5/logs/dialog-lang.log) |
-| `walk-presentation-p5-05.cjs` | **Đạt** | 8/8 tổ hợp; có tải PNG · [log](verification/offline-fix-5/logs/presentation.log) |
-| `net-before-book-p5-05.cjs` | **Đạt** | 0 request sách trước mở, 3 sau mở; đếm cả worker · [log](verification/offline-fix-5/logs/net-before-book-p5-05.log) |
-| `probe-offline-sw-5.cjs` | **Đạt** | Idle 0 worker / 0 sách; sau bấm 491/491; scope đúng · [log](verification/offline-fix-5/logs/probe-offline-sw-5.log) |
-| `probe-offline-stale-5.cjs` | **Đạt** | JS/CSS/JSON ?v mới và navigation tới mạng; cache fallback khi offline · [log](verification/offline-fix-5/logs/probe-offline-stale-5.log) |
-| `check-file-url.cjs` | **Đạt** | file:// vẫn hoạt động; không worker · [log](verification/offline-fix-5/logs/file-url.log) |
-| `check-shared-files-p3p4.cjs` | **Đạt** | Preview-3/4 giống hệt · [log](verification/offline-fix-5/logs/shared-p3p4.log) |
-| `scan-layout-en-5.cjs` | **Đạt** | 0 lỗi chỉ ở EN, cả 5 cỡ · [log](verification/offline-fix-5/logs/layout-en.log) |
-| `tools/perf/verify-gd6-functional.cjs --a verification/p5-books/baseline/map-surroundings-preview-5.html --b map-surroundings-preview-5.html --out ../../../../verification/p5-books/p5-05/gd6-functional-offline-fix.json` | **Đạt** | Đúng 13 khác biệt, khớp từng dòng; 0 lỗi · [log](verification/offline-fix-5/logs/gd6-functional.log) |
+| `tools/check-station-photos-5.cjs` | **Đạt** | 504 lượt: 490 ảnh + 14 biểu tượng; bấm chuẩn bị, mở tab mới/tải lại offline · [log](../../verification/offline-fix-5/logs/station-photos.log) |
+| `tools/check-station-panel-5.cjs` | **Đạt** | 6 cỡ, hành trình/thẻ/kỷ niệm/bưu thiếp/sách · [log](../../verification/offline-fix-5/logs/station-panel.log) |
+| `tools/verify-preview5-conversation-cards.cjs` | **Đạt** | 6 cỡ và trọn lượt chơi · [log](../../verification/offline-fix-5/logs/conversation-cards.log) |
+| `tools/check-i18n-5.cjs --walk` | **Đạt** | Không còn chữ Việt sót, không lỗi trang · [log](../../verification/offline-fix-5/logs/i18n-walk.log) |
+| `tools/build-content-en-5.cjs --check` | **Đạt** | 710 bản dịch, 36 ga, 144 thẻ; tệp sinh khớp · [log](../../verification/offline-fix-5/logs/content-en-check.log) |
+| `python tools/build-preview-5-offline.py --check` | **Đạt** | Manifest khớp; không ghi tệp · [log](../../verification/offline-fix-5/logs/offline-manifest-check.log) |
+| `tools/check-books-5.cjs --render` | **Đạt** | Không lỗi; giữ cảnh báo nội dung sách nháp · [log](../../verification/offline-fix-5/logs/books-render.log) |
+| `verify-p5-01.cjs` | **Đạt** | 21/21 · [log](../../verification/offline-fix-5/logs/verify-p5-01.log) |
+| `verify-p5-02.cjs` | **Đạt** | 43/43; ca C2 dùng đúng cardIds thử · [log](../../verification/offline-fix-5/logs/verify-p5-02.log) |
+| `verify-dialog-lang-5.cjs` | **Đạt** | 17/17 · [log](../../verification/offline-fix-5/logs/dialog-lang.log) |
+| `walk-presentation-p5-05.cjs` | **Đạt** | 8/8 tổ hợp; có tải PNG · [log](../../verification/offline-fix-5/logs/presentation.log) |
+| `net-before-book-p5-05.cjs` | **Đạt** | 0 request sách trước mở, 3 sau mở; đếm cả worker · [log](../../verification/offline-fix-5/logs/net-before-book-p5-05.log) |
+| `probe-offline-sw-5.cjs` | **Đạt** | Idle 0 worker / 0 sách; sau bấm 491/491; scope đúng · [log](../../verification/offline-fix-5/logs/probe-offline-sw-5.log) |
+| `probe-offline-stale-5.cjs` | **Đạt** | JS/CSS/JSON ?v mới và navigation tới mạng; cache fallback khi offline · [log](../../verification/offline-fix-5/logs/probe-offline-stale-5.log) |
+| `check-file-url.cjs` | **Đạt** | file:// vẫn hoạt động; không worker · [log](../../verification/offline-fix-5/logs/file-url.log) |
+| `check-shared-files-p3p4.cjs` | **Đạt** | Preview-3/4 giống hệt · [log](../../verification/offline-fix-5/logs/shared-p3p4.log) |
+| `scan-layout-en-5.cjs` | **Đạt** | 0 lỗi chỉ ở EN, cả 5 cỡ · [log](../../verification/offline-fix-5/logs/layout-en.log) |
+| `tools/perf/verify-gd6-functional.cjs --a verification/p5-books/baseline/map-surroundings-preview-5.html --b map-surroundings-preview-5.html --out ../../../../verification/p5-books/p5-05/gd6-functional-offline-fix.json` | **Đạt** | Đúng 13 khác biệt, khớp từng dòng; 0 lỗi · [log](../../verification/offline-fix-5/logs/gd6-functional.log) |
 
-**Ca bổ sung:** [503 → thử lại](verification/offline-fix-5/logs/probe-offline-retry-5.log) và [manifest cũ → exit 1, không ghi](verification/offline-fix-5/logs/manifest-stale-fixture.log) đều Đạt.
+**Ca bổ sung:** [503 → thử lại](../../verification/offline-fix-5/logs/probe-offline-retry-5.log) và [manifest cũ → exit 1, không ghi](../../verification/offline-fix-5/logs/manifest-stale-fixture.log) đều Đạt.
 
-[Tổng hợp trạng thái JSON](verification/offline-fix-5/final-results.json) · [Báo cáo 504 lượt ga](verification/station-photos-5/e2e/report.json) · [GD6 mới](verification/p5-books/p5-05/gd6-functional-offline-fix.json)
+[Tổng hợp trạng thái JSON](../../verification/offline-fix-5/final-results.json) · [Báo cáo 504 lượt ga](../../verification/station-photos-5/e2e/report.json) · [GD6 mới](../../verification/p5-books/p5-05/gd6-functional-offline-fix.json)
 
 ## Hồ sơ ảnh và bàn giao
 
-- [Catalog 36 ga: 35 ảnh + 1 placeholder](assets/goi-viet/station-photos-5/catalog.json), [ghi công](assets/goi-viet/station-photos-5/CREDITS.md), [hướng dẫn bảo trì và --check](assets/goi-viet/station-photos-5/README.md).
-- [Bảng ảnh desktop 1](verification/station-photos-5/e2e/desktop-contact-1.jpg), [desktop 2](verification/station-photos-5/e2e/desktop-contact-2.jpg); [mobile 1](verification/station-photos-5/e2e/mobile-contact-1.jpg), [mobile 2](verification/station-photos-5/e2e/mobile-contact-2.jpg). Các bảng đã thay Hoàng Sa bằng biểu tượng.
+- [Catalog 36 ga: 35 ảnh + 1 placeholder](../../assets/goi-viet/station-photos-5/catalog.json), [ghi công](../../assets/goi-viet/station-photos-5/CREDITS.md), [hướng dẫn bảo trì và --check](../../assets/goi-viet/station-photos-5/README.md).
+- [Bảng ảnh desktop 1](../../verification/station-photos-5/e2e/desktop-contact-1.jpg), [desktop 2](../../verification/station-photos-5/e2e/desktop-contact-2.jpg); [mobile 1](../../verification/station-photos-5/e2e/mobile-contact-1.jpg), [mobile 2](../../verification/station-photos-5/e2e/mobile-contact-2.jpg). Các bảng đã thay Hoàng Sa bằng biểu tượng.
 - Cập nhật mục 5 và danh sách tệp mục 9 của BAO-CAO-P5-05.md; không xóa lịch sử nghiệm thu P5-05.
 - Các harness trong verification được sửa theo yêu cầu nhưng thư mục này bị Git bỏ qua, nên chúng hiện nằm trong workspace. Không stage/commit/push.
 

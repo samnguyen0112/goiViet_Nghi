@@ -42,7 +42,7 @@ Mọi thay đổi chỉ gồm preview-5 và tài nguyên `-5`. Tệp dùng chung
 - **Sách tham chiếu Hà Nội:** 1 bìa và 12 trang đôi là ảnh PNG 1536×1024, **chữ tiếng Việt in thẳng trong ảnh**, không có lớp tranh tách chữ. Tệp nặng 46,3 MB (33 MB ảnh). Nội dung gồm 7 phần, khoảng 2.280 từ trên 24 trang, trung bình gần 100 từ mỗi trang. Đây là bản nháp đang soạn.
 - **Hạ tầng:** dự án nạp dữ liệu bằng `<script>`, không dùng `fetch`. Font nhúng sẵn trong HTML (Be Vietnam Pro, Playfair Display), nên chạy được offline và mở trực tiếp từ tệp.
 - **Chuỗi tiếng Việt đang là khóa kỹ thuật:** chủ đề (`data-topic="Ẩm thực"`, regex trong `conversation-cards-5.js`), tên vùng (`MINERAL_PALETTE['Đồng bằng sông Hồng']` trong `webgl-terrain-renderer-3.js`). Không được dịch các trường này tại chỗ trong dữ liệu.
-- **Hiệu năng lịch sử (GĐ6):** vào bản đồ ở CPU chậm 4 lần mở màn che sau 9,5 giây trên preview-5 so với 13,9 giây trên preview-4; byte tới cổng 13,53 → 9,60 MiB. Chỉ dùng tham khảo. Mốc nghiệm thu đợt này là **preview-5 trước thay đổi so với preview-5 ứng viên**. [Báo cáo GĐ6](BAO-CAO-GD6-PREVIEW-5.md)
+- **Hiệu năng lịch sử (GĐ6):** vào bản đồ ở CPU chậm 4 lần mở màn che sau 9,5 giây trên preview-5 so với 13,9 giây trên preview-4; byte tới cổng 13,53 → 9,60 MiB. Chỉ dùng tham khảo. Mốc nghiệm thu đợt này là **preview-5 trước thay đổi so với preview-5 ứng viên**. [Báo cáo GĐ6](../02-nang-cap-hieu-nang/BAO-CAO-GD6-PREVIEW-5.md)
 - **Git** chưa theo dõi HTML preview-5 và một số tài nguyên bản này đang nạp. `AGENTS.md` vẫn ghi bản mặc định là preview-3.
 
 ## 2. Quy tắc trải nghiệm và dữ liệu
