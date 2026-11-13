@@ -1,0 +1,23 @@
+/* Preview-5 only: legibility overrides for shared stylesheets (command bar, postcard, station photo credit).
+   Shared files stay untouched so earlier previews and the arrival demo keep their look.
+   Targets: functional text >= 11px; text contrast >= 4.5:1 in light and dark; credit controls >= 24px tall. */
+@media (min-width: 769px) {
+  body[data-regional-preview]:has(#introScreen.intro-hidden) #mapScene .top-header {
+    & .heritage-turn-prefix,
+    & .heritage-progress-prefix { font-size: 11px; letter-spacing: .02em; color: #7d5c2e; }
+  }
+  html[data-theme='dark'] body[data-regional-preview]:has(#introScreen.intro-hidden) #mapScene .top-header {
+    & .heritage-turn-prefix,
+    & .heritage-progress-prefix { color: #d8bd88; }
+  }
+}
+
+#postcardModal .postcard-kicker { font-size: 11px; color: #7d5c2e; }
+html[data-theme='dark'] #postcardModal .postcard-kicker { color: #d8bd88; }
+#postcardModal .postcard-preview-heading p { font-size: 11px; }
+
+body[data-regional-preview]:has(#introScreen.intro-hidden) #mapScene :is(#stationPanel.gv-station-v5, #arrivalSheet) {
+  & .gv-station-photo-credit { font-size: 11px; }
+  & .gv-station-photo-credit summary { min-height: 24px; }
+  & .gv-station-photo-credit a { display: inline-flex; align-items: center; min-height: 24px; }
+}

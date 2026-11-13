@@ -68,6 +68,11 @@ async function main() {
     const reset=()=>page.evaluate(()=>{performSessionReset();});
     const letter=async()=>{const s=await inspect();if(s.phase==='sent')await act('next-letter');if((await inspect()).phase==='map')await act('open-letter');};
     const send=async()=>{await act('complete');assert.equal((await inspect()).phase,'sent');};
+    const assertNoHorizontalOverflow = async () => {
+      const widths = await page.locator('#naturalIslandModal :is(.modal-sheet,.natural-detail-body,.voyage-modebar)').evaluateAll(elements =>
+        elements.map(element => [element.className, element.scrollWidth, element.clientWidth]));
+      for (const [name, actual, available] of widths) assert(actual <= available + 1, `${name} overflows: ${actual} > ${available}`);
+    };
     const defaultFlags=process.argv.slice(2).filter(x=>x.startsWith('--'));
     const focused=defaultFlags.some(x=>['--deck-only','--dpi-only','--stress-only','--layout-only','--offline-only'].includes(x));
     if(defaultFlags.includes('--layout-only')){
@@ -89,6 +94,51 @@ async function main() {
         assert(await page.locator('.sea-letter-bottom [data-voyage-action="complete"]').evaluate(e=>{const r=e.getBoundingClientRect(),b=e.closest('.natural-detail-body').getBoundingClientRect();return r.bottom<=b.bottom+1&&r.x>=b.x&&r.right<=b.right;}));await shot('letter-'+width);
       }
       ok('Final visual QA: boat clears all text in 5 desktop sizes; open-letter primary action fits 4 desktop sizes');
+      await reset();await open(page,'hoang-sa');
+      const menu = page.locator('.sea-more > summary');
+      await menu.focus();await page.keyboard.press('Enter');
+      assert(await page.locator('.sea-more-content').isVisible());
+      await shot('hoang-sa-menu-961');
+      await page.keyboard.press('Escape');assert(await page.locator('.sea-more-content').isHidden());
+      assert(await menu.evaluate(el => el === document.activeElement));
+      await more('destinations');assert(await page.locator('#seaDestinations').isVisible());
+      await page.keyboard.press('Escape');assert(await page.locator('#seaDestinations').isHidden());
+      await more('destinations');await page.locator('#seaDestinations [data-island="truong-sa"]').click();
+      assert.equal((await inspect()).currentId,'truong-sa');
+      assert(await page.locator('.voyage-modebar [data-voyage-action="play"]').evaluate(el => el === document.activeElement));
+      await letter();const beforeRole = await page.locator('.sea-reader').innerText();
+      await more('roles');assert.notEqual(await page.locator('.sea-reader').innerText(),beforeRole);
+      await more('en');assert.equal(await page.locator('.sea-more [data-voyage-action="en"]').getAttribute('aria-pressed'),'true');
+      await more('vi');await page.keyboard.press('Escape');
+      await more('originals');assert(await page.locator('#deckModal').isVisible());
+      await page.keyboard.press('Escape');assert(await page.locator('#deckModal').isHidden());
+      await open(page,'truong-sa');
+      assert.equal((await inspect()).phase,'letter');
+      const word = page.locator('[data-voyage-action="word"]').first();
+      await word.click();assert.equal(await word.getAttribute('aria-pressed'),'true');
+      await send();await letter();
+      for (const [width,height] of [[1920,1080],[1366,768],[1024,660],[961,600]]) {
+        await page.setViewportSize({width,height});
+        await assertNoHorizontalOverflow();
+        const sendButton = page.locator('.sea-letter-bottom [data-voyage-action="complete"]');
+        await sendButton.scrollIntoViewIfNeeded();
+        assert(await sendButton.evaluate(el => {
+          const rect = el.getBoundingClientRect(), body = el.closest('.natural-detail-body').getBoundingClientRect();
+          return rect.top >= body.top && rect.bottom <= body.bottom + 1;
+        }), `Trường Sa send is clipped at ${width}×${height}`);
+        await shot('truong-sa-bag-'+width);
+      }
+      await act('atlas');await assertNoHorizontalOverflow();await shot('truong-sa-atlas-961');
+      await page.locator('#naturalPlus').click();
+      await page.locator('#naturalMinus').click();
+      await page.locator('#naturalFit').click();
+      await page.locator('#naturalOverview').click();
+      await act('play');
+      await page.setViewportSize({width:1366,height:768});
+      await act('bag');await page.locator('.sea-keepsake summary').click();
+      await page.locator('#voyageNote').fill('Mỗi người góp một điều thân thuộc.');
+      await assertNoHorizontalOverflow();await shot('truong-sa-note-1366');
+      ok('Menu keyboard, dismiss, language, roles, destination, original deck Escape and compact Trường Sa layout');
     }
     if(!focused){
       const baseline=JSON.parse(await fs.readFile(path.join(ROOT,'verification/family-voyage-5/baseline.json'),'utf8'));
@@ -136,11 +186,34 @@ async function main() {
       ok('Keyboard opening; words, safe notes, close/reopen and sent state; timer, source shelf and optional full atlas preserve the letter');
       await reset();
       for(const id of ['hoang-sa','truong-sa']){
+        await open(page,id);
+        const P=await page.evaluate(id=>({envelope:GoiVietSeaPostOffice.routes[id].envelope.vi,letters:GoiVietSeaPostOffice.routes[id].letters.map(l=>({place:l.postmark.place.vi,story:l.postmark.story,starters:l.starters?.map(s=>s.vi)})),contexts:GoiVietFamilyVoyageData.routes[id].stops.map(s=>s.context.vi)}),id);
+        assert.equal(await page.locator('.sea-envelope-address small').textContent(),P.envelope);
+        for(let i=0;i<3;i++){
+          await letter();const mark=page.locator('.sea-postmark');
+          assert((await mark.textContent()).includes(P.letters[i].place),`${id} letter ${i+1}: postmark place`);
+          if(P.letters[i].starters)assert.equal((await page.locator('.sea-starters [data-item="0"]').textContent()).trim(),P.letters[i].starters[0]);
+          await mark.click();assert.equal(await page.locator('.sea-story-sheet h4').textContent(),P.contexts[P.letters[i].story],`${id} letter ${i+1}: story`);
+          await page.keyboard.press('Escape');assert.equal((await inspect()).phase,'letter');
+          assert(await mark.evaluate(el=>el===document.activeElement),`${id} letter ${i+1}: focus returns to the postmark`);
+          await act('skip');
+        }
+      }
+      ok('Postmarks name each letter’s real place and open its own story; envelope and Trường Sa starters follow one sending direction');
+      await reset();
+      for(const id of ['hoang-sa','truong-sa']){
         await open(page,id);await shot(id+'-sealed');
         for(let i=0;i<3;i++){
           await letter();if(i===0)await act('word');
           if(id==='truong-sa'&&i===1){for(let n=0;n<4;n++)await page.locator(`[data-voyage-action="bag"][data-item="${n}"]:visible`).click();assert.equal((await inspect()).sessions[id].stops[1].bag.length,3);await shot('truong-sa-bag');await page.locator('[data-voyage-action="bag"][data-item="1"]:visible').click();await page.locator('[data-voyage-action="bag"][data-item="4"]:visible').click();assert.deepEqual((await inspect()).sessions[id].stops[1].bag,[0,2,4]);}
-          if(i===2){await act('starter');assert(await page.locator('#voyageNote').isVisible());}
+          if(i===2){
+            await act('starter');assert(await page.locator('#voyageNote').isVisible());
+            const firstStarter = await page.locator('#voyageNote').inputValue();
+            const secondStarter = page.locator('.sea-starters [data-item="1"]');
+            await secondStarter.click();assert.notEqual(await page.locator('#voyageNote').inputValue(),firstStarter);
+            await page.locator('#voyageNote').fill('Câu nhà mình đã viết.');
+            await act('starter');assert.equal(await page.locator('#voyageNote').inputValue(),'Câu nhà mình đã viết.');
+          }
           else await page.locator('.sea-keepsake summary').click();
           await page.locator('#voyageNote').fill(`${id}: Chuyện nhà ở lá thư ${i+1}.`);if(i===0)await page.locator('#voyageMemoryPlace').fill('Đà Nẵng');
           await send();await page.waitForTimeout(320);await act('next-letter');
@@ -177,9 +250,19 @@ async function main() {
       const first=page.locator('.voyage-fanned-card').first();await page.locator('#naturalClose').focus();await page.mouse.move(0,0);const x=await first.evaluate(e=>e.getBoundingClientRect().x);await page.locator('.voyage-fan').hover();await page.waitForTimeout(100);assert((await first.evaluate(e=>e.getBoundingClientRect().x))<x-15);
       const chosen=await page.locator('.voyage-fanned-card').last().getAttribute('data-card');await page.locator('.voyage-fanned-card').last().focus();await page.keyboard.press('Enter');
       assert.equal((await inspect()).sessions['hoang-sa'].stops[0].cardId,chosen);assert(await page.locator('#voyageSeal').isVisible());assert.equal(await page.locator('#voyageConnection').evaluate(e=>e.inert),true);
-      await act('unseal');assert.equal(await page.locator('#voyageConnection').evaluate(e=>e.inert),false);await act('map');assert(await page.locator('.sea-envelope').isVisible());
+      await shot('hoang-sa-card-sealed');
+      assert(await page.locator('[data-voyage-action="check"]').isDisabled());
+      await act('helper');assert.equal(await page.locator('[data-voyage-action="helper"]').getAttribute('aria-expanded'),'true');
+      await act('option');assert(await page.locator('#voyageHelper').isVisible());
+      await act('unseal');assert.equal(await page.locator('#voyageConnection').evaluate(e=>e.inert),false);
+      await act('map');assert(await page.locator('.sea-envelope').isVisible());
       await more('deck');await page.locator('.voyage-dock-action [data-voyage-action="draw"]').click();await act('explain');assert(await page.locator('.voyage-answer').isVisible());
       await more('originals');assert(await page.locator('#deckModal').isVisible());await page.evaluate(()=>closeDeckModal());
+      await reset();await open(page,'truong-sa');await letter();await more('deck');await act('draw');
+      assert.equal(await page.locator('#voyageConnection').evaluate(el=>el.inert),true,'Opening a letter must not unseal a card');
+      await act('option');await act('check');assert(await page.locator('.voyage-answer').isVisible());
+      assert.equal(await page.locator('#voyageConnection').evaluate(el=>el.inert),false);
+      await assertNoHorizontalOverflow();await shot('truong-sa-card-open');
       ok('Optional reference deck: elastic fan, exact keyboard draw, dual faces, lotus/inert seal, explanation and original-deck handoff');
       await reset();await open(page,'hoang-sa');await more('deck');await page.emulateMedia({reducedMotion:'no-preference'});await page.evaluate(()=>state.reducedMotion=false);
       await page.locator('.voyage-dock-action [data-voyage-action="draw"]').click();assert(await page.locator('.phase-gather').count());await page.waitForTimeout(400);assert(await page.locator('.phase-shuffle').count());

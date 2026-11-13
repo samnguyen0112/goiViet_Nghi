@@ -4,7 +4,7 @@
   'use strict';
   const D = window.GoiVietFamilyVoyageData;
   const P = window.GoiVietSeaPostOffice;
-  if (!D) return;
+  if (!D || !P) return;
   const desktop = matchMedia('(min-width: 961px)');
   const sessions = new Map(), archives = new Map();
   const isEnglish = () => window.GoiVietI18n?.lang() === 'en';
@@ -15,18 +15,36 @@
   const lotus = '<svg viewBox="0 0 64 64" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M32 48C15 37 19 20 32 9c13 11 17 28 0 39Z"/><path d="M32 48C16 49 7 35 9 22c15 1 23 11 23 26Zm0 0c16 1 25-13 23-26-15 1-23 11-23 26Z"/><path d="M32 48C17 56 5 45 4 34c13-1 22 3 28 14Zm0 0c15 8 27-3 28-14-13-1-22 3-28 14Z"/><path d="M19 54h26M32 26v22"/></g></svg>';
   const $ = selector => dialog?.querySelector(selector);
   const btn = (action, text, extra = '', primary = false) => `<button type="button" class="voyage-btn${primary ? ' voyage-primary' : ''}" data-voyage-action="${action}" ${extra}>${E(text)}</button>`;
+  const seaButton = (action, label, symbol, {primary = false, attributes = ''} = {}) => `
+    <button type="button" class="voyage-btn sea-btn${primary ? ' voyage-primary' : ''}" data-voyage-action="${action}" ${attributes}>
+      ${icon(symbol)}<span>${E(label)}</span>
+    </button>`;
   const landscape = () => window.GoiVietNaturalLandscape;
   const shuffle = input => { const a = [...input]; for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; };
-  let dialog, body, root, bar, map, nativeLayout, mapSlot, panel, scene, dock, workbench, album, rail, layer, toolbar, live;
+  let dialog, body, root, bar, map, nativeLayout, scene, dock, workbench, album, live;
   let enabled = false, currentId = null, groupData = null, mode = 'play', activeArchive = -1, targetEntries = [];
   let drawLock = false, drawTimers = [], timer = null, seconds = 60, exporting = false;
-  let viewTicket = 0, original = null, completingUntil = 0;
+  let viewTicket = 0, original = null, completingUntil = 0, returnToPostmark = false;
   const getSession = () => sessions.get(currentId);
   const getRoute = () => D.routes[currentId];
   const getStop = () => getSession()?.stops[getSession().index];
   const getStep = () => getRoute()?.stops[getSession().index];
-  const getLetter = index => P?.routes[currentId]?.letters[index ?? getSession()?.index];
-  const focus = selector => queueMicrotask(() => { const el = $(selector); if(enabled && dialog.classList.contains('open') && el && !el.closest('[hidden],[inert]')) el.focus({preventScroll:true}); });
+  const getLetter = index => P.routes[currentId]?.letters[index ?? getSession()?.index];
+  const letterStarters = () => getLetter()?.starters || getStep().starters;
+  // A letter may tell its story through another stop (its postmark); the card deck keeps its own stop order.
+  const storyStep = () => { const i = Math.min(getSession().index, 2); return getRoute().stops[getLetter(i)?.postmark?.story ?? i]; };
+  const focus = selector => queueMicrotask(() => {
+    const element = $(selector);
+    if (!enabled || !dialog.classList.contains('open') || !element?.getClientRects().length || element.closest('[hidden],[inert]')) return;
+    element.focus({preventScroll:true});
+    if (body.contains(element)) {
+      const target = element.getBoundingClientRect();
+      const viewport = body.getBoundingClientRect();
+      if (target.top < viewport.top || target.bottom > viewport.bottom) {
+        element.scrollIntoView({block:'nearest', inline:'nearest'});
+      }
+    }
+  });
   const announce = message => { if(live) live.textContent = message; };
   const person = index => typeof getPlayerDisplayName === 'function' ? getPlayerDisplayName(index) : say('turn',{name:String(index+1)});
   const authorOf = stop => stop.author ? person(stop.playerIdx) : '';
@@ -34,7 +52,7 @@
   const roles = () => { const s=getSession(),n=Math.max(2,state.playerCount||2),i=(s?.turnIndex??state.currentPlayerIndex??0)%n;return s?.roleOffset?[person((i+1)%n),person(i)]:[person(i),person((i+1)%n)]; };
   const reduced = () => state.reducedMotion || matchMedia('(prefers-reduced-motion: reduce)').matches;
   function fresh(id) {
-    return { id, title:'', date:new Date().toISOString(), index:0, phase:'map', turnIndex:state.currentPlayerIndex||0,roleOffset:0, view:null, albumEdit:false,
+    return { id, title:'', date:new Date().toISOString(), index:0, phase:'map', turnIndex:state.currentPlayerIndex||0,roleOffset:0, view:null, albumEdit:false, albumOptionsOpen:false,
       stops:D.routes[id].stops.map((_,i) => ({routeId:id,letterIndex:i,found:false,status:'pending',opened:false,wordIndex:-1,noteOpen:false,drawn:[],cardId:null,order:[],selected:null,revealed:false,unlocked:false,activity:0,hint:0,clueOpen:false,note:'',memoryPlace:'',bag:[],starter:-1,author:'',playerIdx:0,helperIdx:null,memoryId:null,memorySig:''})) };
   }
   function currentEntries() { return window.GoiVietIslandChart?.inspect().entries || []; }
@@ -55,18 +73,24 @@
   function mount(el) {
     if(dialog)return;
     dialog=el;body=$('.natural-detail-body');map=$('.natural-detail-map');nativeLayout=$('.island-chart-layout');
-    bar=document.createElement('nav');bar.className='voyage-modebar voyage-only';bar.setAttribute('aria-label',say('brand'));body.prepend(bar);
+    bar=document.createElement('nav');bar.className='voyage-modebar voyage-only';body.before(bar);
     root=document.createElement('div');root.className='voyage-root voyage-only';
-    root.innerHTML='<div class="sea-scene"></div><div class="voyage-grid"><div class="voyage-map-slot"></div><aside class="voyage-panel"></aside></div><div class="voyage-dock"></div><div class="voyage-workbench"></div><section class="voyage-album"></section><nav class="voyage-rail"></nav><p class="voyage-status" role="status" aria-live="polite" aria-atomic="true"></p>';
-    body.append(root);mapSlot=$('.voyage-map-slot');panel=$('.voyage-panel');dock=$('.voyage-dock');workbench=$('.voyage-workbench');album=$('.voyage-album');rail=$('.voyage-rail');live=$('.voyage-status');
+    root.innerHTML='<div class="sea-scene"></div><div class="voyage-dock"></div><div class="voyage-workbench"></div><section class="voyage-album"></section><p class="voyage-status" role="status" aria-live="polite" aria-atomic="true"></p>';
+    body.append(root);dock=$('.voyage-dock');workbench=$('.voyage-workbench');album=$('.voyage-album');live=$('.voyage-status');
     scene=$('.sea-scene');
-    layer=document.createElement('div');layer.className='voyage-map-layer voyage-only';map.append(layer);
-    toolbar=document.createElement('div');toolbar.className='voyage-map-tools voyage-only';map.append(toolbar);
     const kicker=document.createElement('div');kicker.className='voyage-kicker voyage-only';$('#naturalIslandHeading').before(kicker);
     dialog.addEventListener('click',handleClick);
+    dialog.addEventListener('focusin', event => {
+      const more = $('.sea-more');
+      if (more?.open && !more.contains(event.target)) more.open = false;
+    });
     dialog.addEventListener('input',handleInput);
     dialog.addEventListener('change',handleChange);
-    dialog.addEventListener('toggle',e=>{if(e.target.classList?.contains('sea-keepsake')&&getStop())getStop().noteOpen=e.target.open;},true);
+    dialog.addEventListener('toggle', event => {
+      if (event.target.matches('.sea-keepsake') && getStop()) getStop().noteOpen = event.target.open;
+      if (event.target.matches('.sea-album-options') && getSession()) getSession().albumOptionsOpen = event.target.open;
+      if (event.target.matches('.voyage-card-reading') && getStop()) getStop().readingOpen = event.target.open;
+    }, true);
     desktop.addEventListener('change',() => {
       if(!currentId || !D.routes[currentId])return;
       if(!desktop.matches){snapshot();cancelDraw();stopTimer();disable();}
@@ -82,6 +106,7 @@
   function disable() {
     ++viewTicket;enabled=false;dialog.classList.remove('voyage-enabled','sea-postoffice','voyage-atlas','voyage-card-open','voyage-deck-open','voyage-album-open','voyage-destinations-open');
     delete dialog.dataset.voyagePhase;
+    body.scrollTop = 0;
     if(nativeLayout && map)nativeLayout.append(map);
     if(original){
       const route=D.routes[currentId],heading=route&&window.GoiVietI18n?.t('isl.heading',{place:route.name}),caption=route&&window.GoiVietI18n?.t('isl.captionArch');
@@ -94,16 +119,20 @@
   function onGroup(group) {
     cancelDraw();stopTimer();
     groupData=group;currentId=group.id;mode='play';activeArchive=-1;
+    const choosingDestination = dialog.classList.contains('voyage-destinations-open');
+    dialog.classList.remove('voyage-destinations-open');
     const entries=currentEntries();targetEntries=D.routes[currentId]?.stops.map(step=>entries.find(e=>e.type==='land'&&e.label===step.target))||[];
     original={heading:$('#naturalIslandHeading').textContent,caption:$('.natural-detail-caption').textContent};
     if(!D.routes[currentId] || !desktop.matches){disable();return;}
     if(!sessions.has(currentId))sessions.set(currentId,fresh(currentId));
     enable();render();refreshMap();
+    if (choosingDestination) focus('.voyage-modebar [data-voyage-action="play"]');
     markPlaceExplored(currentId);
   }
   function onClose() {
     if (!enabled) return;
     snapshot();cancelDraw();stopTimer();++viewTicket;
+    $('.sea-more').open = false;
     queueMicrotask(() => window.GoiVietArrivalDemo?.refresh());
   }
   function cancelDraw() {
@@ -116,8 +145,7 @@
     if(!enabled || getSession()?.index>=3)return;
     const entry=currentEntries().find(e=>e.value===String(value));if(!entry)return;
     const found=entry.label===getStep().target;
-    if(found){getStop().found=true;renderPanel();renderDock();announce(say('found',{place:geo(entry.label)}));}
-    else announce(say('looking',{place:geo(entry.label)}));
+    if (found) getStop().found = true;
     snapshot();
   }
   function render() {
@@ -126,19 +154,70 @@
     const card=mode==='play'&&s.phase==='card'&&!!getStop()?.cardId;
     const deck=mode==='play'&&s.phase==='deck';
     const showAlbum=mode==='album'||(mode==='play'&&s.index>=3&&s.phase!=='sent');
+    const phase = mode==='atlas'||mode==='story' ? mode : showAlbum ? 'album' : card ? 'card' : deck ? 'deck' : s.phase;
+    if (dialog.dataset.voyagePhase !== phase) body.scrollTop = 0;
+    announce('');
     dialog.classList.toggle('voyage-atlas',mode==='atlas');dialog.classList.toggle('voyage-card-open',card);
     dialog.classList.toggle('voyage-deck-open',deck);dialog.classList.toggle('voyage-album-open',showAlbum);
-    dialog.dataset.voyagePhase=mode==='atlas'?'atlas':showAlbum?'album':card?'card':deck?'deck':s.phase;
+    dialog.dataset.voyagePhase = phase;
     if(map.parentElement!==nativeLayout)nativeLayout.append(map);
     $('.voyage-kicker').textContent=say('brand');$('#naturalIslandHeading').textContent=route.name;
     $('.natural-detail-caption').textContent=L(P.routes[currentId].subtitle);
-    $('#naturalClose').textContent=say('pause');$('#naturalClose').setAttribute('aria-label',say('pause'));
-    bar.innerHTML=`<div class="sea-quiet-nav">${btn('play',say('play'),`aria-pressed="${mode==='play'}"`)}${btn('atlas',say('atlas'),`aria-pressed="${mode==='atlas'}"`)}${btn('album',say('album'),`aria-pressed="${mode==='album'}"`)}</div><details class="sea-more"><summary>${E(say('more'))} <span aria-hidden="true">+</span></summary><div class="sea-more-content">${s.index<3?btn('deck',say('deck')):''}${btn('story',say('source'))}${btn('originals',say('originals'))}${btn('destinations',say('switch'))}${s.index<3?btn('roles',say('swapRoles')):''}<div class="voyage-language" role="group" aria-label="Language"><button type="button" data-voyage-action="vi" aria-pressed="${!isEnglish()}">VI</button><button type="button" data-voyage-action="en" aria-pressed="${isEnglish()}">EN</button></div></div></details>`;
-    renderScene();renderDock();renderCards();renderAlbum();renderRail();
+    $('#naturalClose').innerHTML = `${icon('close')}<span>${E(say('pause'))}</span>`;
+    $('#naturalClose').setAttribute('aria-label',say('pause'));
+    renderNavigation(showAlbum);
+    renderScene();renderDock();renderCards();renderAlbum();
     refreshMap();
   }
+  function renderNavigation(showAlbum) {
+    const hasLetter = getSession().index < 3;
+    const active = showAlbum ? 'album' : mode;
+    const destinationsOpen = dialog.classList.contains('voyage-destinations-open');
+    bar.setAttribute('aria-label', say('brand'));
+    bar.innerHTML = `
+      <div class="sea-quiet-nav">
+        ${seaButton('play', say('play'), 'letter', {attributes:`aria-pressed="${active === 'play'}"`})}
+        ${seaButton('atlas', say('atlas'), 'map', {attributes:`aria-pressed="${active === 'atlas'}"`})}
+        ${seaButton('album', say('album'), 'book', {attributes:`aria-pressed="${active === 'album'}"`})}
+      </div>
+      <details class="sea-more">
+        <summary>${icon('more')}<span>${E(say('more'))}</span>${icon('chevron')}</summary>
+        <div class="sea-more-content">
+          ${hasLetter ? seaButton('deck', say('deck'), 'cards') : ''}
+          ${seaButton('story', say('source'), 'book')}
+          ${seaButton('originals', say('originals'), 'lotus')}
+          <div class="sea-menu-group">
+            ${seaButton('destinations', say('switch'), 'map', {attributes:`aria-expanded="${destinationsOpen}" aria-controls="seaDestinations"`})}
+            ${hasLetter ? seaButton('roles', say('swapRoles'), 'swap') : ''}
+          </div>
+          <div class="sea-menu-language">
+            <span>${E(say('language'))}</span>
+            <div class="voyage-language" role="group" aria-label="${E(say('language'))}">
+              ${btn('vi', 'VI', `aria-pressed="${!isEnglish()}"`)}
+              ${btn('en', 'EN', `aria-pressed="${isEnglish()}"`)}
+            </div>
+          </div>
+        </div>
+      </details>`;
+    $('.natural-island-tabs').id = 'seaDestinations';
+  }
   function icon(name) {
+    if (name === 'lotus') return lotus;
     const paths={
+      close:'<path d="m17 17 30 30m0-30L17 47"/>',
+      chevron:'<path d="m19 26 13 13 13-13"/>',
+      arrow:'<path d="M11 32h40M36 17l15 15-15 15"/>',
+      back:'<path d="M53 32H13m15-15L13 32l15 15"/>',
+      more:'<circle cx="15" cy="32" r="2"/><circle cx="32" cy="32" r="2"/><circle cx="49" cy="32" r="2"/>',
+      map:'<path d="m9 17 15-7 16 7 15-7v37l-15 7-16-7-15 7zm15-7v37m16-30v37"/>',
+      book:'<path d="M32 15C24 9 13 9 7 13v36c10-4 18-3 25 2 7-5 15-6 25-2V13c-6-4-17-4-25 2Zm0 0v36"/>',
+      cards:'<rect x="20" y="13" width="34" height="43" rx="4"/><path d="M14 47 7 12l33-7 1 4M28 27h18m-18 8h18m-18 8h12"/>',
+      swap:'<path d="M9 21h45M44 11l10 10-10 10M55 43H10m10-10L10 43l10 10"/>',
+      pen:'<path d="m11 43-3 13 13-3 32-32a7 7 0 0 0-10-10Zm26-26 10 10"/>',
+      refresh:'<path d="M51 25a20 20 0 1 0 0 14m0-28v14H37"/>',
+      timer:'<circle cx="32" cy="35" r="20"/><path d="M32 15V8m-8 0h16m-8 15v12l8 6"/>',
+      download:'<path d="M32 8v32M20 29l12 12 12-12M10 45v9h44v-9"/>',
+      check:'<path d="m13 32 12 12 26-27"/>',
       letter:'<path d="M8 17h48v32H8z"/><path d="m8 17 24 19 24-19M8 49l16-18m32 18L40 31"/>',
       home:'<path d="m8 31 24-20 24 20M14 26v28h36V26M26 54V37h12v17"/>',
       heart:'<path d="M32 53 10 31C-2 13 20 3 32 18 44 3 66 13 54 31Z"/>',
@@ -157,80 +236,190 @@
     return `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths[name]||paths.letter}</svg>`;
   }
   function boatMarkup() {
-    return '<div class="sea-water" aria-hidden="true"><svg viewBox="0 0 1100 290" preserveAspectRatio="none"><path d="M0 80Q180 15 360 85T720 75T1100 80V290H0Z"/><path d="M0 160Q220 90 440 145T880 145T1100 155"/><path d="M0 228Q180 165 360 220T720 220T1100 225"/></svg></div><img class="sea-sailboat" src="assets/goi-viet/memory-reference-v5/sailboat-single-640.webp" alt="" aria-hidden="true">';
+    return '<img class="sea-sailboat" src="assets/goi-viet/memory-reference-v5/sailboat-single-640.webp" alt="" aria-hidden="true">';
+  }
+  function letterStatus(stop, active = false) {
+    if (stop.status === 'done') return say('sent');
+    if (stop.status === 'skipped') return say('skipped');
+    if (active) return say('currentLetter');
+    return say(stop.opened ? 'draftLetter' : 'pendingLetter');
+  }
+  function letterRail(session) {
+    return `<aside class="sea-letter-rail" aria-label="${E(say('progress'))}">
+      <div class="sea-rail-cover">
+        <h3 class="sea-scene-heading">${E(L(P.routes[currentId].title))}</h3>
+        ${boatMarkup()}
+      </div>
+      <ol>${P.routes[currentId].letters.map((letter, index) => {
+        const stop = session.stops[index];
+        const active = session.phase === 'sent' ? index === session.lastSent : index === session.index;
+        const mark = stop.status === 'done' ? 'check' : letter.icon;
+        return `<li data-status="${stop.status}" ${active ? 'aria-current="step"' : ''}>
+          <span class="sea-step-icon">${icon(mark)}</span>
+          <div><strong>${E(L(letter.title))}</strong><small>${E(letterStatus(stop, active))}</small></div>
+        </li>`;
+      }).join('')}</ol>
+    </aside>`;
+  }
+  function choice(action, label, symbol, index, selected) {
+    return `<button type="button" class="sea-choice sea-${action}-choice" data-voyage-action="${action}" data-item="${index}" aria-pressed="${selected}">
+      <span class="sea-choice-icon">${icon(symbol)}</span>
+      <strong>${E(label)}</strong>
+      <span class="sea-choice-check">${icon('check')}</span>
+    </button>`;
+  }
+  function renderInvitation(letter, stop) {
+    if (letter.kind === 'words') {
+      const symbols = currentId === 'hoang-sa' ? ['sun','home','sail','heart'] : ['rice','tree','home','heart'];
+      return `<div class="sea-word-choices" role="group" aria-labelledby="seaInvitation">
+        ${letter.words.map((word, index) => choice('word', L(word), symbols[index], index, stop.wordIndex === index)).join('')}
+      </div><p class="sea-whisper">${E(say(stop.wordIndex >= 0 ? 'wordAfter' : 'wordHint'))}</p>`;
+    }
+    if (letter.kind === 'bag') {
+      const symbols = ['bell','cup','photo','moon','rice','music'];
+      const count = say('bagCount', {n: stop.bag.length});
+      return `<div class="sea-bag-progress">
+        <span>${E(count)}</span>
+        <div class="sea-bag-slots" aria-hidden="true">${Array.from({length:3}, (_, i) => {
+          const item = stop.bag[i];
+          return `<span class="${item === undefined ? '' : 'is-filled'}">${item === undefined ? '·' : icon(symbols[item])}</span>`;
+        }).join('')}</div>
+      </div>
+      <div class="sea-bag-choices" role="group" aria-labelledby="seaInvitation">
+        ${D.bag.map((item, index) => choice('bag', L(item), symbols[index], index, stop.bag.includes(index))).join('')}
+      </div><p class="sea-whisper">${E(say(stop.bag.length === 3 ? 'bagAfter' : 'bagHint'))}</p>`;
+    }
+    if (letter.kind === 'letter') {
+      return `<div class="sea-starters" role="group" aria-labelledby="seaInvitation">
+        ${letterStarters().map((text, index) => seaButton('starter', L(text), 'pen', {
+          attributes: `data-item="${index}" aria-pressed="${stop.starter === index}"`
+        })).join('')}
+      </div><p class="sea-whisper">${E(say('letterHint'))}</p>`;
+    }
+    return `<div class="sea-listening-shell">
+      <span class="sea-listening-icon">${icon('shell')}</span>
+      <p>${E(say('listenHint'))}</p>
+      ${seaButton('timer', say(timer ? 'stopTimer' : 'listen'), 'timer', {attributes:`aria-pressed="${Boolean(timer)}"`})}
+      <span class="voyage-timer" aria-live="off" ${timer ? '' : 'hidden'}>${timer ? seconds + 's' : ''}</span>
+    </div>`;
+  }
+  function postmarkMarkup(letter) {
+    const mark = letter.postmark;
+    if (!mark) return '';
+    const place = L(mark.place), detail = L(mark.detail);
+    return `<button type="button" class="sea-postmark" data-voyage-action="story" aria-label="${E(say('postmarkLabel', {place: place + ' · ' + detail}))}">
+      <svg class="sea-postmark-waves" viewBox="0 0 40 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M2 6c4-3 5 3 9 0s5 3 9 0 5 3 9 0 5 3 9 0M2 12c4-3 5 3 9 0s5 3 9 0 5 3 9 0 5 3 9 0M2 18c4-3 5 3 9 0s5 3 9 0 5 3 9 0 5 3 9 0"/></svg>
+      <span class="sea-postmark-stamp"><strong>${E(place)}</strong><small>${E(detail)}</small></span>
+      <span class="sea-postmark-cue">${icon('book')}<span>${E(say('postmarkCue'))}</span></span>
+    </button>`;
+  }
+  function writingDrawer(stop) {
+    return `<details class="sea-keepsake" ${stop.noteOpen ? 'open' : ''}>
+      <summary>${icon('pen')}<span>${E(say('keepLine'))}</span>${icon('chevron')}</summary>
+      <div class="sea-writing-fields">
+        <label for="voyageNote">${E(say('note'))}</label>
+        <textarea id="voyageNote" maxlength="180" rows="2" placeholder="${E(say('noteHint'))}">${E(stop.note)}</textarea>
+        <span class="voyage-note-counter">${stop.note.length}/180</span>
+        <label for="voyageMemoryPlace">${E(say('mainland'))}</label>
+        <input id="voyageMemoryPlace" maxlength="80" value="${E(stop.memoryPlace)}" placeholder="${E(say('mainlandHint'))}">
+        <small class="sea-draft-notice">${E(say('draftOnly'))}</small>
+      </div>
+    </details>`;
   }
   function renderScene() {
-    if(!enabled||!scene)return;
-    const s=getSession(),route=getRoute();if(!s||!route)return;
-    if(mode==='story'){
-      const step=route.stops[Math.min(s.index,2)];
-      scene.innerHTML=`<article class="sea-story-sheet"><span class="sea-overline">${E(L(step.context))}</span><h3 tabindex="-1">${E(say('source'))}</h3><p>${E(L(step.reading))}</p>${sourceMarkup(step)}${btn('play',say('backMap'))}</article>`;return;
-    }
-    if(mode!=='play'||['card','deck'].includes(s.phase)||(s.index>=3&&s.phase!=='sent')){scene.innerHTML='';return;}
-    if(s.phase==='sent'){
-      const i=s.lastSent??Math.max(0,s.index-1),stop=s.stops[i],letter=getLetter(i);
-      scene.innerHTML=`<div class="sea-tableau is-sent">${boatMarkup()}<div class="sea-sent-letter"><div class="sea-ink-stamp"><span>${lotus}</span><strong>${E(stop.status==='skipped'?say('skipped'):say('sent'))}</strong><small>${E(route.name)}</small></div><h3>${E(L(letter.title))}</h3><p class="sea-kept">${E(keptText(stop)||say('sentHint'))}</p>${btn('next-letter',s.index<3?say('nextLetter'):say('collect'),'',true)}</div></div>`;return;
-    }
-    const stop=getStop(),letter=getLetter();
-    if(!stop||!letter){scene.innerHTML='';return;}
-    const open=s.phase==='letter';
-    if(!open){
-      scene.innerHTML=`<div class="sea-tableau is-sealed"><div class="sea-scene-heading"><span class="sea-overline">${E(L(P.routes[currentId].title))}</span><h3>${E(say('sealedTitle'))}</h3><p>${E(say('sealedHint'))}</p></div>${boatMarkup()}<button type="button" class="sea-envelope" data-voyage-action="open-letter" aria-label="${E(say('openLetter'))}"><span class="sea-envelope-address"><small>${E(say('to'))}</small><strong>${E(route.name)}</strong></span><span class="sea-envelope-number">0${s.index+1}</span><span class="sea-envelope-flap"></span><span class="sea-envelope-seal">${lotus}</span><span class="sea-envelope-caption">${E(say('openLetter'))}</span></button><span class="sea-letter-name">${E(L(letter.title))}</span></div>`;
+    if (!enabled || !scene) return;
+    const session = getSession();
+    const route = getRoute();
+    if (!session || !route) return;
+    if (mode === 'story') {
+      const step = storyStep();
+      scene.innerHTML = `<article class="sea-story-sheet">
+        <div class="sea-view-header">
+          <h3 tabindex="-1">${E(say('source'))}</h3>
+          ${seaButton('play', say('backMap'), 'back')}
+        </div>
+        <h4>${E(L(step.context))}</h4><p>${E(L(step.reading))}</p>${sourceMarkup(step)}
+      </article>`;
       return;
     }
-    const prompt=L(letter.prompts[stop.activity%letter.prompts.length]);
-    let interaction='';
-    if(letter.kind==='words'){
-      const names=currentId==='hoang-sa'?['sun','home','sail','heart']:['rice','tree','home','heart'];
-      interaction=`<div class="sea-word-choices" role="group" aria-label="${E(prompt)}">${letter.words.map((word,i)=>`<button type="button" class="sea-word-choice" data-voyage-action="word" data-item="${i}" aria-pressed="${stop.wordIndex===i}"><span>${icon(names[i])}</span><strong>${E(L(word))}</strong><i aria-hidden="true">✓</i></button>`).join('')}</div><p class="sea-whisper">${E(stop.wordIndex>=0?say('wordAfter'):say('wordHint'))}</p>`;
-    } else if(letter.kind==='bag'){
-      const names=['bell','cup','photo','moon','rice','music'];
-      interaction=`<div class="sea-bag-slots" aria-label="${E(say('bagCount',{n:stop.bag.length}))}">${[0,1,2].map(i=>`<span class="${stop.bag[i]!==undefined?'is-filled':''}">${stop.bag[i]!==undefined?icon(names[stop.bag[i]]):'<i>+</i>'}</span>`).join('')}</div><div class="sea-bag-choices" role="group" aria-label="${E(say('bagHint'))}">${D.bag.map((item,i)=>`<button type="button" class="sea-bag-choice" data-voyage-action="bag" data-item="${i}" aria-pressed="${stop.bag.includes(i)}"><span>${icon(names[i])}</span><strong>${E(L(item))}</strong><i aria-hidden="true">✓</i></button>`).join('')}</div><p class="sea-whisper">${E(stop.bag.length===3?say('bagAfter'):say('bagHint'))}</p>`;
-    } else if(letter.kind==='letter'){
-      interaction=`<div class="sea-starters">${getStep().starters.map((x,i)=>`<button type="button" data-voyage-action="starter" data-item="${i}" aria-pressed="${stop.starter===i}">${E(L(x))}</button>`).join('')}</div><p class="sea-whisper">${E(say('letterHint'))}</p>`;
-    } else interaction=`<div class="sea-listening-shell" aria-hidden="true">${icon('shell')}<span></span><span></span><span></span></div><p class="sea-whisper">${E(say('listenHint'))}</p>`;
-    scene.innerHTML=`<div class="sea-open-table">${boatMarkup()}<article class="sea-open-letter"><div class="sea-letter-top"><span>${E(say('letterNumber',{n:s.index+1}))}</span><span class="sea-postmark">${E(route.name)}</span></div><span class="sea-letter-kicker">${E(L(letter.title))}</span><h3 id="seaInvitation" tabindex="-1">${E(prompt)}</h3>${interaction}<details class="sea-keepsake" ${stop.noteOpen?'open':''}><summary>${E(say('keepLine'))} <span aria-hidden="true">✎</span></summary><div class="sea-writing-fields"><label class="sr-only" for="voyageNote">${E(say('note'))}</label><textarea id="voyageNote" maxlength="180" rows="2" placeholder="${E(say('noteHint'))}">${E(stop.note)}</textarea><label for="voyageMemoryPlace">${E(say('mainland'))}</label><input id="voyageMemoryPlace" maxlength="80" value="${E(stop.memoryPlace)}" placeholder="${E(D.ui.mainlandHint?L(D.ui.mainlandHint):'')}"><small class="sea-draft-notice">${E(say('draftOnly'))}</small></div></details><div class="sea-letter-bottom"><span>${E(say('owner',{name:authorOf(stop)||roles()[0]}))}</span>${btn('complete',say('send'),'',true)}</div><div class="sea-letter-links">${btn('alternate',say('alternate'))}${btn('skip',say('later'))}${letter.kind==='listen'?btn('timer',timer?say('stopTimer'):say('listen')):''}${timer?`<span class="voyage-timer" aria-live="off">${seconds}s</span>`:''}</div></article></div>`;
+    if (mode !== 'play' || ['card','deck'].includes(session.phase) || (session.index >= 3 && session.phase !== 'sent')) {
+      scene.replaceChildren();
+      return;
+    }
+    const index = session.phase === 'sent' ? session.lastSent : session.index;
+    const stop = session.stops[index];
+    const letter = getLetter(index);
+    const letterTitle = E(L(letter.title));
+    let content;
+    if (session.phase === 'sent') {
+      const message = keptText(stop);
+      content = `<article class="sea-sent-letter" data-status="${stop.status}">
+        <div class="sea-ink-stamp">${icon(stop.status === 'done' ? 'lotus' : 'letter')}</div>
+        <h3>${E(letterStatus(stop))}</h3><p>${letterTitle}</p>
+        ${message ? `<p class="sea-kept">${E(message)}</p>` : ''}
+        ${seaButton('next-letter', say(session.index < 3 ? 'nextLetter' : 'collect'), 'arrow', {primary:true})}
+      </article>`;
+    } else if (session.phase === 'letter') {
+      content = `<article class="sea-open-letter">
+        <header class="sea-letter-header">
+          <span class="sea-letter-emblem">${icon(letter.icon)}</span>
+          <div><p class="sea-letter-kicker">${letterTitle}</p>
+          <h3 id="seaInvitation" tabindex="-1">${E(L(letter.prompts[stop.activity]))}</h3></div>
+        </header>
+        <div class="sea-letter-meta">
+          <p class="sea-reader">${E(say('owner', {name: authorOf(stop) || roles()[0]}))}</p>
+          ${postmarkMarkup(letter)}
+        </div>
+        ${renderInvitation(letter, stop)}
+        ${writingDrawer(stop)}
+        <footer class="sea-letter-bottom">
+          <div class="sea-letter-links">
+            ${seaButton('alternate', say('alternate'), 'refresh')}
+            ${seaButton('skip', say('later'), 'arrow')}
+          </div>
+          ${seaButton('complete', say('send'), 'lotus', {primary:true})}
+        </footer>
+      </article>`;
+    } else {
+      content = `<article class="sea-sealed-letter">
+        <h3>${E(say('sealedTitle'))}</h3>
+        <button type="button" class="sea-envelope" data-voyage-action="open-letter" aria-label="${E(say('openLetter'))} · ${letterTitle}">
+          <span class="sea-envelope-address"><small>${E(L(P.routes[currentId].envelope) || say('to'))}</small><strong>${E(route.name)}</strong></span>
+          <span class="sea-envelope-seal">${lotus}</span>
+          <span class="sea-envelope-caption">${E(say('openLetter'))}${icon('arrow')}</span>
+        </button>
+      </article>`;
+    }
+    scene.innerHTML = `<div class="sea-letter-desk">${letterRail(session)}${content}</div>`;
   }
   function openLetter() {
     const s=getSession(),stop=getStop();if(!stop||stop.status!=='pending'||drawLock)return;
-    stop.opened=true;stop.unlocked=true;stop.found=true;
+    stop.opened=true;stop.found=true;
     if(!stop.author){stop.playerIdx=readerIndex();stop.helperIdx=((s.turnIndex||0)+(s.roleOffset?0:1))%Math.max(2,state.playerCount);stop.author=person(stop.playerIdx);}
     s.phase='letter';render();FolkAudio.playBambooClack();focus('#seaInvitation');
   }
   function sourceMarkup(step) {
     const source=D.sources[step.source];
-    return `<details class="voyage-sources"><summary>${E(say('source'))}</summary><p>${E(say('sourceNote'))}</p><a href="${E(source.url)}" target="_blank" rel="noopener noreferrer">${E(L(source.title))} ↗</a><p>${E(say('geoSource'))}</p><a href="https://allencoralatlas.org/methods/" target="_blank" rel="noopener noreferrer">Allen Coral Atlas · CC BY 4.0 ↗</a><p>${E(say('originalNote'))}</p>${btn('originals',say('originals'))}</details>`;
+    return `<details class="voyage-sources"><summary>${E(say('references'))}</summary><p>${E(say('sourceNote'))}</p><a href="${E(source.url)}" target="_blank" rel="noopener noreferrer">${E(L(source.title))} ↗</a><p>${E(say('geoSource'))}</p><a href="https://allencoralatlas.org/methods/" target="_blank" rel="noopener noreferrer">Allen Coral Atlas · CC BY 4.0 ↗</a><p>${E(say('originalNote'))}</p>${seaButton('originals',say('originals'),'cards')}</details>`;
   }
   function renderPanel() { renderScene(); }
   function renderDock() {
-    if(!enabled)return;const s=getSession(),step=getStep(),stop=getStop();if(!step||!stop){dock.innerHTML='';return;}
+    if (!enabled) return;
+    const s = getSession(), step = getStep(), stop = getStop();
+    if (!step || !stop || s.phase !== 'deck' || mode !== 'play') {
+      dock.replaceChildren();
+      return;
+    }
     const last=(archives.get(currentId)||[]).at(-1),lastCard=last?.stops[s.index]?.cardId;
     const available=step.cards.filter(c=>!stop.drawn.includes(c.id));
-    dock.innerHTML=`<div class="voyage-dock-copy"><span class="voyage-eyebrow">${E(say('fanKicker'))}</span><h3>${E(geo(step.target))}</h3><p>${E(stop.found?say('fanHint'):say('locate'))}</p></div><div class="voyage-fan" role="group" aria-label="${E(say('fanKicker'))}">${step.cards.map((c,i)=>`<button type="button" class="voyage-fanned-card" data-voyage-action="draw" data-card="${E(c.id)}" style="--fan-x:${(i-1)*62}px;--fan-angle:${(i-1)*13}deg;--fan-open:${(i-1)*92}px" aria-label="${E(say('cardChoice',{n:i+1,topic:L(c.topic)}))}" ${!stop.found||drawLock?'disabled':''}><span class="voyage-card-topic">${E(L(c.topic))}</span><span class="voyage-card-lotus">${lotus}</span><strong>${E(getRoute().name)}</strong><small>${E(say('brand'))}</small></button>`).join('')}</div><div class="voyage-dock-action">${btn('draw',stop.cardId?say('continue'):say('draw'),!stop.found||drawLock?'disabled':'',true)}<span class="voyage-draw-status"></span><p>${E(say('voluntary'))}</p>${btn('skip',say('later'))}</div>`;
+    dock.innerHTML=`<div class="voyage-dock-copy"><span class="voyage-eyebrow">${E(say('fanKicker'))}</span><h3>${E(geo(step.target))}</h3><p>${E(say('fanHint'))}</p></div>
+      <div class="voyage-fan" role="group" aria-label="${E(say('fanKicker'))}">${step.cards.map((c,i)=>`<button type="button" class="voyage-fanned-card" data-voyage-action="draw" data-card="${E(c.id)}" style="--fan-x:${(i-1)*62}px;--fan-angle:${(i-1)*13}deg;--fan-open:${(i-1)*92}px" aria-label="${E(say('cardChoice',{n:i+1,topic:L(c.topic)}))}" ${drawLock?'disabled':''}><span class="voyage-card-topic">${E(L(c.topic))}</span><span class="voyage-card-lotus">${lotus}</span><strong>${E(getRoute().name)}</strong></button>`).join('')}</div>
+      <div class="voyage-dock-action">
+        ${seaButton('draw', say(stop.cardId ? 'resumeCard' : 'draw'), 'cards', {primary:true, attributes:drawLock ? 'disabled' : ''})}
+        <span class="voyage-draw-status"></span>
+        ${seaButton('map', say('backMap'), 'back')}
+      </div>`;
     dock.dataset.previousCard=lastCard || '';dock.dataset.available=String(available.length);
-  }
-  function renderMapTools() {
-    if(!enabled)return;
-    toolbar.innerHTML=`${btn('zoom-out','−',`aria-label="${E(say('zoomOut'))}"`)}${btn('zoom-in','+',`aria-label="${E(say('zoomIn'))}"`)}${btn('overview',say('overview'))}`;
-    const s=getSession();layer.innerHTML=`<svg class="voyage-route-line" aria-hidden="true"><path></path></svg>${getRoute().stops.map((step,i)=>`<button type="button" class="voyage-map-pin ${i===s.index?'is-current':''} ${s.stops[i].status==='done'?'is-done':''}" data-voyage-action="pin" data-stop="${i}" aria-label="${E(say('stopButton',{n:i+1,place:geo(step.target)}))}"><span>${s.stops[i].status==='done'?'✓':i+1}</span><strong>${E(geo(step.target).replace(/^Đảo\s+/,''))}</strong></button>`).join('')}`;
-  }
-  function paintMap(camera,w,h,group) {
-    if(!enabled || group.id!==currentId || mode==='atlas' || !layer)return;
-    const project=window.GoiVietNaturalCore.projector(camera,w,h),entries=targets(),points=[];
-    layer.querySelectorAll('.voyage-map-pin').forEach((pin,i)=>{
-      const e=entries[i];if(!e){pin.style.display='none';return;}
-      const [x,y]=project(...e.point),visible=x>=24&&x<=w-24&&y>=30&&y<=h-30;
-      pin.style.display=visible?'':'none';pin.style.left=`${x}px`;pin.style.top=`${y}px`;
-      pin.classList.toggle('label-left',x>w*.7);if(visible)points.push([x,y]);
-    });
-    const svg=layer.querySelector('svg');svg.setAttribute('viewBox',`0 0 ${w} ${h}`);
-    // A story connector between actual sourced points; never a navigable sea route.
-    svg.querySelector('path').setAttribute('d',points.length===3?points.map((p,i)=>(i?'L':'M')+p.join(',')).join(' '):'');
-  }
-  function renderRail() {
-    if(!enabled)return;const s=getSession();
-    rail.setAttribute('aria-label',say('album'));
-    rail.innerHTML=P.routes[currentId].letters.map((letter,i)=>`<span class="sea-letter-stamp ${s.stops[i].status==='done'?'is-done':''} ${i===s.index?'is-current':''}" ${i===s.index?'aria-current="step"':''}><i>${s.stops[i].status==='done'?lotus:String(i+1).padStart(2,'0')}</i><span>${E(L(letter.title))}</span></span>`).join('');
   }
   function draw(id) {
     const s=getSession(),stop=getStop(),step=getStep();
@@ -241,13 +430,13 @@
     const nextPool=pool.filter(c=>c.id!==previous);
     const picked=pool.find(c=>c.id===id)||shuffle(nextPool.length?nextPool:pool)[0];snapshot();
     const fan=dock.querySelector('.voyage-fan'),chosen=fan.querySelector(`[data-card="${picked.id}"]`);
-    drawLock=true;dock.setAttribute('aria-busy','true');dock.querySelectorAll('button').forEach(el=>el.disabled=true);
-    panel.querySelectorAll('[data-voyage-action="draw"]').forEach(el=>el.disabled=true);
+    drawLock=true;dock.setAttribute('aria-busy','true');
+    dock.querySelectorAll('[data-voyage-action="draw"]').forEach(el=>el.disabled=true);
     const commit=()=>{
       if(s!==getSession() || !enabled || !dialog.classList.contains('open'))return;
       drawTimers=[];drawLock=false;stop.cardId=picked.id;stop.drawn.push(picked.id);stop.order=shuffle([0,1,2]);
       stop.playerIdx=readerIndex();stop.helperIdx=((s.turnIndex||0)+(s.roleOffset?0:1))%Math.max(2,state.playerCount);stop.author=person(stop.playerIdx);s.phase='card';
-      render();announce(say('drawing'));focus('#voyageQuestion');
+      render();focus('#voyageQuestion');
     };
     if(reduced()){commit();return;}
     const later=(fn,ms)=>drawTimers.push(setTimeout(fn,ms));
@@ -259,11 +448,76 @@
   }
   function activeCard() { return getStep()?.cards.find(c=>c.id===getStop()?.cardId); }
   function renderCards() {
-    if(!enabled)return;const s=getSession(),step=getStep(),stop=getStop(),card=activeCard();
-    if(!card||s.phase!=='card'||mode!=='play'){workbench.innerHTML='';return;}
-    const names=[authorOf(stop)||roles()[0],Number.isInteger(stop.helperIdx)?person(stop.helperIdx):roles()[1]];
-    workbench.innerHTML=`<div class="voyage-card-context"><span>${E(say('chapter',{n:s.index+1}))} · ${E(geo(step.target))}</span>${btn('map',say('backMap'))}</div><div class="voyage-diptych"><section class="voyage-card-front"><span class="voyage-eyebrow">${E(say('front'))} · ${E(L(card.topic))}</span><details class="voyage-card-reading"><summary>${E(L(step.context))}</summary><p>${E(L(step.reading))}</p><a href="${E(D.sources[step.source].url)}" target="_blank" rel="noopener noreferrer">${E(L(D.sources[step.source].title))} ↗</a></details><h3 id="voyageQuestion" tabindex="-1">${E(L(card.question))}</h3><div class="voyage-options" role="group" aria-labelledby="voyageQuestion">${stop.order.map((n,i)=>`<button type="button" data-voyage-action="option" data-option="${n}" class="voyage-option ${stop.selected===n?'is-selected':''} ${stop.revealed&&n===card.correct?'is-correct':''} ${stop.revealed&&stop.selected===n&&n!==card.correct?'is-incorrect':''}" aria-pressed="${stop.selected===n}" ${stop.revealed?'disabled':''}><span>${String.fromCharCode(65+i)}</span>${E(L(card.options[n]))}${stop.revealed&&n===card.correct?' ✓':''}</button>`).join('')}</div><div class="voyage-card-actions">${btn('helper',say('helper'))}${btn('explain',say('explain'))}${btn('check',say('check'),stop.selected===null?'disabled':'',true)}</div><p id="voyageHelper" class="voyage-helper" hidden>${E(say('helperText',{name:names[1]}))}</p>${stop.revealed?`<div class="voyage-answer" role="status"><strong>${E(stop.selected===card.correct?say('right'):say('learn'))}</strong><p>${E(L(card.explanation))}</p></div>`:''}</section>
-      <section class="voyage-card-back"><div id="voyageSeal" class="voyage-seal" ${stop.unlocked?'hidden':''}><button type="button" class="voyage-wax-seal" data-voyage-action="unseal" aria-label="${E(say('seal'))}"><span>${lotus}</span><small>${E(say('lotus'))}</small></button><h3>${E(say('sealTitle'))}</h3><p>${E(say('sealHint'))}</p>${btn('unseal',say('seal'),'',true)}</div><div id="voyageConnection" ${stop.unlocked?'':'inert'} aria-hidden="${!stop.unlocked}"><span class="voyage-eyebrow">${E(say('back'))}</span><span class="voyage-context-label">${E(say('pen',{name:authorOf(stop)||names[0]}))}</span><div class="voyage-activity"><h3 id="voyageActivity" tabindex="-1">${E(L(step.title))}</h3><p>${E(L(step.activities[stop.activity]))}</p></div>${activityMarkup(step,stop)}<p class="voyage-gentle">${E(say('voluntary'))}</p><div class="voyage-inline">${btn('alternate',say('alternate'))}${btn('timer',timer?say('stopTimer'):say('listen'))}<span class="voyage-timer" aria-live="off">${timer?seconds+'s':''}</span></div><div class="voyage-note-field"><label for="voyageNote">${E(say('note'))}</label><textarea id="voyageNote" maxlength="180" rows="2" placeholder="${E(say('noteHint'))}">${E(stop.note)}</textarea><span class="voyage-note-counter">${stop.note.length}/180</span><label for="voyageMemoryPlace">${E(say('mainland'))}</label><input id="voyageMemoryPlace" maxlength="80" value="${E(stop.memoryPlace)}" placeholder="${E(say('mainlandHint'))}"><p class="voyage-session-note">${E(say('session'))}</p></div><div class="voyage-complete-actions">${btn('complete',say('complete'),'',true)}${btn('skip',say('later'))}</div></div></section></div>`;
+    if (!enabled) return;
+    const step = getStep(), stop = getStop(), card = activeCard();
+    if (!card || getSession().phase !== 'card' || mode !== 'play') {
+      workbench.replaceChildren();
+      return;
+    }
+    const reader = authorOf(stop) || roles()[0];
+    const helper = Number.isInteger(stop.helperIdx) ? person(stop.helperIdx) : roles()[1];
+    const source = D.sources[step.source];
+    workbench.innerHTML = `
+      <div class="voyage-card-context">
+        <strong>${E(geo(step.target))}</strong>
+        ${seaButton('map', say('backMap'), 'back')}
+      </div>
+      <div class="voyage-diptych">
+        <section class="voyage-card-front">
+          <span class="voyage-eyebrow">${E(say('front'))} · ${E(L(card.topic))}</span>
+          <details class="voyage-card-reading" ${stop.readingOpen ? 'open' : ''}>
+            <summary>${E(L(step.context))}</summary>
+            <p>${E(L(step.reading))}</p>
+            <a href="${E(source.url)}" target="_blank" rel="noopener noreferrer">${E(L(source.title))} ↗</a>
+          </details>
+          <h3 id="voyageQuestion" tabindex="-1">${E(L(card.question))}</h3>
+          <div class="voyage-options" role="group" aria-labelledby="voyageQuestion">
+            ${stop.order.map((index, position) => {
+              const selected = stop.selected === index;
+              const correct = stop.revealed && index === card.correct;
+              const incorrect = stop.revealed && selected && !correct;
+              return `<button type="button" class="voyage-option ${selected ? 'is-selected' : ''} ${correct ? 'is-correct' : ''} ${incorrect ? 'is-incorrect' : ''}"
+                data-voyage-action="option" data-option="${index}" aria-pressed="${selected}" ${stop.revealed ? 'disabled' : ''}>
+                <span>${String.fromCharCode(65+position)}</span>${E(L(card.options[index]))}${correct ? ' ✓' : ''}
+              </button>`;
+            }).join('')}
+          </div>
+          ${stop.revealed ? `<div class="voyage-answer" role="status">
+            <strong>${E(say(stop.selected === card.correct ? 'right' : 'learn'))}</strong>
+            <p>${E(L(card.explanation))}</p>
+          </div>` : `<div class="voyage-card-actions">
+            ${seaButton('helper', say('helper'), 'heart', {attributes:`aria-expanded="${Boolean(stop.helperOpen)}" aria-controls="voyageHelper"`})}
+            ${seaButton('explain', say('explain'), 'book')}
+            ${seaButton('check', say('check'), 'check', {primary:true, attributes:stop.selected === null ? 'disabled' : ''})}
+          </div>
+          <p id="voyageHelper" class="voyage-helper" ${stop.helperOpen ? '' : 'hidden'}>${E(say('helperText', {name:helper}))}</p>`}
+        </section>
+        <section class="voyage-card-back">
+          <div id="voyageSeal" class="voyage-seal" ${stop.unlocked ? 'hidden' : ''}>
+            <h3>${E(say('back'))}</h3>
+            <button type="button" class="voyage-wax-seal" data-voyage-action="unseal" aria-label="${E(say('seal'))}">
+              ${lotus}<small>${E(say('seal'))}</small>
+            </button>
+          </div>
+          <div id="voyageConnection" ${stop.unlocked ? '' : 'inert'} aria-hidden="${!stop.unlocked}">
+            <span class="voyage-eyebrow">${E(say('back'))}</span>
+            <p class="sea-reader">${E(say('owner', {name:reader}))}</p>
+            <div class="voyage-activity">
+              <h3 id="voyageActivity" tabindex="-1">${E(L(step.title))}</h3>
+              <p>${E(L(step.activities[stop.activity]))}</p>
+            </div>
+            ${activityMarkup(step, stop)}
+            ${writingDrawer(stop)}
+            <div class="voyage-complete-actions">
+              ${seaButton('alternate', L(D.ui.alternate), 'refresh')}
+              ${seaButton('timer', say(timer ? 'stopTimer' : 'listen'), 'timer', {attributes:`aria-pressed="${Boolean(timer)}"`})}
+              <span class="voyage-timer" aria-live="off">${timer ? seconds + 's' : ''}</span>
+              ${seaButton('skip', say('later'), 'arrow')}
+              ${seaButton('complete', say('complete'), 'lotus', {primary:true})}
+            </div>
+          </div>
+        </section>
+      </div>`;
   }
   function activityMarkup(step,stop) {
     if(step.kind==='bag')return `<fieldset class="voyage-bag"><legend>${E(say('bagTitle'))}</legend><p>${E(say('bagHint'))}</p><div>${D.bag.map((x,i)=>`<button type="button" class="voyage-bag-item" data-voyage-action="bag" data-item="${i}" aria-pressed="${stop.bag.includes(i)}">${E(L(x))}</button>`).join('')}</div><small>${E(say('bagCount',{n:stop.bag.length}))}</small></fieldset>`;
@@ -285,11 +539,59 @@
     return `<svg class="voyage-postcard-map" viewBox="0 0 ${w} ${h}" role="img" aria-label="${E(getRoute().name)}"><path d="${paths}" class="voyage-postcard-land"/>${targets().map((e,i)=>{if(!e)return '';const p=project(e.point);return `<circle cx="${p[0]}" cy="${p[1]}" r="6"/><text x="${p[0]+10}" y="${p[1]+4}">${i+1}</text>`;}).join('')}</svg>`;
   }
   function renderAlbum() {
-    if(!enabled)return;const s=selectedJournal();if(!s)return;
-    const route=getRoute(),history=archives.get(currentId)||[],editable=activeArchive<0;
-    album.innerHTML=`<div class="sea-album-heading"><span class="sea-overline">${E(say('album'))}</span><h3>${E(getSession().index>=3?say('finish'):say('albumTitle'))}</h3><p>${E(say('albumHint'))}</p></div>
-      <article class="voyage-postcard"><div class="voyage-postcard-top"><span>${E(route.name)}</span><span>${E(dateOf(s))}</span></div><h3 class="voyage-postcard-title">${E(titleOf(s))}</h3><div class="voyage-postcard-body"><div class="voyage-postcard-entries">${route.stops.map((step,i)=>`<section class="voyage-postcard-entry"><span class="voyage-entry-number">0${i+1}</span><div><h4>${E(L(P.routes[currentId].letters[i].title))}</h4><span class="voyage-entry-status">${E(s.stops[i].status==='done'?say('done'):s.stops[i].status==='skipped'?say('skipped'):s.stops[i].opened?say('visited'):say('upcoming'))}</span><p class="voyage-kept-line" data-note-preview="${i}">${E(keptText(s.stops[i])||say('emptyNote'))}</p>${editable&&getSession().albumEdit?`<label for="voyageAlbumNote${i}">${E(say('note'))}</label><textarea id="voyageAlbumNote${i}" rows="2" maxlength="180" data-album-note="${i}">${E(s.stops[i].note)}</textarea>`:''}</div></section>`).join('')}</div><div class="voyage-postcard-aside">${sketch()}<span class="voyage-postmark">${E(route.name)}<small>${E(say('stamp'))}</small></span></div></div><footer><a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">${E(say('exportCredit'))}</a></footer></article>
-      <div class="sea-album-bottom">${btn('download',exporting?say('exporting'):say('download'),exporting?'disabled':'',true)}${getSession().index<3?btn('play',say('continue')):btn('replay',say('replay'))}<details class="sea-album-options" ${getSession().albumEdit?'open':''}><summary>${E(say('options'))}</summary><div>${editable?`<label for="voyageTitle">${E(say('title'))}</label><input id="voyageTitle" maxlength="60" value="${E(s.title)}" placeholder="${E(L(P.routes[currentId].title))}">${btn('edit-album',say('editPostcard'))}`:''}${btn('download-text',say('downloadText'))}${btn('other',say('otherSea',{place:D.routes[currentId==='hoang-sa'?'truong-sa':'hoang-sa'].name}))}${history.length?`<label for="voyageArchiveSelect">${E(say('previous'))}</label><select id="voyageArchiveSelect"><option value="-1" ${editable?'selected':''}>${E(say('current'))}</option>${history.map((x,i)=>`<option value="${i}" ${activeArchive===i?'selected':''}>${E(titleOf(x))}</option>`).join('')}</select>`:''}</div></details></div><p class="voyage-session-note">${E(say('session'))}</p>`;
+    if (!enabled || dialog.dataset.voyagePhase !== 'album') {
+      album.replaceChildren();
+      return;
+    }
+    const s = selectedJournal();
+    const session = getSession();
+    const history = archives.get(currentId) || [];
+    const editable = activeArchive < 0;
+    const other = D.routes[currentId === 'hoang-sa' ? 'truong-sa' : 'hoang-sa'].name;
+    album.innerHTML = `<div class="sea-album-content">
+      <header class="sea-view-header"><h3>${E(say('albumTitle'))}</h3>
+        ${session.index < 3 ? seaButton('play', say('continue'), 'back') : seaButton('replay', say('replay'), 'refresh')}
+      </header>
+      <article class="voyage-postcard">
+        <div class="voyage-postcard-top"><span>${E(getRoute().name)}</span><span>${E(dateOf(s))}</span></div>
+        <h4 class="voyage-postcard-title">${E(titleOf(s))}</h4>
+        <div class="voyage-postcard-body">
+          <div class="voyage-postcard-entries">${s.stops.map((stop, i) => {
+            const letter = getLetter(i);
+            return `<section class="voyage-postcard-entry" data-status="${stop.status}">
+              <span class="sea-step-icon">${icon(stop.status === 'done' ? 'check' : letter.icon)}</span>
+              <div><h4>${E(L(letter.title))}</h4>
+                <span class="voyage-entry-status">${E(letterStatus(stop))}</span>
+                <p class="voyage-kept-line" data-note-preview="${i}">${E(keptText(stop))}</p>
+                ${editable && session.albumEdit ? `<label for="voyageAlbumNote${i}">${E(say('note'))}</label>
+                  <textarea id="voyageAlbumNote${i}" rows="2" maxlength="180" data-album-note="${i}">${E(stop.note)}</textarea>` : ''}
+              </div>
+            </section>`;
+          }).join('')}</div>
+          <div class="voyage-postcard-aside">${sketch()}</div>
+        </div>
+        <footer><a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">${E(say('exportCredit'))}</a></footer>
+      </article>
+      <div class="sea-album-bottom">
+        ${seaButton('download', say(exporting ? 'exporting' : 'download'), 'download', {primary:true, attributes:exporting ? 'disabled' : ''})}
+        <details class="sea-album-options" ${session.albumOptionsOpen ? 'open' : ''}>
+          <summary>${icon('more')}<span>${E(say('options'))}</span>${icon('chevron')}</summary>
+          <div>
+            ${editable ? `<label for="voyageTitle">${E(say('title'))}</label>
+              <input id="voyageTitle" maxlength="60" value="${E(s.title)}" placeholder="${E(L(P.routes[currentId].title))}">
+              ${seaButton('edit-album', say('editPostcard'), 'pen', {attributes:`aria-pressed="${session.albumEdit}"`})}` : ''}
+            ${seaButton('download-text', say('downloadText'), 'download')}
+            ${seaButton('other', say('otherSea', {place:other}), 'map')}
+            ${history.length ? `<label for="voyageArchiveSelect">${E(say('previous'))}</label>
+              <select id="voyageArchiveSelect">
+                <option value="-1" ${editable ? 'selected' : ''}>${E(say('current'))}</option>
+                ${history.map((entry, i) => `<option value="${i}" ${activeArchive === i ? 'selected' : ''}>${E(titleOf(entry))}</option>`).join('')}
+              </select>` : ''}
+          </div>
+        </details>
+      </div>
+      <p class="voyage-session-note">${E(say('session'))}</p>
+    </div>`;
   }
   function handleInput(event) {
     if(!enabled)return;const el=event.target,s=getSession(),stop=getStop();
@@ -300,58 +602,117 @@
   }
   function handleChange(event) {
     if(!enabled)return;
-    if(event.target.id==='voyageArchiveSelect'){activeArchive=Number(event.target.value);renderAlbum();}
+    if(event.target.id==='voyageArchiveSelect'){activeArchive=Number(event.target.value);renderAlbum();focus('#voyageArchiveSelect');}
     else if(event.target.hasAttribute('data-album-note'))renderSidebarTrackers();
   }
   function setMode(next) {
+    const fromPostmark = returnToPostmark && mode === 'story' && next === 'play';
+    if (next !== 'story') returnToPostmark = false;
     snapshot();cancelDraw();stopTimer();mode=next;activeArchive=-1;dialog.classList.remove('voyage-destinations-open');
     if(next==='play'&&['deck','card'].includes(getSession().phase))getSession().phase=getStop()?.opened?'letter':'map';
-    render();focus(next==='atlas'?'#islandChartSearch':next==='album'?'[data-voyage-action="download"]':next==='story'?'.sea-story-sheet h3':getSession().phase==='letter'?'#seaInvitation':getSession().phase==='sent'?'[data-voyage-action="next-letter"]':'[data-voyage-action="open-letter"]');
+    render();
+    if (next === 'atlas') focus('#islandChartSearch');
+    else if (next === 'story') focus('.sea-story-sheet h3');
+    else if (dialog.dataset.voyagePhase === 'album') focus('.sea-album-bottom [data-voyage-action="download"]');
+    else if (fromPostmark && getSession().phase === 'letter') focus('.sea-postmark');
+    else focusLetter();
   }
-  function selectPin(index, {help=false}={}) {
-    const e=targets()[index];if(!e){announce(say('noTarget'));return;}
-    if(mode==='album')mode='play';
-    if(getSession().phase==='card')getSession().phase='map';
-    render();landscape().selectDetail(e.value);
-    if(help && index===getSession().index){getStop().found=true;renderPanel();renderDock();}
-    snapshot();refreshMap();focus('[data-voyage-action="draw"]');
+  function focusLetter() {
+    const phase = getSession().phase;
+    if (phase === 'letter') focus('#seaInvitation');
+    else if (phase === 'sent') focus('.sea-sent-letter [data-voyage-action="next-letter"]');
+    else focus('.sea-envelope');
+  }
+  function setDestinations(open) {
+    dialog.classList.toggle('voyage-destinations-open', open);
+    $('[data-voyage-action="destinations"]').setAttribute('aria-expanded', String(open));
+    if (open) {
+      $('.sea-more').open = false;
+      body.scrollTop = 0;
+      focus('.natural-island-tabs [aria-pressed="true"]');
+    } else focus('.sea-more > summary');
   }
   function handleClick(event) {
+    if (!enabled) return;
+    const more = $('.sea-more');
+    if (more.open && !more.contains(event.target)) more.open = false;
     const button=event.target.closest('[data-voyage-action]');
-    if(!button || !enabled || button.disabled)return;
+    if(!button || button.disabled)return;
     const action=button.dataset.voyageAction,s=getSession(),stop=getStop();
+    if(action==='story')returnToPostmark=button.classList.contains('sea-postmark');
     if(action==='play'||action==='atlas'||action==='album'||action==='story'){setMode(action);return;}
     if(action==='open-letter'){openLetter();return;}
-    if(action==='next-letter'){s.phase='map';render();focus(s.index<3?'[data-voyage-action="open-letter"]':'[data-voyage-action="download"]');return;}
+    if(action==='next-letter'){s.phase='map';if(s.index>=3)mode='album';render();focus(s.index<3?'[data-voyage-action="open-letter"]':'[data-voyage-action="download"]');return;}
     if(action==='deck'){if(!stop)return;stop.found=true;s.phase='deck';mode='play';render();focus('.voyage-fanned-card');return;}
-    if(action==='destinations'){dialog.classList.toggle('voyage-destinations-open');button.setAttribute('aria-expanded',String(dialog.classList.contains('voyage-destinations-open')));if(dialog.classList.contains('voyage-destinations-open'))focus('.natural-island-tabs [aria-pressed="true"]');return;}
-    if(action==='vi'||action==='en'){window.GoiVietI18n?.setLang(action);return;}
+    if(action==='destinations'){setDestinations(!dialog.classList.contains('voyage-destinations-open'));return;}
+    if(action==='vi'||action==='en'){
+      window.GoiVietI18n?.setLang(action);
+      $('.sea-more').open = true;
+      focus(`.sea-more [data-voyage-action="${action}"]`);
+      return;
+    }
     if(action==='other'){snapshot();landscape().switchDetailGroup(currentId==='hoang-sa'?'truong-sa':'hoang-sa');return;}
     if(action==='originals'){openDeckModal(currentId,button);return;}
-    if(action==='zoom-in'||action==='zoom-out'){document.getElementById(action==='zoom-in'?'naturalPlus':'naturalMinus').click();snapshot();return;}
-    if(action==='overview'){landscape().selectDetail('-1');snapshot();return;}
-    if(action==='pin'){selectPin(Number(button.dataset.stop));return;}
     if(action==='download'){downloadPostcard();return;}
     if(action==='download-text'){downloadBlob(new Blob([journalText(selectedJournal())],{type:'text/plain;charset=utf-8'}),'txt');return;}
-    if(action==='edit-album'){s.albumEdit=!s.albumEdit;renderAlbum();if(s.albumEdit)focus('#voyageAlbumNote0');return;}
+    if(action==='edit-album'){
+      s.albumEdit = !s.albumEdit;
+      s.albumOptionsOpen = true;
+      renderAlbum();
+      focus(s.albumEdit ? '#voyageAlbumNote0' : '.sea-album-options [data-voyage-action="edit-album"]');
+      return;
+    }
     if(action==='replay'){snapshot();const history=archives.get(currentId)||[];history.push(structuredClone(s));archives.set(currentId,history);sessions.set(currentId,fresh(currentId));mode='play';activeArchive=-1;render();focus('[data-voyage-action="open-letter"]');return;}
     if(!stop)return;
-    if(action==='roles'){s.roleOffset=s.roleOffset?0:1;if(stop.opened){stop.playerIdx=readerIndex();stop.author=person(stop.playerIdx);}renderScene();renderCards();$('.sea-more')?.removeAttribute('open');focus('#seaInvitation');return;}
-    if(action==='clue'){stop.clueOpen=true;stop.hint=Math.min(stop.hint+1,getStep().hints.length);renderPanel();announce(L(getStep().hints[stop.hint-1]));focus('[data-voyage-action="hide-clue"]');return;}
-    if(action==='hide-clue'){stop.clueOpen=false;renderPanel();focus('[data-voyage-action="clue"]');return;}
-    if(action==='locate'){const select=$('#voyageStopSelect');if(select.value===''){select.focus();return;}selectPin(Number(select.value));return;}
-    if(action==='help-map'){selectPin(s.index,{help:true});return;}
+    if(action==='roles'){
+      s.roleOffset = s.roleOffset ? 0 : 1;
+      if (stop.opened || stop.cardId) {
+        stop.playerIdx = readerIndex();
+        stop.helperIdx = ((s.turnIndex || 0) + (s.roleOffset ? 0 : 1)) % Math.max(2, state.playerCount);
+        stop.author = person(stop.playerIdx);
+      }
+      renderScene();renderCards();
+      more.open = false;
+      focus('.sea-more > summary');
+      announce(say('owner', {name:person(readerIndex())}));
+      return;
+    }
     if(action==='draw'){draw(button.dataset.card);return;}
-    if(action==='map'){stopTimer();s.phase=stop.opened?'letter':'map';render();focus(stop.opened?'#seaInvitation':'[data-voyage-action="open-letter"]');return;}
+    if(action==='map'){setMode('play');return;}
     if(action==='option'&&!stop.revealed){stop.selected=Number(button.dataset.option);renderCards();focus(`[data-voyage-action="option"][data-option="${stop.selected}"]`);return;}
-    if(action==='helper'){const helper=$('#voyageHelper');helper.hidden=!helper.hidden;announce(helper.hidden?'':helper.textContent);return;}
-    if(action==='check'||action==='explain'){if(action==='check'&&stop.selected===null)return;stop.revealed=true;stop.unlocked=true;renderCards();announce(L(activeCard().explanation));focus('#voyageActivity');return;}
+    if(action==='helper'){
+      const helper = $('#voyageHelper');
+      stop.helperOpen = helper.hidden;
+      helper.hidden = !stop.helperOpen;
+      button.setAttribute('aria-expanded', String(stop.helperOpen));
+      announce(helper.hidden ? '' : helper.textContent);
+      return;
+    }
+    if(action==='check'||action==='explain'){
+      if (action === 'check' && stop.selected === null) return;
+      stop.revealed = true;
+      stop.unlocked = true;
+      renderCards();
+      focus('#voyageActivity');
+      return;
+    }
     if(action==='unseal'){stop.unlocked=true;renderCards();announce(say('back'));focus('#voyageActivity');return;}
-    if(!stop.unlocked && !['skip'].includes(action))return;
+    if(s.phase !== 'letter' && !stop.unlocked && action !== 'skip')return;
     if(action==='word'){const n=Number(button.dataset.item);if(!getLetter()?.words?.[n])return;stop.wordIndex=stop.wordIndex===n?-1:n;renderScene();focus(`[data-voyage-action="word"][data-item="${n}"]`);return;}
     if(action==='alternate'){stopTimer();stop.activity=(stop.activity+1)%getStep().activities.length;if(s.phase==='card'){renderCards();focus('#voyageActivity');}else{renderScene();focus('#seaInvitation');}return;}
     if(action==='bag'){const n=Number(button.dataset.item);if(!D.bag[n])return;if(stop.bag.includes(n))stop.bag=stop.bag.filter(x=>x!==n);else if(stop.bag.length<3)stop.bag.push(n);else {announce(say('bagFull'));return;}if(s.phase==='card')renderCards();else renderScene();focus(`[data-voyage-action="bag"][data-item="${n}"]`);return;}
-    if(action==='starter'){const n=Number(button.dataset.item);stop.starter=n;if(!stop.note.trim())stop.note=L(getStep().starters[n]);stop.noteOpen=true;if(s.phase==='card')renderCards();else renderScene();focus('#voyageNote');return;}
+    if(action==='starter'){
+      const index = Number(button.dataset.item);
+      const starters = s.phase === 'letter' ? letterStarters() : getStep().starters;
+      const previous = starters[stop.starter];
+      if (!stop.note.trim() || stop.note === previous?.vi || stop.note === previous?.en) stop.note = L(starters[index]);
+      stop.starter = index;
+      stop.noteOpen = true;
+      if (s.phase === 'card') renderCards();
+      else renderScene();
+      focus('#voyageNote');
+      return;
+    }
     if(action==='timer'){if(timer)stopTimer();else startTimer();if(s.phase==='card')renderCards();else renderScene();focus('[data-voyage-action="timer"]');return;}
     if(action==='complete'||action==='skip')completeStop(action==='complete'?'done':'skipped');
   }
@@ -365,7 +726,7 @@
   }
   function completeStop(status) {
     const s=getSession(),stop=getStop(),step=getStep();
-    if(drawLock||performance.now()<completingUntil||!stop||stop.status!=='pending'||(status==='done'&&!stop.unlocked))return;
+    if(drawLock||performance.now()<completingUntil||!stop||stop.status!=='pending'||(status==='done'&&s.phase!=='letter'&&!stop.unlocked))return;
     completingUntil=performance.now()+300;
     stopTimer();stop.status=status;
     recordMemory(stop);
@@ -384,18 +745,27 @@
     stopTimer();seconds=60;
     timer=setInterval(()=>{
       seconds--;const label=$('.voyage-timer');if(label)label.textContent=seconds+'s';
-      if(seconds<=0){stopTimer();announce(say('timerDone'));const button=$('[data-voyage-action="timer"]');if(button)button.textContent=say('listen');}
+      if(seconds<=0){
+        stopTimer();
+        announce(say('timerDone'));
+        const button = $('[data-voyage-action="timer"]');
+        if (!button) return;
+        const buttonLabel = button.querySelector('span') || button;
+        buttonLabel.textContent = say('listen');
+        if (button.hasAttribute('aria-pressed')) button.setAttribute('aria-pressed','false');
+      }
     },1000);
   }
   function stopTimer() { if(timer)clearInterval(timer);timer=null; }
   function handleEscape() {
     if(!enabled)return false;
     const more=$('.sea-more');if(more?.open){more.open=false;focus('.sea-more > summary');return true;}
+    if(dialog.classList.contains('voyage-destinations-open')){setDestinations(false);return true;}
     if(drawLock){cancelDraw();announce(say('fanHint'));focus('[data-voyage-action="draw"]');return true;}
     if(mode==='atlas'||mode==='story'){setMode('play');return true;}
-    if(mode==='play'&&getSession().phase==='deck'){getSession().phase=getStop()?.opened?'letter':'map';render();focus('[data-voyage-action="open-letter"]');return true;}
+    if(mode==='play'&&getSession().phase==='deck'){setMode('play');return true;}
     if(mode==='album'&&getSession().index<3){setMode('play');return true;}
-    if(mode==='play'&&getSession().phase==='card'){stopTimer();getSession().phase=getStop()?.opened?'letter':'map';render();focus('[data-voyage-action="open-letter"]');return true;}
+    if(mode==='play'&&getSession().phase==='card'){setMode('play');return true;}
     return false;
   }
   function journalText(s) {
@@ -455,7 +825,7 @@
   }
   function reset() {
     cancelDraw();stopTimer();if(dialog?.classList.contains('open'))landscape()?.closeDetail();
-    sessions.clear();archives.clear();if(dialog)disable();currentId=null;groupData=null;targetEntries=[];mode='play';completingUntil=0;
+    sessions.clear();archives.clear();if(dialog)disable();currentId=null;groupData=null;targetEntries=[];mode='play';completingUntil=0;returnToPostmark=false;
   }
   document.addEventListener('goiviet:langchange',()=>{
     // The shared journal knows original card IDs. Relabel only our own generated content here;
@@ -470,7 +840,7 @@
     if(enabled){snapshot();cancelDraw();render();}
   });
   window.addEventListener('pagehide',()=>{cancelDraw();stopTimer();});
-  window.GoiVietFamilyVoyage=Object.freeze({mount,onGroup,onClose,onSelect,paintMap,handleEscape,beforeGroup:snapshot,reset,
+  window.GoiVietFamilyVoyage=Object.freeze({mount,onGroup,onClose,onSelect,handleEscape,beforeGroup:snapshot,reset,
     entryLabel:(place,full=false)=>desktop.matches?say(full?'entryLabel':'entry',{place}):null,
     isOpenFor:id=>enabled&&currentId===id&&dialog?.classList.contains('open'),
     suppressesLabel:value=>enabled && mode==='play' && targets().some(e=>e?.value===value),

@@ -143,13 +143,18 @@
       if(chart)chart.before(ctx,camera,w,h,group);
       paintGroup(ctx,group,camera,w,h,dark,extent,true);
       if(chart)chart.after(ctx,group,camera,w,h,dark);
-      window.GoiVietFamilyVoyage?.paintMap(camera,w,h,group);
       const value=detailReef>=0?'reef:'+detailReef:String(detailFeature),entry=chart&&chart.catalog(group).find(e=>e.value===value);
       document.getElementById('naturalDetailInfo').textContent=names[detailGroup]+(entry?' · '+G(entry.label):detailReef>=0?' · '+G(reefChoices(group).find(r=>r.index===detailReef).label):detailFeature>=0?' · '+G(displayName(group.islands[detailFeature])):'')+(archipelago?T('isl.infoArch',' · Màu rạn thể hiện lớp địa mạo, không phải số đo độ sâu.'):T('isl.info',' · Kéo và thu phóng để xem gần. Hình theo dữ liệu địa lý; màu được minh họa.'));
     });
   }
   function openDetail(id='phu-quoc',trigger=document.activeElement){ensure().then(ok=>{if(!ok||!islands.groups.some(g=>g.id===id))return;createDialog();const wasOpen=dialog.classList.contains('open');if(wasOpen&&detailGroup===id)return;dialog.classList.add('open');switchGroup(id);if(!wasOpen)pushModalFocus('naturalIslandModal',trigger);else{syncBackgroundInertAndRenderState();focusFirstElementInModal(dialog);}requestMapRender(2);});}
-  window.addEventListener('keydown',e=>{if(e.key==='Escape'&&dialog?.classList.contains('open')){e.preventDefault();e.stopImmediatePropagation();if(!window.GoiVietFamilyVoyage?.handleEscape())closeDetail();}},true);
+  window.addEventListener('keydown', event => {
+    if (event.key !== 'Escape' || !dialog?.classList.contains('open')) return;
+    if (getTopOpenModalElement() !== dialog) return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    if (!window.GoiVietFamilyVoyage?.handleEscape()) closeDetail();
+  }, true);
   new MutationObserver(()=>{if(active())ensure();else closeDetail();}).observe(intro,{attributes:true,attributeFilter:['class']});
   new MutationObserver(()=>{if(dialog?.classList.contains('open'))drawDetail();}).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
   // Home-screen preparation: island tiles for this camera on the GPU, without drawing. A wider extent than
