@@ -1,0 +1,227 @@
+/* Preview-5 only. Every layout change is desktop-gated; original mobile chart is retained. */
+.voyage-only { display:none; }
+@media (min-width:961px) {
+  body[data-regional-preview] #naturalIslandModal.voyage-enabled {
+    --voyage-red:#9e2835; --voyage-card:#8a1e26; --voyage-gold:#d5a64f; --voyage-gold-light:#ffdf8e;
+    --voyage-sea:#205e67; --voyage-paper:var(--paper-elevated); --voyage-line:var(--wood-border);
+    padding:20px;
+  }
+  body[data-regional-preview] .archipelago-detail-button { width:120px; }
+  body[data-regional-preview] #naturalIslandModal.voyage-enabled > .modal-sheet { width:min(1360px,100%);max-width:1360px;height:min(980px,95dvh);border-radius:22px;border:1px solid var(--wood-border-strong); }
+  body[data-regional-preview] #naturalIslandModal.voyage-enabled > .modal-sheet > .modal-header { padding:20px 26px 16px;gap:24px;background:var(--paper-elevated);align-items:center; }
+  #naturalIslandModal.voyage-enabled .voyage-kicker { display:block;font:700 10px/1.5 var(--font-sans);letter-spacing:.19em;color:var(--voyage-red);margin-bottom:5px; }
+  body[data-regional-preview] #naturalIslandModal.voyage-enabled h2 { font:700 clamp(21px,1.9vw,28px)/1.35 var(--font-display);color:var(--ink-primary); }
+  body[data-regional-preview] #naturalIslandModal.voyage-enabled .natural-detail-caption { display:block;font:400 13px/1.6 var(--font-sans);margin-top:5px;color:var(--ink-secondary); }
+  #naturalIslandModal.voyage-enabled #naturalClose { min-height:44px;flex:0 0 auto;font-size:12px; }
+  body[data-regional-preview] #naturalIslandModal.voyage-enabled .natural-detail-body { padding:12px 24px 18px;overflow:auto;overscroll-behavior:contain;gap:12px;scrollbar-width:thin; }
+  #naturalIslandModal.voyage-enabled .voyage-modebar { display:flex;align-items:center;flex-wrap:wrap;gap:10px;flex:0 0 auto;padding-bottom:12px;border-bottom:1px solid var(--voyage-line); }
+  #naturalIslandModal.voyage-enabled .voyage-mode-tabs,#naturalIslandModal.voyage-enabled .voyage-mode-actions { display:flex;align-items:center;gap:5px; }
+  #naturalIslandModal.voyage-enabled .voyage-mode-actions { margin-left:auto; }
+  #naturalIslandModal.voyage-enabled .voyage-mode-meta { font-size:11px;line-height:1.5;color:var(--ink-muted);max-width:340px; }
+  #naturalIslandModal.voyage-enabled .voyage-language { display:flex;gap:2px;border-left:1px solid var(--voyage-line);padding-left:7px; }
+  #naturalIslandModal.voyage-enabled .voyage-language button { border:0;background:transparent;color:var(--ink-secondary);font:600 11px/1.4 var(--font-sans);min-height:36px;padding:7px;cursor:pointer; }
+  #naturalIslandModal.voyage-enabled .voyage-language [aria-pressed=true] { color:var(--voyage-red);text-decoration:underline;text-underline-offset:5px; }
+  #naturalIslandModal.voyage-enabled .voyage-btn { min-height:38px;padding:8px 12px;border:1px solid var(--wood-border-strong);border-radius:8px;background:var(--paper-elevated);color:var(--ink-primary);font:500 12px/1.45 var(--font-sans);cursor:pointer;text-align:center;transition:background .16s,transform .16s; }
+  #naturalIslandModal.voyage-enabled .voyage-btn:hover:not(:disabled) { background:var(--paper-warm); }
+  #naturalIslandModal.voyage-enabled .voyage-btn[aria-pressed=true] { background:var(--voyage-sea);border-color:var(--voyage-sea);color:#fff4d9; }
+  #naturalIslandModal.voyage-enabled .voyage-primary { min-height:44px;background:linear-gradient(180deg,#af3644,#8a1e26);border:1px solid var(--voyage-gold-light);color:#fff9ee;box-shadow:0 3px 0 #571725,0 5px 12px #83231420;font-weight:600; }
+  #naturalIslandModal.voyage-enabled .voyage-primary:hover:not(:disabled) { background:linear-gradient(180deg,#b83c49,#7a1d2a);transform:translateY(-1px); }
+  #naturalIslandModal.voyage-enabled button:disabled { opacity:.48;cursor:default; }
+  #naturalIslandModal.voyage-enabled :is(button,a,input,textarea,select,summary):focus-visible { outline:3px solid var(--voyage-gold);outline-offset:3px; }
+  #naturalIslandModal.voyage-enabled .voyage-root { display:flex;flex:1 0 auto;flex-direction:column;gap:14px;min-width:0; }
+  #naturalIslandModal.voyage-enabled:not(.voyage-atlas) :is(.island-chart-layout,.natural-detail-controls,.natural-detail-legend,.natural-detail-info) { display:none; }
+  #naturalIslandModal.voyage-enabled .natural-island-tabs { display:none; }
+  #naturalIslandModal.voyage-enabled.voyage-destinations-open .natural-island-tabs { display:grid; }
+  #naturalIslandModal.voyage-enabled .voyage-grid { display:grid;grid-template-columns:minmax(0,1.65fr) minmax(320px,1fr);gap:20px;min-height:340px; }
+  #naturalIslandModal.voyage-enabled .voyage-map-slot { min-width:0;display:flex;position:relative;min-height:340px; }
+  body[data-regional-preview] #naturalIslandModal.voyage-enabled .voyage-map-slot > .natural-detail-map { width:100%;min-height:340px;border-radius:16px;position:relative;box-shadow:inset 0 0 0 1px #ffffff30; }
+  #naturalIslandModal.voyage-enabled:not(.voyage-atlas) :is(.island-chart-minimap,.island-chart-position) { display:none; }
+  #naturalIslandModal.voyage-enabled:not(.voyage-atlas) .island-chart-scale { bottom:54px; }
+  #naturalIslandModal.voyage-enabled .voyage-map-layer { display:block;position:absolute;inset:0;pointer-events:none;overflow:hidden; }
+  #naturalIslandModal.voyage-enabled .voyage-route-line { position:absolute;inset:0;width:100%;height:100%;overflow:visible; }
+  #naturalIslandModal.voyage-enabled .voyage-route-line path { fill:none;stroke:#ffe0a580;stroke-width:1.3;stroke-dasharray:4 7; }
+  #naturalIslandModal.voyage-enabled .voyage-map-pin { position:absolute;display:flex;align-items:center;gap:7px;transform:translate(-50%,-50%);pointer-events:auto;border:0;background:transparent;color:#fff6dc;font:600 11px/1.4 var(--font-sans);cursor:pointer;min-height:44px;padding:0; }
+  #naturalIslandModal.voyage-enabled .voyage-map-pin > span { width:31px;height:31px;display:grid;place-items:center;flex-shrink:0;border:1px solid #f3daa0;border-radius:50%;background:#174d58;color:#fff4d3;box-shadow:0 2px 10px #143a4b66; }
+  #naturalIslandModal.voyage-enabled .voyage-map-pin > strong { position:absolute;left:39px;white-space:nowrap;padding:4px 7px;border-radius:5px;background:#184a52e8;color:#fff4d3;font-weight:500; }
+  #naturalIslandModal.voyage-enabled .voyage-map-pin.label-left > strong { left:auto;right:39px; }
+  #naturalIslandModal.voyage-enabled .voyage-map-pin.is-current > span { width:38px;height:38px;background:#9e2835;border:2px solid #ffdf8e;box-shadow:0 0 0 5px #ffdf8e25; }
+  #naturalIslandModal.voyage-enabled .voyage-map-pin.is-done > span { background:#2b6e48; }
+  #naturalIslandModal.voyage-enabled .voyage-map-tools { display:flex;position:absolute;left:12px;right:12px;bottom:12px;gap:5px;align-items:center;pointer-events:none; }
+  #naturalIslandModal.voyage-enabled .voyage-map-tools button { pointer-events:auto;min-height:36px;border-color:#e6d7ac90;background:#174d58ed;color:#fff4d3; }
+  #naturalIslandModal.voyage-enabled .voyage-map-tools button:first-child,#naturalIslandModal.voyage-enabled .voyage-map-tools button:nth-child(2) { min-width:38px;font-size:18px;padding:4px; }
+  #naturalIslandModal.voyage-enabled .voyage-map-tools button:last-child { margin-left:auto; }
+  #naturalIslandModal.voyage-enabled .voyage-map-tools button:hover { background:#123e48; }
+  #naturalIslandModal.voyage-enabled .voyage-panel { min-width:0;display:flex;flex-direction:column;align-items:stretch;gap:10px;padding:2px 0 3px; }
+  #naturalIslandModal.voyage-enabled .voyage-chapter-line { display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:11px;color:var(--ink-muted); }
+  #naturalIslandModal.voyage-enabled .voyage-eyebrow { font:700 10px/1.5 var(--font-sans);letter-spacing:.12em;color:var(--voyage-red); }
+  #naturalIslandModal.voyage-enabled .voyage-panel h3 { margin:0;font:700 26px/1.3 var(--font-display);color:var(--ink-primary); }
+  #naturalIslandModal.voyage-enabled p { margin:0; }
+  #naturalIslandModal.voyage-enabled .voyage-objective { font-size:14px;line-height:1.65;color:var(--ink-secondary); }
+  #naturalIslandModal.voyage-enabled .voyage-role-pair { display:grid;grid-template-columns:1fr 1fr;gap:12px;border-top:1px solid var(--voyage-line);padding-top:10px; }
+  #naturalIslandModal.voyage-enabled .voyage-role-pair > span { display:grid;grid-template-columns:30px 1fr;column-gap:8px;align-items:center;min-width:0; }
+  #naturalIslandModal.voyage-enabled .voyage-role-pair i { grid-row:1/3;display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--paper-warm);color:var(--voyage-red);font:500 11px/1 var(--font-sans); }
+  #naturalIslandModal.voyage-enabled .voyage-role-pair small { font-size:10px;color:var(--ink-muted); }
+  #naturalIslandModal.voyage-enabled .voyage-role-pair strong { font-size:12px;color:var(--ink-primary);overflow-wrap:anywhere; }
+  #naturalIslandModal.voyage-enabled .voyage-role-hint { font-size:11px;line-height:1.6;color:var(--ink-muted); }
+  #naturalIslandModal.voyage-enabled [data-voyage-action=roles] { align-self:flex-start;border:0;background:transparent;padding:0;min-height:24px;color:var(--voyage-red);font-size:11px; }
+  #naturalIslandModal.voyage-enabled .voyage-clue-box { padding:11px 13px;background:var(--paper-elevated);border:1px solid var(--voyage-line);border-radius:10px;display:flex;flex-direction:column;gap:9px; }
+  #naturalIslandModal.voyage-enabled .voyage-clue-box .voyage-eyebrow { font-weight:400;letter-spacing:0;font-size:11px;line-height:1.6;color:var(--ink-secondary); }
+  #naturalIslandModal.voyage-enabled .voyage-clue-text { font-size:14px;line-height:1.7;color:var(--ink-primary); }
+  #naturalIslandModal.voyage-enabled .voyage-inline { display:flex;gap:8px;align-items:center;flex-wrap:wrap; }
+  #naturalIslandModal.voyage-enabled .voyage-find-row { display:flex;flex-direction:column;gap:6px; }
+  #naturalIslandModal.voyage-enabled .voyage-find-row label { font-size:11px;color:var(--ink-secondary); }
+  #naturalIslandModal.voyage-enabled .voyage-find-row > div { display:flex;gap:6px; }
+  #naturalIslandModal.voyage-enabled .voyage-find-row select { flex:1;min-width:0;width:0; }
+  #naturalIslandModal.voyage-enabled .voyage-find-row [data-voyage-action=help-map] { align-self:flex-start;border:0;background:transparent;color:var(--voyage-red);min-height:26px;padding:2px 0;font-size:11px; }
+  #naturalIslandModal.voyage-enabled :is(select,input,textarea) { font:400 14px/1.5 var(--font-sans);border:1px solid var(--wood-border-strong);background:var(--paper-elevated);color:var(--ink-primary);border-radius:7px;padding:9px 11px;min-height:40px;max-width:100%;box-sizing:border-box; }
+  #naturalIslandModal.voyage-enabled :is(input,textarea)::placeholder { color:var(--ink-muted);opacity:1; }
+  #naturalIslandModal.voyage-enabled .voyage-found { font-size:12px;line-height:1.6;color:var(--com-green); }
+  #naturalIslandModal.voyage-enabled .voyage-revisit { font-size:11px;color:var(--ink-secondary); }
+  #naturalIslandModal.voyage-enabled .voyage-revisit[open] { display:flex;flex-direction:column;gap:9px; }
+  #naturalIslandModal.voyage-enabled .voyage-revisit summary { min-height:26px; }
+  #naturalIslandModal.voyage-enabled :is(.voyage-reading,.voyage-sources) { font-size:12px;line-height:1.7;color:var(--ink-secondary);border-top:1px solid var(--voyage-line);padding-top:8px; }
+  #naturalIslandModal.voyage-enabled summary { cursor:pointer; }
+  #naturalIslandModal.voyage-enabled :is(.voyage-reading,.voyage-sources) summary { color:var(--ink-primary);min-height:24px; }
+  #naturalIslandModal.voyage-enabled .voyage-reading p { margin-top:6px; }
+  #naturalIslandModal.voyage-enabled .voyage-sources :is(p,a,button) { display:block;margin-top:8px; }
+  #naturalIslandModal.voyage-enabled a { color:var(--com-green);text-underline-offset:3px;overflow-wrap:anywhere; }
+  #naturalIslandModal.voyage-enabled .voyage-context-label { display:block;color:var(--ink-muted);font-size:10px;line-height:1.6;margin:5px 0; }
+  #naturalIslandModal.voyage-enabled .voyage-dock { display:grid;grid-template-columns:minmax(0,1fr) 290px minmax(0,1fr);align-items:center;gap:16px;min-height:160px;padding:15px 22px;background:var(--paper-elevated);border:1px solid var(--voyage-line);border-radius:15px; }
+  #naturalIslandModal.voyage-enabled .voyage-dock-copy h3 { margin:6px 0;font:700 22px/1.3 var(--font-display);color:var(--ink-primary); }
+  #naturalIslandModal.voyage-enabled .voyage-dock-copy p { max-width:280px;font-size:12px;line-height:1.7;color:var(--ink-secondary); }
+  #naturalIslandModal.voyage-enabled .voyage-dock-action { display:flex;flex-direction:column;align-items:flex-start;gap:8px;justify-self:end;max-width:290px; }
+  #naturalIslandModal.voyage-enabled .voyage-dock-action p { font-size:10px;line-height:1.6;color:var(--ink-muted); }
+  #naturalIslandModal.voyage-enabled .voyage-dock-action [data-voyage-action=skip] { padding:0;min-height:24px;font-size:11px;border:0;background:transparent;color:var(--ink-secondary); }
+  #naturalIslandModal.voyage-enabled .voyage-draw-status { font-size:11px;color:var(--voyage-red); }
+  #naturalIslandModal.voyage-enabled .voyage-draw-status:empty { display:none; }
+  #naturalIslandModal.voyage-enabled .voyage-fan { position:relative;height:148px;width:100%;perspective:1000px; }
+  #naturalIslandModal.voyage-enabled .voyage-fanned-card { position:absolute;left:calc(50% - 52px);bottom:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;width:104px;height:140px;padding:9px 6px;background:linear-gradient(140deg,#a52c38,#751c27);border:2px solid #d9ac56;border-radius:10px;color:#ffefc3;box-shadow:0 4px 14px #49222638;transform-origin:center 150%;transform:translateX(var(--fan-x)) rotate(var(--fan-angle));transition:transform .5s cubic-bezier(.2,.8,.2,1.25),opacity .3s;cursor:pointer; }
+  #naturalIslandModal.voyage-enabled .voyage-fanned-card::after { content:'';position:absolute;inset:5px;border:1px solid #e8b95d88;border-radius:5px;pointer-events:none; }
+  #naturalIslandModal.voyage-enabled .voyage-fan:is(:hover,:focus-within) .voyage-fanned-card:not(:disabled) { transform:translateX(var(--fan-open)) rotate(var(--fan-angle)); }
+  #naturalIslandModal.voyage-enabled .voyage-fan .voyage-fanned-card:is(:hover,:focus-visible):not(:disabled) { transform:translate(var(--fan-open),-16px) rotate(0deg);z-index:10; }
+  #naturalIslandModal.voyage-enabled .voyage-card-topic { font:500 9px/1.3 var(--font-sans); }
+  #naturalIslandModal.voyage-enabled .voyage-card-lotus { width:39px;height:39px;display:grid;place-items:center;border:1px solid #d9ac56;border-radius:50%;font-size:29px; }
+  #naturalIslandModal.voyage-enabled .voyage-card-lotus svg { width:33px;height:33px; }
+  #naturalIslandModal.voyage-enabled .voyage-fanned-card strong { font:600 14px/1.3 var(--font-display); }
+  #naturalIslandModal.voyage-enabled .voyage-fanned-card small { font:400 7px/1.5 var(--font-sans);letter-spacing:.08em; }
+  #naturalIslandModal.voyage-enabled .voyage-fanned-card:disabled { opacity:.7; }
+  #naturalIslandModal.voyage-enabled .voyage-fan.is-shuffling { pointer-events:none; }
+  #naturalIslandModal.voyage-enabled .phase-gather .voyage-fanned-card { transform:translateX(0) rotate(0); }
+  #naturalIslandModal.voyage-enabled .phase-shuffle .voyage-fanned-card { animation:voyage-shuffle .42s ease-in-out infinite alternate; }
+  #naturalIslandModal.voyage-enabled .phase-shuffle .voyage-fanned-card:nth-child(even) { animation-direction:alternate-reverse; }
+  #naturalIslandModal.voyage-enabled .phase-pick .voyage-fanned-card { opacity:.35;transform:translateX(0) rotate(0); }
+  #naturalIslandModal.voyage-enabled .phase-pick .voyage-fanned-card.is-picked { opacity:1;z-index:12;transform:translateY(-15px) rotate(0) scale(1.05);box-shadow:0 0 24px #ffdf8e99; }
+  #naturalIslandModal.voyage-enabled .phase-draw .voyage-fanned-card.is-picked { transform:translateY(-60px) rotate(0) scale(1.2); }
+  #naturalIslandModal.voyage-enabled .voyage-rail { display:flex;align-items:center;gap:14px;padding:0 2px; }
+  #naturalIslandModal.voyage-enabled .voyage-rail-stop { display:flex;align-items:center;gap:9px;background:transparent;border:0;padding:6px 14px 6px 0;text-align:left;cursor:pointer;min-height:50px;flex:1;color:var(--ink-secondary); }
+  #naturalIslandModal.voyage-enabled .voyage-rail-stop i { display:grid;place-items:center;width:30px;height:30px;flex-shrink:0;border:1px solid var(--wood-border-strong);border-radius:50%;font:500 12px/1 var(--font-sans); }
+  #naturalIslandModal.voyage-enabled .voyage-rail-stop.is-current i { background:var(--voyage-red);border-color:var(--voyage-red);color:#fff4df; }
+  #naturalIslandModal.voyage-enabled .voyage-rail-stop strong,#naturalIslandModal.voyage-enabled .voyage-rail-stop small { display:block;font:500 12px/1.5 var(--font-sans); }
+  #naturalIslandModal.voyage-enabled .voyage-rail-stop small { font-size:10px;font-weight:400;color:var(--ink-muted); }
+  #naturalIslandModal.voyage-enabled .voyage-rail-note { font-size:10px;color:var(--ink-muted);max-width:140px;line-height:1.6;text-align:right; }
+  #naturalIslandModal.voyage-enabled .voyage-status { color:var(--com-green);font-size:12px;line-height:1.6; }
+  #naturalIslandModal.voyage-enabled .voyage-status:empty { display:none; }
+  #naturalIslandModal.voyage-enabled :is(.voyage-workbench,.voyage-album) { display:none; }
+  #naturalIslandModal.voyage-enabled.voyage-card-open :is(.voyage-grid,.voyage-dock),#naturalIslandModal.voyage-enabled.voyage-album-open :is(.voyage-grid,.voyage-dock,.voyage-workbench) { display:none; }
+  #naturalIslandModal.voyage-enabled.voyage-card-open .voyage-workbench { display:block; }
+  #naturalIslandModal.voyage-enabled.voyage-album-open .voyage-album { display:block; }
+  #naturalIslandModal.voyage-enabled.voyage-atlas .voyage-root { display:none; }
+  #naturalIslandModal.voyage-enabled.voyage-atlas :is(.voyage-map-layer,.voyage-map-tools) { display:none; }
+  #naturalIslandModal.voyage-enabled.voyage-atlas .island-chart-layout { min-height:390px; }
+  #naturalIslandModal.voyage-enabled .voyage-card-context { display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;color:var(--ink-secondary);font-size:12px; }
+  #naturalIslandModal.voyage-enabled .voyage-diptych { display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px; }
+  #naturalIslandModal.voyage-enabled :is(.voyage-card-front,.voyage-card-back) { position:relative;min-width:0;min-height:510px;padding:24px;border-radius:16px;overflow-wrap:anywhere; }
+  #naturalIslandModal.voyage-enabled .voyage-card-front { color:#fff9f3;background:url('../corner.svg') right 10px top 10px/30px 30px no-repeat,var(--voyage-card);border:1.5px solid var(--voyage-gold);box-shadow:0 8px 24px #7a1d2a22; }
+  #naturalIslandModal.voyage-enabled .voyage-card-front .voyage-eyebrow { color:#ffdf8e; }
+  #naturalIslandModal.voyage-enabled .voyage-card-front h3 { color:#fff9f3;font:600 23px/1.55 var(--font-sans);margin:20px 0; }
+  #naturalIslandModal.voyage-enabled .voyage-card-reading { font-size:12px;line-height:1.7;color:#fae1d2;padding:13px 0;border-bottom:1px solid #ffdf8e55; }
+  #naturalIslandModal.voyage-enabled .voyage-card-reading summary { color:#fff0cf; }
+  #naturalIslandModal.voyage-enabled .voyage-card-reading p { margin:10px 0; }
+  #naturalIslandModal.voyage-enabled .voyage-card-reading a { color:#ffdf8e; }
+  #naturalIslandModal.voyage-enabled .voyage-options { display:flex;flex-direction:column;gap:10px; }
+  #naturalIslandModal.voyage-enabled .voyage-option { display:flex;align-items:center;gap:12px;width:100%;min-height:52px;padding:12px;border:1px solid #fff0d98c;background:#fff4df0f;color:#fff9f3;border-radius:10px;text-align:left;font:400 14px/1.6 var(--font-sans);cursor:pointer; }
+  #naturalIslandModal.voyage-enabled .voyage-option > span { display:grid;place-items:center;width:26px;height:26px;flex-shrink:0;border-radius:50%;background:#fff2;font-size:12px; }
+  #naturalIslandModal.voyage-enabled .voyage-option.is-selected { border-color:#ffdf8e;background:#ffdf8e30; }
+  #naturalIslandModal.voyage-enabled .voyage-option.is-correct { background:#245f40;border-color:#a5d6ad; }
+  #naturalIslandModal.voyage-enabled .voyage-option.is-incorrect { border-style:dashed;border-color:#ffd8c1; }
+  #naturalIslandModal.voyage-enabled .voyage-option:disabled { opacity:1; }
+  #naturalIslandModal.voyage-enabled .voyage-card-actions { display:flex;flex-wrap:wrap;gap:8px;margin-top:16px; }
+  #naturalIslandModal.voyage-enabled .voyage-card-front .voyage-btn:not(.voyage-primary) { color:#fff5e7;border-color:#ffdf8e80;background:#fff1; }
+  #naturalIslandModal.voyage-enabled .voyage-card-front .voyage-btn:hover { background:#fff2; }
+  #naturalIslandModal.voyage-enabled .voyage-helper { margin-top:13px;font-size:12px;line-height:1.7;color:#ffe1c8; }
+  #naturalIslandModal.voyage-enabled .voyage-answer { margin-top:18px;padding:14px;background:#fff9ee;color:#293b32;border-left:3px solid #d5a64f;border-radius:0 8px 8px 0;font-size:13px;line-height:1.7; }
+  #naturalIslandModal.voyage-enabled .voyage-answer strong { display:block;color:#27633e;margin-bottom:6px; }
+  #naturalIslandModal.voyage-enabled .voyage-card-back { color:var(--ink-primary);background:var(--paper-elevated);border:1px solid var(--wood-border-strong); }
+  #naturalIslandModal.voyage-enabled .voyage-seal { display:flex;position:absolute;inset:0;z-index:2;flex-direction:column;align-items:center;justify-content:center;gap:20px;padding:36px;text-align:center;background:var(--paper-elevated);border-radius:16px; }
+  #naturalIslandModal.voyage-enabled .voyage-seal[hidden] { display:none; }
+  #naturalIslandModal.voyage-enabled .voyage-seal h3 { font:700 24px/1.45 var(--font-display);color:var(--voyage-red);margin:0; }
+  #naturalIslandModal.voyage-enabled .voyage-seal p { max-width:330px;font-size:13px;line-height:1.8;color:var(--ink-secondary); }
+  #naturalIslandModal.voyage-enabled .voyage-wax-seal { display:flex;flex-direction:column;align-items:center;justify-content:center;width:92px;height:92px;flex-shrink:0;border:3px solid #ffdf8e;border-radius:50%;background:radial-gradient(circle at 35% 35%,#bf3c4c,#90212f 60%,#60121d);color:#ffedbd;box-shadow:0 8px 24px #83231444,inset 0 2px 6px #fff5;cursor:pointer;transition:transform .25s; }
+  #naturalIslandModal.voyage-enabled .voyage-wax-seal:hover { transform:scale(1.06) rotate(4deg); }
+  #naturalIslandModal.voyage-enabled .voyage-wax-seal span { font-size:35px; }
+  #naturalIslandModal.voyage-enabled .voyage-wax-seal svg { width:48px;height:48px;display:block; }
+  #naturalIslandModal.voyage-enabled .voyage-wax-seal small { font:700 9px/1.5 var(--font-sans);letter-spacing:1px; }
+  #naturalIslandModal.voyage-enabled #voyageConnection[aria-hidden=true] { visibility:hidden; }
+  #naturalIslandModal.voyage-enabled #voyageConnection[aria-hidden=false] { animation:voyage-unseal .35s ease both; }
+  #naturalIslandModal.voyage-enabled .voyage-activity { margin:14px 0;padding:16px;background:var(--paper-warm);border:1px solid var(--voyage-line);border-radius:11px; }
+  #naturalIslandModal.voyage-enabled .voyage-activity h3 { margin:0 0 8px;font:700 21px/1.4 var(--font-display); }
+  #naturalIslandModal.voyage-enabled .voyage-activity p { font-size:14px;line-height:1.8; }
+  #naturalIslandModal.voyage-enabled .voyage-gentle { color:var(--ink-muted);font-size:11px;line-height:1.7;margin:12px 0; }
+  #naturalIslandModal.voyage-enabled :is(.voyage-bag,.voyage-letter) { padding:0;border:0;margin:16px 0;min-width:0; }
+  #naturalIslandModal.voyage-enabled :is(.voyage-bag,.voyage-letter) legend { font:600 12px/1.6 var(--font-sans);margin-bottom:5px;color:var(--ink-primary); }
+  #naturalIslandModal.voyage-enabled :is(.voyage-bag,.voyage-letter) p { font-size:11px;line-height:1.7;color:var(--ink-secondary);margin-bottom:9px; }
+  #naturalIslandModal.voyage-enabled :is(.voyage-bag,.voyage-letter) > div { display:flex;gap:6px;flex-wrap:wrap; }
+  #naturalIslandModal.voyage-enabled :is(.voyage-bag,.voyage-letter) button { min-height:35px;padding:7px 9px;border:1px solid var(--wood-border-strong);border-radius:7px;background:var(--paper-bg);color:var(--ink-primary);font:400 11px/1.5 var(--font-sans);cursor:pointer; }
+  #naturalIslandModal.voyage-enabled :is(.voyage-bag,.voyage-letter) [aria-pressed=true] { color:#fff4df;background:var(--voyage-sea);border-color:var(--voyage-sea); }
+  #naturalIslandModal.voyage-enabled .voyage-bag small { display:block;color:var(--ink-muted);font-size:10px;margin-top:7px; }
+  #naturalIslandModal.voyage-enabled .voyage-note-field { display:flex;flex-direction:column;gap:6px;margin:16px 0; }
+  #naturalIslandModal.voyage-enabled .voyage-note-field label { font-size:12px;color:var(--ink-secondary); }
+  #naturalIslandModal.voyage-enabled .voyage-note-field textarea { min-height:80px;max-height:180px;resize:vertical;width:100%; }
+  #naturalIslandModal.voyage-enabled .voyage-note-counter { align-self:flex-end;color:var(--ink-muted);font-size:10px; }
+  #naturalIslandModal.voyage-enabled .voyage-complete-actions { display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding-top:12px;border-top:1px solid var(--voyage-line); }
+  #naturalIslandModal.voyage-enabled .voyage-session-note { color:var(--ink-muted);font-size:11px;line-height:1.6;margin:6px 0; }
+  #naturalIslandModal.voyage-enabled .voyage-timer { font:600 13px/1.5 var(--font-sans);color:var(--voyage-red);font-variant-numeric:tabular-nums; }
+  #naturalIslandModal.voyage-enabled .voyage-album-heading { display:flex;justify-content:space-between;align-items:flex-start;gap:22px;margin-bottom:18px; }
+  #naturalIslandModal.voyage-enabled .voyage-album-heading h3 { font:700 28px/1.4 var(--font-display);margin:5px 0;color:var(--ink-primary); }
+  #naturalIslandModal.voyage-enabled .voyage-album-heading p { font-size:13px;line-height:1.7;color:var(--ink-secondary); }
+  #naturalIslandModal.voyage-enabled .voyage-title-label { display:block;font-size:12px;color:var(--ink-secondary);margin-bottom:6px; }
+  #naturalIslandModal.voyage-enabled #voyageTitle { display:block;width:100%;margin-bottom:16px; }
+  #naturalIslandModal.voyage-enabled .voyage-postcard { border:1px solid var(--wood-border-strong);border-radius:14px;padding:24px 28px;background:var(--paper-elevated);box-shadow:0 6px 22px #442c1510; }
+  #naturalIslandModal.voyage-enabled .voyage-postcard-top { display:flex;justify-content:space-between;gap:12px;color:var(--voyage-red);font:600 10px/1.5 var(--font-sans);letter-spacing:.12em; }
+  #naturalIslandModal.voyage-enabled .voyage-postcard-title { margin:16px 0 22px;font:700 29px/1.4 var(--font-display);color:var(--ink-primary);overflow-wrap:anywhere; }
+  #naturalIslandModal.voyage-enabled .voyage-postcard-body { display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:24px; }
+  #naturalIslandModal.voyage-enabled .voyage-postcard-entry { display:flex;gap:14px;padding:14px 0;border-top:1px solid var(--voyage-line); }
+  #naturalIslandModal.voyage-enabled .voyage-entry-number { font:500 13px/1.5 var(--font-sans);color:var(--voyage-red);padding-top:4px; }
+  #naturalIslandModal.voyage-enabled .voyage-postcard-entry > div { min-width:0;flex:1; }
+  #naturalIslandModal.voyage-enabled .voyage-postcard-entry h4 { font:600 15px/1.6 var(--font-sans);color:var(--ink-primary);margin:0; }
+  #naturalIslandModal.voyage-enabled .voyage-postcard-entry h4 small { font-weight:400;font-size:11px;color:var(--ink-secondary); }
+  #naturalIslandModal.voyage-enabled .voyage-entry-status { display:block;color:var(--com-green);font-size:10px;margin:4px 0; }
+  #naturalIslandModal.voyage-enabled .voyage-kept-line { font-size:13px;line-height:1.8;color:var(--ink-primary);overflow-wrap:anywhere;white-space:pre-wrap; }
+  #naturalIslandModal.voyage-enabled .voyage-postcard-entry small { color:var(--ink-muted);font-size:10px; }
+  #naturalIslandModal.voyage-enabled .voyage-postcard-entry :is(label,textarea) { display:block;width:100%;margin-top:6px;font-size:12px; }
+  #naturalIslandModal.voyage-enabled .voyage-postcard-aside { display:flex;flex-direction:column;align-items:center;gap:12px;border-left:1px solid var(--voyage-line);padding-left:18px; }
+  #naturalIslandModal.voyage-enabled .voyage-postcard-map { width:100%;height:auto;background:var(--voyage-sea);border-radius:10px; }
+  #naturalIslandModal.voyage-enabled .voyage-postcard-map .voyage-postcard-land { fill:#f0ddaa;stroke:#efdfb8;stroke-width:.4px; }
+  #naturalIslandModal.voyage-enabled .voyage-postcard-map circle { fill:#ffdf8e; }
+  #naturalIslandModal.voyage-enabled .voyage-postcard-map text { fill:#fff0d1;font:600 11px var(--font-sans); }
+  #naturalIslandModal.voyage-enabled .voyage-postmark { display:flex;flex-direction:column;align-items:center;justify-content:center;width:120px;height:70px;border:2px solid var(--voyage-red);border-radius:50%;color:var(--voyage-red);font:700 17px/1.4 var(--font-display);transform:rotate(-9deg); }
+  #naturalIslandModal.voyage-enabled .voyage-postmark small { font:500 6px/1.6 var(--font-sans);letter-spacing:.04em; }
+  #naturalIslandModal.voyage-enabled .voyage-postcard footer { margin-top:20px;color:var(--ink-muted);font-size:10px;line-height:1.7; }
+  #naturalIslandModal.voyage-enabled .voyage-album-actions { display:flex;gap:9px;flex-wrap:wrap;margin:20px 0 10px; }
+  #naturalIslandModal.voyage-enabled .voyage-archive-select { display:flex;flex-direction:column;gap:6px;max-width:320px;font-size:11px;color:var(--ink-secondary); }
+  html[data-theme=dark] #naturalIslandModal.voyage-enabled { --voyage-red:#f0ab97;--voyage-sea:#1d515b; }
+  html[data-theme=dark] #naturalIslandModal.voyage-enabled .voyage-card-front { --voyage-red:#ffdf8e; }
+  html[data-theme=dark] #naturalIslandModal.voyage-enabled .voyage-primary { color:#fff9ee; }
+  @media (max-width:1120px) {
+    #naturalIslandModal.voyage-enabled .voyage-mode-meta { display:none; }
+    #naturalIslandModal.voyage-enabled .voyage-grid { grid-template-columns:minmax(0,1.25fr) minmax(310px,1fr);gap:16px; }
+    #naturalIslandModal.voyage-enabled .voyage-dock { grid-template-columns:minmax(0,1fr) 260px minmax(0,1fr);padding:14px;gap:10px; }
+    #naturalIslandModal.voyage-enabled :is(.voyage-card-front,.voyage-card-back) { padding:18px; }
+    #naturalIslandModal.voyage-enabled .voyage-rail-note { display:none; }
+  }
+  @media (prefers-reduced-motion:reduce) {
+    #naturalIslandModal.voyage-enabled *,#naturalIslandModal.voyage-enabled *::after { animation:none!important;transition:none!important;scroll-behavior:auto!important; }
+  }
+}
+@keyframes voyage-shuffle { from { transform:translateX(-45px) rotate(-10deg); } to { transform:translate(50px,-8px) rotate(12deg); } }
+@keyframes voyage-unseal { from { opacity:0;transform:translateY(7px); } to { opacity:1;transform:none; } }

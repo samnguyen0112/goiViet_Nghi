@@ -32,12 +32,13 @@ function staticChecks() {
     if (name === 'map-surroundings-preview-5.html') continue;
     assert.equal(crypto.createHash('sha256').update(fs.readFileSync(path.join(ROOT, name))).digest('hex'), hash, name + ' changed');
   }
-  report.static = { stations: 36, photos: 35, placeholders: 1, distinctFiles: 35, remoteImageURLs: 0, otherPagesUnchanged: true,
+  report.static = { surface: 'arrival-sheet', stations: 36, photos: 35, placeholders: 1, distinctFiles: 35, remoteImageURLs: 0, otherPagesUnchanged: true,
                     bytes: catalog.reduce((sum, p) => sum + p.bytes, 0),
                     catalogSHA256: crypto.createHash('sha256').update(JSON.stringify(catalog)).digest('hex') };
   if (process.argv.includes('--resume')) {
     const previous = JSON.parse(fs.readFileSync(path.join(OUT, 'report.json'), 'utf8'));
     assert.equal(previous.static.bytes, report.static.bytes, 'Photo set changed; run without --resume');
+    assert.equal(previous.static.surface, 'arrival-sheet', 'Photo surface changed; run without --resume');
     assert.deepEqual(previous.errors, []);
     assert.deepEqual(previous.externalRequests, []);
     const labels = new Set(previous.frames.map(frame => frame.viewport).filter(label => !label.startsWith('offline-')));
@@ -75,20 +76,19 @@ async function openMap(context, viewport, query = '') {
   await page.goto(target + query, { waitUntil: 'load', timeout: 60000 });
   await page.waitForFunction(() => window.GoiVietHomeIntro && window.GoiVietBooks && window.GoiVietJourneyPreview);
   await page.evaluate(() => { GoiVietHomeIntro.skip(); closeIntroModal(); });
-  await page.waitForFunction(() => document.querySelector('#station-pick-hn'));
-  if (viewport.width < 769 && await page.locator('#btnMobileTogglePanel').isVisible()) {
-    const hidden = await page.locator('#stationPanel').evaluate(el => el.getBoundingClientRect().left >= innerWidth || el.getAttribute('inert') !== null);
-    if (hidden) await page.locator('#btnMobileTogglePanel').click();
-  }
+  await page.waitForFunction(() => window.GoiVietArrivalDemo && document.querySelector('#station-pick-hn'));
   await page.evaluate(() => document.fonts.ready);
   return page;
 }
 
 async function select(page, photo) {
   const name = await page.evaluate(id => contentVi(CULTURAL_PLACE_MAP[id], 'name'), photo.id);
+  if (await page.locator('#stationPanel').isHidden()) await page.locator('#previewPanelOpen').click();
   await page.locator('#provSearchInput').fill(name);
   const pick = page.locator('#station-pick-' + photo.id);
-  if (await pick.count()) await pick.click();
+  await pick.click();
+  await page.locator('#arrivalExplore').click();
+  await page.waitForFunction(id => GoiVietArrivalDemo.isSheetOpen() && document.querySelector('#arrivalSheet').dataset.place === id, photo.id);
   const art = page.locator('#story-hero-' + photo.id + ' .gv-station-art-photo');
   if (photo.status === 'placeholder') {
     await page.locator('#story-hero-' + photo.id).waitFor({ state: 'visible' });
@@ -105,28 +105,36 @@ async function inspectFrame(page, photo, label, screenshots) {
   if (!art) {
     const hero = page.locator('#story-hero-' + photo.id);
     assert(await hero.locator('.gv-station-art-fallback svg').isVisible());
-    assert.equal(await page.locator('#placeCard-' + photo.id + ' .gv-station-photo-credit').count(), 0);
+    assert.equal(await page.locator('#arrivalSheet .gv-station-photo-credit').count(), 0);
     assert.equal(await hero.getAttribute('title'), label.includes('en') ? photo.titleEn : photo.titleVi);
     assert(await page.evaluate(id => {
       const place = CULTURAL_PLACE_MAP[id];
       return place.photoTitleVi === contentVi(place, 'highlights').landmark && !place.photoUrl && !place.photos.length;
     }, photo.id));
-    if (screenshots) await page.locator('#placeCard-' + photo.id + ' .gv-station-sheet').screenshot({ path: path.join(OUT, label, photo.id + '.png') });
+    if (screenshots) await page.locator('#arrivalSheet').screenshot({ path: path.join(OUT, label, photo.id + '.png') });
     report.frames.push({ viewport: label, id: photo.id, placeholder: true });
     return;
   }
+  await page.mouse.move(2, 2);
+  await page.locator('#arrivalSheet').evaluate(async sheet => {
+    await Promise.allSettled(sheet.getAnimations().map(animation => animation.finished));
+  });
   const frame = await art.evaluate(image => {
     const rect = image.getBoundingClientRect();
-    const outer = image.closest('.gv-station-art').getBoundingClientRect();
-    const sheet = image.closest('.gv-station-sheet').getBoundingClientRect();
-    const panel = image.closest('#stationPanel');
-    const title = image.closest('.gv-station-sheet').querySelector('.gv-station-kicker').getBoundingClientRect();
+    const wrapper = image.closest('.gv-station-art');
+    const outer = wrapper.getBoundingClientRect();
+    const style = getComputedStyle(wrapper);
+    const left = parseFloat(style.borderLeftWidth), top = parseFloat(style.borderTopWidth);
+    const right = parseFloat(style.borderRightWidth), bottom = parseFloat(style.borderBottomWidth);
+    const panel = image.closest('#arrivalSheet');
+    const sheet = panel.getBoundingClientRect();
+    const summary = panel.querySelector('.arrival-summary').getBoundingClientRect();
     return { src: image.currentSrc, alt: image.alt, id: image.dataset.photoPlace, width: rect.width, height: rect.height,
       naturalWidth: image.naturalWidth, naturalHeight: image.naturalHeight,
       objectFit: getComputedStyle(image).objectFit, position: image.style.objectPosition,
-      fits: Math.abs(rect.left - outer.left) < 1 && Math.abs(rect.top - outer.top) < 1
-        && Math.abs(rect.width - outer.width) < 1 && Math.abs(rect.height - outer.height) < 1,
-      inSheet: outer.left >= sheet.left && outer.right <= sheet.right && outer.bottom <= title.top,
+      fits: Math.abs(rect.left - outer.left - left) < 1 && Math.abs(rect.top - outer.top - top) < 1
+        && Math.abs(rect.width - outer.width + left + right) < 1 && Math.abs(rect.height - outer.height + top + bottom) < 1,
+      inSheet: outer.left >= sheet.left && outer.right <= sheet.right && outer.bottom <= summary.top + 1,
       noOverflow: panel.scrollWidth <= panel.clientWidth + 1,
       density: getComputedStyle(image).objectFit === 'contain'
         ? Math.max(image.naturalWidth / rect.width, image.naturalHeight / rect.height)
@@ -138,9 +146,9 @@ async function inspectFrame(page, photo, label, screenshots) {
   assert.equal(frame.objectFit, photo.fit || 'cover');
   assert.equal(frame.position, photo.position);
   assert(frame.naturalWidth === photo.width && frame.naturalHeight === photo.height);
-  assert(frame.fits && frame.inSheet && frame.noOverflow, label + ':' + photo.id + ' frame placement');
+  assert(frame.fits && frame.inSheet && frame.noOverflow, label + ':' + photo.id + ' frame placement ' + JSON.stringify(frame));
   assert(frame.density >= 2, label + ':' + photo.id + ' source density below 2x');
-  const credit = page.locator('#placeCard-' + photo.id + ' .gv-station-photo-credit');
+  const credit = page.locator('#arrivalSheet .gv-station-photo-credit');
   await credit.locator('summary').click();
   const creditText = (await credit.innerText()).replace(/\s+/g, ' ');
   assert(creditText.includes(photo.author.replace(/\s+/g, ' ')), label + ':' + photo.id + ' author: ' + creditText);
@@ -151,7 +159,7 @@ async function inspectFrame(page, photo, label, screenshots) {
   await page.keyboard.press('Space');
   assert.equal(await credit.getAttribute('open'), null);
   if (screenshots) {
-    await page.locator('#placeCard-' + photo.id + ' .gv-station-sheet').screenshot({ path: path.join(OUT, label, photo.id + '.png') });
+    await page.locator('#arrivalSheet').screenshot({ path: path.join(OUT, label, photo.id + '.png') });
     await page.locator('#story-hero-' + photo.id).screenshot({ path: path.join(OUT, label, photo.id + '-photo.png') });
   }
   report.frames.push({ viewport: label, id: photo.id, ...frame });
@@ -212,7 +220,7 @@ async function responsive(browser) {
       await select(page, catalog[1]);
       await select(page, catalog[0]);
       assert(await page.locator('.gv-station-art-photo').isVisible());
-      await page.locator('#stationPanel').screenshot({ path: path.join(OUT, 'desktop-panel.png') });
+      await page.locator('#arrivalSheet').screenshot({ path: path.join(OUT, 'desktop-arrival.png') });
     }
     await page.close();
   }
@@ -238,10 +246,11 @@ async function offline(browser) {
   fs.mkdirSync(path.join(OUT, 'offline-vi'), { recursive: true });
   for (const photo of catalog) await inspectFrame(page, photo, 'offline-vi', false);
   await page.reload({ waitUntil: 'load' });
+  await page.waitForFunction(() => window.GoiVietArrivalDemo);
   await page.evaluate(() => { GoiVietHomeIntro.skip(); closeIntroModal(); GoiVietI18n.setLang('en', { remember: false }); });
   for (const photo of catalog) await inspectFrame(page, photo, 'offline-en', false);
   assert.deepEqual(failures, [], 'Missing resources during offline operation');
-  await page.locator('#stationPanel').screenshot({ path: path.join(OUT, 'offline-panel.png') });
+  await page.locator('#arrivalSheet').screenshot({ path: path.join(OUT, 'offline-arrival.png') });
   report.offline = { ...ready, coldReload: true, provinces: 36, languages: 2, failures };
   await context.close();
 }

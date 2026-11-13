@@ -949,8 +949,9 @@
     R.panel = null;
     try { popModalFocus('bookModal'); } catch (e) { /* page without the modal stack */ }
   }
-  function playCards() {
+  function playCards(source) {
     const id = R.placeId;
+    if (window.GoiVietArrivalDemo) return window.GoiVietArrivalDemo.playFromReading(id, source, 'book');
     close();
     if (typeof openDeckModal === 'function') openDeckModal(id);
   }
@@ -967,7 +968,7 @@
     else if (act === 'font-down' || act === 'font-up') { R.fontPx = clamp(R.fontPx + (act === 'font-up' ? 2 : -2), 17, 31); renderLarge(); moveTextSection(0); }
     else if (act === 'sec-prev') moveTextSection(-1);
     else if (act === 'sec-next') moveTextSection(1);
-    else if (act === 'play') playCards();
+    else if (act === 'play') playCards(btn);
   }
   function onKey(e) {
     if (e.key === 'Escape') {

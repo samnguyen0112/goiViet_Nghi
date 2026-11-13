@@ -1,0 +1,172 @@
+/* The sea islands are a tactile letter desk; geographic tools are an optional fold-out.
+   Preview-5 desktop only. Existing mobile charts and provincial card designs are unchanged. */
+.sea-scene { display:none; }
+@media(min-width:961px) {
+  body[data-regional-preview] #naturalIslandModal.sea-postoffice > .modal-sheet { width:min(1240px,100%);max-width:1240px;height:min(880px,94dvh);background:var(--paper-bg) url('../paper.svg'); }
+  body[data-regional-preview] #naturalIslandModal.sea-postoffice > .modal-sheet > .modal-header { padding:17px 28px 13px;background:var(--paper-elevated);border-bottom:0; }
+  body[data-regional-preview] #naturalIslandModal.sea-postoffice h2 { font:700 30px/1.2 var(--font-display); }
+  body[data-regional-preview] #naturalIslandModal.sea-postoffice .natural-detail-caption { font:400 12px/1.6 var(--font-sans);margin-top:4px; }
+  #naturalIslandModal.sea-postoffice .voyage-kicker { font-size:9px;letter-spacing:.15em;margin-bottom:4px; }
+  #naturalIslandModal.sea-postoffice #naturalClose { min-height:38px;border:0;background:transparent;color:var(--ink-secondary);font-size:12px;padding:8px 0 8px 16px; }
+  body[data-regional-preview] #naturalIslandModal.sea-postoffice .natural-detail-body { padding:0 26px 16px;gap:10px; }
+  #naturalIslandModal.sea-postoffice .voyage-modebar { padding:0 0 8px;border-bottom:1px solid var(--wood-border);min-height:38px;gap:8px;overflow:visible; }
+  #naturalIslandModal.sea-postoffice .sea-quiet-nav { display:flex;gap:20px;align-items:center; }
+  #naturalIslandModal.sea-postoffice .sea-quiet-nav .voyage-btn { padding:7px 0;min-height:36px;border:0;border-radius:0;background:transparent;color:var(--ink-muted);font-size:12px;box-shadow:none; }
+  #naturalIslandModal.sea-postoffice .sea-quiet-nav .voyage-btn[aria-pressed=true] { color:var(--voyage-red);text-decoration:underline;text-underline-offset:10px;text-decoration-thickness:2px; }
+  #naturalIslandModal.sea-postoffice .sea-more { margin-left:auto;position:relative;font-size:11px;color:var(--ink-secondary);z-index:12; }
+  #naturalIslandModal.sea-postoffice .sea-more > summary { list-style:none;padding:10px 0 10px 12px;min-height:36px;display:flex;align-items:center;gap:10px; }
+  #naturalIslandModal.sea-postoffice .sea-more > summary span { color:var(--voyage-red);font-size:17px; }
+  #naturalIslandModal.sea-postoffice .sea-more-content { position:absolute;right:0;top:39px;min-width:230px;display:flex;flex-direction:column;gap:4px;padding:12px;background:var(--paper-elevated);border:1px solid var(--wood-border-strong);border-radius:9px;box-shadow:0 10px 25px #42311f26; }
+  #naturalIslandModal.sea-postoffice .sea-more-content .voyage-btn { border:0;background:transparent;text-align:left;min-height:36px;font-size:12px; }
+  #naturalIslandModal.sea-postoffice .sea-more-content .voyage-btn:hover { background:var(--paper-warm); }
+  #naturalIslandModal.sea-postoffice .sea-more-content .voyage-language { border-left:0;border-top:1px solid var(--wood-border);padding:6px 0 0;margin-top:5px; }
+  #naturalIslandModal.sea-postoffice .voyage-root { flex:1 0 auto;gap:8px; }
+  #naturalIslandModal.sea-postoffice .voyage-grid { display:none!important; }
+  #naturalIslandModal.sea-postoffice .sea-scene { display:block;min-width:0; }
+  #naturalIslandModal.sea-postoffice .voyage-dock { display:none; }
+  #naturalIslandModal.sea-postoffice.voyage-deck-open .voyage-dock { display:grid;min-height:360px;align-content:center;margin:25px 0; }
+  #naturalIslandModal.sea-postoffice.voyage-deck-open .voyage-fan { height:230px; }
+  #naturalIslandModal.sea-postoffice.voyage-deck-open .voyage-fanned-card { width:144px;height:200px;left:calc(50% - 72px); }
+  #naturalIslandModal.sea-postoffice.voyage-deck-open .voyage-fanned-card strong { font-size:21px; }
+  #naturalIslandModal.sea-postoffice.voyage-deck-open .voyage-fanned-card small { font-size:8px; }
+  #naturalIslandModal.sea-postoffice.voyage-deck-open .voyage-dock-action p { display:none; }
+  #naturalIslandModal.sea-postoffice:is(.voyage-card-open,.voyage-deck-open,.voyage-album-open) .sea-scene { display:none; }
+  #naturalIslandModal.sea-postoffice .sea-tableau { position:relative;isolation:isolate;min-height:430px;height:clamp(430px,53vh,560px);overflow:hidden; }
+  #naturalIslandModal.sea-postoffice .sea-tableau::before { content:'';position:absolute;z-index:-1;inset:6% 0 0;background:radial-gradient(ellipse at 25% 70%,#b4cbb02a,transparent 65%); }
+  #naturalIslandModal.sea-postoffice .sea-scene-heading { position:absolute;top:7%;left:5%;z-index:2; }
+  #naturalIslandModal.sea-postoffice .sea-overline { font:600 10px/1.6 var(--font-sans);letter-spacing:.12em;text-transform:uppercase;color:var(--voyage-red); }
+  #naturalIslandModal.sea-postoffice .sea-scene-heading h3 { font:700 clamp(32px,3vw,43px)/1.3 var(--font-display);margin:8px 0;color:var(--ink-primary); }
+  #naturalIslandModal.sea-postoffice .sea-scene-heading p { font:400 14px/1.6 var(--font-sans);color:var(--ink-secondary); }
+  #naturalIslandModal.sea-postoffice .sea-water { position:absolute;z-index:-1;left:-10%;right:-10%;bottom:-3px;height:46%;pointer-events:none; }
+  #naturalIslandModal.sea-postoffice .sea-water svg { width:100%;height:100%;overflow:visible; }
+  #naturalIslandModal.sea-postoffice .sea-water path:first-child { fill:#7cb7ad29;stroke:none; }
+  #naturalIslandModal.sea-postoffice .sea-water path:not(:first-child) { fill:none;stroke:#6b9d9455;stroke-width:1; }
+  #naturalIslandModal.sea-postoffice .sea-sailboat { position:absolute;z-index:0;left:12%;bottom:1%;width:clamp(215px,20vw,275px);height:auto;pointer-events:none;filter:drop-shadow(0 9px 8px #44372116);animation:sea-boat-sway 6s ease-in-out infinite;transform-origin:50% 90%; }
+  #naturalIslandModal.sea-postoffice .sea-envelope { position:absolute;z-index:3;right:7%;top:31%;width:clamp(340px,34vw,440px);height:255px;border:1px solid #c2a275;border-radius:5px;background:linear-gradient(145deg,#fcf3dc,#ede0be);box-shadow:0 16px 25px #5a392825,inset 0 0 0 7px #f8eed5;transform:rotate(-5deg);cursor:pointer;color:#403a2c;padding:0;transition:transform .45s cubic-bezier(.2,.8,.2,1),box-shadow .4s; }
+  #naturalIslandModal.sea-postoffice .sea-envelope::after { content:'';position:absolute;inset:8px;border:1px dashed #aa80566b;pointer-events:none; }
+  #naturalIslandModal.sea-postoffice .sea-envelope:hover { transform:rotate(-1deg) translateY(-7px);box-shadow:0 24px 32px #5a392831; }
+  #naturalIslandModal.sea-postoffice .sea-envelope-flap { position:absolute;inset:0 0 auto;height:166px;background:linear-gradient(175deg,#fff9e8,#eee0bd);clip-path:polygon(0 0,100% 0,50% 94%);filter:drop-shadow(0 1px 0 #c2a275); }
+  #naturalIslandModal.sea-postoffice .sea-envelope-address { position:absolute;left:29px;top:29px;z-index:2;text-align:left;transform:rotate(5deg); }
+  #naturalIslandModal.sea-postoffice .sea-envelope-address small { display:block;font:400 10px/1.5 var(--font-sans);color:#72634b; }
+  #naturalIslandModal.sea-postoffice .sea-envelope-address strong { display:block;font:700 26px/1.5 var(--font-display); }
+  #naturalIslandModal.sea-postoffice .sea-envelope-number { position:absolute;z-index:2;right:25px;top:22px;display:grid;place-items:center;width:52px;height:52px;border:1px solid #9e2835;border-radius:50%;font:600 16px/1 var(--font-sans);color:#9e2835;transform:rotate(8deg); }
+  #naturalIslandModal.sea-postoffice .sea-envelope-seal { display:grid;place-items:center;position:absolute;z-index:3;left:calc(50% - 38px);top:99px;width:76px;height:76px;border:2px solid #f5d888;border-radius:50%;background:radial-gradient(circle at 35% 28%,#bc4651,#922632 60%,#6f1925);color:#ffdf8e;box-shadow:0 5px 9px #6f282850,inset 0 1px 4px #fff5; }
+  #naturalIslandModal.sea-postoffice .sea-envelope-seal svg { width:49px;height:49px; }
+  #naturalIslandModal.sea-postoffice .sea-envelope-caption { position:absolute;bottom:26px;left:0;right:0;z-index:2;font:500 12px/1.6 var(--font-sans);color:#73482b; }
+  #naturalIslandModal.sea-postoffice .sea-letter-name { position:absolute;right:9%;top:calc(31% + 289px);width:clamp(340px,34vw,440px);text-align:center;font:500 13px/1.5 var(--font-sans);color:var(--ink-secondary); }
+  #naturalIslandModal.sea-postoffice .sea-open-table { position:relative;isolation:isolate;padding:15px 7% 10px;min-height:440px; }
+  #naturalIslandModal.sea-postoffice .sea-open-table .sea-sailboat { width:160px;left:0;bottom:10px;opacity:.6;z-index:-1; }
+  #naturalIslandModal.sea-postoffice .sea-open-table .sea-water { height:31%; }
+  #naturalIslandModal.sea-postoffice .sea-open-letter { position:relative;max-width:780px;margin:0 auto;padding:23px 33px 17px;background:var(--paper-elevated) url('../paper.svg');border:1px solid var(--wood-border-strong);box-shadow:0 10px 28px #53382612;clip-path:polygon(0 0,98.5% 0,100% 1.5%,100% 99%,1% 100%,0 99%);animation:sea-unfold .55s ease both; }
+  #naturalIslandModal.sea-postoffice .sea-open-letter::after { content:'';position:absolute;inset:8px;border:1px solid var(--wood-border);pointer-events:none; }
+  #naturalIslandModal.sea-postoffice .sea-letter-top { display:flex;align-items:center;justify-content:space-between;gap:12px;color:var(--ink-muted);font:500 9px/1.5 var(--font-sans);letter-spacing:.12em; }
+  #naturalIslandModal.sea-postoffice .sea-postmark { font:600 11px/1.5 var(--font-sans);letter-spacing:0;padding:5px 13px;border:1px solid var(--voyage-red);border-radius:50%;color:var(--voyage-red);transform:rotate(-8deg); }
+  #naturalIslandModal.sea-postoffice .sea-letter-kicker { display:block;margin:14px 0 5px;font:400 12px/1.6 var(--font-sans);color:var(--ink-secondary); }
+  #naturalIslandModal.sea-postoffice #seaInvitation { max-width:660px;margin:0 auto 19px;font:600 26px/1.45 var(--font-display);color:var(--ink-primary); }
+  #naturalIslandModal.sea-postoffice .sea-word-choices { display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px; }
+  #naturalIslandModal.sea-postoffice :is(.sea-word-choice,.sea-bag-choice) { position:relative;display:flex;flex-direction:column;align-items:center;gap:7px;min-width:0;padding:10px 6px 8px;border:1px solid transparent;background:transparent;color:var(--ink-primary);cursor:pointer;border-radius:4px;transition:transform .2s,background .2s; }
+  #naturalIslandModal.sea-postoffice :is(.sea-word-choice,.sea-bag-choice) > span { display:grid;place-items:center;width:73px;height:70px;background:radial-gradient(ellipse,#dfc38b4a,#e7d7af1a 67%,transparent 70%);color:var(--voyage-red); }
+  #naturalIslandModal.sea-postoffice :is(.sea-word-choice,.sea-bag-choice) svg { width:47px;height:47px; }
+  #naturalIslandModal.sea-postoffice :is(.sea-word-choice,.sea-bag-choice) strong { font:500 12px/1.5 var(--font-sans); }
+  #naturalIslandModal.sea-postoffice :is(.sea-word-choice,.sea-bag-choice) i { display:none;position:absolute;top:8px;right:10px;font:500 12px/1 var(--font-sans);color:var(--voyage-red); }
+  #naturalIslandModal.sea-postoffice :is(.sea-word-choice,.sea-bag-choice):hover { transform:translateY(-3px);background:var(--paper-warm); }
+  #naturalIslandModal.sea-postoffice :is(.sea-word-choice,.sea-bag-choice)[aria-pressed=true] { border-color:var(--voyage-gold);background:var(--paper-warm); }
+  #naturalIslandModal.sea-postoffice :is(.sea-word-choice,.sea-bag-choice)[aria-pressed=true] i { display:block; }
+  #naturalIslandModal.sea-postoffice .sea-whisper { text-align:center;font:400 12px/1.7 var(--font-sans);color:var(--ink-secondary);margin:14px 0; }
+  #naturalIslandModal.sea-postoffice .sea-bag-slots { display:flex;justify-content:center;gap:19px;margin:4px 0 8px; }
+  #naturalIslandModal.sea-postoffice .sea-bag-slots > span { display:grid;place-items:center;width:56px;height:50px;border:1px dashed var(--wood-border-strong);border-radius:5px;color:var(--ink-muted);transform:rotate(-3deg); }
+  #naturalIslandModal.sea-postoffice .sea-bag-slots > span:nth-child(2) { transform:rotate(4deg); }
+  #naturalIslandModal.sea-postoffice .sea-bag-slots svg { width:37px;height:37px; }
+  #naturalIslandModal.sea-postoffice .sea-bag-slots .is-filled { border-style:solid;border-color:var(--voyage-gold);color:var(--voyage-red);background:var(--paper-warm); }
+  #naturalIslandModal.sea-postoffice .sea-bag-slots i { font-style:normal;font-size:20px; }
+  #naturalIslandModal.sea-postoffice .sea-bag-choices { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px 20px; }
+  #naturalIslandModal.sea-postoffice .sea-bag-choice { flex-direction:row;text-align:left;gap:8px;padding:6px 8px; }
+  #naturalIslandModal.sea-postoffice .sea-bag-choice > span { width:43px;height:43px;flex-shrink:0; }
+  #naturalIslandModal.sea-postoffice .sea-bag-choice svg { width:34px;height:34px; }
+  #naturalIslandModal.sea-postoffice .sea-bag-choice strong { font-size:11px; }
+  #naturalIslandModal.sea-postoffice .sea-starters { display:flex;flex-wrap:wrap;justify-content:center;gap:8px; }
+  #naturalIslandModal.sea-postoffice .sea-starters button { padding:9px 13px;border:1px solid var(--wood-border);background:transparent;color:var(--ink-secondary);border-radius:4px;font:400 12px/1.6 var(--font-sans);cursor:pointer; }
+  #naturalIslandModal.sea-postoffice .sea-starters [aria-pressed=true] { color:var(--voyage-red);border-color:var(--voyage-gold);background:var(--paper-warm); }
+  #naturalIslandModal.sea-postoffice .sea-listening-shell { display:flex;align-items:center;justify-content:center;gap:8px;margin:15px 0;min-height:110px;color:var(--voyage-red); }
+  #naturalIslandModal.sea-postoffice .sea-listening-shell svg { width:100px;height:100px;transform:rotate(-12deg);margin-right:20px; }
+  #naturalIslandModal.sea-postoffice .sea-listening-shell span { width:2px;height:30px;background:var(--voyage-gold);border-radius:4px; }
+  #naturalIslandModal.sea-postoffice .sea-listening-shell span:nth-child(3) { height:48px; }
+  #naturalIslandModal.sea-postoffice .sea-keepsake { border-bottom:1px solid var(--wood-border);margin:15px 0 12px;font-size:12px;color:var(--ink-muted); }
+  #naturalIslandModal.sea-postoffice .sea-keepsake summary { list-style:none;display:flex;align-items:center;justify-content:space-between;gap:15px;padding:8px 0;min-height:30px; }
+  #naturalIslandModal.sea-postoffice .sea-keepsake summary span { font-size:19px;color:var(--voyage-red); }
+  #naturalIslandModal.sea-postoffice .sea-writing-fields { display:flex;flex-direction:column;gap:7px;padding-bottom:12px; }
+  #naturalIslandModal.sea-postoffice .sea-writing-fields textarea { width:100%;resize:vertical;min-height:75px;max-height:170px;border:0;border-bottom:1px solid var(--wood-border-strong);border-radius:0;background:transparent;font-size:15px;padding:9px 0; }
+  #naturalIslandModal.sea-postoffice .sea-writing-fields label { color:var(--ink-secondary);font-size:11px; }
+  #naturalIslandModal.sea-postoffice .sea-writing-fields input { font-size:13px;min-height:36px; }
+  #naturalIslandModal.sea-postoffice .sea-draft-notice { font-size:10px;line-height:1.6;color:var(--ink-muted); }
+  #naturalIslandModal.sea-postoffice .sea-letter-bottom { display:flex;justify-content:space-between;align-items:center;gap:20px; }
+  #naturalIslandModal.sea-postoffice .sea-letter-bottom > span { max-width:340px;font:400 11px/1.7 var(--font-sans);color:var(--ink-muted); }
+  #naturalIslandModal.sea-postoffice .sea-letter-bottom .voyage-primary { padding:12px 23px;min-height:45px; }
+  #naturalIslandModal.sea-postoffice .sea-letter-links { display:flex;align-items:center;justify-content:flex-end;gap:16px;margin-top:10px; }
+  #naturalIslandModal.sea-postoffice .sea-letter-links .voyage-btn { padding:0;min-height:26px;background:transparent;border:0;border-radius:0;font:400 10px/1.6 var(--font-sans);color:var(--ink-muted);box-shadow:none; }
+  #naturalIslandModal.sea-postoffice .voyage-rail { display:flex;justify-content:center;gap:38px;padding:11px 0 0;border-top:1px solid var(--wood-border); }
+  #naturalIslandModal.sea-postoffice .sea-letter-stamp { display:flex;align-items:center;gap:8px;opacity:1; }
+  #naturalIslandModal.sea-postoffice .sea-letter-stamp > i { display:grid;place-items:center;width:32px;height:32px;border:1px solid var(--wood-border-strong);border-radius:50%;font:500 10px/1 var(--font-sans);color:var(--ink-secondary); }
+  #naturalIslandModal.sea-postoffice .sea-letter-stamp > span { font:400 11px/1.5 var(--font-sans);color:var(--ink-secondary); }
+  #naturalIslandModal.sea-postoffice .sea-letter-stamp.is-current { opacity:1; }
+  #naturalIslandModal.sea-postoffice .sea-letter-stamp.is-current > i { color:var(--voyage-red);border-color:var(--voyage-red); }
+  #naturalIslandModal.sea-postoffice .sea-letter-stamp.is-done { opacity:1; }
+  #naturalIslandModal.sea-postoffice .sea-letter-stamp.is-done > i { background:var(--voyage-red);color:var(--paper-elevated);border-color:var(--voyage-red); }
+  #naturalIslandModal.sea-postoffice .sea-letter-stamp svg { width:23px;height:23px; }
+  #naturalIslandModal.sea-postoffice .sea-sent-letter { position:absolute;z-index:2;top:10%;right:10%;width:52%;min-height:300px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:18px;padding:30px 35px;background:var(--paper-elevated);border:1px solid var(--wood-border);box-shadow:0 12px 20px #654b251a;transform:rotate(2deg); }
+  #naturalIslandModal.sea-postoffice .sea-ink-stamp { display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;width:200px;height:100px;border:2px solid var(--voyage-red);border-radius:50%;color:var(--voyage-red);transform:rotate(-9deg);animation:sea-stamp-in .5s cubic-bezier(.3,.7,.1,1.4) both; }
+  #naturalIslandModal.sea-postoffice .sea-ink-stamp svg { width:29px;height:29px; }
+  #naturalIslandModal.sea-postoffice .sea-ink-stamp strong { font:500 11px/1.5 var(--font-sans); }
+  #naturalIslandModal.sea-postoffice .sea-ink-stamp small { font:400 9px/1.5 var(--font-sans);letter-spacing:.1em; }
+  #naturalIslandModal.sea-postoffice .sea-sent-letter h3 { margin:5px 0 0;font:700 26px/1.4 var(--font-display);color:var(--ink-primary); }
+  #naturalIslandModal.sea-postoffice .sea-kept { font:400 13px/1.8 var(--font-sans);color:var(--ink-secondary);white-space:pre-wrap;overflow-wrap:anywhere; }
+  #naturalIslandModal.sea-postoffice .sea-story-sheet { max-width:730px;margin:25px auto;padding:30px;background:var(--paper-elevated);border:1px solid var(--wood-border); }
+  #naturalIslandModal.sea-postoffice .sea-story-sheet h3 { font:700 26px/1.4 var(--font-display);margin:12px 0;color:var(--ink-primary); }
+  #naturalIslandModal.sea-postoffice .sea-story-sheet > p { font-size:16px;line-height:1.9;color:var(--ink-secondary);margin:15px 0 24px; }
+  #naturalIslandModal.sea-postoffice .sea-story-sheet > .voyage-btn { margin-top:20px; }
+  #naturalIslandModal.sea-postoffice .sea-album-heading { text-align:center;margin:10px 0 20px; }
+  #naturalIslandModal.sea-postoffice .sea-album-heading h3 { margin:7px 0;font:700 30px/1.4 var(--font-display);color:var(--ink-primary); }
+  #naturalIslandModal.sea-postoffice .sea-album-heading p { font-size:12px;line-height:1.7;color:var(--ink-secondary); }
+  #naturalIslandModal.sea-postoffice .voyage-postcard { max-width:870px;margin:0 auto;padding:20px 26px;box-shadow:0 8px 18px #54341d14; }
+  #naturalIslandModal.sea-postoffice .voyage-postcard-title { font-size:24px;margin:12px 0 15px; }
+  #naturalIslandModal.sea-postoffice .voyage-postcard-body { grid-template-columns:minmax(0,1fr) 190px; }
+  #naturalIslandModal.sea-postoffice .voyage-postcard-entry { padding:10px 0; }
+  #naturalIslandModal.sea-postoffice .voyage-postcard-map { max-height:215px; }
+  #naturalIslandModal.sea-postoffice .voyage-postcard footer { margin-top:12px;font-size:9px; }
+  #naturalIslandModal.sea-postoffice .sea-album-bottom { max-width:870px;margin:18px auto 8px;display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap; }
+  #naturalIslandModal.sea-postoffice .sea-album-bottom > .voyage-btn:not(.voyage-primary) { border:0;background:transparent; }
+  #naturalIslandModal.sea-postoffice .sea-album-options { font-size:11px;color:var(--ink-secondary); }
+  #naturalIslandModal.sea-postoffice .sea-album-options > summary { padding:10px; }
+  #naturalIslandModal.sea-postoffice .sea-album-options[open] { flex-basis:100%; }
+  #naturalIslandModal.sea-postoffice .sea-album-options > div { display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;padding:12px;border-top:1px solid var(--wood-border); }
+  #naturalIslandModal.sea-postoffice .sea-album-options input { flex:1;min-width:170px; }
+  #naturalIslandModal.sea-postoffice .voyage-session-note { text-align:center;font-size:10px; }
+  #naturalIslandModal.sea-postoffice .voyage-status { margin:0;text-align:center;font-size:11px; }
+  html[data-theme=dark] #naturalIslandModal.sea-postoffice .sea-water path:first-child { fill:#6caaa328; }
+  html[data-theme=dark] #naturalIslandModal.sea-postoffice .sea-envelope { filter:brightness(.86); }
+  html[data-theme=dark] #naturalIslandModal.sea-postoffice .sea-sailboat { filter:brightness(.88) drop-shadow(0 9px 8px #0003); }
+  @media(max-height:800px) {
+    #naturalIslandModal.sea-postoffice .sea-tableau { min-height:370px;height:390px; }
+    #naturalIslandModal.sea-postoffice .sea-scene-heading h3 { font-size:34px; }
+    #naturalIslandModal.sea-postoffice .sea-sailboat { width:215px; }
+    #naturalIslandModal.sea-postoffice .sea-envelope { top:25%;height:230px;width:350px; }
+    #naturalIslandModal.sea-postoffice .sea-letter-name { top:calc(25% + 249px);width:350px; }
+    #naturalIslandModal.sea-postoffice .sea-envelope-seal { top:85px; }
+    #naturalIslandModal.sea-postoffice .sea-open-table { padding:8px 6% 3px;min-height:0; }
+    #naturalIslandModal.sea-postoffice .sea-open-letter { padding:16px 28px 12px; }
+    #naturalIslandModal.sea-postoffice #seaInvitation { font-size:23px;margin-bottom:12px; }
+    #naturalIslandModal.sea-postoffice .sea-word-choice > span { height:57px; }
+    #naturalIslandModal.sea-postoffice .sea-whisper { margin:9px 0; }
+    #naturalIslandModal.sea-postoffice .sea-letter-kicker { margin:8px 0 5px; }
+    #naturalIslandModal.sea-postoffice .sea-listening-shell { min-height:85px;margin:10px 0; }
+    #naturalIslandModal.sea-postoffice .sea-listening-shell svg { width:78px;height:78px; }
+    #naturalIslandModal.sea-postoffice .sea-sent-letter { top:5%;padding:20px 30px;gap:12px; }
+  }
+  @media(prefers-reduced-motion:reduce) {
+    #naturalIslandModal.sea-postoffice *,#naturalIslandModal.sea-postoffice *::before,#naturalIslandModal.sea-postoffice *::after { animation:none!important;transition:none!important;scroll-behavior:auto!important; }
+  }
+  #naturalIslandModal.sea-postoffice .sea-tableau.is-sealed .sea-sailboat { height:calc(100% - 175px);width:auto;max-width:275px; }
+}
+@keyframes sea-boat-sway { 0%,100% { transform:translateY(0) rotate(-1deg); } 50% { transform:translateY(-5px) rotate(1deg); } }
+@keyframes sea-unfold { from { opacity:0;transform:translateY(10px) rotateX(5deg); } to { opacity:1;transform:none; } }
+@keyframes sea-stamp-in { from { opacity:0;transform:scale(1.45) rotate(-13deg); } to { opacity:1;transform:scale(1) rotate(-9deg); } }
