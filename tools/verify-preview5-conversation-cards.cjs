@@ -17,19 +17,31 @@ const out = path.join(root, 'verification/conversation-cards-5');
     const page = await browser.newPage({ viewport: { width: 1440, height: 1000 }, reducedMotion: 'reduce' });
     page.on('pageerror', e => errors.push(e.message));
     await page.goto(pathToFileURL(path.join(root, 'map-surroundings-preview-5.html')).href, { waitUntil: 'load' });
-    await page.waitForFunction(() => window.GoiVietConversationCards && window.GoiVietHomeIntro);
+    await page.waitForFunction(() => window.GoiVietConversationCards && window.GoiVietHomeIntro && window.GoiVietArrivalDemo);
     await page.evaluate(async () => {
       window.GoiVietHomeIntro.skip();
       closeIntroModal();
-      openDeckModal('hn');
       await document.fonts.ready;
     });
+    const openStationDeck = id => page.locator('#deck-open-' + id).evaluate(button => button.click());
+    async function arriveAt(id) {
+      await page.evaluate(id => {
+        state.reducedMotion = true;
+        selectDemoPlace(id);
+        GoiVietJourneyPreview.start(id);
+      }, id);
+      await page.waitForFunction(id => GoiVietArrivalDemo.isSheetOpen() &&
+        document.getElementById('arrivalSheet').dataset.place === id, id);
+    }
+    await arriveAt('hn');
+    await openStationDeck('hn');
+    await page.locator('#deckModal.open').waitFor();
     const geometry = () => page.evaluate(() => {
       const rect = id => { const r = document.getElementById(id).getBoundingClientRect(); return { x: r.x, y: r.y, width: r.width, right: r.right, bottom: r.bottom }; };
       return { front: rect('cardFrontState'), back: rect('cardBackState'), body: rect('deckScrollBody'), overflow: document.getElementById('deckScrollBody').scrollWidth > document.getElementById('deckScrollBody').clientWidth + 1 };
     });
     const beforeHover = await page.locator('.fanned-card').first().evaluate(el => el.getBoundingClientRect().x);
-    await page.mouse.move(240, 400);
+    await page.locator('#fannedDeckBox').hover();
     await page.waitForTimeout(500);
     const afterHover = await page.locator('.fanned-card').first().evaluate(el => el.getBoundingClientRect().x);
     assert(afterHover < beforeHover - 30, 'Hover must expand the fan');
@@ -39,8 +51,9 @@ const out = path.join(root, 'verification/conversation-cards-5');
       await page.setViewportSize({ width, height });
       await page.evaluate(() => {
         closeDeckModal(); state.activeCard = null; state.activeCardPlaceId = null;
-        state.drawnCardIdsByPlace.hn = []; openDeckModal('hn');
+        state.drawnCardIdsByPlace.hn = [];
       });
+      await openStationDeck('hn');
       await page.waitForTimeout(80);
       assert.equal(await page.locator('#deckScrollBody').evaluate(el => el.scrollWidth > el.clientWidth + 1), false, `${width}: deck overflow`);
       await page.screenshot({ path: path.join(out, `deck-${width}.png`) });
@@ -67,7 +80,8 @@ const out = path.join(root, 'verification/conversation-cards-5');
       await page.locator('#memoryDetailsDrawer').evaluate(el => el.open = true);
       await page.locator('#memoryPlaceInput').fill('Đà Lạt');
       await page.locator('#memoryNoteInput').fill('Chuyến đi cùng cả nhà');
-      await page.evaluate(() => { flipCardToFront(); closeDeckModal(); openDeckModal('hn'); });
+      await page.evaluate(() => { flipCardToFront(); closeDeckModal(); });
+      await openStationDeck('hn');
       assert.equal(await page.locator('#memoryPlaceInput').inputValue(), 'Đà Lạt');
       assert.equal(await page.locator('#memoryNoteInput').inputValue(), 'Chuyến đi cùng cả nhà');
       assert(await page.locator('#conversationSeal').isHidden());
@@ -83,8 +97,9 @@ const out = path.join(root, 'verification/conversation-cards-5');
     await page.evaluate(() => {
       closeDeckModal(); state.activeCard = null; state.activeCardPlaceId = null;
       state.drawnCardIdsByPlace.hn = []; state.reducedMotion = false;
-      document.body.classList.remove('reduced-motion'); openDeckModal('hn');
+      document.body.classList.remove('reduced-motion');
     });
+    await openStationDeck('hn');
     await page.clock.install({ time: new Date('2026-10-28T00:00:00Z') });
     await page.clock.pauseAt(new Date('2026-10-28T00:00:01Z'));
     await page.locator('#btnDrawCard').evaluate(el => el.click());
@@ -97,7 +112,7 @@ const out = path.join(root, 'verification/conversation-cards-5');
     await page.clock.runFor(3000);
     assert.equal(await page.evaluate(() => state.drawnCardIdsByPlace.hn.length), 0);
     assert.equal(await page.evaluate(() => state.isDrawingCardLock), false);
-    await page.evaluate(() => openDeckModal('hn'));
+    await openStationDeck('hn');
     await page.locator('#btnDrawCard').evaluate(el => el.click());
     await page.clock.runFor(1600);
     assert.equal(await page.locator('.fanned-card.is-picked').count(), 1);
@@ -117,13 +132,14 @@ const out = path.join(root, 'verification/conversation-cards-5');
     for (let i = 1; i < count; i++) {
       await page.evaluate(() => { flipCardToBack(); completeCardTurn('skipped'); closeMilestoneAndContinue(); });
       await page.waitForTimeout(200);
-      await page.evaluate(() => { openDeckModal('hn'); triggerDrawCardWithAnim(); });
+      await openStationDeck('hn');
+      await page.evaluate(() => triggerDrawCardWithAnim());
       ids.push(await page.evaluate(() => state.activeCard.id));
     }
     assert.equal(new Set(ids).size, count);
     await page.evaluate(() => { flipCardToBack(); completeCardTurn('skipped'); closeMilestoneAndContinue(); });
     await page.waitForTimeout(200);
-    await page.evaluate(() => openDeckModal('hn'));
+    await openStationDeck('hn');
     assert(await page.locator('#deckExhaustedBox').isVisible());
     assert.equal(await page.locator('.fanned-card:enabled').count(), 0);
     await page.locator('#btnReshuffleDeck').click();
@@ -138,9 +154,11 @@ const out = path.join(root, 'verification/conversation-cards-5');
     await page.locator('#memoryDetailsDrawer').evaluate(el => el.open = true);
     assert(await page.locator('#memoryPlaceInput').evaluate(el => el.getBoundingClientRect().height < 70), 'Memory input must keep its normal height');
     // Answer feedback and changing the destination while shuffling.
+    await page.evaluate(() => { closeDeckModal(); state.activeCard = null; state.drawnCardIdsByPlace.hue = []; });
+    await arriveAt('hue');
+    await openStationDeck('hue');
     await page.evaluate(() => {
-      closeDeckModal(); state.activeCard = null; state.drawnCardIdsByPlace.hue = [];
-      openDeckModal('hue'); triggerDrawCardWithAnim();
+      triggerDrawCardWithAnim();
       selectCardOption((state.activeCard.correctIndex + 1) % state.activeCard.options.length);
       revealCardAnswer(false);
     });
@@ -148,13 +166,15 @@ const out = path.join(root, 'verification/conversation-cards-5');
     assert.equal(await page.locator('.option-btn.wrong-reveal').count(), 1);
     assert.equal(await page.locator('.option-btn.correct-reveal').count(), 1);
     assert(await page.locator('#conversationSeal').isHidden());
-    await page.evaluate(() => {
-      closeDeckModal(); state.activeCard = null; state.drawnCardIdsByPlace.hn = [];
-      state.reducedMotion = false; openDeckModal('hn');
-    });
+    await page.evaluate(() => { closeDeckModal(); state.activeCard = null; state.drawnCardIdsByPlace.hn = []; });
+    await arriveAt('hn');
+    await openStationDeck('hn');
+    await page.evaluate(() => { state.reducedMotion = false; });
     await page.emulateMedia({ reducedMotion: 'no-preference' });
     await page.locator('#btnDrawCard').click();
-    await page.evaluate(() => openDeckModal('hue'));
+    await page.evaluate(() => closeDeckModal());
+    await arriveAt('hue');
+    await openStationDeck('hue');
     await page.waitForTimeout(3000);
     assert.equal(await page.evaluate(() => state.drawnCardIdsByPlace.hn.length), 0);
     assert.equal(await page.evaluate(() => state.isDrawingCardLock), false);
