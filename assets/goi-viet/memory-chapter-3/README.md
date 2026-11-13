@@ -1,6 +1,6 @@
 # Miền ký ức · Preview 3
 
-Tham chiếu chính thức: `references/approved-concept.png` và `../../../PLAN-MIEN-KY-UC-PREVIEW-3.md`. Ảnh tham chiếu không được tải bởi trang chạy thật.
+Tham chiếu chính thức: `references/approved-concept.png` và `../../../docs/01-preview-3-mien-ky-uc/PLAN-MIEN-KY-UC-PREVIEW-3.md`. Ảnh tham chiếu không được tải bởi trang chạy thật.
 
 ## Các lớp được sản xuất riêng
 
