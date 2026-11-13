@@ -48,9 +48,11 @@
     const center=(dockRect.left+dockRect.right)/2-canvasRect.left;
     const header=document.querySelector('.top-header').getBoundingClientRect();
     const tablet=cw>768&&cw<=1080;
-    const menuSpace=tablet?ch-(dockRect.bottom-canvasRect.top)-20:dockRect.top-header.bottom-20;
+    // The arrival flow keeps the dock at the bottom on tablets: follow where the dock actually is.
+    const dockOnTop=tablet&&dockRect.top-canvasRect.top<ch/2;
+    const menuSpace=dockOnTop?ch-(dockRect.bottom-canvasRect.top)-20:dockRect.top-header.bottom-20;
     dock.style.setProperty('--gv-camera-menu-height',Math.max(60,menuSpace)+'px');
-    if(cw>768&&cw<=1080){
+    if(dockOnTop){
       mapScreenArea.top=Math.max(header.bottom-canvasRect.top+16,dockRect.bottom-canvasRect.top+16);
       mapScreenArea.bottom=Math.max(mapScreenArea.top+80,ch-16);
     }

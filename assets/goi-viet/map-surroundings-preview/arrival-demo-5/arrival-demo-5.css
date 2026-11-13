@@ -1,0 +1,788 @@
+/* Arrival flow for preview-5 and its standalone demo. */
+/* Round 3: arrival sequence, session stamps and projector typography. */
+body[data-arrival-demo] [hidden] { display: none !important; }
+body[data-arrival-demo] { overflow-x: hidden; }
+body[data-arrival-demo] #mapScene { --arrival-right: max(28px, env(safe-area-inset-right)); }
+
+body[data-arrival-demo][data-regional-preview]:has(#introScreen.intro-hidden) #mapScene {
+  & .top-header { z-index: 60; }
+  & #previewPanelOpen {
+    position: fixed !important;
+    display: inline-flex !important;
+    align-items: center;
+    gap: 7px;
+    top: var(--header-offset);
+    right: var(--arrival-right);
+    left: auto;
+    bottom: auto;
+    width: auto;
+    min-height: 40px;
+    padding: 8px 15px;
+    transform: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    border: 1px solid #b39459;
+    border-radius: 10px;
+    color: #562b2b;
+    background-color: #fff4dc;
+    font: 600 12px/1.4 'Be Vietnam Pro', sans-serif;
+    z-index: 55;
+    pointer-events: auto;
+  }
+  & #previewPanelOpen[hidden] { display: none !important; }
+  & #stationPanel {
+    position: fixed !important;
+    top: calc(var(--header-offset) + 48px) !important;
+    bottom: var(--dock-offset) !important;
+    right: var(--arrival-right) !important;
+    left: auto !important;
+    width: 400px !important;
+    max-width: calc(100vw - 32px);
+    height: auto !important;
+    max-height: none !important;
+    display: flex !important;
+    flex-direction: column;
+    transform: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto;
+    z-index: 54;
+    --station-display: 'Playfair Display', Georgia, serif;
+    --station-red: #9e2835;
+    --station-red-hover: #84202c;
+  }
+  & #stationPanel[hidden] { display: none !important; }
+  & #stationPanel .gv-station-header {
+    display: flex;
+    gap: 12px;
+    padding: 10px 0 13px;
+  }
+  & #stationPanel .gv-station-logo { display: none; }
+  & #stationPanel .gv-station-heading { text-align: start; flex: 1; }
+  & #stationPanel .gv-station-heading h2 { font-size: 24px; line-height: 1.3; letter-spacing: -.02em; }
+  & #stationPanel .gv-station-heading p { font-size: 11px; margin-top: 4px; }
+  & #stationPanel #previewPanelClose { display: inline-flex; min-height: 40px; }
+  & #stationPanel .preview-panel-scroll { min-height: 0; flex: 1; overflow: auto; }
+  & #stationPanel .gv-station-compact { margin: 0; }
+  & #stationPanel .gv-station-compact-copy :is(strong, small) { white-space: normal; overflow: visible; text-overflow: clip; overflow-wrap: anywhere; }
+  & #stationPanel .gv-station-other-items { gap: 3px; }
+  & #stationPanel .gv-station-welcome { display: none; }
+  & .mobile-view-switcher { display: none !important; }
+  & #arrivalSheet {
+    position: fixed;
+    top: var(--header-offset);
+    right: var(--arrival-right);
+    bottom: auto;
+    width: 420px;
+    max-width: calc(100vw - 32px);
+    max-height: calc(100dvh - var(--header-offset) - var(--dock-offset));
+    display: grid;
+    gap: 12px;
+    padding: 16px;
+    border: 1px solid #baa16d;
+    border-radius: 16px;
+    overflow: visible;
+    color: var(--station-ink);
+    background: #fbf5e8 url('../../paper.svg') 0 0 / 190px;
+    box-shadow: 0 18px 48px #102e2930, 0 2px 6px #102e2912;
+    z-index: 54;
+    --station-paper: #fbf5e8;
+    --station-sheet: #fffaf1;
+    --station-ink: #173f35;
+    --station-muted: #665c48;
+    --station-rule: #e0d2b8;
+    --station-brass: #b79b63;
+    --station-soft: #f0e6d1;
+    --station-sage: #edf0e4;
+    --station-font: 'Be Vietnam Pro', sans-serif;
+    --station-display: 'Playfair Display', Georgia, serif;
+    --station-red: #9e2835;
+    --station-red-hover: #84202c;
+    --station-on-red: #fff8ed;
+    animation: arrival-sheet-in 280ms cubic-bezier(.22,.75,.3,1);
+  }
+  & #arrivalSheet .arrival-visual {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 86px;
+    gap: 14px;
+    min-width: 0;
+    align-items: stretch;
+  }
+  & #arrivalSheet .arrival-art-wrap { position: relative; min-width: 0; }
+  & #arrivalSheet .gv-station-art {
+    width: 100%;
+    min-height: 0;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    margin-inline: auto;
+    border: 1px solid #fffaf0;
+    border-radius: 8px;
+    box-shadow: 0 1px 0 #b99b6333, 0 4px 12px #193d3212;
+  }
+  & #arrivalSheet .gv-station-art-photo { transition: scale 240ms ease; }
+  & #arrivalSheet .gv-station-art:hover .gv-station-art-photo { scale: 1.025; }
+  & #arrivalSheet .gv-station-art-cue {
+    right: 7px;
+    bottom: 7px;
+    padding: 5px;
+    border: 1px solid #fff8edaa;
+    border-radius: 6px;
+    color: #173f35;
+    background: #fffaf0ed;
+    box-shadow: 0 1px 5px #112e2933;
+  }
+  & #arrivalSheet .gv-station-art-cue .gv-station-icon { width: 13px; height: 13px; }
+  & #arrivalSheet .gv-station-photo-credit { position: relative; margin: 6px 1px 0; color: var(--station-muted); font: 400 10px/1.4 var(--station-font); }
+  & #arrivalSheet .gv-station-photo-credit summary {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 0 2px;
+    font: 500 9px/1.5 var(--station-font);
+    letter-spacing: .015em;
+    color: var(--station-muted);
+    white-space: normal;
+    overflow: visible;
+    opacity: 1;
+    list-style: none;
+  }
+  & #arrivalSheet .gv-station-photo-credit summary::-webkit-details-marker { display: none; }
+  & #arrivalSheet .gv-station-photo-credit summary::after { content: ''; width: 5px; height: 5px; border-right: 1px solid currentColor; border-bottom: 1px solid currentColor; rotate: 45deg; translate: 0 -1px; }
+  & #arrivalSheet .gv-station-photo-credit[open] summary::after { rotate: 225deg; translate: 0 1px; }
+  & #arrivalSheet .gv-station-photo-credit > div {
+    position: absolute;
+    top: calc(100% + 7px);
+    left: 0;
+    width: min(340px, calc(100vw - 64px));
+    max-height: 132px;
+    overflow: auto;
+    padding: 12px;
+    border: 1px solid var(--station-brass);
+    border-radius: 8px;
+    color: var(--station-ink);
+    background: var(--station-sheet);
+    box-shadow: 0 8px 22px #102e2929;
+    z-index: 4;
+  }
+  & #arrivalSheet .arrival-credit-title { display: block; margin: 0 0 7px; font: 600 11px/1.5 var(--station-font); }
+  & #arrivalSheet .arrival-ticket {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 9px;
+    padding: 33px 0 10px 12px;
+    border-left: 1px dashed #cbb78b;
+    color: var(--station-red);
+    text-align: center;
+  }
+  & #arrivalSheet .arrival-ticket-label { color: var(--station-muted); font: 500 8px/1.35 var(--station-font); letter-spacing: .09em; text-transform: uppercase; }
+  & #arrivalSheet .arrival-ticket-stamp { display: grid; place-items: center; width: 45px; height: 45px; border: 1px solid currentColor; border-radius: 50%; outline: 1px solid currentColor; outline-offset: 3px; rotate: -9deg; }
+  & #arrivalSheet .arrival-ticket-stamp .gv-station-icon { width: 25px; height: 25px; stroke-width: 1.35; }
+  & #arrivalSheet .arrival-ticket-brand { font: 700 13px/1.25 var(--station-display); }
+  & #arrivalSheet .arrival-identity { min-width: 0; }
+  & #arrivalSheet .arrival-meta { display: flex; align-items: center; flex-wrap: wrap; gap: 5px 10px; margin-bottom: 7px; }
+  & #arrivalSheet .arrival-reached { display: inline-flex; align-items: center; gap: 5px; color: var(--station-red); font: 600 9px/1.4 var(--station-font); letter-spacing: .055em; text-transform: uppercase; }
+  & #arrivalSheet .arrival-reached::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+  & #arrivalSheet .arrival-turn { color: var(--station-muted); font: 400 9.5px/1.45 var(--station-font); }
+  & #arrivalSheet #arrivalStationTitle {
+    margin: 0 0 8px;
+    padding: 0;
+    border: 0;
+    color: var(--station-ink);
+    background: transparent;
+    font: 700 32px/1.28 var(--station-display);
+    letter-spacing: -.035em;
+    overflow-wrap: anywhere;
+  }
+  & #arrivalSheet #arrivalStationTitle:is(:focus, :focus-visible) { outline: none !important; box-shadow: none !important; }
+  & #arrivalSheet .arrival-summary { margin: 0; color: var(--station-muted); font: 400 12px/1.55 var(--station-font); text-wrap: pretty; }
+  & #arrivalSheet .arrival-highlights { padding: 4px 0; border-top: 1px solid var(--station-rule); border-bottom: 1px solid var(--station-rule); }
+  & #arrivalSheet .gv-station-highlights { margin: 0; }
+  & #arrivalSheet .gv-station-highlights > div { grid-template-columns: 93px minmax(0, 1fr); gap: 12px; min-height: 31px; padding: 6px 0; border: 0; font: 400 11.5px/1.5 var(--station-font); }
+  & #arrivalSheet .gv-station-highlights dt { gap: 7px; color: var(--station-muted); font: 500 10px/1.45 var(--station-font); }
+  & #arrivalSheet .gv-station-highlights .gv-station-icon { width: 16px; height: 16px; color: var(--station-brass); stroke-width: 1.65; }
+  & #arrivalSheet .gv-station-highlights dd { color: var(--station-ink); font: 400 11.5px/1.5 var(--station-font); text-align: start; }
+  & #arrivalSheet .gv-station-modes { grid-template-columns: 1.1fr 1fr; gap: 9px; }
+  & #arrivalSheet .gv-station-mode { gap: 10px; min-height: 70px; padding: 12px; border: 1px solid transparent; border-radius: 9px; transition: background-color 160ms, border-color 160ms, translate 160ms; }
+  & #arrivalSheet .gv-station-mode:hover { translate: 0 -1px; }
+  & #arrivalSheet .gv-station-mode strong { font: 600 15px/1.4 var(--station-font); letter-spacing: -.015em; }
+  & #arrivalSheet .gv-station-mode small { margin-top: 3px; font: 400 10px/1.45 var(--station-font); }
+  & #arrivalSheet .gv-station-mode > .gv-station-icon { width: 26px; height: 26px; stroke-width: 1.5; }
+  & #arrivalSheet .gv-station-play { color: var(--station-on-red); background: var(--station-red); box-shadow: 0 3px 7px #9e28351a; }
+  & #arrivalSheet .gv-station-play:hover { background: var(--station-red-hover); }
+  & #arrivalSheet .gv-station-play small { color: #fff8ed; }
+  & #arrivalSheet .gv-station-read { color: var(--station-ink); border-color: #c3c9b0; background: var(--station-sheet); box-shadow: none; }
+  & #arrivalSheet .gv-station-read:hover { border-color: var(--station-ink); background: var(--station-sage); }
+  & #arrivalSheet .gv-station-read small { color: var(--station-muted); }
+  & #arrivalSheet .arrival-mode-cue { outline: 2px solid var(--station-brass); outline-offset: 3px; }
+  & #arrivalSheet .arrival-sheet-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-width: 0; padding-top: 1px; }
+  & #arrivalSheet .arrival-landed { color: var(--station-muted); font: 400 9px/1.45 var(--station-font); }
+  & #arrivalSheet [data-arrival-action='other'] { display: inline-flex; align-items: center; gap: 3px; flex: none; padding: 5px 0 5px 5px; border: 0; color: var(--station-red); background: transparent; font: 500 10px/1.4 var(--station-font); text-decoration: none; cursor: pointer; }
+  & #arrivalSheet [data-arrival-action='other']:hover .arrival-other-label { text-decoration: underline; text-underline-offset: 3px; }
+  & #arrivalSheet [data-arrival-action='other'] .gv-station-icon { width: 13px; height: 13px; }
+  & #arrivalSheet .arrival-close { position: absolute; top: 10px; right: 10px; display: grid; place-items: center; width: 30px; height: 30px; padding: 0; border: 1px solid var(--station-rule); border-radius: 50%; color: var(--station-muted); background: var(--station-sheet); box-shadow: none; cursor: pointer; }
+  & #arrivalSheet .arrival-close .gv-station-icon { width: 15px; height: 15px; stroke-width: 1.7; }
+  & #arrivalSheet .arrival-close:hover { color: var(--station-red); border-color: var(--station-brass); background: var(--station-soft); }
+  & #arrivalStartHint {
+    position: fixed;
+    top: calc(var(--header-offset) + 5px);
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    max-width: calc(100vw - 520px);
+    padding: 7px 10px 7px 14px;
+    border: 1px solid #baa16b;
+    border-radius: 11px;
+    color: #463b2c;
+    background-color: #fff5dd;
+    font: 400 11px/1.5 'Be Vietnam Pro', sans-serif;
+    z-index: 30;
+  }
+  & .arrival-start-chips { display: flex; gap: 5px; }
+  & .arrival-start-chips button {
+    padding: 6px 9px;
+    min-height: 32px;
+    border: 1px solid #c5a66b;
+    border-radius: 999px;
+    color: #82212e;
+    background: #fffaf0;
+    font: 600 11px/1.3 'Be Vietnam Pro', sans-serif;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  & #journeyRouteBar {
+    padding: 11px 13px;
+    max-width: calc(100vw - 20px);
+    color: #183a2d;
+    border-color: #b39459;
+    background: #fff5df url('../../paper.svg') 0 0 / 160px;
+    box-shadow: inset 0 0 0 3px #f8eed7, 0 4px 20px #143b3022;
+    z-index: 32;
+  }
+  & #journeyRouteBar .journey-route-main { align-items: center; gap: 10px; }
+  & #journeyRouteBar .journey-status { color: #61513c; font-size: 10px; letter-spacing: .03em; }
+  & #journeyRouteBar .journey-route-title { display: block; font: 700 17px/1.5 'Playfair Display', Georgia, serif; white-space: normal; overflow: visible; }
+  & #journeyRouteBar .journey-route-title :is(span, strong) { overflow: visible; text-overflow: clip; white-space: normal; }
+  & #journeyRouteBar[data-mode='station'] .journey-route-title { display: none; }
+  & #journeyRouteBar[data-mode='station'] .journey-status { font: 700 18px/1.4 'Playfair Display', Georgia, serif; color: #183a2d; text-transform: none; }
+  & #journeyRouteBar :is(.arrival-eta, .arrival-route-highlights, .arrival-passing, .journey-caption) { color: #61513c; font: 400 11px/1.45 'Be Vietnam Pro', sans-serif; white-space: normal; overflow: visible; text-overflow: clip; }
+  & #journeyRouteBar .arrival-route-highlights { margin-top: 3px; }
+  & #journeyRouteBar .arrival-route-actions { display: flex; flex-direction: column; gap: 6px; flex: 0 0 auto; min-width: 98px; max-width: 148px; }
+  & #journeyRouteBar .arrival-route-actions:not(:has(> button:not([hidden]))) { display: none; }
+  & #journeyRouteBar :is(.journey-depart, .journey-reopen, .journey-instant) { width: 100%; max-width: none; min-height: 40px; padding: 7px 11px; border: 1px solid #b39459; border-radius: 9px; font: 600 11px/1.45 'Be Vietnam Pro', sans-serif; cursor: pointer; white-space: normal; }
+  & #journeyRouteBar :is(.journey-depart, .journey-reopen) { color: #fff7e7; background: #9e2835; }
+  & #journeyRouteBar .journey-depart:disabled { opacity: 1; background: #6b5147; cursor: default; }
+  & #journeyRouteBar .journey-instant { color: #183a2d; background: #eee3c8; min-height: 30px; padding-block: 4px; }
+  & #journeyRouteBar .journey-progress { height: 4px; margin-top: 8px; background: #ddcba8; }
+  & #journeyRouteBar .journey-progress-fill { background: #9e2835; transition: transform 180ms linear; }
+  & .journey-arrival-detail { display: none !important; }
+  & #mapStationArrivalBanner { z-index: 31; top: calc(var(--header-offset) + 4px); width: min(480px, var(--map-space-width)); padding: 10px 18px; pointer-events: none; }
+  & #mapStationArrivalBanner .arrival-banner-steps { display: none; }
+  & #mapStationArrivalBanner .arrival-banner-kicker { font-size: 11px; }
+  & #mapStationArrivalBanner .arrival-banner-title { margin: 3px 0; font: 700 24px/1.3 'Playfair Display', Georgia, serif; }
+  & #mapStationArrivalBanner .arrival-banner-verse { display: block; font-size: 11px; line-height: 1.5; }
+  & #arrivalPinTip { position: fixed; max-width: min(380px, calc(100vw - 24px)); padding: 8px 12px; border: 1px solid #b39459; border-radius: 9px; color: #183a2d; background: #fff7e5; box-shadow: 0 3px 12px #143b3022; font: 500 11px/1.6 'Be Vietnam Pro', sans-serif; pointer-events: none; z-index: 48; }
+  & :is(#arrivalSheet, #arrivalStartHint, #journeyRouteBar, #arrivalVisitedJournal, #previewPanelOpen) :focus-visible { outline: 2px solid #14645a; outline-offset: 2px; }
+}
+
+@keyframes arrival-sheet-in { from { opacity: 0; translate: 28px 0; } to { opacity: 1; translate: 0 0; } }
+body[data-arrival-demo].reduced-motion #mapScene :is(#arrivalSheet, .journey-progress-fill),
+body[data-arrival-demo] #mapScene #arrivalSheet.arrival-no-motion { animation: none !important; transition: none !important; }
+body[data-arrival-demo].reduced-motion #mapStationArrivalBanner { display: none !important; }
+
+html[data-theme='dark'] body[data-arrival-demo][data-regional-preview]:has(#introScreen.intro-hidden) #mapScene {
+  & :is(#arrivalSheet, #stationPanel) {
+    --station-paper: #20332c;
+    --station-sheet: #293e35;
+    --station-ink: #f6eed9;
+    --station-muted: #d5c7a9;
+    --station-rule: #526354;
+    --station-brass: #bb9e66;
+    --station-soft: #344a3e;
+    --station-sage: #3b5144;
+    /* Keep the light paper's white radial highlight from reducing dark-theme contrast. */
+    background: var(--station-paper);
+    --station-red: #9e2835;
+    --station-red-hover: #84202c;
+  }
+  & #arrivalSheet :is(.arrival-reached, .arrival-ticket, [data-arrival-action='other']) { color: #f3c6a4; }
+  & #arrivalSheet .gv-station-read { border-color: #70846c; }
+  & :is(#arrivalStartHint, #previewPanelOpen, #arrivalPinTip, #journeyRouteBar) { color: #f6edcf; background-color: #26362e; border-color: #a48d5b; background-image: none; box-shadow: 0 4px 18px #0004; }
+  & .arrival-start-chips button { color: #f6edcf; background: #3c5241; border-color: #a48d5b; }
+  & #journeyRouteBar :is(.journey-status, .arrival-eta, .arrival-route-highlights, .arrival-passing, .journey-caption) { color: #e0d2b2; }
+  & #journeyRouteBar[data-mode='station'] .journey-status { color: #f6edcf; }
+  & #journeyRouteBar .journey-instant { color: #f6edcf; background: #3c5241; }
+  & :is(#arrivalSheet, #arrivalStartHint, #journeyRouteBar, #arrivalVisitedJournal, #previewPanelOpen) :focus-visible { outline-color: #f2d692; }
+}
+
+@media (max-width: 767px) {
+  body[data-arrival-demo][data-regional-preview]:has(#introScreen.intro-hidden) #mapScene {
+    --arrival-right: 10px;
+    & #previewPanelOpen { top: var(--header-offset); min-height: 38px; padding: 6px 10px; }
+    & #arrivalStartHint { top: calc(var(--header-offset) + 49px); left: 10px; right: 10px; max-width: none; transform: none; flex-wrap: wrap; gap: 6px; padding: 10px; }
+    & #stationPanel { width: calc(100vw - 20px) !important; max-width: none; top: calc(var(--header-offset) + 46px) !important; bottom: var(--dock-offset) !important; }
+    & #arrivalSheet { top: auto; bottom: var(--dock-offset); right: 10px; width: calc(100vw - 20px); max-width: none; max-height: calc(100dvh - var(--header-offset) - var(--dock-offset) - 10px); overflow-y: auto; overflow-x: hidden; border-radius: 19px 19px 10px 10px; padding: 12px; gap: 9px; animation-name: arrival-sheet-up; }
+    & #arrivalSheet .arrival-visual { grid-template-columns: minmax(0, 1fr) 74px; gap: 12px; }
+    & #arrivalSheet .gv-station-art { width: 100%; }
+    & #arrivalSheet #arrivalStationTitle { font-size: 28px; }
+    & #arrivalSheet .gv-station-mode { padding: 10px; min-height: 64px; }
+    & #arrivalSheet .gv-station-mode strong { font-size: 14px; }
+    & #arrivalSheet .arrival-sheet-foot { flex-wrap: wrap; gap: 2px 10px; }
+    & #journeyRouteBar { padding: 8px 10px; }
+    & #journeyRouteBar .journey-route-title { font-size: 15px; }
+    & #journeyRouteBar .journey-route-emblem { display: none; }
+    & #journeyRouteBar .journey-route-main { gap: 6px; }
+    & #journeyRouteBar .journey-route-info { min-width: 0; }
+    & #journeyRouteBar .arrival-route-actions { max-width: 112px; }
+  }
+  @keyframes arrival-sheet-up { from { opacity: 0; translate: 0 25px; } to { opacity: 1; translate: 0 0; } }
+}
+@media (prefers-reduced-motion: reduce) {
+  body[data-arrival-demo] #mapScene :is(#arrivalSheet, .journey-progress-fill) { animation: none !important; transition: none !important; }
+  body[data-arrival-demo] #mapStationArrivalBanner { display: none !important; }
+}
+
+/* The arrival, station directory and journey controls share one quieter visual scale. */
+body[data-arrival-demo][data-regional-preview]:has(#introScreen.intro-hidden) #mapScene {
+  & #stationPanel { border-radius: 15px; box-shadow: 0 14px 40px #102e2929; }
+  & #stationPanel .gv-station-heading h2 { font-size: 23px; letter-spacing: -.025em; }
+  & #stationPanel .gv-station-header::after { display: none; }
+  & #stationPanel #previewPanelClose { border-radius: 7px; font-size: 10px; }
+  & #stationPanel .gv-station-compact { border-color: var(--station-rule); border-radius: 8px; }
+  & #stationPanel .gv-station-compact-copy strong { font: 600 12px/1.5 'Be Vietnam Pro', sans-serif; }
+  & #stationPanel .gv-station-compact-copy small { font-size: 10px; line-height: 1.5; font-weight: 400; }
+  & #previewPanelOpen { border-radius: 8px; box-shadow: 0 3px 12px #183d3014; font-size: 11px; font-weight: 500; }
+  & #arrivalStartHint { border-radius: 9px; padding: 8px 10px 8px 14px; box-shadow: 0 3px 14px #173e3012; }
+  & .arrival-start-chips button { border-color: #dbcaab; border-radius: 6px; font-weight: 500; }
+  & .arrival-start-chips button:hover { border-color: #9e2835; background: #fffaf2; }
+  & #journeyRouteBar { border-radius: 12px; padding: 12px 15px; border-color: #bda573; box-shadow: 0 7px 24px #163c3224; }
+  & #journeyRouteBar .journey-route-emblem { width: 32px; height: 32px; flex-basis: 32px; border: 1px solid #beaa83; color: #9e2835; background: transparent; }
+  & #journeyRouteBar[data-mode='station'] .journey-route-emblem { color: #2c6551; border-color: #afc0a4; background: #e9eddf; }
+  & #journeyRouteBar[data-mode='station'] .journey-status { font-size: 17px; line-height: 1.5; }
+  & #journeyRouteBar .journey-route-title { font-size: 18px; }
+  & #journeyRouteBar .arrival-eta { margin-top: 3px; font-size: 10px; }
+  & #journeyRouteBar .arrival-route-highlights { font-size: 10px; line-height: 1.6; }
+  & #journeyRouteBar :is(.journey-depart, .journey-reopen) { border-radius: 7px; box-shadow: none; }
+  & #journeyRouteBar .journey-instant { border-radius: 7px; background: transparent; }
+  & #arrivalSheet :is(button, summary):focus-visible { outline: 2px solid var(--station-red); outline-offset: 3px; }
+  & #arrivalSheet .gv-station-art:focus-visible { outline-color: #9e2835; outline-offset: 3px; }
+}
+@media (min-width: 768px) and (max-height: 850px) {
+  body[data-arrival-demo][data-regional-preview]:has(#introScreen.intro-hidden) #mapScene #arrivalSheet {
+    width: 410px;
+    gap: 8px;
+    padding: 12px;
+    & .arrival-visual { grid-template-columns: minmax(0, 1fr) 80px; gap: 12px; }
+    & .arrival-meta { margin-bottom: 5px; }
+    & #arrivalStationTitle { font-size: 29px; margin-bottom: 6px; }
+    & .arrival-summary { font-size: 11.5px; line-height: 1.45; }
+    & .gv-station-highlights > div { min-height: 29px; padding-block: 4px; }
+    & .gv-station-highlights dd { font-size: 11px; line-height: 1.45; }
+    & .gv-station-mode { min-height: 62px; padding: 10px; gap: 8px; }
+    & .gv-station-mode strong { font-size: 14px; }
+    & .gv-station-mode > .gv-station-icon { width: 24px; height: 24px; }
+  }
+}
+html[data-theme='dark'] body[data-arrival-demo][data-regional-preview]:has(#introScreen.intro-hidden) #mapScene {
+  & #journeyRouteBar .journey-route-emblem { color: #f3c6a4; border-color: #9c8b65; }
+  & #journeyRouteBar[data-mode='station'] .journey-route-emblem { color: #f6eed9; background: #3b5144; border-color: #70846c; }
+  & #arrivalSheet :is(button, summary):focus-visible { outline-color: #f2d692; }
+  & .arrival-start-chips button:hover { background: #405e4c; }
+}
+body[data-arrival-demo].reduced-motion #arrivalSheet *,
+body[data-arrival-demo] #arrivalSheet.arrival-no-motion * { transition: none !important; }
+@media (prefers-reduced-motion: reduce) {
+  body[data-arrival-demo] #arrivalSheet * { transition: none !important; }
+}
+
+/* Editorial UI rebuilt from the three imagegen layout studies; no generated art is loaded. */
+body[data-arrival-demo][data-regional-preview]:has(#introScreen.intro-hidden) #mapScene {
+  --arrival-panel-width: 420px;
+  & :is(#stationPanel, #arrivalSheet) {
+    --station-paper: #fbf5e8; --station-sheet: #fffaf1; --station-ink: #173f35;
+    --station-muted: #665e4e; --station-rule: #dcccab; --station-brass: #b39762;
+    --station-soft: #f0e7d5; --station-sage: #e7ebdc; --station-inset: 0px;
+    --station-display: 'Playfair Display', Georgia, serif;
+    width: var(--arrival-panel-width) !important;
+    border: 1px solid #b39762; border-radius: 11px; padding: 16px;
+    background: var(--station-paper); box-shadow: 0 10px 30px #163b3026;
+  }
+  & #previewPanelClose { display: none !important; }
+  & #previewPanelOpen { color: #173f35; background: #fbf5e8; font-size: 12px; border-radius: 8px; }
+  & #stationPanel {
+    top: var(--header-offset) !important; bottom: auto !important;
+    height: auto !important; max-height: calc(100dvh - var(--header-offset) - var(--dock-offset)) !important;
+  }
+  & #stationPanel .gv-station-header { margin: 0 0 12px; padding: 0 32px 12px 0; border-bottom: 1px solid var(--station-rule); }
+  & #stationPanel .gv-station-header::after { display: none; }
+  & #stationPanel .gv-station-heading h2 { font: 700 26px/1.3 var(--station-display); }
+  & #stationPanel .gv-station-heading p { font-size: 11px; line-height: 1.6; margin-top: 4px; }
+  & #stationPanel .preview-panel-scroll { padding: 0 3px 0 0; flex: 0 1 auto; min-height: 0; overflow: auto; scrollbar-gutter: auto; }
+  & #stationPanel .gv-station-filters { margin: 0; padding: 0 0 10px !important; }
+  & #stationPanel .scope-tabs { padding: 3px; gap: 3px; border-radius: 7px; background: transparent; border-color: var(--station-rule); }
+  & #stationPanel .scope-tab { min-height: 37px; border-radius: 5px; font: 600 11px/1.4 var(--station-font); }
+  & #stationPanel .scope-tab.active { color: #fff8ed; background: #9e2835; border-color: #9e2835; }
+  & #stationPanel .scope-tab :is(small, svg) { display: none; }
+  & #stationPanel .scope-tab strong { font: inherit; }
+  & #stationPanel .search-input-wrap { margin-top: 10px; }
+  & #stationPanel .prov-search-input { border-radius: 6px; min-height: 42px; font-weight: 400; background: var(--station-sheet); }
+  & #stationPanel .place-list { gap: 0; }
+  & #stationPanel .gv-station-other h3 { margin: 4px 0 0; font-size: 9px; letter-spacing: .07em; }
+  & #stationPanel .gv-station-other:not(.is-searching) > h3 { display: none; }
+  & #stationPanel .prov-search-input:focus { outline: 2px solid #14645a !important; outline-offset: -2px !important; box-shadow: none !important; }
+  & #stationPanel :is(button, input, summary):focus-visible { outline-offset: -2px; }
+  & #stationPanel .gv-station-other-items { gap: 0; }
+  & #stationPanel .gv-station-compact { margin: 0; border: 0; border-bottom: 1px solid var(--station-rule); border-radius: 0; background: transparent; }
+  & #stationPanel .place-compact-row { padding: 13px 2px; gap: 12px; min-height: 66px; border-radius: 3px; }
+  & #stationPanel .gv-station-folio { width: 31px; padding-right: 10px; border-right: 1px solid var(--station-rule); color: var(--station-red); font: 700 20px/1.5 var(--station-display); }
+  & #stationPanel .gv-station-compact-copy strong { font: 700 18px/1.35 var(--station-display); letter-spacing: -.015em; }
+  & #stationPanel .gv-station-compact-copy small { margin-top: 4px; font: 400 11px/1.5 var(--station-font); white-space: normal; overflow: visible; text-overflow: clip; }
+  & #stationPanel .gv-station-compact-end .gv-station-icon { width: 15px; height: 15px; }
+  & #stationPanel .gv-station-journal { margin-top: 10px; border: 0; border-radius: 0; background: transparent; }
+  & #stationPanel .gv-station-journal summary { padding: 8px 2px; gap: 12px; min-height: 56px; border-radius: 4px; }
+  & #stationPanel .gv-station-journal-icon { width: 31px; background: none; border-radius: 0; border-right: 1px solid var(--station-rule); padding-right: 10px; }
+  & #stationPanel .gv-station-journal-copy strong { font: 700 18px/1.4 var(--station-display); }
+  & #stationPanel .gv-station-journal-copy small { font-size: 10px; font-weight: 400; }
+  & #arrivalSheet { gap: 12px; }
+  & #arrivalSheet .arrival-sheet-header { min-height: 24px; padding: 0 30px 9px 0; border-bottom: 1px solid var(--station-rule); }
+  & #arrivalSheet .arrival-reached { color: #9e2835; background: transparent; border: 0; padding: 0; font: 600 11px/1.5 var(--station-font); text-transform: none; letter-spacing: 0; }
+  & #arrivalSheet .arrival-visual { grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr); gap: 16px; padding: 0; border: 0; background: transparent; box-shadow: none; align-items: center; }
+  & #arrivalSheet .gv-station-art { border-radius: 6px; border: 0; box-shadow: none; }
+  & #arrivalSheet .gv-station-art-cue { padding: 4px; bottom: 5px; right: 5px; border-radius: 4px; }
+  & #arrivalSheet .arrival-identity { padding: 0; border: 0; }
+  & #arrivalSheet #arrivalStationTitle { font-size: 33px; line-height: 1.28; letter-spacing: -.035em; margin: 0 0 8px; }
+  & #arrivalSheet .arrival-turn { display: block; font: 400 11px/1.55 var(--station-font); }
+  & #arrivalSheet .arrival-summary { font: 400 12.5px/1.55 var(--station-font); color: var(--station-muted); }
+  & #arrivalSheet .arrival-highlights { padding: 2px 0; background: transparent; border: 0; border-top: 1px solid var(--station-rule); border-bottom: 1px solid var(--station-rule); border-radius: 0; }
+  & #arrivalSheet .gv-station-highlights > div { grid-template-columns: 90px minmax(0, 1fr); gap: 10px; min-height: 34px; padding: 7px 0; border-bottom: 1px solid var(--station-rule); }
+  & #arrivalSheet .gv-station-highlights > div:last-child { border: 0; }
+  & #arrivalSheet .gv-station-highlights dt { font: 400 10px/1.5 var(--station-font); }
+  & #arrivalSheet .gv-station-highlights dt .gv-station-icon { color: var(--station-ink); width: 16px; height: 16px; stroke-width: 1.5; }
+  & #arrivalSheet .gv-station-highlights dd { font: 500 12px/1.5 var(--station-font); }
+  & #arrivalSheet .gv-station-modes { grid-template-columns: 1fr 1fr; gap: 9px; }
+  & #arrivalSheet .gv-station-mode { min-height: 64px; border-radius: 6px; padding: 10px; gap: 9px; box-shadow: none; border: 1px solid #9e2835; }
+  & #arrivalSheet .gv-station-mode strong { font: 600 14px/1.5 var(--station-font); }
+  & #arrivalSheet .gv-station-mode small { font: 400 10px/1.5 var(--station-font); margin-top: 2px; }
+  & #arrivalSheet .gv-station-play { color: #fff8ed; background: #9e2835; }
+  & #arrivalSheet .gv-station-read { color: var(--station-ink); background: transparent; border-color: var(--station-brass); }
+  & #arrivalSheet .gv-station-read small { color: var(--station-muted); }
+  & #arrivalSheet .arrival-landed { font-size: 9px; }
+  & #arrivalSheet .arrival-close { top: 11px; right: 11px; width: 30px; height: 30px; border: 0; border-radius: 4px; color: var(--station-ink); background: transparent; }
+  & #arrivalSheet .arrival-close .gv-station-icon { width: 19px; height: 19px; stroke-width: 1.5; }
+  & #arrivalSheet .gv-station-photo-credit summary { font-size: 9px; color: var(--station-muted); }
+  & #journeyRouteBar { padding: 15px 17px; border-radius: 10px; border-color: #b39762; background: #fbf5e8; box-shadow: 0 8px 26px #163b3026; }
+  & #journeyRouteBar .journey-route-main { display: grid; grid-template-columns: 18px minmax(0, 1fr) auto; gap: 0 9px; padding: 0; align-items: start; }
+  & #journeyRouteBar .journey-route-emblem { width: 18px; height: 18px; flex-basis: 18px; min-height: 0; border: 0; background: none; border-radius: 0; color: #9e2835; }
+  & #journeyRouteBar .journey-route-emblem svg { width: 18px; height: 18px; stroke-width: 1.5; }
+  & #journeyRouteBar .journey-status { font-size: 9px; font-weight: 600; letter-spacing: .045em; color: #9e2835; line-height: 1.7; margin-bottom: 6px; }
+  & #journeyRouteBar .journey-route-info:focus { outline: none !important; box-shadow: none !important; }
+  & #journeyRouteBar .journey-route-title { display: flex; align-items: baseline; gap: 8px; margin: 0 0 4px; font-size: 21px; line-height: 1.45; }
+  & #journeyRouteBar .journey-route-title > span[aria-hidden] { display: flex; flex: 1; align-items: center; gap: 3px; min-width: 24px; font: 400 14px/1 'Be Vietnam Pro', sans-serif; color: #9a8052; }
+  & #journeyRouteBar .journey-route-title > span[aria-hidden]::before { content: ''; width: 100%; border-top: 1px solid #bda473; }
+  & #journeyRouteBar .arrival-route-actions { align-self: center; margin-left: 8px; padding-left: 14px; border-left: 1px solid #dcccab; min-width: 100px; max-width: 120px; }
+  & #journeyRouteBar :is(.journey-depart, .journey-reopen, .journey-instant) { border-radius: 5px; font-size: 11px; min-height: 40px; box-shadow: none; }
+  & #journeyRouteBar .arrival-route-highlights { margin-top: 3px; font-size: 10px; line-height: 1.5; }
+  & #journeyRouteBar[data-mode='station'] .journey-route-main { align-items: center; }
+  & #journeyRouteBar[data-mode='station'] .journey-route-title { display: none; }
+  & #journeyRouteBar[data-mode='station'] .journey-route-emblem { background: none; border: 0; color: #2c6551; }
+  & #journeyRouteBar[data-mode='station'] .journey-status { margin: 0; font-size: 17px; }
+}
+body[data-arrival-demo][data-regional-preview]:has(#introScreen.intro-hidden):has(#stationPanel:not([hidden])) #mapScene #previewPanelOpen {
+  top: calc(var(--header-offset) + 12px); right: calc(var(--arrival-right) + 12px); width: 32px; min-height: 32px; padding: 0; border: 0; background: transparent; box-shadow: none; z-index: 55;
+  & span { display: none; }
+  & .gv-station-icon { width: 20px; height: 20px; }
+}
+html[data-theme='dark'] body[data-arrival-demo][data-regional-preview]:has(#introScreen.intro-hidden) #mapScene {
+  & :is(#stationPanel, #arrivalSheet) { --station-paper: #20332c; --station-sheet: #293e35; --station-ink: #f6eed9; --station-muted: #d5c7a9; --station-rule: #526354; --station-brass: #bb9e66; background: var(--station-paper); box-shadow: 0 10px 30px #0004; }
+  & #arrivalSheet .arrival-reached { color: #f3c6a4; }
+  & #arrivalSheet .gv-station-read { background: transparent; border-color: #bb9e66; }
+  & #stationPanel .gv-station-folio { color: #f3c6a4; }
+  & #stationPanel .prov-search-input:focus { outline-color: #f2d692 !important; }
+  & :is(#journeyRouteBar, #previewPanelOpen) { color: #f6eed9; background: #20332c; }
+}
+@media (min-width: 768px) and (max-width: 1500px) {
+  body[data-arrival-demo][data-regional-preview]:has(#introScreen.intro-hidden) #mapScene { --arrival-panel-width: 392px; }
+}
+@media (min-width: 768px) and (max-height: 850px) {
+  body[data-arrival-demo][data-regional-preview]:has(#introScreen.intro-hidden) #mapScene #stationPanel {
+    padding: 14px;
+    & .place-compact-row { padding-block: 10px; min-height: 62px; }
+  }
+  body[data-arrival-demo][data-regional-preview]:has(#introScreen.intro-hidden) #mapScene #arrivalSheet {
+    padding: 12px; gap: 8px;
+    & .arrival-sheet-header { min-height: 20px; padding-bottom: 6px; }
+    & .arrival-visual { gap: 12px; }
+    & #arrivalStationTitle { font-size: 29px; margin-bottom: 6px; }
+    & .arrival-turn { font-size: 10.5px; }
+    & .arrival-summary { font-size: 12px; line-height: 1.5; }
+    & .gv-station-highlights > div { min-height: 30px; padding-block: 5px; }
+    & .gv-station-highlights dd { font-size: 11.5px; }
+    & .gv-station-mode { min-height: 60px; }
+  }
+}
+@media (max-width: 767px) {
+  body[data-arrival-demo][data-regional-preview]:has(#introScreen.intro-hidden) #mapScene {
+    --arrival-panel-width: calc(100vw - 20px);
+    & #stationPanel { bottom: var(--dock-offset) !important; top: auto !important; max-height: calc(100dvh - var(--header-offset) - var(--dock-offset) - 10px) !important; padding: 14px; }
+    & #arrivalSheet { padding: 14px; gap: 10px; }
+    & #arrivalSheet #arrivalStationTitle { font-size: 29px; }
+    & #arrivalSheet .arrival-visual { gap: 12px; }
+    & #arrivalSheet .arrival-turn { font-size: 10px; }
+    & #arrivalSheet .gv-station-highlights dd { font-size: 11px; }
+    & #journeyRouteBar .journey-route-main { grid-template-columns: minmax(0, 1fr) auto; gap: 8px; }
+    & #journeyRouteBar .journey-route-title { font-size: 18px; }
+    & #journeyRouteBar .arrival-route-actions { padding-left: 8px; margin-left: 0; min-width: 85px; max-width: 102px; }
+  }
+  body[data-arrival-demo][data-regional-preview]:has(#introScreen.intro-hidden):has(#stationPanel:not([hidden])) #mapScene #previewPanelOpen { top: auto; bottom: calc(var(--dock-offset) + var(--arrival-directory-height, 420px) - 46px); }
+}
+
+/* Final presentation pass: header navigation, railway connector and destination card. */
+body[data-arrival-demo][data-regional-preview]:has(#introScreen.intro-hidden) #mapScene {
+  & .top-header .header-actions > .craft-btn-green { background: #f6e8df; color: #7c303a; border-color: #caa48a; }
+  & .top-header .header-actions > .craft-btn-green:hover { background: #efd9cb; border-color: #ab7a62; }
+  & .top-header #previewPanelOpen {
+    position: static !important; inset: auto !important; display: inline-flex !important;
+    flex: none; align-items: center; justify-content: center; gap: 7px;
+    width: auto; min-width: 44px; height: 48px; min-height: 48px;
+    padding: 0 11px; margin: 0; border: 1px solid #c6b28c; border-radius: 6px;
+    color: #173f35; background: #fff8e9; box-shadow: none; font-size: 11px;
+    visibility: visible !important; pointer-events: auto !important;
+  }
+  & .top-header #previewPanelOpen:hover { border-color: #8b7954; background: #f2e8d3; }
+  & #journeyRouteBar .journey-route-title { align-items: center; }
+  & #journeyRouteBar .journey-route-title > .journey-route-link {
+    min-width: 38px; max-width: 112px; margin-inline: 1px; align-self: center;
+    display: flex; flex: 1; color: #b2945b;
+  }
+  & #journeyRouteBar .journey-route-title > .journey-route-link::before { content: none; }
+  & #journeyRouteBar .journey-route-link svg { display: block; width: 100%; height: 22px; overflow: visible; }
+  & #journeyRouteBar .journey-route-link :is(path, circle) { vector-effect: non-scaling-stroke; stroke: currentColor; stroke-width: 1; fill: none; }
+  & #journeyRouteBar .journey-route-link .route-sleepers { opacity: .6; }
+  & #journeyRouteBar .journey-route-link circle { fill: #9e2835; stroke: #9e2835; }
+  & #journeyRouteBar .journey-route-link .route-head { fill: #9e2835; stroke: #9e2835; }
+  & #arrivalSheet { border-color: #baa170; border-radius: 12px; background: #fcf7ed; box-shadow: 0 14px 34px #163a302e; }
+  & #arrivalSheet .arrival-sheet-header { padding-bottom: 0; border: 0; }
+  & #arrivalSheet .arrival-reached { padding: 3px 7px; background: #f5e6dc; border-radius: 4px; font-size: 10px; }
+  & #arrivalSheet .arrival-visual { gap: 15px; }
+  & #arrivalSheet .gv-station-art { border: 1px solid #c8b793; border-radius: 7px; box-shadow: 0 2px 8px #183e3014; }
+  & #arrivalSheet .arrival-station-kicker { display: block; margin-bottom: 5px; color: #75613f; font: 500 9px/1.5 var(--station-font); letter-spacing: .08em; text-transform: uppercase; }
+  & #arrivalSheet #arrivalStationTitle { font-size: 36px; line-height: 1.25; margin-bottom: 7px; }
+  & #arrivalSheet.arrival-long-name #arrivalStationTitle { font-size: 30px; }
+  & #arrivalSheet .arrival-turn { font-size: 10.5px; line-height: 1.55; }
+  & #arrivalSheet .arrival-summary { padding-left: 9px; border-left: 2px solid #d1bb8e; color: #625844; }
+  & #arrivalSheet .arrival-highlights { border: 1px solid #e0d3b8; border-radius: 7px; padding: 2px 8px; background: #f5eedf; }
+  & #arrivalSheet .gv-station-highlights > div { grid-template-columns: 88px minmax(0, 1fr); gap: 8px; border-color: #e3d9c3; }
+  & #arrivalSheet .gv-station-highlights dt { color: #736951; }
+  & #arrivalSheet .gv-station-highlights dt .gv-station-icon { color: #9b7a43; }
+  & #arrivalSheet .gv-station-highlights dd { font-weight: 500; }
+  & #arrivalSheet .gv-station-mode { gap: 8px; border-radius: 8px; min-height: 66px; padding: 10px; box-shadow: 0 3px 7px #173e3010; }
+  & #arrivalSheet .gv-station-mode > .gv-station-icon:first-child { width: 31px; height: 31px; padding: 5px; border: 1px solid #ffffff55; border-radius: 6px; }
+  & #arrivalSheet .gv-station-mode > .gv-station-icon:last-child { width: 11px; height: 15px; margin-left: auto; }
+  & #arrivalSheet .gv-station-mode strong { font-size: 14px; }
+  & #arrivalSheet .gv-station-read { background: #fffaf0; border-color: #c4ad7d; }
+  & #arrivalSheet .gv-station-read > .gv-station-icon:first-child { border-color: #d3d9c6; background: #edf0e4; }
+  & #arrivalSheet .arrival-sheet-foot { padding-top: 3px; }
+}
+html[data-theme='dark'] body[data-arrival-demo][data-regional-preview]:has(#introScreen.intro-hidden) #mapScene {
+  & .top-header .header-actions > .craft-btn-green { color: #ffe9cb; background: #49332f; border-color: #ae8a5f; }
+  & .top-header #previewPanelOpen { color: #f6eed9; background: #293e35; border-color: #99875e; }
+  & #arrivalSheet { background: #20332c; border-color: #a58e5c; }
+  & #arrivalSheet .arrival-reached { color: #ffd9ac; background: #4b372b; }
+  & #arrivalSheet .arrival-station-kicker { color: #d3bf92; }
+  & #arrivalSheet .arrival-summary { color: #d5c7a9; border-color: #9e8c62; }
+  & #arrivalSheet .arrival-highlights { border-color: #5c6a52; background: #293e35; }
+  & #arrivalSheet .gv-station-highlights > div { border-color: #506149; }
+  & #arrivalSheet .gv-station-highlights dt { color: #d5c7a9; }
+  & #arrivalSheet .gv-station-highlights dt .gv-station-icon { color: #d5b475; }
+  & #arrivalSheet .gv-station-read { background: #2b4136; border-color: #a48f62; }
+  & #arrivalSheet .gv-station-read > .gv-station-icon:first-child { background: #385140; border-color: #6a7b59; }
+}
+@media (min-width: 768px) and (max-width: 1500px) {
+  body[data-arrival-demo][data-regional-preview]:has(#introScreen.intro-hidden) #mapScene .top-header {
+    grid-template-columns: minmax(160px, 1fr) auto auto; gap: 12px;
+  }
+  body[data-arrival-demo][data-regional-preview]:has(#introScreen.intro-hidden) #mapScene .top-header #previewPanelOpen {
+    width: 44px; padding: 0;
+    & span { display: none; }
+  }
+}
+@media (min-width: 768px) and (max-height: 850px) {
+  body[data-arrival-demo][data-regional-preview]:has(#introScreen.intro-hidden) #mapScene #arrivalSheet {
+    gap: 7px;
+    & .arrival-visual { gap: 12px; }
+    & #arrivalStationTitle { font-size: 32px; }
+    &.arrival-long-name #arrivalStationTitle { font-size: 28px; }
+    & .arrival-station-kicker { font-size: 9px; margin-bottom: 3px; }
+    & .gv-station-highlights > div { min-height: 29px; padding-block: 4px; }
+    & .gv-station-mode { min-height: 62px; padding: 9px; gap: 7px; }
+  }
+}
+@media (max-width: 767px) {
+  body[data-arrival-demo][data-regional-preview]:has(#introScreen.intro-hidden) #mapScene {
+    & .top-header #previewPanelOpen { grid-row: 4; grid-column: 3 / 5; width: 100%; height: 40px; min-height: 40px; padding: 0 6px; }
+    & .top-header .gv-lang-toggle-header { grid-row: 4; grid-column: 1 / 3; justify-self: start; }
+    & #arrivalSheet #arrivalStationTitle { font-size: 30px; }
+    & #arrivalSheet.arrival-long-name #arrivalStationTitle { font-size: 27px; }
+    & #arrivalSheet .gv-station-highlights > div { grid-template-columns: 83px minmax(0, 1fr); }
+    & #arrivalSheet .gv-station-mode { padding: 8px; gap: 7px; }
+    & #arrivalSheet .gv-station-mode strong { font-size: 13px; }
+  }
+}
+
+/* Round 3: native seals and one unambiguous arrival moment. */
+body[data-arrival-demo][data-regional-preview]:has(#introScreen.intro-hidden) #mapScene {
+  & #arrivalSheet .arrival-station-kicker { letter-spacing: .025em; text-transform: none; }
+  & #arrivalSheet .arrival-sheet-foot { align-items: center; }
+  & #arrivalSheet .arrival-seal-status { color: var(--station-muted); font: 400 9.5px/1.5 var(--station-font); }
+  & #arrivalSheet.arrival-has-seal .arrival-seal-status { color: #286349; font-weight: 600; }
+  & #arrivalSheet .gv-station-art-cue { left: 5px; right: auto; }
+  & #arrivalSheet .arrival-stamp { position: absolute; z-index: 3; right: 5px; top: 5px; width: 54px; height: 54px; padding: 7px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 1px; border: 2px solid #9e2835; outline: 1px solid #9e2835; outline-offset: -5px; border-radius: 50%; background: #fff6e8f2; color: #9e2835; rotate: -9deg; pointer-events: none; box-shadow: 0 1px 3px #472d1326; }
+  & #arrivalSheet .arrival-stamp-title { font: 700 9px/1.12 'Be Vietnam Pro', sans-serif; }
+  & #arrivalSheet .arrival-stamp-sub { font: 500 7.5px/1.1 'Be Vietnam Pro', sans-serif; }
+  & #arrivalSheet.arrival-first-stamp .arrival-stamp { animation: arrival-stamp-in 540ms cubic-bezier(.16,.8,.3,1); }
+  & #arrivalSheet.arrival-island .gv-station-art-fallback .gv-station-icon { position: absolute; left: 25%; top: 38%; width: 25%; height: 45%; transform: translate(-50%,-50%); }
+  & #arrivalSheet.arrival-seal-celebrate .arrival-seal-status { animation: arrival-seal-feedback 520ms ease-out; }
+  & #arrivalSheet .arrival-book-soon { background: transparent; border-color: var(--station-rule); box-shadow: none; }
+  & #arrivalSheet .arrival-book-soon small { white-space: normal; line-height: 1.35; }
+  & #journeyRouteBar .arrival-passing { height: 18px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  & #journeyRouteBar .journey-choose { width: 100%; min-height: 32px; padding: 5px 9px; border: 1px solid #bca77c; border-radius: 5px; color: #173f35; background: #fff8e9; font: 500 11px/1.45 'Be Vietnam Pro', sans-serif; cursor: pointer; }
+  & #journeyRouteBar[data-mode='station'] { width: max-content; padding: 9px 12px; }
+  & #journeyRouteBar[data-mode='station'] .journey-route-main { grid-template-columns: 18px minmax(0, 1fr) auto; gap: 8px; }
+  & #journeyRouteBar[data-mode='station'] .arrival-route-actions { flex-direction: row; min-width: 0; max-width: none; margin-left: 0; padding-left: 8px; gap: 6px; }
+  & #journeyRouteBar[data-mode='station'] .arrival-route-actions button { width: auto; min-height: 32px; padding: 5px 7px; font-size: 10px; }
+  & #journeyRouteBar[data-mode='station'] .journey-status { font: 600 12px/1.5 'Be Vietnam Pro', sans-serif; white-space: nowrap; }
+  & .arrival-region-group { margin: 10px 0 4px; }
+  & .arrival-region-group > h3 { margin: 0; padding: 7px 0; border-bottom: 1px solid var(--station-brass); font: 600 11px/1.5 'Be Vietnam Pro',sans-serif; color: var(--station-muted); }
+  & #mapStationArrivalBanner { position: fixed; width: min(440px, calc(100vw - 40px)); left: 50%; top: calc(var(--header-offset) + 8px); transform: translateX(-50%); pointer-events: none; }
+  & #mapStationArrivalBanner:not(.show) { visibility: hidden; transition: none; }
+  & #mapStationArrivalBanner .arrival-banner-kicker { display: none; }
+  & #mapStationArrivalBanner .arrival-banner-verse { white-space: pre-line; font-size: 12px; line-height: 1.55; }
+}
+@keyframes arrival-stamp-in { 0% { opacity: 0; scale: 1.65; rotate: -18deg; } 65% { opacity: 1; scale: .94; } 100% { opacity: 1; scale: 1; rotate: -9deg; } }
+@keyframes arrival-seal-feedback { 0% { box-shadow: 0 0 0 3px #b7975c80; } 100% { box-shadow: 0 0 0 0 #b7975c00; } }
+html[data-theme='dark'] body[data-arrival-demo][data-regional-preview]:has(#introScreen.intro-hidden) #mapScene {
+  & #arrivalSheet.arrival-has-seal .arrival-seal-status { color: #cce1b9; }
+  & #journeyRouteBar .journey-choose { color: #f6eed9; background: #293e35; border-color: #9f8b60; }
+}
+@media (min-width: 1600px) {
+  body[data-arrival-demo][data-regional-preview]:has(#introScreen.intro-hidden) #mapScene {
+    --arrival-panel-width: 500px;
+    & :is(#arrivalSheet, #stationPanel) { padding: 20px; }
+    & #arrivalSheet { gap: 13px; }
+    & #arrivalSheet .arrival-sheet-header { min-height: 26px; }
+    & #arrivalSheet .arrival-reached { font-size: 12px; }
+    & #arrivalSheet .arrival-visual { gap: 18px; }
+    & #arrivalSheet #arrivalStationTitle { font-size: clamp(36px, 2.3vw, 44px); }
+    & #arrivalSheet.arrival-long-name #arrivalStationTitle { font-size: 34px; }
+    & #arrivalSheet :is(.arrival-turn, .arrival-station-kicker) { font-size: 12px; line-height: 1.5; }
+    & #arrivalSheet .arrival-summary { font-size: 14px; line-height: 1.55; }
+    & #arrivalSheet .gv-station-highlights > div { grid-template-columns: 111px minmax(0, 1fr); gap: 10px; padding-block: 7px; min-height: 38px; }
+    & #arrivalSheet .gv-station-highlights dt { font-size: 12px; }
+    & #arrivalSheet .gv-station-highlights dd { font-size: 14px; }
+    & #arrivalSheet .gv-station-mode { padding: 12px; min-height: 84px; gap: 9px; }
+    & #arrivalSheet .gv-station-mode strong { font-size: 16px; }
+    & #arrivalSheet .gv-station-mode small { font-size: 12px; line-height: 1.4; }
+    & #arrivalSheet .gv-station-mode > .gv-station-icon:first-child { width: 35px; height: 35px; }
+    & #arrivalSheet :is(.arrival-seal-status, [data-arrival-action='other'], .gv-station-photo-credit summary) { font-size: 12px; }
+    & #arrivalSheet .arrival-stamp { width: 76px; height: 76px; padding: 7px; gap: 2px; text-align: center; }
+    & #arrivalSheet .arrival-stamp-title { font-size: 12px; }
+    & #arrivalSheet .arrival-stamp-sub { font-size: 12px; line-height: 1.05; }
+    & #stationPanel .gv-station-heading h2 { font-size: 32px; }
+    & #stationPanel .gv-station-heading p { font-size: 14px; }
+    & #stationPanel :is(.scope-tab, .prov-search-input, .gv-station-compact-copy small, .gv-station-journal-copy small, .arrival-region-group > h3, .gv-station-badge) { font-size: 12px; }
+    & #stationPanel .gv-station-compact-copy strong { font-size: 22px; }
+    & #stationPanel .gv-station-compact-copy small { font-size: 14px; }
+    & #stationPanel .gv-station-journal-copy strong { font-size: 22px; }
+    & #stationPanel .place-compact-row { min-height: 77px; }
+    & #stationPanel .gv-station-journal-body { font-size: 14px; }
+    & #stationPanel .gv-station-journal-body h3 { font-size: 12px; }
+    & #stationPanel :is(.gv-station-journal-body p, .gv-station-journal-memory, .gv-station-journal-stop, .gv-station-postcard, .prov-search-input) { font-size: 14px; }
+    & #journeyRouteBar[data-mode='station'] .journey-status { font-size: 14px; }
+    & #journeyRouteBar[data-mode='station'] .arrival-route-actions button { font-size: 12px; }
+  }
+}
+@media (prefers-reduced-motion: reduce) { body[data-arrival-demo] #arrivalSheet :is(.arrival-stamp,.arrival-seal-status) { animation: none !important; } }
+body[data-arrival-demo].reduced-motion #arrivalSheet :is(.arrival-stamp,.arrival-seal-status),body[data-arrival-demo] #arrivalSheet.arrival-no-motion :is(.arrival-stamp,.arrival-seal-status) { animation: none !important; }
+@media (max-width:767px) {
+  body[data-arrival-demo][data-regional-preview]:has(#introScreen.intro-hidden) #mapScene #journeyRouteBar[data-mode='station'] {
+    /* The emblem is hidden on phones, so the status takes the only column. */
+    & .journey-route-main { grid-template-columns: minmax(0,1fr); row-gap: 5px; }
+    & .arrival-route-actions { grid-column: 1 / -1; justify-content: flex-end; padding-left: 0; border-left: 0; }
+    & .journey-status { white-space: normal; }
+  }
+}
+
+body[data-arrival-preview] #arrivalSheet .arrival-sheet-header {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+}
+body[data-arrival-preview] #arrivalSheet .arrival-island-entry {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 32px;
+  padding: 4px 8px;
+  border: 1px solid var(--station-brass);
+  border-radius: 5px;
+  background: transparent;
+  color: var(--station-ink);
+  font: 600 12px/1.35 var(--station-font);
+  cursor: pointer;
+}
+body[data-arrival-preview] #arrivalSheet .arrival-island-entry:hover {
+  background: var(--station-soft);
+}
+
+@media (min-width: 769px) and (max-width: 1080px) {
+  body[data-arrival-demo][data-regional-preview]:has(#introScreen.intro-hidden) #mapScene .bottom-dock {
+    top: auto;
+    bottom: calc(var(--hf-bottom) + var(--hf-gap));
+  }
+  /* With the dock at the bottom, the camera menu opens upwards as on desktop. */
+  body[data-arrival-demo][data-regional-preview]:has(#introScreen.intro-hidden) #mapScene .bottom-dock .control-options {
+    top: auto;
+    bottom: calc(100% + 8px);
+  }
+}
+
+/* While the sheet is open the dock is centred in the map area to its left, so the sheet may reach the
+   dock's bottom edge instead of stopping above it. This leaves room for readable text on 720-px screens. */
+@media (min-width: 768px) {
+  body[data-arrival-demo][data-regional-preview]:has(#introScreen.intro-hidden) #mapScene #arrivalSheet {
+    max-height: calc(100dvh - var(--header-offset) - var(--hf-bottom) - var(--hf-gap));
+  }
+}
+/* Classroom projectors often run 1280×720 or 1366×768: keep sheet and journey text readable below 1600 px. */
+@media (min-width: 768px) and (max-width: 1599px) {
+  body[data-arrival-demo][data-regional-preview]:has(#introScreen.intro-hidden) #mapScene {
+    & #arrivalSheet :is(.arrival-reached, .arrival-station-kicker) { font-size: 11px; }
+    & #arrivalSheet .arrival-turn { font-size: 12px; }
+    & #arrivalSheet .arrival-summary { font-size: 13px; line-height: 1.5; }
+    & #arrivalSheet .gv-station-highlights dt { font-size: 11px; }
+    & #arrivalSheet .gv-station-highlights dd { font-size: 12.5px; }
+    & #arrivalSheet .gv-station-mode small { font-size: 11px; line-height: 1.4; }
+    & #arrivalSheet :is(.arrival-seal-status, [data-arrival-action='other'], .gv-station-photo-credit summary) { font-size: 11px; }
+    & #arrivalSheet .arrival-stamp { width: 64px; height: 64px; }
+    & #arrivalSheet .arrival-stamp-title { font-size: 11px; }
+    & #arrivalSheet .arrival-stamp-sub { font-size: 9px; }
+    & #journeyRouteBar .journey-status { font-size: 10px; }
+    & #journeyRouteBar :is(.arrival-eta, .arrival-route-highlights, .arrival-passing, .journey-caption) { font-size: 11px; }
+    & #journeyRouteBar[data-mode='station'] .journey-status { font-size: 13px; }
+    & #journeyRouteBar[data-mode='station'] .arrival-route-actions button { font-size: 11px; }
+  }
+}
+
+@media (max-width: 360px) {
+  body[data-arrival-demo][data-regional-preview]:has(#introScreen.intro-hidden) #mapScene #stationPanel {
+    overflow-y: auto;
+  }
+  body[data-arrival-demo][data-regional-preview]:has(#introScreen.intro-hidden) #mapScene #stationPanel .preview-panel-scroll {
+    flex: 0 0 auto;
+    overflow: visible;
+  }
+}

@@ -4,8 +4,8 @@
 (() => {
   'use strict';
   const T = (key, fallback, vars) => { const I = window.GoiVietI18n; if (!I) return fallback; const value = I.t(key, vars); return value === key ? fallback : value; };
-  const closerLabel=id=>T('arch.closer','Xem gần quần đảo '+(id==='hoang-sa'?'Hoàng Sa':'Trường Sa'),{place:id==='hoang-sa'?'Hoàng Sa':'Trường Sa'});
-  const closerShort=()=>T('arch.closerShort','Xem gần');
+  const closerLabel=id=>window.GoiVietFamilyVoyage?.entryLabel(id==='hoang-sa'?'Hoàng Sa':'Trường Sa',true)||T('arch.closer','Xem gần quần đảo '+(id==='hoang-sa'?'Hoàng Sa':'Trường Sa'),{place:id==='hoang-sa'?'Hoàng Sa':'Trường Sa'});
+  const closerShort=()=>window.GoiVietFamilyVoyage?.entryLabel()||T('arch.closerShort','Xem gần');
 
   const C=window.GoiVietNaturalCore,cache=new Map(),catalogs=new WeakMap(),buttons=new Map(),positions=new Map();
   const ids=new Set(['hoang-sa','truong-sa']);
@@ -117,6 +117,8 @@
     buttonFrame++;
   }
   new MutationObserver(()=>{if(!document.getElementById('introScreen').classList.contains('intro-hidden'))for(const button of buttons.values())show(button,false);}).observe(document.getElementById('introScreen'),{attributes:true,attributeFilter:['class']});
-  document.addEventListener('goiviet:langchange',()=>{for(const [id,button] of buttons){button.setAttribute('aria-label',closerLabel(id));const span=button.querySelector('span');if(span)span.textContent=closerShort();}});
+  const relabelButtons=()=>{for(const [id,button] of buttons){button.setAttribute('aria-label',closerLabel(id));const span=button.querySelector('span');if(span)span.textContent=closerShort();}};
+  document.addEventListener('goiviet:langchange',relabelButtons);
+  matchMedia('(min-width:961px)').addEventListener('change',relabelButtons);
   window.GoiVietArchipelagoArt=Object.freeze({paint,positionButton,inspect:()=>({builds,cacheTiles:cache.size,cacheBytes,lastFrame:lastFrame.map(v=>({...v})),buttons:[...buttons].map(([id,b])=>({id,hidden:b.style.display==='none',position:b.getBoundingClientRect().toJSON()})),buttonFrame})});
 })();

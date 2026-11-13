@@ -25,7 +25,12 @@ const ok = msg => console.log('✓ ' + msg);
 const sandbox = { window: {}, document: { addEventListener() {}, dispatchEvent() {}, querySelectorAll: () => [], documentElement: {} }, location: { search: '' }, localStorage: { getItem: () => null, setItem() {} }, URLSearchParams, CustomEvent: function () {} };
 sandbox.window = sandbox;
 vm.createContext(sandbox);
-for (const rel of ['assets/goi-viet/map-surroundings-preview/i18n-5.js', 'assets/goi-viet/map-surroundings-preview/i18n-ui-5.js']) vm.runInContext(read(rel), sandbox, { filename: rel });
+const dictionaryAssets = ['i18n-5.js', 'i18n-ui-5.js', 'i18n-arrival-5.js'];
+for (const name of dictionaryAssets) {
+  const rel = assets.find(asset => asset.endsWith('/' + name));
+  if (!rel) continue;
+  vm.runInContext(read(rel), sandbox, { filename: rel });
+}
 const I = sandbox.GoiVietI18n;
 const lookup = (lang, key) => { I.setLang(lang, { remember: false }); const v = I.t(key); return v === key ? null : v; };
 const markupKeys = new Set();
@@ -101,7 +106,8 @@ async function walk() {
   // VI round trip on the map with a card open.
   const p = await open('');
   await p.evaluate(() => { window.GoiVietHomeIntro.skip(); closeIntroModal(); }); await p.waitForTimeout(800);
-  await p.click('#station-pick-hn'); await p.click('#deck-open-hn'); await p.waitForSelector('#deckModal.open');
+  await p.click('#arrivalStartHint [data-arrival-pick="hn"]'); await p.click('#arrivalExplore');
+  await p.click('#deck-open-hn'); await p.waitForSelector('#deckModal.open');
   await drawCard(p); await p.waitForTimeout(800);
   await p.keyboard.press('Escape'); await p.waitForTimeout(300);
   const dump = () => p.evaluate(() => { const t = []; const w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); for (let n = w.nextNode(); n; n = w.nextNode()) if (!n.parentElement.closest('script,style')) t.push(n.nodeValue); return t.join('\u0001') + '\u0002' + Array.from(document.querySelectorAll('[aria-label],[title],[placeholder],[alt]')).map(e => ['aria-label', 'title', 'placeholder', 'alt'].map(a => e.getAttribute(a) || '').join('|')).join('\u0001'); });
@@ -109,7 +115,14 @@ async function walk() {
   await p.click('.gv-lang-toggle-header [data-set-lang="en"]'); await p.waitForTimeout(400);
   await p.click('.gv-lang-toggle-header [data-set-lang="vi"]'); await p.waitForTimeout(400);
   const after = await dump();
-  before === after ? ok('VI → EN → VI leaves the Vietnamese page unchanged (card open in the background)') : fail('VI → EN → VI changed the Vietnamese page');
+  if (before === after) ok('VI → EN → VI leaves the Vietnamese page unchanged (card open in the background)');
+  else {
+    const offset = [...before].findIndex((_, index) => before[index] !== after[index]);
+    fail('VI → EN → VI changed the Vietnamese page: ' + JSON.stringify({
+      before: before.slice(Math.max(0, offset - 30), offset + 100),
+      after: after.slice(Math.max(0, offset - 30), offset + 100)
+    }));
+  }
   // Switching while the page runs (decorating scripts have already touched the labels) must reach the same result.
   const seen = new Map();
   await p.click('.gv-lang-toggle-header [data-set-lang="en"]');
@@ -126,15 +139,17 @@ async function walk() {
   await e.click('#btnHomeExploreMemory').catch(() => {}); await e.waitForTimeout(1500); await step('memory chapter');
   await e.click('#memoryNextCard').catch(() => {}); await e.waitForTimeout(1500); await step('memory prompt');
   await e.evaluate(() => { window.GoiVietHomeIntro.skip(); closeIntroModal(); }); await e.waitForTimeout(800); await step('map');
-  await e.click('#station-pick-hn'); await e.waitForTimeout(400); await step('station');
+  await e.click('#arrivalStartHint [data-arrival-pick="hn"]'); await e.click('#arrivalExplore');
+  await e.waitForSelector('#arrivalSheet:not([hidden])'); await step('station');
   await e.click('#headerSettings summary'); await e.waitForTimeout(300); await step('settings');
   await e.click('#mapSources > summary').catch(() => {}); await e.waitForTimeout(300);
   await e.click('#mapSources .settings-source-details > summary').catch(() => {}); await e.waitForTimeout(300); await step('map sources');
   await e.keyboard.press('Escape');
+  await e.click('#previewPanelOpen');
   await e.click('#stationJournalToggle'); await step('journal'); await e.click('#stationJournalToggle');
-  await e.fill('#provSearchInput', 'hue'); await e.click('#station-pick-hue'); await e.click('#station-journey-hue');
-  await e.waitForFunction(() => !window.GoiVietJourneyPreview.isMoving() && !document.querySelector('#journeyRouteBar .journey-arrival-detail')?.hidden, null, { timeout: 60000 }); await step('arrival');
-  await e.click('#journeyRouteBar .journey-arrival-deck'); await e.waitForSelector('#deckModal.open'); await e.waitForTimeout(500); await step('deck');
+  await e.fill('#provSearchInput', 'hue'); await e.click('#station-pick-hue'); await e.click('#arrivalExplore');
+  await e.waitForSelector('#arrivalSheet[data-place="hue"]:not([hidden])', { timeout: 60000 }); await step('arrival');
+  await e.click('#deck-open-hue'); await e.waitForSelector('#deckModal.open'); await e.waitForTimeout(500); await step('deck');
   await drawCard(e); await e.waitForTimeout(800); await step('card front');
   await e.click('#btnAskFamilyHint'); await e.waitForTimeout(300); await step('family hint');
   await e.click('#btnDontKnowReveal'); await e.waitForTimeout(600); await step('card back');

@@ -39,24 +39,36 @@ async function waitForFocus(page, id) {
   await page.waitForFunction(expected => document.activeElement.id === expected, id);
 }
 
-async function findAndSelect(page, query, id) {
+async function openDirectory(page) {
+  if (await page.locator('#stationPanel').isHidden()) await page.locator('#previewPanelOpen').click();
+}
+
+async function selectRoute(page, query, id) {
+  await openDirectory(page);
   await page.locator('#provSearchInput').fill(query);
-  const row = page.locator('#station-pick-' + id);
-  if (await row.count()) await row.click();
-  assert.equal(await page.locator(selection).getAttribute('id'), 'placeCard-' + id);
+  await page.locator('#station-pick-' + id).click();
+  assert.equal(await page.evaluate(() => GoiVietJourneyPreview.inspect().selected), id);
+  assert(await page.locator('#arrivalSheet').isHidden());
+}
+
+async function findAndSelect(page, query, id) {
+  await selectRoute(page, query, id);
+  await page.locator('#arrivalExplore').click();
+  await page.waitForFunction(id => GoiVietArrivalDemo.isSheetOpen() && document.querySelector('#arrivalSheet').dataset.place === id, id);
 }
 
 async function verifyLayout(page, width, name = 'sidebar-' + width) {
-  assert(await page.locator('#stationPanel').evaluate(panel => {
+  await openDirectory(page);
+  const layout = await page.locator('#stationPanel').evaluate(panel => {
     const scroll = panel.querySelector('#previewPanelScroll');
     const title = panel.querySelector('#stationPanelTitle').getBoundingClientRect();
     const outer = panel.getBoundingClientRect();
-    const modes = panel.querySelector('.gv-station-modes');
-    const sheet = panel.querySelector('.gv-station-sheet');
-    const modeOrder = !modes || sheet.getBoundingClientRect().bottom <= modes.getBoundingClientRect().top;
-    return scroll.scrollWidth <= scroll.clientWidth + 1 && scroll.clientHeight > 80 && modeOrder
-      && title.left >= outer.left && title.right <= outer.right && outer.right <= innerWidth;
-  }), 'Sidebar overflows at ' + width);
+    return { scrollWidth: scroll.scrollWidth, clientWidth: scroll.clientWidth, clientHeight: scroll.clientHeight,
+      titleFits: title.left >= outer.left && title.right <= outer.right, panelFits: outer.right <= innerWidth,
+      hasModes: Boolean(panel.querySelector('.gv-station-modes')) };
+  });
+  assert(layout.scrollWidth <= layout.clientWidth + 1 && layout.clientHeight > 80 && !layout.hasModes &&
+    layout.titleFits && layout.panelFits, 'Station list at ' + width + ': ' + JSON.stringify(layout));
   await page.locator('#stationPanel').screenshot({ path: path.join(output, name + '.png') });
 }
 
@@ -66,18 +78,18 @@ async function verifyDesktop(browser) {
   assert.equal(await page.locator(station).count(), 3);
   assert.equal(await page.locator(selection).count(), 0);
   assert.deepEqual(await page.evaluate(() => [state.selectedPlaceId, GoiVietJourneyPreview.inspect().currentId]), [null, 'hn']);
-  assert(await page.locator('.gv-station-welcome').isVisible());
+  assert(await page.locator('#demoPlaceList .gv-station-other').isVisible());
   assert.equal(await page.locator('#stationPanel .topic-filter-bar, #sidebarSealSlots, #journalSealCount').count(), 0);
   assert.equal(await page.locator('#stationJournal').getAttribute('open'), null);
   assert.match(await page.locator('.gv-station-logo').evaluate(logo => logo.currentSrc), /goi-viet-logo-(512|1024)\.webp$/);
   assert.deepEqual(bookRequests, []);
 
-  await page.locator('#previewPanelClose').click();
+  await page.locator('#previewPanelOpen').click();
   assert.equal(await page.locator('#stationPanel').getAttribute('inert'), '');
   assert.equal(await page.locator('#previewPanelOpen').getAttribute('aria-expanded'), 'false');
   await waitForFocus(page, 'previewPanelOpen');
   await page.keyboard.press('Enter');
-  await waitForFocus(page, 'previewPanelClose');
+  await waitForFocus(page, 'provSearchInput');
 
   await page.locator('#tabScopeAll').click();
   assert.equal(await page.locator(station).count(), 36);
@@ -94,40 +106,26 @@ async function verifyDesktop(browser) {
   await page.locator('#tabScopeFeatured').click();
 
   await page.locator('#station-pick-hn').click();
-  await page.waitForFunction(() => document.querySelector('#station-journey-hn')?.dataset.journeyAction === 'explore');
+  assert(await page.locator('#arrivalSheet').isHidden());
   await page.keyboard.press('Escape');
-  assert.equal(await page.locator(selection).count(), 0);
-  assert(await page.locator('.gv-station-welcome').isVisible());
-  await page.locator('#station-pick-hn').click();
+  assert.equal(await page.evaluate(() => GoiVietJourneyPreview.inspect().selected), null);
+  await findAndSelect(page, 'ha noi', 'hn');
   await page.waitForFunction(() => document.querySelector('.gv-station-art img')?.naturalWidth > 0);
   assert.match(await page.locator('#book-open-hn').innerText(), /Bản nháp/);
-  await verifyLayout(page, 1440);
-
-  // P5-02: no demo-story drawer; the station picture opens the book through the shared entry.
-  assert.equal(await page.locator('#station-stories-hn, #placeCard-hn .gv-station-story').count(), 0);
   await page.locator('#story-hero-hn').click();
   await page.waitForFunction(() => GoiVietBooks.inspect().kind === 'book' && GoiVietBooks.inspect().placeId === 'hn');
   assert.equal(await page.locator(modal('storyModal')).count(), 0);
   await page.keyboard.press('Escape');
   await waitForFocus(page, 'story-hero-hn');
-  assert.match(await page.locator('#station-pick-hn, #placeCard-hn').first().innerText(), /Đã đọc sách|Bản nháp/);
 
   await findAndSelect(page, 'hue', 'hue');
-  await waitForFocus(page, 'station-title-hue');
-  assert.equal(await page.evaluate(() => GoiVietJourneyPreview.inspect().selected), 'hue');
-  await page.locator('#station-journey-hue').click();
-  await page.waitForFunction(() => GoiVietJourneyPreview.inspect().currentId === 'hue');
-  assert.match(await page.locator('#station-journey-hue').innerText(), /Khám phá/);
-  // "Khám phá" points to the two modes instead of opening a story.
-  await page.locator('#station-journey-hue').click();
-  await waitForFocus(page, 'deck-open-hue');
-  assert.equal(await page.locator('#placeCard-hue .gv-station-modes.is-cued').count(), 1);
+  await waitForFocus(page, 'arrivalStationTitle');
+  assert.equal(await page.evaluate(() => GoiVietJourneyPreview.inspect().currentId), 'hue');
   assert.equal(await page.locator(modal('storyModal') + ', ' + modal('bookModal') + ', ' + modal('deckModal')).count(), 0);
 
   await findAndSelect(page, 'hoang sa', 'hoang-sa');
-  assert.match(await page.locator('#placeCard-hoang-sa .gv-station-kicker').innerText(), /Hải trình/i);
-  await page.locator('#station-journey-hoang-sa').click();
-  await page.waitForFunction(() => GoiVietJourneyPreview.inspect().currentId === 'hoang-sa');
+  assert.match(await page.locator('.arrival-station-kicker').innerText(), /Biển đảo/i);
+  assert.equal(await page.evaluate(() => GoiVietJourneyPreview.inspect().currentId), 'hoang-sa');
 
   await findAndSelect(page, 'ha noi', 'hn');
   await page.locator('#deck-open-hn').click();
@@ -153,6 +151,7 @@ async function verifyDesktop(browser) {
   await page.locator('#btnCompleteCardTurn').click();
   await page.locator(modal('deckModal')).waitFor({ state: 'hidden' });
   assert.equal(await page.evaluate(() => state.completedStamps.length), 1);
+  await openDirectory(page);
   await page.locator('#stationJournalToggle').click();
   assert.equal(await page.locator('#journalMentionedCount').innerText(), '1');
   assert.match(await page.locator('#sidebarMentionedList').innerText(), /Huế/);
@@ -171,7 +170,8 @@ async function verifyDesktop(browser) {
   await page.locator(modal('postcardModal')).waitFor({ state: 'hidden' });
   await waitForFocus(page, 'stationPostcard');
   await page.locator('#sidebarMentionedList button').click();
-  await waitForFocus(page, 'station-title-hue');
+  await page.waitForFunction(() => GoiVietJourneyPreview.inspect().selected === 'hue');
+  assert(await page.locator('#stationPanel').isHidden());
   assert.equal(await page.locator('#provSearchInput').inputValue(), '');
   assert.equal(await page.locator('#stationJournal').getAttribute('open'), null);
   await findAndSelect(page, 'ha noi', 'hn');
@@ -210,6 +210,7 @@ async function verifyDesktop(browser) {
   }
   assert.equal(bookRequests.length, 4);
 
+  await openDirectory(page);
   await page.locator('#stationJournalToggle').click();
   await page.locator('#stationPostcard').click();
   await page.locator('#postcardModal .postcard-reset button').click();
@@ -227,11 +228,13 @@ async function verifyPublicAndMobile(browser) {
   const page = await openMap(browser, { width: 390, height: 844 }, '?lang=en');
   await verifyLayout(page, 390);
   assert.equal(await page.locator('#stationPanelTitle').innerText(), 'Heritage stations');
-  await page.locator('#btnMobileTogglePanel').tap();
+  await page.locator('#previewPanelOpen').tap();
   assert.equal(await page.locator('#stationPanel').getAttribute('aria-hidden'), 'true');
-  await page.locator('#btnMobileTogglePanel').tap();
+  await page.locator('#previewPanelOpen').tap();
   assert.equal(await page.locator('#stationPanel').getAttribute('aria-hidden'), 'false');
   await page.locator('#station-pick-hn').tap();
+  await page.locator('#arrivalExplore').tap();
+  await page.locator('#arrivalSheet').waitFor();
   const requestsBefore = bookRequests.length;
   await page.locator('#book-open-hn').tap();
   assert.equal(await page.evaluate(() => GoiVietBooks.inspect().kind), 'soon');
@@ -254,7 +257,7 @@ async function verifyPublicAndMobile(browser) {
   for (const [width, height] of [[1024, 768], [820, 1180], [320, 568]]) {
     const sized = await openMap(browser, { width, height }, '?sach=nhap');
     await verifyLayout(sized, width);
-    await sized.locator('#station-pick-hn').click();
+    await findAndSelect(sized, 'ha noi', 'hn');
     await sized.locator('#book-open-hn').scrollIntoViewIfNeeded();
     assert(await sized.locator('#deck-open-hn').isVisible() && await sized.locator('#book-open-hn').isVisible());
     await sized.close();
@@ -291,7 +294,7 @@ async function verifyCommunityInvitation(browser) {
   await page.locator(modal('deckModal')).waitFor();
   assert.match(await page.locator('#deckModalHeading').innerText(), /Hải Phòng/);
   await page.keyboard.press('Escape');
-  await waitForFocus(page, 'book-open-hp');
+  await waitForFocus(page, 'deck-open-hp');
   assert.equal(bookRequests.length, requestsBefore);
 
   const checked = await page.evaluate(async () => {
@@ -338,21 +341,22 @@ async function verifyCommunityInvitation(browser) {
 async function verifyMovingTrain(browser) {
   const page = await openMap(browser, { width: 1366, height: 900 }, '', 'no-preference');
   await verifyLayout(page, 1366);
-  await findAndSelect(page, 'bac ninh', 'bn');
-  const departure = page.locator('#station-journey-bn');
-  assert.match(await departure.innerText(), /Vào ga/);
+  await selectRoute(page, 'bac ninh', 'bn');
+  const departure = page.locator('#arrivalExplore');
+  assert.match(await departure.innerText(), /Khám phá/);
   await departure.click();
   await page.waitForFunction(() => GoiVietJourneyPreview.inspect().running === 'bn');
   assert(await departure.isDisabled());
   await page.waitForFunction(() => GoiVietJourneyPreview.inspect().currentId === 'bn', null, { timeout: 15000 });
-  assert(await departure.isEnabled());
-  assert.match(await departure.innerText(), /Khám phá/);
+  await page.locator('#arrivalSheet').waitFor();
+  assert(await departure.isHidden());
+  assert.match(await page.locator('#arrivalStationTitle').innerText(), /Bắc Ninh/);
 
   await page.locator('#headerSettings summary').first().click();
   await page.locator('#btnTheme').click();
   assert.equal(await page.locator('html').getAttribute('data-theme'), 'dark');
-  await page.keyboard.press('Escape');
-  await page.locator('#stationPanel').screenshot({ path: path.join(output, 'sidebar-dark.png') });
+  if (await page.locator('#headerSettings').getAttribute('open') !== null) await page.keyboard.press('Escape');
+  await page.locator('#arrivalSheet').screenshot({ path: path.join(output, 'arrival-dark.png') });
   await page.close();
 }
 
