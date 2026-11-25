@@ -4,6 +4,7 @@
    Existing world geometry, journey data and shared assets are read-only. */
 (() => {
   'use strict';
+  const groupPlay = document.documentElement.hasAttribute('data-group-play');
   const T = (key, fallback, vars) => { const I = window.GoiVietI18n; if (!I) return fallback; const value = I.t(key, vars); return value === key ? fallback : value; };
   const G = text => (window.GoiVietContent ? window.GoiVietContent.geo(text) : text);
   // Two lines for an archipelago caption: QUẦN ĐẢO / HOÀNG SA, or HOÀNG SA / (PARACEL) ISLANDS.
@@ -440,9 +441,10 @@
     if(cachedCamera)drawWaves(cachedCamera,waveView.width,waveView.height,dark,now,waveView.pad);mountCrane();
   }
   const landmarkSpecs = [
-    {id:'hn',file:'hanoi.svg',width:34,height:46,geo:[105.8523,21.02786]},
-    {id:'hue',file:'hue.svg',width:52,height:31,geo:[107.576,16.468]},
-    {id:'hcm',file:'saigon.svg',width:44,height:37,geo:[106.698019,10.772521]},
+    // D-02 (2026-11-21): fallback files hold the same artwork as landmark-assets.js, used only when that bundle fails to load.
+    {id:'hn',file:'landmark-hanoi-5.svg',width:34,height:46,geo:[105.8523,21.02786]},
+    {id:'hue',file:'landmark-hue-5.svg',width:52,height:31,geo:[107.576,16.468]},
+    {id:'hcm',file:'landmark-saigon-5.svg',width:44,height:37,geo:[106.698019,10.772521]},
     {id:'sailboat',file:'sailboat.svg',width:114,height:117,point:[700,250]}
   ];
   function loadArt() {
@@ -464,7 +466,14 @@
       const selected=getMapSelectedPlaceId()===id,province=P34_MAP[id],p=project3D(...province.center,selected?44:34,camera,width,height);
       pinBoxes.push(rect(p[0],p[1],44,44));
       if(!selected||window.GoiVietJourneyPreview?.active()){context.save();context.font=canvasFont(13,700);const name=getCleanStationName(CULTURAL_PLACE_MAP[id]);pinBoxes.push(rect(p[0],p[1]-21,measureText(context,name)+14,24));context.restore();}
-      else {const pawn=getPlayerPawn(state.currentPlayerIndex);context.save();context.font=canvasFont(12,700);const name=getCleanStationName(CULTURAL_PLACE_MAP[id])+' • '+pawn.roleLabel;pinBoxes.push(rect(p[0],p[1]-33,measureText(context,name)+40,27));context.restore();}
+      else {
+        const name = getCleanStationName(CULTURAL_PLACE_MAP[id]);
+        const label = groupPlay ? name : `${name} • ${getPlayerPawn(state.currentPlayerIndex).roleLabel}`;
+        context.save();
+        context.font = canvasFont(12, 700);
+        pinBoxes.push(rect(p[0], p[1] - 33, measureText(context, label) + 40, 27));
+        context.restore();
+      }
     }
     const hitsTrack=box=>tracks.some(points=>points.some((p,i)=>{if(!i)return false;const a=points[i-1],dx=p[0]-a[0],dy=p[1]-a[1],steps=Math.max(1,Math.ceil(Math.hypot(dx,dy)/4));for(let t=0;t<=steps;t++){const x=a[0]+dx*t/steps,y=a[1]+dy*t/steps;if(x>box.left-6&&x<box.right+6&&y>box.top-6&&y<box.bottom+6)return true;}return false;}));
     for(const spec of landmarkSpecs){
@@ -546,10 +555,11 @@
   }
   function isAnimating() {return active()&&waveMotion&&!state.reducedMotion&&!document.hidden&&!getTopOpenModalElement();}
   function mountOptions() {
-    if(mounted)return;const menu=document.querySelector('#mapViewOptions .control-options');if(!menu)return;mounted=true;
+    if(mounted)return;const target=document.getElementById('mapViewAdvanced')||document.querySelector('#mapViewOptions .control-options');
+    if(!target)return;mounted=true;
     const label=document.createElement('label');label.className='regional-wave-option';waveCheckbox=document.createElement('input');waveCheckbox.type='checkbox';waveCheckbox.id='regionalWaveMotion';
     waveCheckbox.title=T('map.waveTitle','Tự dừng khi bật giảm chuyển động hoặc mở cửa sổ nội dung');
-    const text=document.createElement('span');text.textContent=T('map.wave','Sóng chuyển động nhẹ');document.addEventListener('goiviet:langchange',()=>{text.textContent=T('map.wave','Sóng chuyển động nhẹ');waveCheckbox.title=T('map.waveTitle','Tự dừng khi bật giảm chuyển động hoặc mở cửa sổ nội dung');});label.append(waveCheckbox,text);menu.append(label);
+    const text=document.createElement('span');text.textContent=T('map.wave','Sóng chuyển động nhẹ');document.addEventListener('goiviet:langchange',()=>{text.textContent=T('map.wave','Sóng chuyển động nhẹ');waveCheckbox.title=T('map.waveTitle','Tự dừng khi bật giảm chuyển động hoặc mở cửa sổ nội dung');});label.append(waveCheckbox,text);target.append(label);
     waveCheckbox.addEventListener('change',()=>{waveMotion=waveCheckbox.checked;lastWaveKey='';requestMapRender(3);});
     const note=document.createElement('p');note.className='island-helper-note';note.dataset.regionalSource='true';
     note.innerHTML='Nền địa lý: <a href="https://www.naturalearthdata.com/" target="_blank" rel="noopener noreferrer">Natural Earth</a>. Đất và biển được minh họa; địa giới các tỉnh Việt Nam giữ dữ liệu gốc.';note.dataset.i18n='src.base.1|src.base.2';

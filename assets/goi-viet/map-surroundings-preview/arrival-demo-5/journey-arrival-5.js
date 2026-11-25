@@ -5,10 +5,12 @@
 /* Private preview: one trip clock, immutable plans, independent browsing. */
 (() => {
   'use strict';
+  const integrated = document.body.hasAttribute('data-arrival-preview');
   const N=window.GoiVietJourneyNetwork,intro=document.getElementById('introScreen'),active=()=>intro.classList.contains('intro-hidden'),clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
   let selected=null,currentId='hn',plan=null,trip=null,previous=null,lastLeg=null,changedAt=-1000,arrivedAt=-1000,revision=0,dirty=1,baseDirty=-1,baseKey='',lastNow=performance.now(),paused=false,phaseKey='',bar=null,clearButton=null,obstacles=[],progressUpdate=0;
   let baseFrames=0,reusedFrames=0,arrival=null,lastArrival=null;
   const tr=(key,vars,fallback)=>window.GoiVietI18n?window.GoiVietI18n.t(key,vars):fallback;
+  let routeOrigin, routeMeta;
   let barLayoutDirty=true,barLayoutKey='';
   const barLayoutTargets=[],barLayoutTransitions=new Map();
   let lastReduced=state.reducedMotion;
@@ -169,10 +171,12 @@
       const origin=trip?.route.originId||currentId,destination=trip?.route.id||selected||arrival?.id||currentId;
       const atStation=!trip&&destination===currentId,confirmed=atStation&&arrival?.id===currentId;
       bar.dataset.mode=trip?'moving':confirmed?'station':'preview';
-      setText(bar.querySelector('.journey-status'),tr(trip?'arrival.moving':confirmed?(N.node(currentId).kind==='island'?'arrival.atIsland':'arrival.at'):'arrival.ready',{place:name(currentId)}));
+      setText(bar.querySelector('.journey-status'),tr(trip?'arrival.moving':confirmed?(N.node(currentId).kind==='island'?'arrival.atIsland':'arrival.at'):integrated&&atStation?'journeyControls.current':'arrival.ready',{place:name(currentId)}));
       // As in journey-system-5.js, the route title drops "Quần đảo" so island routes stay on one line.
-      setText(bar.querySelector('.journey-origin'),name(origin).replace(/^Quần đảo /,''));
+      const originName = name(origin).replace(/^Quần đảo /,'');
+      setText(routeOrigin, integrated ? tr('journeyControls.from', { place: originName }) : originName);
       setText(bar.querySelector('.journey-destination'),name(destination).replace(/^Quần đảo /,''));
+      if (routeMeta) routeMeta.hidden = atStation;
       const estimated=(N.schedule(route||N.plan(currentId,destination),false).reduce((n,p)=>n+p.duration,0)/1000).toFixed(0);
       setText(bar.querySelector('.arrival-eta'),tr('arrival.eta',{seconds:estimated}));
       const hl=CULTURAL_PLACE_MAP[destination]?.highlights;
@@ -238,6 +242,15 @@
     bar.querySelector('.journey-reopen').addEventListener('click',()=>window.GoiVietArrivalDemo?.openSheet(currentId));
     bar.querySelector('.journey-choose').addEventListener('click',()=>window.GoiVietArrivalDemo?.toggleList());
     bar.querySelector('.journey-instant').addEventListener('click',()=>instant());
+    routeOrigin = bar.querySelector('.journey-origin');
+    if (integrated) {
+      const eta = bar.querySelector('.arrival-eta');
+      routeMeta = document.createElement('div');
+      routeMeta.className = 'journey-route-meta';
+      bar.querySelector('.journey-route-link').remove();
+      eta.replaceWith(routeMeta);
+      routeMeta.append(routeOrigin, eta);
+    }
     scene.append(bar);
     new ResizeObserver(()=>{syncMapControlLayout();invalidate();requestMapRender(2);}).observe(bar);
     clearButton=document.createElement('button');clearButton.id='btnClearJourney';clearButton.type='button';clearButton.className='dock-btn journey-clear';clearButton.hidden=true;clearButton.title='Bỏ chọn và ẩn tuyến (Esc)';clearButton.setAttribute('aria-label','Bỏ chọn tỉnh và ẩn tuyến');clearButton.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>';clearButton.onclick=()=>{clear();document.getElementById('mainCanvas').focus({preventScroll:true});};scene.querySelector('.bottom-dock').append(clearButton);

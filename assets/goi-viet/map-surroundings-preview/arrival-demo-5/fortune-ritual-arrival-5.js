@@ -140,7 +140,7 @@
           <span class="ritual-stage-signature" aria-hidden="true" data-i18n="ritual.signature">DỌC MIỀN DI SẢN</span>
         </section>
         <section class="ritual-content">
-          <p id="bambooTurnKicker" class="ritual-player"></p>
+          ${document.documentElement.hasAttribute('data-group-play') ? '' : '<p id="bambooTurnKicker" class="ritual-player"></p>'}
           <div id="ritualIdlePanel" class="ritual-invitation">
             <span class="ritual-overline" data-i18n="ritual.inviteKicker">ĐỂ MỘT CÂU THƠ DẪN LỐI</span>
             <h3 data-i18n="ritual.ask1|ritual.ask2">Hôm nay, mình<br> ghé miền nào?</h3>
@@ -228,7 +228,8 @@
   function open() {
     resetView();
     originalOpen();
-    document.getElementById('bambooTurnKicker').textContent = T('ritual.turnOf', { name: getCurrentPlayerName() });
+    const turnKicker = document.getElementById('bambooTurnKicker');
+    if (turnKicker) turnKicker.textContent = T('ritual.turnOf', { name: getCurrentPlayerName() });
     modal.querySelector('.ritual-body').scrollTop = 0;
   }
   function close() {

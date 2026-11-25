@@ -1,6 +1,7 @@
 /* Arrival flow shared by preview-5 and its standalone demo. */
 (() => {
   'use strict';
+  const groupPlay = document.documentElement.hasAttribute('data-group-play');
   const I = window.GoiVietI18n;
   const t = (key, vars) => I.t('arrival.' + key, vars);
   const $ = id => document.getElementById(id);
@@ -146,8 +147,9 @@
   function refreshJournal() {
     const earned = seals();
     const progress = $('cardProgressLabel');
-    progress.title = t('sealHint');
-    progress.setAttribute('aria-label', progress.textContent + '. ' + t('sealHint'));
+    const progressHint = groupPlay ? I.t('group.milestone.help') : t('sealHint');
+    progress.title = progressHint;
+    progress.setAttribute('aria-label', progress.textContent + '. ' + progressHint);
     for (const id of earned) if (!knownSeals.has(id)) { knownSeals.add(id); pendingSeals.add(id); }
     const key = I.lang() + ':' + [...visited].join(',') + ':' + [...earned].join(',');
     if (journalKey === key) return;
@@ -166,7 +168,8 @@
     const sealed = seals().has(sheetId);
     const islandEntry = integrated && ISLAND_MAP[sheetId] && window.GoiVietNaturalLandscape;
     const islandLabel = islandEntry && t(window.GoiVietFamilyVoyage?.entryLabel() ? 'postOffice' : 'islandChart');
-    const key = [sheetId, I.lang(), remaining, getCurrentPlayerName(), visited.size, sealed, islandLabel].join('|');
+    const player = groupPlay ? '' : getCurrentPlayerName();
+    const key = [sheetId, I.lang(), remaining, player, visited.size, sealed, islandLabel].join('|');
     if (sheetKey === key) { sealFeedback(); return; }
     sheetKey = key;
     const component = window.GoiVietStationPanel;
@@ -177,7 +180,7 @@
         </button>` : ''}</div>
       <div class="arrival-visual">
         <div class="arrival-art-wrap">${component.renderStationArt(place, place.highlights, place.stories[0].id, Boolean(ISLAND_MAP[sheetId]))}</div>
-        <div class="arrival-identity"><span class="arrival-station-kicker"></span><h3 id="arrivalStationTitle" tabindex="-1"></h3><small class="arrival-turn"></small></div>
+        <div class="arrival-identity"><span class="arrival-station-kicker"></span><h3 id="arrivalStationTitle" tabindex="-1"></h3>${groupPlay ? '' : '<small class="arrival-turn"></small>'}</div>
       </div>
       <p class="arrival-summary"></p>
       <div class="arrival-highlights">${component.renderHighlights(place.highlights)}</div>
@@ -208,7 +211,7 @@
     sheet.querySelector('.arrival-station-kicker').textContent = region(place);
     sheet.querySelector('.arrival-reached').textContent = t(ISLAND_MAP[sheetId] ? 'reachedIslands' : 'sheetArrival');
     if (islandEntry) sheet.querySelector('.arrival-island-entry span').textContent = islandLabel;
-    sheet.querySelector('.arrival-turn').textContent = t('sheetTurn', { player: getCurrentPlayerName() });
+    if (!groupPlay) sheet.querySelector('.arrival-turn').textContent = t('sheetTurn', { player });
     $('arrivalStationTitle').textContent = name(sheetId);
     sheet.querySelector('.arrival-summary').textContent = place.tagline || place.summary || '';
     sheet.classList.toggle('arrival-island', Boolean(ISLAND_MAP[sheetId]));
@@ -437,12 +440,13 @@
   }
 
   function turnMessage() {
+    if (groupPlay) return '';
     const s = journey()?.inspect();
     return s?.selected && !s.running && s.selected !== s.currentId ? t('turnReady', { player: getCurrentPlayerName(), place: name(s.selected) }) : '';
   }
   function updateToast() {
     const toast = $('turnHandoffToast');
-    if (!toast.classList.contains('show')) return;
+    if (!toast?.classList.contains('show')) return;
     const text = turnMessage() || uiT('js.turn.toast', { name: getCurrentPlayerName() }).replace(/<\/?strong>/g, '');
     const label = toast.lastElementChild;
     if (label && label.textContent !== text) label.textContent = text;
@@ -513,7 +517,7 @@
     const modal = $(id);
     if (modal) new MutationObserver(() => { if (!modal.classList.contains('open')) refresh(); }).observe(modal, { attributes: true, attributeFilter: ['class'] });
   }
-  new MutationObserver(refresh).observe($('currentTurnLabel'), { childList: true, characterData: true, subtree: true });
+  new MutationObserver(refresh).observe($(groupPlay ? 'cardProgressLabel' : 'currentTurnLabel'), { childList: true, characterData: true, subtree: true });
   document.addEventListener('goiviet:langchange', localize);
   window.addEventListener('resize', () => { if (!sheet.hidden) { refresh(); fitSheet(); focusCurrent(); } }, { passive: true });
 

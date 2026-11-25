@@ -5,7 +5,7 @@
   const workerURL = new URL('preview-5-offline-worker.js', document.baseURI).href;
   const supported = 'serviceWorker' in navigator && window.isSecureContext && /^https?:$/.test(location.protocol);
   const status = { supported, ready: false, phase: supported ? 'idle' : 'unavailable', version: null,
-    resources: 0, expectedResources: 0, bytes: 164000000, error: null };
+    resources: 0, expectedResources: 0, bytes: 180000000, error: null };
   const button = document.getElementById('btnPrepareOffline');
   let inFlight = null, pending = null, initialized;
   const t = (key, vars) => window.GoiVietI18n.t('offline.' + key, vars);

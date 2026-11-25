@@ -2,7 +2,7 @@
 // Start tools/perf/server.cjs, then: node tools/check-station-photos-5.cjs
 const assert = require('node:assert/strict');
 const crypto = require('node:crypto');
-const { launch, fs, path, ROOT, BASE } = require('./perf/lib.cjs');
+const { launch, chromium, CHROME, fs, path, ROOT, BASE } = require('./perf/lib.cjs');
 const OUT = path.join(ROOT, 'verification/station-photos-5/e2e');
 const catalog = JSON.parse(fs.readFileSync(path.join(ROOT, 'assets/goi-viet/station-photos-5/catalog.json'), 'utf8')).photos;
 const photos = catalog.filter(photo => photo.src);
@@ -227,8 +227,13 @@ async function responsive(browser) {
   await context.close();
 }
 
-async function offline(browser) {
-  const context = await browser.newContext({ reducedMotion: 'reduce', deviceScaleFactor: 2 });
+async function offline() {
+  // 2026-11-21: a fresh on-disk profile, like a real Chrome profile or the presentation shortcut (--user-data-dir).
+  // An incognito context keeps Cache Storage in memory and dropped entries of the 180 MB pack at random (ERR_FAILED).
+  const profile = path.join(OUT, 'offline-profile');
+  fs.rmSync(profile, { recursive: true, force: true });
+  const context = await chromium.launchPersistentContext(profile, { executablePath: CHROME, headless: true, reducedMotion: 'reduce', deviceScaleFactor: 2 });
+  try {
   await context.route(/^https?:/, route => new URL(route.request().url()).origin === origin ? route.continue() : route.abort());
   let page = await openMap(context, { width: 1440, height: 1120 });
   assert.equal((await page.evaluate(() => GoiVietOffline.ready)).ready, false, 'Fresh visits must not install a worker');
@@ -252,7 +257,10 @@ async function offline(browser) {
   assert.deepEqual(failures, [], 'Missing resources during offline operation');
   await page.locator('#arrivalSheet').screenshot({ path: path.join(OUT, 'offline-arrival.png') });
   report.offline = { ...ready, coldReload: true, provinces: 36, languages: 2, failures };
-  await context.close();
+  } finally {
+    await context.close();
+    fs.rmSync(profile, { recursive: true, force: true });
+  }
 }
 
 (async () => {
@@ -263,7 +271,7 @@ async function offline(browser) {
   const browser = await launch();
   try {
     await responsive(browser);
-    await offline(browser);
+    await offline();
     assert.deepEqual(report.errors, []);
     assert.deepEqual(report.externalRequests, []);
     console.log('PASS: 35 photos + Hoàng Sa symbol, 6 viewports × 2 languages, 36 book entries, opt-in preparation, and 72 cold-offline frames.');

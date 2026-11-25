@@ -54,7 +54,9 @@
     visited: ['Ga đã ghé', 'Visited stations'],
     visitedEmpty: ['Chơi thẻ hoặc đọc sách để lưu ga đầu tiên.', 'Play cards or read a book to record your first stop.'],
     memories: ['Kỷ niệm đã lưu', 'Saved memories'],
-    memoriesEmpty: ['Cả nhà có thể ghi kỷ niệm khi chơi thẻ.', 'Save a family memory while playing cards.'],
+    memoriesEmpty: document.documentElement.hasAttribute('data-group-play')
+      ? ['Bạn có thể ghi kỷ niệm khi chơi thẻ.', 'You can save a memory while playing cards.']
+      : ['Cả nhà có thể ghi kỷ niệm khi chơi thẻ.', 'Save a family memory while playing cards.'],
     visit: ['Tới ga', 'Go to station'],
     postcard: ['Mở bưu thiếp', 'Open postcard'],
     noResults: ['Chưa tìm thấy ga phù hợp', 'No matching stations'],

@@ -113,6 +113,10 @@
       'settings.darkHint': 'Sắc trầm dịu mắt khi khám phá.',
       'settings.motionHint': 'Tiết chế hiệu ứng và chuyển cảnh.',
       'settings.motionDevice': 'Đang theo cài đặt của thiết bị.'
+      , 'ui.map.chuyen-luot-cho-thanh-vien': 'Chuyển lượt cho thành viên tiếp theo',
+      'ui.map.doi-luot': 'Đổi lượt',
+      'ui.deck.moi': 'Mời',
+      'ui.deck.chon-mot-la-bai-tren': 'chọn một lá bài trên bàn. Dù trả lời đúng hay chưa đúng, cả nhà đều được mở phần gắn kết để trò chuyện!'
       , 'offline.prepare': 'Chuẩn bị chạy không mạng',
       'offline.again': 'Chuẩn bị lại bộ không mạng',
       'offline.size': 'Khoảng {mb} MB · chỉ tải khi bạn bấm nút.',
@@ -565,6 +569,8 @@
 
       // Fixed labels attached to data: card topics, activity kinds and the family pawns (uiLabel).
       'topic.Ẩm thực': 'Food', 'topic.Nghệ thuật': 'Arts', 'topic.Lễ hội': 'Festivals', 'topic.Nghề truyền thống': 'Traditional crafts', 'topic.Văn hóa': 'Culture', 'topic.Danh thắng': 'Landmarks',
+      // Card labels since 2026-11-19 (Canva covers): every deck has Địa danh, Văn hóa, Nét đẹp and Món ăn.
+      'topic.Địa danh': 'Landmarks', 'topic.Nét đẹp': 'Local charm', 'topic.Món ăn': 'Food',
       'activityKind.Kể chuyện': 'Storytelling', 'activityKind.Đố vui': 'Quiz', 'activityKind.Chăm sóc tự nguyện': 'Caring (optional)',
       'activityKind.Quan sát': 'Observation', 'activityKind.Đoán': 'Guessing', 'activityKind.Phối hợp': 'Teamwork',
       'activityKind.Sáng tạo đơn giản': 'Simple creativity', 'activityKind.Sáng tạo': 'Creativity',
@@ -645,7 +651,21 @@
       'cards.status.shuffling': 'Đang xáo bài — câu chuyện nào sẽ được mở?',
       'cards.status.picked': 'Đã chọn lá {topic}!',
       'cards.status.drawing': 'Đang rút lá bài dành cho cả nhà…',
-      'cards.seeActivity': 'Xem hoạt động gắn kết →'
+      'cards.seeActivity': 'Xem hoạt động gắn kết →',
+      // Canva cover of the fan cards (card-covers-5.js)
+      'cover.kicker': 'Nói rằng mình là người', 'cover.kickerQuanHo': '“Dân ca Quan họ”',
+      'cover.quote': '“Văn hóa là bản sắc, là hồn cốt ngàn năm nuôi dưỡng tâm hồn người Việt.”',
+      // Canva cards: open question for locals or visitors (card-canva-5.js)
+      'canva.rolePrompt': 'Người rút lá là người địa phương hay không? Chọn câu hỏi phù hợp.',
+      'canva.role.local': 'Người địa phương', 'canva.role.visitor': 'Không phải người địa phương',
+      'canva.hint': 'Gợi ý đáp án', 'canva.secretShow': '🙈 Chỉ người diễn tả bấm xem', 'canva.secretHide': 'Ẩn danh sách',
+      'canva.tab.local': 'Người địa phương', 'canva.tab.visitor': 'Người nơi khác',
+      // "Bàn chơi" look of a drawn card (card-table-5.js)
+      'table.kickerFor': 'Câu hỏi dành cho', 'table.kickerAbout': 'Câu hỏi về',
+      'table.forLocal': 'người địa phương', 'table.forVisitor': 'người nơi khác',
+      'table.coverShow': 'Xem bìa lá bài', 'table.coverBack': 'Đặt bìa xuống', 'table.lookCover': '🔍 Xem mặt bìa',
+      'canva.open': 'Mở thử thách →', 'canva.openNote': 'Trả lời xong, mở thử thách ở mặt gắn kết.',
+      'canva.openNoteOwn': 'Trả lời xong, mở hoạt động gắn kết.', 'canva.challenge': 'Thử thách · {role}'
     },
     en: {
       'cards.drawLabel': 'Draw the {topic} card • {place}',
@@ -658,7 +678,18 @@
       'cards.status.shuffling': 'Shuffling — which story will open?',
       'cards.status.picked': '{topic} card chosen!',
       'cards.status.drawing': 'Drawing a card for the whole family…',
-      'cards.seeActivity': 'See the connection activity →'
+      'cards.seeActivity': 'See the connection activity →',
+      'cover.kicker': 'So you say you’re from', 'cover.kickerQuanHo': '“Quan họ folk songs”',
+      'cover.quote': '“Culture is who we are: the thousand-year soul that nurtures the Vietnamese spirit.”',
+      'canva.rolePrompt': 'Is the person who drew the card from here? Pick the matching question.',
+      'canva.role.local': 'From here', 'canva.role.visitor': 'Not from here',
+      'canva.hint': 'Answer hint', 'canva.secretShow': '🙈 Only the actor looks', 'canva.secretHide': 'Hide the list',
+      'canva.tab.local': 'From here', 'canva.tab.visitor': 'Not from here',
+      'table.kickerFor': 'A question for', 'table.kickerAbout': 'A question about',
+      'table.forLocal': 'locals', 'table.forVisitor': 'visitors',
+      'table.coverShow': 'Show the card’s cover', 'table.coverBack': 'Put the cover back', 'table.lookCover': '🔍 Look at the cover',
+      'canva.open': 'Open the challenge →', 'canva.openNote': 'Once answered, open the challenge on the connection face.',
+      'canva.openNoteOwn': 'Once answered, open the connection activity.', 'canva.challenge': 'Challenge · {role}'
     }
   });
 
@@ -804,6 +835,91 @@
       'src.chart.3': 'are checked against the coordinates and the CSIS/AMTI records. Other names follow the source data. The 2026 OSM coastline may include reclaimed land; the ACA reef geomorphology layer uses 2018–2020 imagery, so the two layers are not from the same time.'
     }
   });
+
+  if (document.documentElement.hasAttribute('data-group-play')) {
+    const labels = {
+      'page.title': ['Gói Việt — Cùng khám phá văn hóa Việt Nam', 'Gói Việt — Explore Vietnamese culture together'],
+      'ui.home.moi-tinh-thanh-la-mot': ['Mỗi tỉnh thành là một ga dừng nghỉ để cùng nghe chuyện xưa và sẻ chia ký ức.”', 'Every province is a station where we can listen to old stories and share memories.”'],
+      'ui.home.mo-chuyen-nha-minh': ['Mở một câu chuyện quê hương.', 'Open a story of home.'],
+      'ui.home.moi-mien-que-mot-chuyen': ['Mỗi miền quê, một câu chuyện', 'Every place has a story'],
+      'ui.home.ke-chuyen-nha-minh': ['Kể chuyện mình nhớ', 'Share a story you remember'],
+      'ui.map.hanh-trinh-gia-dinh-doc': ['Hành trình dọc ba miền • 36 ga văn hóa và biển đảo', 'Journey across three regions • 36 culture and island stations'],
+      'ui.map.gia-dinh-ba-mien-bien': ['Ba miền • Biển đảo', 'Three regions • Islands'],
+      'ui.map.dong-du-3-an-ga': ['Đủ 3 ấn để mở một mốc hành trình', 'Collect 3 stamps to reach a journey milestone'],
+      'group.milestone.progress': ['Tiến độ mốc {done} / 3', 'Milestone {done} / 3'],
+      'group.milestone.help': ['Chơi 3 lá bài để đạt một mốc hành trình', 'Play 3 cards to reach a journey milestone'],
+      'group.deck.invite': ['Chọn một lá để cả nhóm cùng đoán và trò chuyện.', 'Pick a card to guess the answer and talk together.'],
+      'ui.deck.ca-nha-da-rut-het': ['Đã rút hết các lá bài tại ga này!', 'All cards at this station have been drawn!'],
+      'ui.deck.hoi-nguoi-than': ['Xem gợi ý', 'Get a hint'],
+      'ui.deck.chon-dap-an-o-mat': ['Chọn đáp án ở mặt trước hoặc chạm vào dấu Hoa Sen để mở hoạt động gắn kết.', 'Choose an answer on the front or tap the lotus seal to open the group activity.'],
+      'ui.deck.dau-ky-niem-gia-dinh': ['DẤU KỶ NIỆM', 'MEMORY STAMP'],
+      'ui.deck.mat-sau-hoat-dong-gan': ['Mặt sau • Hoạt động gắn kết', 'Back • Group activity'],
+      'ui.deck.xong-den-luot-tiep-theo': ['Xong lá này', 'Finish this card'],
+      'journeyControls.current': ['Bạn đang ở đây', 'You are here'],
+      'journeyControls.from': ['Từ {place}', 'From {place}'],
+      'journeyControls.focusStation': ['Về ga đang chọn', 'Return to selected station'],
+      'journeyControls.tilt': ['Góc nhìn nghiêng', 'Tilted view'],
+      'journeyControls.advanced': ['Điều khiển thêm', 'More controls'],
+      'journeyControls.offline': ['Dùng khi không có mạng', 'Offline access'],
+      'table.timerStart': ['Hẹn giờ 60 giây', '60s timer'],
+      'table.timerStop': ['Dừng hẹn giờ', 'Stop timer'],
+      'table.timerRestart': ['Hẹn lại 60 giây', 'Restart 60s timer'],
+      'table.recordMemory': ['Ghi kỷ niệm', 'Record a memory'],
+      'table.recordAnotherMemory': ['Ghi thêm', 'Record another'],
+      'table.backToActivity': ['Về hoạt động', 'Back to activity'],
+      'table.memoryPlace': ['Địa danh', 'Place'],
+      'table.memoryNote': ['Kỷ niệm (tùy chọn)', 'Memory (optional)'],
+      'table.memorySession': ['Lưu trong phiên này. Tải bưu thiếp để giữ lại.', 'Kept for this session. Download the postcard to keep it.'],
+      'ui.deck.khi-mot-nguoi-muon-ke': ['Bật đồng hồ khi có người muốn kể chuyện và cả nhóm cùng lắng nghe.', 'Start the timer when someone wants to tell a story and the group wants to listen.'],
+      'ui.deck.du-tra-loi-dung-hay': ['Dù trả lời thế nào, bạn vẫn có thể mở hoạt động gắn kết.', 'You can open the group activity whatever your answer.'],
+      'ui.memory.neu-cuoc-tro-chuyen-goi': ['Nếu cuộc trò chuyện gợi nhớ một nơi, bạn có thể ghi lại. Nếu kết thúc lá khi còn nháp, hãy mở mục Bản nháp kỷ niệm trong bộ thẻ của ga để viết tiếp.', 'If the conversation reminds you of a place, write it down. You can finish an unfinished memory from Memory drafts in the station deck.'],
+      'group.memory.author': ['Tên người kể (tùy chọn)', 'Storyteller’s name (optional)'],
+      'group.memory.authorPlaceholder': ['Tên hoặc biệt danh', 'Name or nickname'],
+      'group.memory.drafts': ['Bản nháp kỷ niệm ({n})', 'Memory drafts ({n})'],
+      'group.memory.editTitle': ['Viết tiếp kỷ niệm', 'Continue writing this memory'],
+      'group.memory.backToDeck': ['Về bộ thẻ', 'Back to the deck'],
+      'group.memory.kept': ['Đã giữ bản nháp kỷ niệm trong bộ thẻ của ga.', 'Your memory draft is saved in the station deck.'],
+      'ui.bamboo.de-rut-mot-que-tho': ['để rút một quẻ thơ lục bát dẫn tới một ga mới!', 'to draw a lục bát verse that leads to a new station!'],
+      'ritual.resultKicker': ['ĐIỂM DỪNG GỢI Ý', 'SUGGESTED STOP'],
+      'ui.milestone.cot-moc-hanh-trinh-gia': ['CỘT MỐC HÀNH TRÌNH', 'JOURNEY MILESTONE'],
+      'ui.milestone.ca-nha-da-cung-trai': ['Đã cùng khám phá', 'You’ve explored'],
+      'ui.milestone.ba-la-bai-vua-qua': ['Bạn muốn khám phá thêm các ga hay xem', 'Would you like to explore more stations or view the'],
+      'ui.milestone.xem-buu-thiep-ket-thuc': ['Xem bưu thiếp', 'View postcard'],
+      'ui.postcard.goi-viet-ky-niem-gia': ['Gói Việt · Kỷ niệm hành trình', 'Gói Việt · Journey memories'],
+      'ui.postcard.dau-an-doan-vien': ['DẤU ẤN HÀNH TRÌNH', 'JOURNEY STAMPS'],
+      'ui.postcard.cac-ga-gia-dinh-da': ['Các ga đã khám phá', 'Stations explored'],
+      'ui.postcard.buu-thiep-cua-ca-nha': ['Xem trước bưu thiếp', 'Postcard preview'],
+      'ui.postcard.ban-xem-truoc-hinh-anh': ['Bản xem trước ảnh bưu thiếp hành trình', 'Preview image of the journey postcard'],
+      'ui.postcard.sach-van-hoa-da-doc': ['Sách văn hóa đã đọc và thẻ đã hoàn thành.', 'Culture books read and cards finished.'],
+      'ui.postcard.chuyen-nha-minh': ['Kỷ niệm đã ghi', 'Saved memories'],
+      'group.postcard.memorySelection': ['Đã chọn {selected}/{limit} kỷ niệm', '{selected}/{limit} memories selected'],
+      'group.postcard.memorySelectionFull': ['Đã chọn {selected}/{limit} kỷ niệm. Bỏ chọn một mục để thêm mục khác.', '{selected}/{limit} memories selected. Deselect a memory to add another.'],
+      'js.drum.left': ['✦ Đang lắng nghe: còn {s} giây…', '✦ Listening: {s} seconds left…'],
+      'js.memory.defaultNote': ['Được nhắc đến khi cùng chơi thẻ.', 'Mentioned while playing cards.'],
+      'js.deck.selectHint': ['Cùng chọn đáp án, xem gợi ý hoặc đọc giải thích ngay.', 'Choose an answer together, get a hint, or read the explanation.'],
+      'js.deck.wrong': ['Cùng tìm hiểu nhé! Bạn vẫn có thể mở hoạt động gắn kết.', 'Let’s find out! You can still open the group activity.'],
+      'js.milestone.sr': ['Đã cùng hoàn thành {n} lá bài!', 'You’ve finished {n} cards together!'],
+      'js.postcard.readNoTurn': ['Đã đọc sách văn hóa. Chưa có thẻ hoàn thành.', 'A culture book has been read. No cards finished yet.'],
+      'js.postcard.stampLine': ['Dấu kỷ niệm #{n} · {place} ({topic})', 'Memory stamp #{n} · {place} ({topic})'],
+      'js.postcard.filename': ['goi-viet-buu-thiep-hanh-trinh.png', 'goi-viet-journey-postcard.png'],
+      'js.hint.title': ['★ Gợi ý cho cả nhóm', '★ Hint for the group'],
+      'js.hint.removed': ['Đã <strong>lược bớt phương án {letter}</strong>.', '<strong>Option {letter} has been ruled out.</strong>'],
+      'js.hint.tipLabel': ['Thử cùng đoán.', 'Guess together.'],
+      'js.hint.tip': ['Mỗi người có thể nói vì sao mình nghiêng về một đáp án.', 'Anyone can share why they lean toward one answer.'],
+      'cards.status.drawing': ['Đang rút một lá bài…', 'Drawing a card…'],
+      'book.soon.text': ['Câu chuyện về {place} đang chờ được kể. Trong lúc chờ, bạn có thể chơi bộ thẻ của ga này.', 'The story of {place} is waiting to be told. In the meantime, try this station’s cards.'],
+      'book.soon.playHint': ['Trong lúc chờ sách, mời bạn ghé chơi thẻ.', 'Try the station’s cards while the book is in progress.'],
+      'png.kicker': ['GÓI VIỆT · KỶ NIỆM HÀNH TRÌNH', 'GÓI VIỆT · JOURNEY MEMORIES'],
+      'png.family': ['Kỷ niệm đã ghi', 'Saved memories'],
+      'png.note': ['Hành trình văn hóa minh họa · Kỷ niệm được chọn từ lưu bút', 'Illustrated cultural journey · Memories selected from the guestbook']
+    };
+    const dict = { vi: {}, en: {} };
+    for (const [key, [vi, en]] of Object.entries(labels)) {
+      dict.vi[key] = vi;
+      dict.en[key] = en;
+    }
+    I.add(dict);
+  }
 
   window.GoiVietI18nDom = Object.freeze({ apply: applyDom, sync: syncDocument });
   // The markup above this script is already parsed: localize it now so ?lang=en never shows Vietnamese first.

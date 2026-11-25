@@ -1,0 +1,39 @@
+/* P5-06 (2026-11-21): question face of the 15 Canva cards (card-canva-5.js), inside the red front face of
+   conversation-cards-5.css: a choice between the locals' and the visitors' question, an answer hint and, for Huế, a
+   list only the actor looks at. The cover lies under the card (card-table-5.css). */
+#deckModal #cardFrontState.is-canva-card .question-text { margin: 14px 0 12px; white-space: pre-line; }
+
+#deckModal .canva-card-top { display: grid; gap: 8px; }
+#deckModal .canva-prompt { margin: 0; font-size: 13px; line-height: 1.45; color: #f8d5c8; }
+#deckModal .canva-roles { display: flex; flex-wrap: wrap; gap: 6px; padding: 4px; border: 1px solid #ffdf8e66; border-radius: 14px; background: #00000026; width: fit-content; max-width: 100%; }
+#deckModal .canva-role {
+  flex: 1 1 auto;
+  min-height: 38px;
+  padding: 7px 14px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: #fff3e6;
+  font: 600 13px / 1.2 'Be Vietnam Pro', system-ui, sans-serif;
+  cursor: pointer;
+  transition: background .18s ease, color .18s ease;
+}
+#deckModal .canva-role:hover { background: #ffffff1f; }
+#deckModal .canva-role[aria-checked="true"] { background: #ffdf8e; color: #6b1218; box-shadow: 0 2px 8px #3a050a59; }
+#deckModal .canva-role:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+
+#deckModal .canva-card-bottom { display: grid; gap: 12px; }
+#deckModal .canva-card-extras { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-start; }
+#deckModal .canva-card-extras .canva-hint { flex: 1 1 200px; }
+#deckModal .canva-secret { display: grid; gap: 8px; justify-items: start; }
+#deckModal .canva-secret-list { margin: 0; padding: 10px 14px 10px 34px; border-radius: 10px; background: #fff9f3; color: #3a1d1d; font-size: 15px; line-height: 1.6; }
+#deckModal .canva-hint { border: 1px solid #ffdf8e66; border-radius: 10px; background: #00000026; }
+#deckModal .canva-hint summary { padding: 9px 12px; cursor: pointer; font-size: 13px; font-weight: 600; color: #ffdf8e; }
+#deckModal .canva-hint p { margin: 0; padding: 0 12px 11px; font-size: 14px; line-height: 1.55; color: #fff3e6; }
+#deckModal .canva-card-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; }
+#deckModal .canva-card-note { font-size: 12px; color: #f8d5c8; }
+
+@media (max-width: 560px) {
+  #deckModal .canva-roles { width: 100%; }
+  #deckModal .canva-card-actions .btn-lg { width: 100%; }
+}

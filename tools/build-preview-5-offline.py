@@ -22,6 +22,7 @@ def main():
         ('assets/goi-viet/map-surroundings-preview/natural', {'.js', '.webp', '.svg'}),
         ('assets/goi-viet/map-surroundings-preview/landmarks', {'.svg'}),
         ('assets/goi-viet/books-5/postcards', {'.webp'}),
+        ('assets/goi-viet/card-covers-5', {'.webp'}),  # P5-06: Canva covers, file names built in card-covers-5.js
     ]:
         pending.extend(f for f in (ROOT / directory).rglob('*') if f.is_file() and f.suffix in extensions)
     catalog = ROOT / 'assets/goi-viet/station-photos-5/catalog.json'
@@ -39,6 +40,17 @@ def main():
                 if candidate.is_file() and candidate.resolve().is_relative_to(ROOT):
                     pending.append(candidate)
                     break
+    # Names built at runtime that the scan cannot see (added unscanned: the v9 bundles embed their own images).
+    for name in [
+        'assets/goi-viet/homepage-reference-v9/assets-2k.js',  # B-01: homepage-layered-scene-3.js, 2K/4K tier
+        'assets/goi-viet/homepage-reference-v9/assets-4k.js',
+        'assets/goi-viet/homepage-transport-3/train-2k.webp',  # B-01: transport.js, 'train-'+quality
+        'assets/goi-viet/homepage-transport-3/train-4k.webp',
+        'assets/goi-viet/map-art/landmark-hanoi-5.svg',  # D-02: preview-5.js landmark fallbacks
+        'assets/goi-viet/map-art/landmark-hue-5.svg',
+        'assets/goi-viet/map-art/landmark-saigon-5.svg',
+    ]:
+        seen.add((ROOT / name).resolve(strict=True))
     paths = sorted(file.relative_to(ROOT).as_posix() for file in seen)
     digest = hashlib.sha256(WORKER.read_bytes())
     hashes = {}

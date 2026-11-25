@@ -144,7 +144,8 @@ async function main() {
       const baseline=JSON.parse(await fs.readFile(path.join(ROOT,'verification/family-voyage-5/baseline.json'),'utf8'));
       for(const [f,digest]of Object.entries(baseline.protectedHashes))assert.equal(hash(await fs.readFile(path.join(ROOT,f))),digest,f+' changed');
       const html=await fs.readFile(path.join(ROOT,'map-surroundings-preview-5.html'),'utf8');
-      assert.equal(hash(html.split('\n').find(l=>l.startsWith('const ALL_DECKS_MAP = '))),baseline.dataHash);
+      const deckDataLine = html.split(/\r?\n/).find(line => line.startsWith('const ALL_DECKS_MAP = '));
+      assert([hash(deckDataLine), hash(deckDataLine + '\r')].includes(baseline.dataHash), 'Source deck data changed');
       for(const m of html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/g))if(m[1].trim())new vm.Script(m[1]);
       for(const f of ['family-voyage-5.js','family-voyage-data-5.js','sea-postoffice-data-5.js'])new vm.Script(await fs.readFile(path.join(ROOT,'assets/goi-viet/map-surroundings-preview',f),'utf8'));
       for(const width of [390,720,820]){await page.setViewportSize({width,height:844});for(const id of ['hoang-sa','truong-sa','phu-quoc']){await open(page,id);assert.deepEqual(await mobileGeometry(page),baseline.mobile[`${width}-${id}`]);assert.equal((await inspect()).enabled,false);}}

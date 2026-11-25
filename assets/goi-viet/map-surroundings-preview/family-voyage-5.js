@@ -46,13 +46,15 @@
     }
   });
   const announce = message => { if(live) live.textContent = message; };
-  const person = index => typeof getPlayerDisplayName === 'function' ? getPlayerDisplayName(index) : say('turn',{name:String(index+1)});
+  const participantSlots = 3;
+  const person = index => uiT('js.turn.player', { n: index + 1 });
   const authorOf = stop => stop.author ? person(stop.playerIdx) : '';
-  const readerIndex = () => { const s=getSession(),n=Math.max(2,state.playerCount||2);return ((s?.turnIndex??state.currentPlayerIndex??0)+(s?.roleOffset||0))%n; };
-  const roles = () => { const s=getSession(),n=Math.max(2,state.playerCount||2),i=(s?.turnIndex??state.currentPlayerIndex??0)%n;return s?.roleOffset?[person((i+1)%n),person(i)]:[person(i),person((i+1)%n)]; };
+  const readerIndex = () => (getSession().turnIndex + getSession().roleOffset) % participantSlots;
+  const helperIndex = () => (getSession().turnIndex + 1 - getSession().roleOffset) % participantSlots;
+  const roles = () => [person(readerIndex()), person(helperIndex())];
   const reduced = () => state.reducedMotion || matchMedia('(prefers-reduced-motion: reduce)').matches;
   function fresh(id) {
-    return { id, title:'', date:new Date().toISOString(), index:0, phase:'map', turnIndex:state.currentPlayerIndex||0,roleOffset:0, view:null, albumEdit:false, albumOptionsOpen:false,
+    return { id, title:'', date:new Date().toISOString(), index:0, phase:'map', turnIndex:0, roleOffset:0, view:null, albumEdit:false, albumOptionsOpen:false,
       stops:D.routes[id].stops.map((_,i) => ({routeId:id,letterIndex:i,found:false,status:'pending',opened:false,wordIndex:-1,noteOpen:false,drawn:[],cardId:null,order:[],selected:null,revealed:false,unlocked:false,activity:0,hint:0,clueOpen:false,note:'',memoryPlace:'',bag:[],starter:-1,author:'',playerIdx:0,helperIdx:null,memoryId:null,memorySig:''})) };
   }
   function currentEntries() { return window.GoiVietIslandChart?.inspect().entries || []; }
@@ -395,7 +397,7 @@
   function openLetter() {
     const s=getSession(),stop=getStop();if(!stop||stop.status!=='pending'||drawLock)return;
     stop.opened=true;stop.found=true;
-    if(!stop.author){stop.playerIdx=readerIndex();stop.helperIdx=((s.turnIndex||0)+(s.roleOffset?0:1))%Math.max(2,state.playerCount);stop.author=person(stop.playerIdx);}
+    if(!stop.author){stop.playerIdx=readerIndex();stop.helperIdx=helperIndex();stop.author=person(stop.playerIdx);}
     s.phase='letter';render();FolkAudio.playBambooClack();focus('#seaInvitation');
   }
   function sourceMarkup(step) {
@@ -435,7 +437,7 @@
     const commit=()=>{
       if(s!==getSession() || !enabled || !dialog.classList.contains('open'))return;
       drawTimers=[];drawLock=false;stop.cardId=picked.id;stop.drawn.push(picked.id);stop.order=shuffle([0,1,2]);
-      stop.playerIdx=readerIndex();stop.helperIdx=((s.turnIndex||0)+(s.roleOffset?0:1))%Math.max(2,state.playerCount);stop.author=person(stop.playerIdx);s.phase='card';
+      stop.playerIdx=readerIndex();stop.helperIdx=helperIndex();stop.author=person(stop.playerIdx);s.phase='card';
       render();focus('#voyageQuestion');
     };
     if(reduced()){commit();return;}
@@ -668,7 +670,7 @@
       s.roleOffset = s.roleOffset ? 0 : 1;
       if (stop.opened || stop.cardId) {
         stop.playerIdx = readerIndex();
-        stop.helperIdx = ((s.turnIndex || 0) + (s.roleOffset ? 0 : 1)) % Math.max(2, state.playerCount);
+        stop.helperIdx = helperIndex();
         stop.author = person(stop.playerIdx);
       }
       renderScene();renderCards();
@@ -735,7 +737,9 @@
       const letterMode=s.phase==='letter',activity=L(letterMode?getLetter().prompts[stop.activity]:step.activities[stop.activity]);
       state.totalCardsCompleted+=1;state.completedStamps.push({placeId:currentId,placeName:getRoute().name,topic:letterMode?say('letterType'):L(activeCard().topic),activity,voyageId:currentId,voyageStop:s.index,voyageFormat:letterMode?'postoffice':'card',cardId:letterMode?null:stop.cardId,activityIdx:stop.activity,player:authorOf(stop)||roles()[0],playerIdx:stop.playerIdx,status:status==='done'?'Đã thực hiện hoạt động':'Để lần sau',statusKey:status==='done'?'js.stamp.done':'sea.stampSkipped'});
     }
-    s.turnIndex=(((stop.cardId||stop.opened)?stop.playerIdx:readerIndex())+1)%Math.max(2,state.playerCount);state.currentPlayerIndex=s.turnIndex;updateSessionHeaderUI();renderSidebarTrackers();
+    s.turnIndex = (((stop.cardId || stop.opened) ? stop.playerIdx : readerIndex()) + 1) % participantSlots;
+    updateSessionHeaderUI();
+    renderSidebarTrackers();
     s.lastSent=s.index;s.index+=1;s.phase='sent';s.roleOffset=0;FolkAudio.playPentatonicChime();
     render();
     focus('[data-voyage-action="next-letter"]');

@@ -1,0 +1,275 @@
+/* P5-06 (2026-11-21): "Bàn chơi" look of a drawn card (card-table-5.js). Two playing cards side by side on a table,
+   the lotus seal over the connection card (card-testing.html: two faces, sealed connection). Loaded after
+   conversation-cards-5.css; selectors carry #card3DFlipper to win over its face rules. */
+
+/* The table */
+#deckModal { padding: 12px; }
+#deckModal .modal-sheet { width: min(1220px, 100%); max-width: 1220px; max-height: calc(100dvh - 24px); }
+#deckModal .deck-header { padding: clamp(9px, 1.7dvh, 16px) clamp(12px, 2vw, 24px); }
+#deckModal #deckScrollBody { padding: clamp(8px, 1.6dvh, 16px); }
+#deckModal #drawnCardViewport { position: relative; overflow: hidden; padding: 42px clamp(16px, 2.6vw, 32px) 16px; border-radius: 16px; background: radial-gradient(ellipse at 50% 30%, #fff8e6 0%, #f3e4c0 66%, #e6cf9c 100%); box-shadow: inset 0 0 0 1px #e2cc9a; }
+#deckModal #card3DFlipper { grid-template-columns: repeat(2, minmax(0, 500px)); justify-content: center; gap: clamp(18px, 3vw, 42px); align-items: stretch; zoom: var(--card-table-scale, 1); }
+#deckModal .card-table-front > #cardFrontState { height: 100%; }
+#deckModal .card-table-front { position: relative; min-width: 0; }
+/* the choice tabs need room above the card only on Canva cards */
+#deckModal #drawnCardViewport:has(#cardFrontState:not(.is-canva-card)) { padding-top: 16px; }
+#deckModal .card-face-nav { display: none; }
+
+/* The question card */
+#deckModal #card3DFlipper #cardFrontState {
+  display: flex !important;
+  flex-direction: column;
+  z-index: 2;
+  min-height: clamp(370px, 60dvh, 500px);
+  padding: clamp(12px, 2dvh, 22px) clamp(14px, 2vw, 24px);
+  border: 2px solid #ffdf8e;
+  border-radius: 18px;
+  background: radial-gradient(circle at 50% 26%, #a3262f 0%, #7c1820 75%);
+  box-shadow: 0 22px 40px #4a2a0a40, 0 3px 8px #4a2a0a30;
+  transform: rotate(-1.2deg);
+}
+#deckModal #card3DFlipper #cardFrontState::before { content: ''; position: absolute; inset: 8px; border: 1px dashed #ffdf8e80; border-radius: 12px; pointer-events: none; }
+#deckModal #cardFrontState .card-kicker-row { justify-content: center; margin-bottom: 3px; text-align: center; }
+#deckModal #cardFrontState .card-side-badge.front { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+#deckModal #cardFrontTopicTag { padding: 4px 12px; border: 1px solid #ffdf8eb3; border-radius: 99px; background: #00000033; color: #ffdf8e !important; font-size: 11.5px !important; font-weight: 700 !important; letter-spacing: .05em; text-transform: uppercase; }
+#deckModal .card-face-title { display: flex; flex-direction: column; align-items: center; margin: 5px 0 0; text-align: center; }
+#deckModal .card-face-kicker { font: 500 13px / 1 'Goi Viet Cover Condensed', 'Be Vietnam Pro', sans-serif; letter-spacing: .14em; text-transform: uppercase; color: #fcf8db; }
+#deckModal .card-face-script { margin-top: 2px; font: 700 clamp(25px, 4.2dvh, 34px) / 1.1 'Goi Viet Cover Script', 'Be Vietnam Pro', cursive; color: #ffdf8e; text-shadow: 0 2px 4px #3b000080; }
+#deckModal .card-face-orn { width: 120px; height: 10px; margin-top: 4px; background: radial-gradient(circle, #ffdf8e 2.5px, transparent 3px) center / 14px 10px repeat-x; opacity: .7; }
+/* quiz cards: "Câu hỏi về · món ăn" on one line, to leave room for the three answers */
+#deckModal #cardFrontState:not(.is-canva-card) .card-face-title { flex-direction: row; justify-content: center; align-items: baseline; flex-wrap: wrap; gap: 0 8px; }
+#deckModal #cardFrontState:not(.is-canva-card) .card-face-script { font-size: clamp(23px, 3.7dvh, 30px); }
+#deckModal #cardFrontState:not(.is-canva-card) .card-face-orn { display: none; }
+#deckModal #cardFrontState .question-text { margin: 7px 0; text-align: center; font-size: clamp(16px, 2.45dvh, 21px); line-height: 1.3; }
+/* the question only receives focus to move the reader there (tabindex -1); the page-wide ring would frame it */
+#deckModal #cardFrontState .question-text:focus-visible { outline: none !important; }
+#deckModal #cardFrontState .option-btn { min-height: 36px; padding: 5px 9px; font-size: clamp(12.5px, 1.85dvh, 14px); line-height: 1.35; }
+#deckModal #cardFrontState .option-letter { width: 22px; height: 22px; }
+#deckModal #cardFrontState .options-list { gap: 5px; margin-bottom: 5px; }
+#deckModal .card-face-tools { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 4px 6px; margin: 2px 0 0; }
+#deckModal #cardFrontState .linked-story-context-box { padding: 0; margin: 0; border: 0; background: none; }
+#deckModal #cardFrontState :is(.card-cover-open, #cardExplanationOpen, .linked-story-context-box .small-wood-btn) { min-height: 30px; padding: 4px 9px; border: 1px solid #ffdf8e85; border-radius: 7px; background: #ffffff14; color: #ffdf8e; font-size: 12px; line-height: 1.35; }
+#deckModal #cardFrontState :is(.card-cover-open, #cardExplanationOpen, .linked-story-context-box .small-wood-btn):hover { background: #ffffff26; }
+#deckModal #cardExplanationOpen { display: none; }
+#deckModal #cardFrontState[data-review-question]:has(#answerExplanationBox.visible) #cardExplanationOpen { display: inline-flex; }
+/* bottom of the card: hint links and one gold action */
+#deckModal #cardFrontState > div:has(> #cardSelectHint), #deckModal #cardFrontState:not(.is-canva-card) #canvaCardBottom { margin-top: auto; }
+#deckModal #cardFrontState > div:has(> #cardSelectHint) { flex-direction: column; align-items: stretch !important; gap: 8px !important; }
+#deckModal #cardSelectHint { display: none; }
+#deckModal #cardFrontState .card-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 10px; margin-top: 4px; }
+#deckModal #cardFrontState .card-actions #btnRevealAnswer { flex: 1 1 100%; }
+#deckModal #cardFrontState .card-actions .btn-secondary { min-height: 30px; padding: 4px 6px; border: 0; border-bottom: 1px dashed #ffdf8e99; border-radius: 0; background: transparent; color: #ffdf8e; font-size: 12px; }
+#deckModal #cardFrontState .card-actions .btn-secondary:hover { background: #ffffff14; }
+#deckModal #cardFrontState :is(#btnRevealAnswer, .canva-open) { grid-column: 1 / -1; min-height: 38px; border: 0; border-radius: 9px; background: linear-gradient(#ffe9a8, #f2c867); color: #5a1010; font-size: 13.5px; font-weight: 700; box-shadow: 0 3px 0 #b88a2c; }
+#deckModal #cardFrontState :is(#btnRevealAnswer, .canva-open):not(:disabled):hover { filter: brightness(1.04); transform: translateY(-1px); }
+#deckModal #cardFrontState.is-canva-card .question-text { margin-block: auto; padding: 9px 0; font-size: clamp(17px, 2.7dvh, 22px); }
+#deckModal #cardFrontState #answerExplanationBox { margin-top: 7px !important; padding: 8px 10px; background: #fff8e6; border-left-color: #c9a15a; }
+#deckModal #cardFrontState #answerExplanationBox > div:last-child { padding-top: 4px !important; border-top: 0 !important; }
+#deckModal #cardFrontState #answerExplanationBox .btn-primary { min-height: 30px; padding: 5px 9px; }
+#deckModal #cardFrontState:has(#answerExplanationBox.visible) > :is(#cardHintBox, div:has(> #cardSelectHint)) { display: none !important; }
+#deckModal #cardFrontState:not([data-review-question]):has(#answerExplanationBox.visible) :is(#cardQuestionText, .card-face-title, .option-btn:not(.correct-reveal)) { display: none; }
+#deckModal #cardFrontState[data-review-question] #answerExplanationBox { display: none; }
+#deckModal #drawnCardViewport[data-reading-explanation] #cardFrontState > :is(.card-kicker-row, .card-face-tools, #cardOptionsList) { display: none; }
+#deckModal #answerExplanationBox .card-review-button { min-height: 30px; padding: 5px 9px; border: 1px solid #c9a15a; border-radius: 7px; background: #fffdf5; color: #573a25; font-size: 12px; }
+
+/* Canva cards: the two sides are tabs on the top edge of the card */
+#deckModal #cardFrontState .canva-prompt { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+#deckModal #cardFrontState .canva-roles { position: absolute; left: 22px; right: 22px; top: -32px; display: flex; gap: 6px; width: auto; padding: 0; border: 0; border-radius: 0; background: none; }
+#deckModal #cardFrontState .canva-role { flex: 1 1 0; min-height: 32px; padding: 5px 8px 9px; border-radius: 10px 10px 0 0; background: #e9d6a8; color: #6b4a1c; font-size: 12px; box-shadow: inset 0 -6px 8px -6px #0003; }
+#deckModal #cardFrontState .canva-role:hover { background: #f1e2bb; }
+#deckModal #cardFrontState .canva-role[aria-checked="true"] { background: #9a232c; color: #ffdf8e; box-shadow: none; }
+#deckModal #cardFrontState .canva-card-actions { flex-direction: column; align-items: stretch; gap: 8px; }
+#deckModal #cardFrontState .canva-card-note { text-align: center; }
+#deckModal #cardFrontState .canva-card-extras { justify-content: center; }
+#deckModal #cardFrontState .canva-hint { flex: 1 1 100%; border-style: dashed; background: transparent; }
+#deckModal #cardFrontState .canva-hint summary { text-align: center; }
+/* Cover opened by the dedicated button. */
+#deckModal .card-cover-peek {
+  position: absolute;
+  display: none;
+  aspect-ratio: 630 / 880;
+  padding: 0;
+  overflow: hidden;
+  border: 2px solid #ffdf8e;
+  border-radius: 18px;
+  background: #861b1b url('../card-covers-5/paper-red.webp') 0 0 / 50% auto repeat;
+}
+#deckModal .card-cover-peek .gv-cover { position: absolute; inset: 0; display: flex; align-items: center; }
+#deckModal .card-table-front.is-raised .card-cover-peek {
+  display: block;
+  z-index: 4;
+  top: 8px;
+  left: 50%;
+  width: min(86%, var(--cover-fit-width));
+  transform: translateX(-50%);
+  transition: box-shadow .35s ease;
+  box-shadow: 0 30px 56px #4a2a0a66;
+  cursor: zoom-out;
+}
+#deckModal .card-table-front .card-cover-peek:focus-visible { outline: 3px solid #fff4cf; box-shadow: 0 0 0 6px #6b1218; }
+#deckModal .card-cover-peek.is-plain { background: linear-gradient(145deg, #962516 0%, #761b0e 50%, #581208 100%); }
+#deckModal .card-cover-plain { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; color: #fff8ec; }
+#deckModal .card-cover-plain b { font: 700 34px / 1.1 'Goi Viet Cover Script', cursive; color: #ffdf8e; }
+#deckModal .card-cover-plain small { font: 600 13px 'Be Vietnam Pro', sans-serif; }
+
+/* The connection card: the Canva back (paper, roof band) */
+#deckModal #card3DFlipper #cardBackState {
+  min-height: clamp(370px, 60dvh, 500px);
+  padding: 49px clamp(12px, 2vw, 22px) 12px;
+  overflow: hidden;
+  border: 2px solid #c9a15a;
+  border-radius: 18px;
+  background: linear-gradient(#fdf6e0, #f4e4bb);
+  box-shadow: 0 22px 40px #4a2a0a33, 0 3px 8px #4a2a0a26;
+  transform: rotate(1.2deg);
+}
+#deckModal #card3DFlipper #cardBackState::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  z-index: 3;
+  height: 41px;
+  pointer-events: none;
+  background: radial-gradient(circle at 50% 100%, #8a1e26 8px, transparent 9px) 0 21px / 18px 12px repeat-x, linear-gradient(#8a1e26, #8a1e26) 0 0 / 100% 23px no-repeat;
+}
+#deckModal #card3DFlipper #cardBackState::after { content: ''; position: absolute; left: 0; right: 0; top: 37px; z-index: 3; height: 3px; pointer-events: none; background: linear-gradient(90deg, transparent, #d9a440, transparent); }
+#deckModal #cardBackState #conversationConnectionContent[aria-hidden=true] { display: none; }
+#deckModal #cardBackState .conversation-seal { inset: 40px 0 0; padding: 14px 44px 56px; gap: 12px; border-radius: 0 0 16px 16px; background: linear-gradient(#fdf6e0f5, #f4e4bbfa); }
+#deckModal #cardBackState .conversation-wax-seal { width: clamp(68px, 12dvh, 100px); height: auto; aspect-ratio: 1; border: 0; box-shadow: 0 0 0 4px #f0c96a, 0 0 0 6px #7c1820, 0 12px 26px #4a0a0a66; }
+#deckModal #cardBackState .conversation-seal h3 { color: #7c1820; font-size: 21px; line-height: 1.3; text-wrap: balance; }
+#deckModal #cardBackState .conversation-seal p { color: #5b4630; }
+#deckModal .card-table-figure { position: absolute; bottom: 8px; width: clamp(30px, 6.5dvh, 50px); height: auto; pointer-events: none; }
+#deckModal .card-table-figure.is-left { left: 10px; transform: scaleX(-1); }
+#deckModal .card-table-figure.is-right { right: 10px; }
+#deckModal #cardBackState .card-side-badge.back { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+#deckModal #cardBackState #cardPostmarkSeal { top: 60px; }
+#deckModal #cardBackState .activity-prompt-box { padding: 10px 12px; border: 1.5px solid #e0c58a; border-radius: 12px; background: #fffaf0b8; }
+#deckModal #cardBackState .activity-type-tag { display: inline-flex; align-items: center; gap: 8px; padding: 0; background: none; font: 600 15px / 1.2 'Goi Viet Cover Condensed', 'Be Vietnam Pro', sans-serif; letter-spacing: .06em; text-transform: uppercase; color: #7c1820; }
+#deckModal #cardBackState .activity-type-tag::before { content: ''; flex: none; width: 34px; height: 34px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 44 44'%3E%3Ccircle cx='22' cy='22' r='14' fill='none' stroke='%23c9a15a' stroke-width='2' stroke-dasharray='3 4'/%3E%3Cg fill='%238a1e26'%3E%3Ccircle cx='22' cy='5' r='4'/%3E%3Ccircle cx='37' cy='14' r='4'/%3E%3Ccircle cx='37' cy='30' r='4'/%3E%3Ccircle cx='22' cy='39' r='4'/%3E%3Ccircle cx='7' cy='30' r='4'/%3E%3Ccircle cx='7' cy='14' r='4'/%3E%3C/g%3E%3C/svg%3E") center / contain no-repeat; }
+#deckModal #cardBackState .activity-gentle-note { margin-top: 5px; font-size: 11.5px; line-height: 1.35; }
+#deckModal #cardBackState .activity-main-text { margin-top: 5px; font: 500 clamp(16px, 2.4dvh, 19px) / 1.35 'Goi Viet Cover Body', 'Be Vietnam Pro', sans-serif; color: #3a1d1d; }
+#deckModal .card-turn-actions { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 5px; padding: 5px 0; border-bottom: 1px solid var(--wood-border); }
+#deckModal #cardBackState .btn-lg { min-height: 34px; padding: 6px 10px; font-size: 12px; }
+#deckModal #cardBackState .btn-lg.btn-secondary { border-radius: 99px; border: 1px solid #d7c297; background: #fffaf0; }
+#deckModal #cardBackState #btnCompleteCardTurn { border-radius: 99px; }
+#deckModal .card-round-tools { display: flex; align-items: flex-start; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+#deckModal .card-round-tools .card-tool-button,
+#deckModal #cardRoundTools #memoryDetailsDrawer > summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 32px;
+  padding: 4px 9px;
+  border: 1px solid #d7c297;
+  border-radius: 7px;
+  background: #fffaf0;
+  color: #414c3f;
+  font: 600 12px / 1.35 var(--font-sans);
+  cursor: pointer;
+}
+#deckModal .card-round-tools .card-tool-button:hover,
+#deckModal #cardRoundTools #memoryDetailsDrawer > summary:hover { background: #fbeac7; }
+#deckModal #listeningTimerDisplay { min-width: 3ch; color: #8a1e26; font-variant-numeric: tabular-nums; }
+#deckModal .card-round-tools #memoryDetailsDrawer { min-width: 0; margin: 0; padding: 0; border: 0; background: transparent; }
+#deckModal .card-round-tools #memoryDetailsDrawer[open] { flex: 1 0 100%; }
+#deckModal .card-round-tools #memoryDetailsDrawer > summary::after { content: none; }
+#deckModal #memoryDetailsDrawer:not([open]) .card-memory-close-label,
+#deckModal #memoryDetailsDrawer[open] .card-memory-open-label,
+#deckModal #cardBackState:has(#memoryDetailsDrawer[open]) .activity-prompt-box,
+#deckModal .card-round-tools:has(#memoryDetailsDrawer[open]) #btnListeningTimer:not([data-running]) { display: none; }
+#deckModal #memoryBridgeBox { margin: 7px 0 0; padding: 0; border: 0; border-radius: 0; background: transparent; }
+#deckModal #memoryBridgeBox .memory-input-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: end !important; gap: 7px; }
+#deckModal #memoryBridgeBox .memory-field-group { gap: 2px; }
+#deckModal #memoryBridgeBox .memory-input { min-height: 34px; padding: 5px 8px; }
+#deckModal .card-memory-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 4px; }
+#deckModal #memoryBridgeBox #memorySessionNotice { margin: 6px 0 0; color: var(--ink-secondary); font-size: 11px !important; line-height: 1.4; }
+#deckModal #memoryBridgeBox .memory-feedback { margin-top: 6px; }
+#deckModal #memoryFeedbackBox .small-wood-btn { max-width: 100%; white-space: normal; overflow-wrap: anywhere; text-align: start; }
+#deckModal #memoryBridgeBox.has-saved-memory > :is(.memory-input-row, #memorySessionNotice),
+#deckModal #memoryBridgeBox:not(.has-saved-memory) #btnRecordAnotherMemory { display: none; }
+#deckModal #btnRecordAnotherMemory { margin-top: 8px; }
+
+/* Dark theme: the table darkens; the two cards stay printed cards (paper keeps its light-theme ink). */
+html[data-theme=dark] #deckModal #cardBackState { --paper-bg: #f7f0de; --paper-elevated: #fffcf4; --paper-warm: #efe6ce; --wood-border: #d8d0b5; --wood-border-strong: #938362; --ink-primary: #293b32; --ink-secondary: #4b5b4c; --ink-muted: #596b5c; --son-red: #9e2835; --com-green: #2b6e48; color: #293b32; }
+html[data-theme=dark] #deckModal #cardBackState .conversation-seal { background: linear-gradient(#fdf6e0f5, #f4e4bbfa); }
+html[data-theme=dark] #deckModal #drawnCardViewport { background: radial-gradient(ellipse at 50% 30%, #2f4a3c 0%, #1c3027 70%, #132219 100%); box-shadow: inset 0 0 0 1px #4b6552; }
+
+/* Narrow screens switch between faces in the same space. */
+@media (max-width: 860px) {
+  #deckModal #drawnCardViewport, #deckModal #drawnCardViewport:has(#cardFrontState:not(.is-canva-card)) { padding: 8px; }
+  #deckModal #card3DFlipper { grid-template-columns: minmax(0, 560px); gap: 0; }
+  #deckModal #card3DFlipper :is(#cardFrontState, #cardBackState) { min-height: 0; transform: none; }
+  #deckModal #card3DFlipper #cardBackState:has(.conversation-seal:not([hidden])) { min-height: clamp(325px, 58dvh, 410px); }
+  #deckModal #drawnCardViewport[data-face=back] .card-table-front,
+  #deckModal #drawnCardViewport:not([data-face=back]) #cardBackState { display: none !important; }
+  #deckModal .card-face-nav { display: flex; justify-content: center; gap: 4px; margin: 0 auto 8px; }
+  #deckModal .card-face-nav button { min-height: 32px; padding: 4px 14px; border: 1px solid var(--wood-border-strong); border-radius: 7px; background: var(--paper-elevated); color: var(--ink-primary); font: 600 12px/1.35 var(--font-sans); }
+  #deckModal .card-face-nav button[aria-pressed=true] { background: #8a1e26; border-color: #8a1e26; color: #fff9f3; }
+  #deckModal #cardFrontState .canva-roles { position: static; margin-block: 5px; }
+  #deckModal #cardFrontState .canva-role { border-radius: 7px; }
+}
+@media (max-width: 600px) {
+  #deckModal { padding: 0; }
+  #deckModal .modal-sheet { max-height: 100dvh; }
+  #deckModal .deck-header { display: flex; flex-wrap: wrap; gap: 6px 10px; }
+  #deckModal .deck-header > div:first-child { flex: 0 0 100%; }
+  #deckModal #deckModalHeading { font-size: 17px; }
+  #deckModal .deck-header-actions { flex: 1; flex-flow: row nowrap; align-items: center; justify-content: space-between; gap: 5px; }
+  #deckModal .deck-header-actions :is(.craft-btn, [data-set-lang]) { min-height: 32px; padding: 4px 8px; font-size: 11px; }
+  #deckModal .deck-header-actions .gv-lang-toggle { width: 72px; min-height: 32px; }
+  #deckModal #deckRemainingBadge { font-size: 11px; }
+  #deckModal .conversation-fan-stage { height: clamp(224px, 37dvh, 310px); }
+  #deckModal .fanned-deck-container { height: 100%; }
+  #deckModal #cardFrontState:not(.is-canva-card) .card-face-title { display: none; }
+  #deckModal #cardFrontState .card-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  #deckModal #cardFrontState .card-actions > button { min-width: 0; }
+  #deckModal #cardBackState .activity-prompt-box { margin-bottom: 6px; }
+  #deckModal .card-turn-actions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  #deckModal .card-turn-actions > div { display: contents !important; }
+  #deckModal .card-turn-actions .btn-lg { min-width: 0; text-align: center; }
+  #deckModal #memoryBridgeBox .memory-input-row { grid-template-columns: minmax(0, 1fr); }
+  #deckModal .card-tool-button { padding-inline: 7px; }
+  #deckModal #cardBackState .conversation-seal { padding-inline: 34px; }
+}
+@media (max-width: 600px) and (max-height: 650px) {
+  #deckModal .deck-header { padding-block: 6px; }
+  #deckModal #drawnCardViewport, #deckModal #drawnCardViewport:has(#cardFrontState:not(.is-canva-card)) { padding-block: 6px; }
+  #deckModal .card-face-nav { margin-bottom: 4px; }
+  #deckModal #card3DFlipper #cardFrontState { padding: 7px 11px; }
+  #deckModal #cardFrontTopicTag { padding: 3px 8px; font-size: 10.5px !important; }
+  #deckModal #cardFrontState .question-text { margin: 5px 0; font-size: 15.5px; line-height: 1.25; }
+  #deckModal #cardFrontState .option-btn { min-height: 33px; padding: 4px 7px; gap: 7px; font-size: 12px; line-height: 1.28; }
+  #deckModal #cardFrontState :is(.card-cover-open, #cardExplanationOpen, .linked-story-context-box .small-wood-btn) { min-height: 27px; padding: 3px 7px; }
+  #deckModal #cardBackState .activity-type-tag::before { width: 25px; height: 25px; }
+  #deckModal #cardBackState .btn-lg { padding-inline: 7px; font-size: 11.5px; }
+}
+
+/* P5-06 UI audit (2026-11-22): spacing, alignment and type fixes found by the layout audit. */
+/* After "Chưa biết"/"Kiểm tra": the answer and its explanation sit in the middle of the card, not at the top. */
+#deckModal #cardFrontState:not([data-review-question]):has(#answerExplanationBox.visible) #cardOptionsList { margin-top: auto; }
+#deckModal #cardFrontState:not([data-review-question]):has(#answerExplanationBox.visible) #answerExplanationBox { margin-bottom: auto; }
+/* Canva cards: room between the topic pill, the cover button and the "Câu hỏi dành cho" title. */
+#deckModal #cardFrontState.is-canva-card .card-face-tools { margin: 7px 0 9px; }
+/* Canva questions use the Canva body face (Barlow Semi Condensed, as the challenge on the back) instead of the quiz serif. */
+#deckModal #cardFrontState.is-canva-card .question-text { font-family: 'Goi Viet Cover Body', 'Be Vietnam Pro', sans-serif; font-weight: 500; font-size: clamp(19px, 3dvh, 25px); line-height: 1.3; }
+/* No lone word on the last line under the lotus seal. */
+#deckModal #cardBackState .conversation-seal p { text-wrap: balance; }
+/* Only Be Vietnam Pro 400–700 is bundled: ask for 700 rather than a missing 800. */
+#deckModal .conversation-wax-seal small { font-weight: 700; }
+@media (min-width: 861px) {
+  /* Centre the revealed activity and its controls in the connection card. */
+  #deckModal #card3DFlipper #cardBackState:has(#conversationConnectionContent:not([aria-hidden=true])) { display: flex !important; flex-direction: column; }
+  #deckModal #cardBackState #conversationConnectionContent:not([aria-hidden=true]) { flex: 1 1 auto; display: flex; flex-direction: column; justify-content: safe center; }
+}
+@media (min-width: 1600px) and (min-height: 900px) {
+  /* Projector / full-HD screens: a wider table; card-table-5.js lets the cards grow while they fit. */
+  #deckModal .modal-sheet { width: min(1440px, 100%); max-width: 1440px; }
+}
+@media (max-width: 600px) {
+  /* "Đổi hoạt động" and "Bỏ qua" share a row; "Xong lá này" takes the full width below, so no button wraps. */
+  #deckModal .card-turn-actions { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  #deckModal .card-turn-actions .btn-lg { white-space: nowrap; }
+  #deckModal .card-turn-actions #btnCompleteCardTurn { grid-column: 1 / -1; }
+}

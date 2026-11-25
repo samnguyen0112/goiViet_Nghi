@@ -55,6 +55,11 @@
     'sr.open': ['Đã mở thông tin ga {place}.', 'Station info for {place} is open.'],
     'sr.close': ['Đã đóng thông tin ga. Có thể mở lại trên thanh hành trình.', 'Station info closed. Reopen it from the journey bar.']
   };
+  if (document.documentElement.hasAttribute('data-group-play')) {
+    labels.stampTitle = ['Ga thứ {n}', 'Stop {n}'];
+    labels.stampSub = ['đã ghé', ''];
+    labels.landed = ['Đã ghé ga thứ {n}', 'Stop number {n} visited'];
+  }
   const dict = { vi: {}, en: {} };
   for (const [key, [vi, en]] of Object.entries(labels)) {
     dict.vi['arrival.' + key] = vi;
