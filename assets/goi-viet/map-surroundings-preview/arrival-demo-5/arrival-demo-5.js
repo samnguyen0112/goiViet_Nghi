@@ -26,6 +26,8 @@
     return I.lang() === 'en' ? window.GoiVietContent.english(regionKey(place)) : regionKey(place);
   }
   let focusFrame = 0, focusRevision = 0;
+  let deferredSheetRefresh = false, deferredSheetFit = false;
+  const isCoveredByModal = () => typeof getTopOpenModalElement === 'function' && Boolean(getTopOpenModalElement());
 
   const sheet = document.createElement('section');
   sheet.id = 'arrivalSheet';
@@ -163,6 +165,11 @@
   function refresh() {
     refreshJournal();
     if (!sheetId) return;
+    if (!sheet.hidden && isCoveredByModal()) {
+      deferredSheetRefresh = true;
+      return;
+    }
+    deferredSheetRefresh = false;
     const place = CULTURAL_PLACE_MAP[sheetId];
     const remaining = Math.max(0, place.cards.length - (state.drawnCardIdsByPlace[sheetId] || []).length);
     const sealed = seals().has(sheetId);
@@ -258,6 +265,11 @@
   // Runs only on arrival/content changes/resize, never on the map's animation loop.
   function fitSheet() {
     if (sheet.hidden) return;
+    if (isCoveredByModal()) {
+      deferredSheetFit = true;
+      return;
+    }
+    deferredSheetFit = false;
     const art = sheet.querySelector('.gv-station-art');
     if (!art) return;
     art.style.removeProperty('width');
@@ -317,9 +329,23 @@
     return true;
   }
 
+  function flushDeferred() {
+    if (isCoveredByModal()) return;
+    if (deferredSheetRefresh) {
+      deferredSheetRefresh = false;
+      deferredSheetFit = false;
+      refresh();
+    } else if (deferredSheetFit) {
+      deferredSheetFit = false;
+      fitSheet();
+    }
+  }
+
   function closeSheet({ restore = true, announce = true } = {}) {
     if (sheet.hidden) return false;
     sheet.hidden = true;
+    deferredSheetRefresh = false;
+    deferredSheetFit = false;
     focusRevision++;
     cancelAnimationFrame(focusFrame);
     journey()?.syncControls();
@@ -515,14 +541,14 @@
   });
   for (const id of ['bookModal', 'deckModal']) {
     const modal = $(id);
-    if (modal) new MutationObserver(() => { if (!modal.classList.contains('open')) refresh(); }).observe(modal, { attributes: true, attributeFilter: ['class'] });
+    if (modal) new MutationObserver(() => { if (!modal.classList.contains('open')) { flushDeferred(); refresh(); } }).observe(modal, { attributes: true, attributeFilter: ['class'] });
   }
   new MutationObserver(refresh).observe($(groupPlay ? 'cardProgressLabel' : 'currentTurnLabel'), { childList: true, characterData: true, subtree: true });
   document.addEventListener('goiviet:langchange', localize);
   window.addEventListener('resize', () => { if (!sheet.hidden) { refresh(); fitSheet(); focusCurrent(); } }, { passive: true });
 
   window.GoiVietArrivalDemo = Object.freeze({
-    selected, refresh, onArrive, openSheet, closeSheet, canOpen, playFromReading, boardTicket, focusRoute, syncList, region, regionKey, stationName: name, turnMessage,
+    selected, refresh, flushDeferred, onArrive, openSheet, closeSheet, canOpen, playFromReading, boardTicket, focusRoute, syncList, region, regionKey, stationName: name, turnMessage,
     isSheetOpen: () => !sheet.hidden,
     isArrivalPending: () => Boolean(pendingArrival),
     hasVisited: id => visited.has(id),
@@ -534,6 +560,7 @@
     nextStation(id) { announceSR(t('next', { place: name(id) })); focusRoute(); updateToast(); },
     resetSession() {
       cancelArrival(); pendingSeals.clear(); knownSeals.clear();
+      deferredSheetRefresh = false; deferredSheetFit = false;
       closeSheet({ restore: false, announce: false });
       closeList(false);
       visited.clear(); visited.add('hn');

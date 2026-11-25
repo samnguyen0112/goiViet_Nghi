@@ -247,6 +247,9 @@ async function verifySize(viewport) {
       assert.equal(await page.locator('script[src*="offline-control-5"]').count(), integrated ? 1 : 0);
       if (integrated) {
         await page.locator('#headerSettings > summary').click();
+        if ((await page.locator('details.settings-offline').getAttribute('open')) === null) {
+          await page.locator('details.settings-offline > summary').click();
+        }
         assert(await page.locator('#btnPrepareOffline').isVisible());
         await page.keyboard.press('Escape');
       } else assert(!await page.locator('.settings-offline').isVisible());
