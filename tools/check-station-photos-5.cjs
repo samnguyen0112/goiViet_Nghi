@@ -238,6 +238,10 @@ async function offline() {
   let page = await openMap(context, { width: 1440, height: 1120 });
   assert.equal((await page.evaluate(() => GoiVietOffline.ready)).ready, false, 'Fresh visits must not install a worker');
   await page.locator('#headerSettings > summary').click();
+  const offlineDetails = page.locator('details.settings-offline');
+  if ((await offlineDetails.getAttribute('open')) === null) {
+    await page.locator('details.settings-offline > summary').click();
+  }
   await page.locator('#btnPrepareOffline').click();
   await page.waitForFunction(() => GoiVietOffline.inspect().ready || GoiVietOffline.inspect().phase === 'error', null, { timeout: 180000 });
   const ready = await page.evaluate(() => GoiVietOffline.ready);

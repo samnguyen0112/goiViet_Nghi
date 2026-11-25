@@ -4162,7 +4162,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 <script src="assets/goi-viet/map-surroundings-preview/family-voyage-data-5.js?v=20261113-voyage-1" defer></script>
 <script src="assets/goi-viet/map-surroundings-preview/sea-postoffice-data-5.js?v=20261113-postoffice-4" defer></script>
 <script src="assets/goi-viet/map-surroundings-preview/family-voyage-5.js?v=20261116-group-play-1" defer></script>
-<script src="assets/goi-viet/map-surroundings-preview/natural/landscape-5.js?v=20261122-journey-ui-1" defer></script>
+<script src="assets/goi-viet/map-surroundings-preview/natural/landscape-5.js?v=20261125-audit-2" defer></script>
 <link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/natural/natural.css?v=3">
 <link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/natural/island-chart.css?v=2">
 <link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/family-voyage-5.css?v=20261113-voyage-1">
@@ -4229,7 +4229,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 <!-- P5-06: "Bàn chơi" look of a drawn card (two playing cards on a table; the cover lies under the question card). -->
 <link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/card-table-5.css?v=20261122-journey-ui-1">
 <script src="assets/goi-viet/map-surroundings-preview/card-table-5.js?v=20261122-ui-audit-1" defer></script>
-<script src="assets/goi-viet/map-surroundings-preview/conversation-cards-5.js?v=20261122-table-1" defer></script>
+<script src="assets/goi-viet/map-surroundings-preview/conversation-cards-5.js?v=20261125-audit-2" defer></script>
 <!-- P5-01: bilingual core and culture-book reader. Book pages load only when a book is opened (books-5/<placeId>/book.js). -->
 <link rel="stylesheet" href="assets/goi-viet/books-5/book-reader-5.css?v=20261111-language-switch">
 <script src="assets/goi-viet/map-surroundings-preview/arrival-demo-5/station-panel-arrival-5.js?v=20261116-group-play-1" defer></script>
@@ -4243,7 +4243,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 <link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/arrival-demo-5/arrival-demo-5.css?v=20261113-polish-2">
 <link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/legibility-5.css?v=20261113-legibility-1">
 <link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/journey-controls-5.css?v=20261122-journey-ui-1">
-<script src="assets/goi-viet/map-surroundings-preview/arrival-demo-5/arrival-demo-5.js?v=20261116-group-play-2" defer></script>
+<script src="assets/goi-viet/map-surroundings-preview/arrival-demo-5/arrival-demo-5.js?v=20261125-audit-2" defer></script>
 <style id="preview3-island-button-alignment">
   /* Keep the island toolbar aligned without changing the other previews. */
   #naturalIslandModal .natural-detail-controls {
@@ -5872,44 +5872,89 @@ function getTopOpenModalElement() {
   return null;
 }
 
-function syncBackgroundInertAndRenderState() {
+function isModalElementFocusable(el, modalEl) {
+  if (!el || !modalEl) return false;
+  const inertAncestor = el.closest('[inert]');
+  if (inertAncestor && modalEl.contains(inertAncestor)) return false;
+  const hiddenAncestor = el.closest('[aria-hidden="true"]');
+  if (hiddenAncestor && modalEl.contains(hiddenAncestor)) return false;
+  const closedDetails = el.closest('details:not([open])');
+  if (closedDetails && el !== closedDetails.querySelector('summary')) return false;
+  if (el.offsetParent === null && modalEl.id !== 'introScreen') return false;
+  const style = getComputedStyle(el);
+  return style.visibility !== 'hidden' && style.display !== 'none';
+}
+
+function getFocusableElementsInModal(modalEl) {
+  if (!modalEl) return [];
+  return Array.from(modalEl.querySelectorAll(
+    'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), summary, [tabindex]:not([tabindex="-1"])'
+  )).filter(el => isModalElementFocusable(el, modalEl));
+}
+
+function setLayerHiddenState(el, hidden, { useFalseAttr = false } = {}) {
+  if (!el) return;
+  if (!hidden) {
+    el.removeAttribute('inert');
+    if (useFalseAttr) el.setAttribute('aria-hidden', 'false');
+    else el.removeAttribute('aria-hidden');
+    return;
+  }
+  const active = document.activeElement;
+  if (active && active !== document.body && el.contains(active) && typeof active.blur === 'function') {
+    active.blur();
+  }
+  el.setAttribute('inert', '');
+  el.setAttribute('aria-hidden', 'true');
+}
+
+function unhideExposedLayers() {
   const introEl = document.getElementById('introScreen');
-  if (introEl) {
-    const introClosed = introEl.classList.contains('intro-hidden');
-    if (introClosed) {
-      introEl.setAttribute('aria-hidden', 'true');
-      introEl.setAttribute('inert', '');
-    } else {
-      introEl.setAttribute('aria-hidden', 'false');
-      introEl.removeAttribute('inert');
-    }
+  if (introEl && !introEl.classList.contains('intro-hidden')) {
+    setLayerHiddenState(introEl, false, { useFalseAttr: true });
   }
   const topModal = getTopOpenModalElement();
   const resetModal = document.getElementById('resetSessionModal');
-  const resetOpen = resetModal && resetModal.classList.contains('open');
-  if (resetModal) resetModal.setAttribute('aria-hidden', String(!resetOpen));
+  const resetOpen = Boolean(resetModal && resetModal.classList.contains('open'));
+  if (resetModal && resetOpen) {
+    setLayerHiddenState(resetModal, false, { useFalseAttr: true });
+  }
+  const bookOnTop = Boolean(topModal && topModal.id === 'bookModal');
+  for (const id of ['bambooRollModal', 'postcardModal', 'milestoneModal', 'bookModal', 'deckModal', 'storyModal', 'naturalIslandModal']) {
+    const modal = document.getElementById(id);
+    if (!modal) continue;
+    const covered = resetOpen || (bookOnTop && id !== 'bookModal' && modal.classList.contains('open'));
+    if (!covered) setLayerHiddenState(modal, false);
+  }
+  const mapSceneEl = document.getElementById('mapScene');
+  if (mapSceneEl && !topModal) {
+    setLayerHiddenState(mapSceneEl, false, { useFalseAttr: true });
+  }
+  return { introEl, topModal, resetModal, resetOpen, bookOnTop, mapSceneEl };
+}
+
+function syncBackgroundInertAndRenderState() {
+  const { introEl, topModal, resetModal, resetOpen, bookOnTop, mapSceneEl } = unhideExposedLayers();
+  if (introEl && introEl.classList.contains('intro-hidden')) {
+    setLayerHiddenState(introEl, true, { useFalseAttr: true });
+  }
+  if (resetModal && !resetOpen) {
+    setLayerHiddenState(resetModal, true, { useFalseAttr: true });
+  }
   // P5-02: a book opened from a card sits over the open deck; hide the deck from assistive tech while the book is on top.
-  const bookOnTop = topModal && topModal.id === 'bookModal';
   for (const id of ['bambooRollModal', 'postcardModal', 'milestoneModal', 'bookModal', 'deckModal', 'storyModal']) {
     const modal = document.getElementById(id);
     if (!modal) continue;
     if (resetOpen || (bookOnTop && id !== 'bookModal' && modal.classList.contains('open'))) {
-      modal.setAttribute('inert', '');
-      modal.setAttribute('aria-hidden', 'true');
-    } else {
-      modal.removeAttribute('inert');
-      modal.removeAttribute('aria-hidden');
+      setLayerHiddenState(modal, true);
     }
   }
-  const mapSceneEl = document.getElementById('mapScene');
-  if (mapSceneEl) {
-    if (topModal) {
-      mapSceneEl.setAttribute('aria-hidden', 'true');
-      mapSceneEl.setAttribute('inert', '');
-    } else {
-      mapSceneEl.setAttribute('aria-hidden', 'false');
-      mapSceneEl.removeAttribute('inert');
-    }
+  if (mapSceneEl && topModal) {
+    setLayerHiddenState(mapSceneEl, true, { useFalseAttr: true });
+  }
+  if (!topModal) {
+    flushPendingDemoPlaceListRender();
+    window.GoiVietArrivalDemo?.flushDeferred?.();
   }
   if (typeof requestMapRender === 'function') {
     requestMapRender();
@@ -5917,39 +5962,53 @@ function syncBackgroundInertAndRenderState() {
 }
 
 function focusFirstElementInModal(modalEl) {
-  if (!modalEl) return;
+  if (!modalEl) return false;
   if (modalEl.id === 'introScreen') {
     const target = document.getElementById('btnQuickStartWelcome');
-    if (target) { target.focus(); return; }
-  }
-  const focusables = modalEl.querySelectorAll(
-    'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
-  );
-  for (const el of focusables) {
-    if (el.offsetParent !== null || modalEl.id === 'introScreen') {
-      try { el.focus(); } catch (e) {}
-      return;
+    if (target && !target.disabled && isModalElementFocusable(target, modalEl)) {
+      try { target.focus({ preventScroll: true }); } catch (e) {}
+      if (modalEl.contains(document.activeElement)) return true;
     }
   }
+  const focusables = getFocusableElementsInModal(modalEl);
+  for (const el of focusables) {
+    try { el.focus({ preventScroll: true }); } catch (e) {}
+    if (modalEl.contains(document.activeElement)) return true;
+  }
+  if (!modalEl.hasAttribute('tabindex')) modalEl.setAttribute('tabindex', '-1');
+  try { modalEl.focus({ preventScroll: true }); } catch (e) {}
+  return modalEl.contains(document.activeElement);
 }
 
 function pushModalFocus(modalId, sourceTrigger = document.activeElement) {
   const active = sourceTrigger;
   const disclosure = active && active.closest('.control-disclosure');
   const triggerEl = disclosure ? disclosure.querySelector('summary') : active;
-  closeControlDisclosures();
   if (triggerEl && triggerEl !== document.body) {
     modalFocusReturnStack.push({ modalId, triggerEl });
   }
-  syncBackgroundInertAndRenderState();
+  closeControlDisclosures();
+  // Unhide the opening modal and move focus into it BEFORE marking the background inert/aria-hidden.
+  unhideExposedLayers();
   const modalEl = document.getElementById(modalId);
-  setTimeout(() => {
-    if (getTopOpenModalElement() === modalEl) focusFirstElementInModal(modalEl);
-  }, 30);
+  if (modalEl && getTopOpenModalElement() === modalEl) {
+    focusFirstElementInModal(modalEl);
+  }
+  syncBackgroundInertAndRenderState();
+  if (modalEl && document.activeElement === modalEl) {
+    setTimeout(() => {
+      if (getTopOpenModalElement() === modalEl && document.activeElement === modalEl) {
+        focusFirstElementInModal(modalEl);
+      }
+    }, 30);
+  }
 }
 
-function popModalFocus(modalId) {
-  syncBackgroundInertAndRenderState();
+function popModalFocus(modalId, { fallbackTarget = null } = {}) {
+  const closingEl = document.getElementById(modalId);
+  // Unhide the newly exposed background/parent modal BEFORE restoring focus to its trigger.
+  unhideExposedLayers();
+  let restored = false;
   for (let i = modalFocusReturnStack.length - 1; i >= 0; i--) {
     if (modalFocusReturnStack[i].modalId === modalId) {
       const entry = modalFocusReturnStack.splice(i, 1)[0];
@@ -5964,11 +6023,22 @@ function popModalFocus(modalId) {
         if (!triggerEl) triggerEl = document.querySelector('.brand-group');
       }
       if (triggerEl && typeof triggerEl.focus === 'function') {
-        try { triggerEl.focus(); } catch (e) {}
+        try { triggerEl.focus({ preventScroll: true }); } catch (e) {}
+        restored = document.activeElement === triggerEl;
       }
-      return;
+      break;
     }
   }
+  if (!restored || (closingEl && closingEl.contains(document.activeElement))) {
+    const topModal = getTopOpenModalElement();
+    if (topModal) {
+      focusFirstElementInModal(topModal);
+    } else if (fallbackTarget && typeof fallbackTarget.focus === 'function') {
+      try { fallbackTarget.focus({ preventScroll: true }); } catch (e) {}
+    }
+  }
+  syncBackgroundInertAndRenderState();
+  return restored;
 }
 
 function getCleanStationName(place) {
@@ -6759,7 +6829,26 @@ function selectDemoPlace(rawPlaceId, whistleAlreadyPlayed) {
 
 }
 
+let demoPlaceListDirty = false;
+let demoPlaceListFrame = 0;
+function scheduleDemoPlaceListRender() {
+  demoPlaceListDirty = true;
+  if (typeof getTopOpenModalElement === 'function' && getTopOpenModalElement()) return;
+  if (!demoPlaceListFrame) {
+    demoPlaceListFrame = requestAnimationFrame(() => {
+      demoPlaceListFrame = 0;
+      if (demoPlaceListDirty) renderDemoPlaceList();
+    });
+  }
+}
+function flushPendingDemoPlaceListRender() {
+  if (!demoPlaceListDirty) return;
+  renderDemoPlaceList();
+}
+
 function renderDemoPlaceList() {
+  demoPlaceListDirty = false;
+  if (demoPlaceListFrame) { cancelAnimationFrame(demoPlaceListFrame); demoPlaceListFrame = 0; }
   for (const [id, placeId] of [['btnIslandHoangSa', 'hoang-sa'], ['btnIslandTruongSa', 'truong-sa']]) {
     const button = document.getElementById(id);
     if (button) setAriaPressed(button, state.selectedPlaceId === placeId);
@@ -7289,7 +7378,7 @@ function updateDeckRemainingUI(place) {
   const drawBtn = document.getElementById('btnDrawCard');
   const promptP = document.getElementById('deckPromptParagraph');
   const fanBox = document.getElementById('fannedDeckBox');
-  if (!state.isDrawingCardLock) window.GoiVietConversationCards?.renderDeck(place);
+  if (!state.isDrawingCardLock && !state.activeCard) window.GoiVietConversationCards?.renderDeck(place);
   renderDeckMemoryDrafts(place);
   if (remaining === 0 && !state.activeCard) {
     if (exhBox) exhBox.style.display = 'block';
@@ -7338,8 +7427,9 @@ function openDeckModal(rawPlaceId, sourceTrigger = document.activeElement) {
   const deckModalEl = document.getElementById('deckModal');
   const deckWasOpen = deckModalEl.classList.contains('open');
   if (deckWasOpen && state.deckPlaceId === place.id) {
-    syncBackgroundInertAndRenderState();
+    unhideExposedLayers();
     if (!deckModalEl.contains(document.activeElement)) focusFirstElementInModal(deckModalEl);
+    syncBackgroundInertAndRenderState();
     return;
   }
   window.GoiVietConversationCards?.cancelDraw();
@@ -7397,7 +7487,7 @@ function openDeckModal(rawPlaceId, sourceTrigger = document.activeElement) {
   stopListeningDrumTimer();
   deckModalEl.classList.add('open');
   document.getElementById('deckScrollBody').scrollTop = 0;
-  if (deckWasOpen) { syncBackgroundInertAndRenderState(); focusFirstElementInModal(deckModalEl); }
+  if (deckWasOpen) { unhideExposedLayers(); focusFirstElementInModal(deckModalEl); syncBackgroundInertAndRenderState(); }
   else pushModalFocus('deckModal', sourceTrigger);
 }
 
@@ -7507,7 +7597,7 @@ function drawOneCard(pickedCardId) {
   updateDeckRemainingUI(place);
   renderActiveCard();
   FolkAudio.playBambooClack();
-  renderDemoPlaceList();
+  scheduleDemoPlaceListRender();
   announceSR(uiT('js.deck.drawnSR', { question: cardQuestion(pickedCard) }));
 }
 
@@ -8495,9 +8585,8 @@ function closeIntroModal() {
   renderMainScene(performance.now());
   intro.classList.add('intro-hidden');
   intro.classList.remove('open');
-  popModalFocus('introScreen');
   const mapScene = document.getElementById('mapScene');
-  if (mapScene && !getTopOpenModalElement()) mapScene.focus({ preventScroll: true });
+  popModalFocus('introScreen', { fallbackTarget: mapScene });
   FolkAudio.playTrainWhistle();
   if (typeof requestMapRender === 'function') requestMapRender(36);
 }
@@ -9988,9 +10077,7 @@ window.addEventListener('keydown', e => {
   if (e.key === 'Tab') {
     const activeModal = getTopOpenModalElement();
     if (!activeModal) return;
-    const focusables = Array.from(activeModal.querySelectorAll(
-      'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), summary, [tabindex]:not([tabindex="-1"])'
-    )).filter(el => el.offsetParent !== null);
+    const focusables = getFocusableElementsInModal(activeModal);
     if (focusables.length === 0) return;
     const first = focusables[0];
     const last = focusables[focusables.length - 1];
@@ -10136,6 +10223,6 @@ function animateLoop(now) {
 <script src="assets/goi-viet/homepage-layered-opening-5.js?v=20261111-i18n-2"></script>
 <script src="assets/goi-viet/homepage-music-5.js?v=20261111-i18n-2"></script>
 <script src="assets/goi-viet/homepage-opening-controller-5.js?v=20261111-i18n-2" onerror="document.getElementById('introScreen').dataset.homeOpening='complete';document.querySelector('.gv-home-content').inert=false;document.getElementById('btnHomeOpeningStart').hidden=true;document.getElementById('homeOpeningGate').hidden=true;document.querySelector('.gv-home-opening-tools').style.display='none'"></script>
-<script src="assets/goi-viet/map-surroundings-preview/offline-control-5.js?v=20261121-audit-1"></script>
+<script src="assets/goi-viet/map-surroundings-preview/offline-control-5.js?v=20261125-audit-2"></script>
 </body>
 </html>

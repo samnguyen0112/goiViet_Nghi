@@ -7,7 +7,11 @@
   const status = { supported, ready: false, phase: supported ? 'idle' : 'unavailable', version: null,
     resources: 0, expectedResources: 0, bytes: 180000000, error: null };
   const button = document.getElementById('btnPrepareOffline');
-  let inFlight = null, pending = null, initialized;
+  let inFlight = null, pending = null, initialized, workerError = null;
+  const isReportReady = report => Boolean(
+    report && report.ready === true && typeof report.version === 'string' && report.version.length > 0 &&
+    report.expectedResources > 0 && report.resources === report.expectedResources
+  );
   const t = (key, vars) => window.GoiVietI18n.t('offline.' + key, vars);
   function render() {
     if (!button) return;
@@ -58,19 +62,26 @@
   function startPreparation() {
     if (!supported) return Promise.resolve({ ...status });
     if (inFlight) return inFlight;
+    workerError = null;
     update({ ready: false, phase: 'preparing', resources: 0, expectedResources: 0, error: null });
     inFlight = (async () => {
       try {
         const registration = await navigator.serviceWorker.register(workerURL, { scope, updateViaCache: 'none' });
+        if (!registration.installing && !registration.waiting && registration.active) {
+          await registration.update();
+        }
         const worker = await activated(registration);
         const report = await ask(worker);
-        if (!report.ready) throw new Error('bundle-incomplete');
+        if (!isReportReady(report)) throw new Error('bundle-incomplete');
         // Remove only our earlier root-scoped registration after the narrow one is usable.
         for (const old of await navigator.serviceWorker.getRegistrations()) {
           if (old.scope !== scope && ours(old)) await old.unregister();
         }
-        return update({ ...report, phase: 'ready', error: null });
-      } catch (error) { return update({ ready: false, phase: 'error', error: error.message }); }
+        return update({ ...report, ready: true, phase: 'ready', error: null });
+      } catch (error) {
+        const reason = (error.message === 'install-failed' && workerError) ? workerError : error.message;
+        return update({ ready: false, phase: 'error', error: reason });
+      }
       finally { inFlight = null; }
     })();
     pending = inFlight;
@@ -84,7 +95,8 @@
       const exact = registrations.find(registration => registration.scope === scope);
       if (exact?.active) {
         const report = await ask(exact.active);
-        return update({ ...report, phase: report.ready ? 'ready' : 'idle' });
+        const ready = isReportReady(report);
+        return update({ ...report, ready, phase: ready ? 'ready' : 'idle' });
       }
       // Existing installations retain their prior offline preparation. Migration copies
       // verified unchanged resources from the old cache instead of downloading them again.
@@ -94,11 +106,12 @@
         if (old) {
           window.addEventListener('online', startPreparation, { once: true });
           const report = await ask(old.active);
-          return update({ ...report, phase: report.ready ? 'ready' : 'idle' });
+          const ready = isReportReady(report);
+          return update({ ...report, ready, phase: ready ? 'ready' : 'idle' });
         }
       }
       return { ...status };
-    } catch (error) { return update({ phase: 'error', error: error.message }); }
+    } catch (error) { return update({ ready: false, phase: 'error', error: error.message }); }
   }
   window.GoiVietOffline = Object.freeze({
     get ready() { return pending || initialized; },
@@ -108,7 +121,8 @@
   if (supported) navigator.serviceWorker.addEventListener('message', event => {
     if (event.data?.type !== 'GOIVIET_OFFLINE_PROGRESS' || event.source?.scriptURL.split('?')[0] !== workerURL) return;
     const { resources, expectedResources, bytes, error } = event.data;
-    update({ resources, expectedResources, bytes, ...(error ? { phase: 'error', error } : {}) });
+    if (error) workerError = error;
+    update({ resources, expectedResources, bytes, ...(error ? { ready: false, phase: 'error', error } : {}) });
   });
   button?.addEventListener('click', () => { void window.GoiVietOffline.prepare(); });
   document.addEventListener('goiviet:langchange', render);

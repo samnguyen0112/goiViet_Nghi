@@ -64,7 +64,7 @@
     });
   }
 
-  function cancelDraw() {
+  function cancelDraw({ rerender = true } = {}) {
     generation++;
     timers.forEach(clearTimeout);
     timers.clear();
@@ -75,7 +75,7 @@
     byId('btnDrawCard').disabled = false;
     byId('btnDrawCard').firstElementChild.textContent = T('cards.shuffleButton');
     byId('conversationShuffleStatus').textContent = '';
-    renderDeck();
+    if (rerender) renderDeck();
   }
 
   function draw(clickedCard) {
@@ -99,11 +99,13 @@
     const status = text => { byId('conversationShuffleStatus').textContent = text; };
     const commit = () => {
       if (currentPlace().id !== place.id) { cancelDraw(); return; }
+      // Reset scroll before mutating the modal DOM so setScrollTop does not force a synchronous layout on the newly dirtied card.
+      const scrollBody = byId('deckScrollBody');
+      if (scrollBody && scrollBody.scrollTop) scrollBody.scrollTop = 0;
       // Consume only on completion, so closing during a shuffle never loses a card.
+      // Clear shuffle state without rebuilding the now-hidden fan; drawOneCard updates the remaining UI once.
+      cancelDraw({ rerender: false });
       drawOneCard(chosen.id);
-      cancelDraw();
-      updateDeckRemainingUI(place);
-      byId('deckScrollBody').scrollTop = 0;
       focusFace('front');
     };
     if (reduced()) { commit(); return; }

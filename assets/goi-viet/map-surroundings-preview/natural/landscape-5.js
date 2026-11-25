@@ -172,7 +172,7 @@
       document.getElementById('naturalDetailInfo').textContent=names[detailGroup]+(entry?' · '+G(entry.label):detailReef>=0?' · '+G(reefChoices(group).find(r=>r.index===detailReef).label):detailFeature>=0?' · '+G(displayName(group.islands[detailFeature])):'')+(archipelago?T('isl.infoArch',' · Màu rạn thể hiện lớp địa mạo, không phải số đo độ sâu.'):T('isl.info',' · Kéo và thu phóng để xem gần. Hình theo dữ liệu địa lý; màu được minh họa.'));
     });
   }
-  function openDetail(id='phu-quoc',trigger=document.activeElement){ensure().then(ok=>{if(!ok||!islands.groups.some(g=>g.id===id))return;createDialog();const wasOpen=dialog.classList.contains('open');if(wasOpen&&detailGroup===id)return;dialog.classList.add('open');switchGroup(id);if(!wasOpen)pushModalFocus('naturalIslandModal',trigger);else{syncBackgroundInertAndRenderState();focusFirstElementInModal(dialog);}requestMapRender(2);});}
+  function openDetail(id='phu-quoc',trigger=document.activeElement){ensure().then(ok=>{if(!ok||!islands.groups.some(g=>g.id===id))return;createDialog();const wasOpen=dialog.classList.contains('open');if(wasOpen&&detailGroup===id)return;dialog.classList.add('open');switchGroup(id);if(!wasOpen)pushModalFocus('naturalIslandModal',trigger);else{focusFirstElementInModal(dialog);syncBackgroundInertAndRenderState();}requestMapRender(2);});}
   window.addEventListener('keydown', event => {
     if (event.key !== 'Escape' || !dialog?.classList.contains('open')) return;
     if (getTopOpenModalElement() !== dialog) return;
