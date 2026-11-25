@@ -1,0 +1,334 @@
+/* Map controls for the integrated preview-5 journey. */
+body[data-arrival-preview]:has(#introScreen.intro-hidden) #mapScene {
+  --journey-paper: #fffbf0;
+  --journey-tint: #f5edd9;
+  --journey-ink: #183e34;
+  --journey-muted: #6b5c45;
+  --journey-rule: #dbc8a2;
+  --journey-brass: #ab8b57;
+  --journey-red: #942331;
+  --journey-serif: 'Heritage Station Heading', 'Playfair Display', Georgia, serif;
+
+  & .top-header .header-actions > #btnRandomTicket {
+    background: #9c3428;
+    border-color: #d4a76c;
+    color: #fff4de;
+    box-shadow: inset 0 0 0 2px #f7d49a42;
+    transform: none;
+    transition: background-color .16s ease, border-color .16s ease, box-shadow .16s ease;
+  }
+  & .top-header .header-actions > #btnRandomTicket:is(:hover, :focus-visible) {
+    background: #7c281f;
+    border-color: #edc88c;
+    box-shadow: inset 0 0 0 2px #f7d49a8c;
+    transform: none;
+  }
+  & .top-header .header-actions > #btnRandomTicket:active {
+    background: #68231d;
+    transform: none;
+  }
+  & .top-header .header-actions > #btnRandomTicket:focus-visible {
+    outline: 2px solid var(--journey-ink);
+    outline-offset: 2px;
+  }
+
+  & #journeyRouteBar[data-mode='preview'] {
+    padding: 12px;
+    border: 1px solid var(--journey-brass);
+    border-radius: 15px;
+    background: var(--journey-paper);
+    color: var(--journey-ink);
+    box-shadow: 0 9px 24px #152d2b38;
+  }
+  & #journeyRouteBar[data-mode='preview'] .journey-route-main {
+    grid-template-columns: 44px minmax(0, 1fr) minmax(128px, 33%);
+    align-items: center;
+    gap: 8px 13px;
+  }
+  & #journeyRouteBar[data-mode='preview'] .journey-route-emblem {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--journey-rule);
+    border-radius: 50%;
+    background: var(--journey-tint);
+    color: var(--journey-red);
+  }
+  & #journeyRouteBar[data-mode='preview'] .journey-route-emblem svg { width: 25px; height: 25px; }
+  & #journeyRouteBar[data-mode='preview'] .journey-status {
+    margin: 0 0 3px;
+    color: var(--journey-red);
+    font: 700 10px/1.4 var(--font-sans);
+    letter-spacing: .08em;
+  }
+  & #journeyRouteBar[data-mode='preview'] .journey-route-title {
+    margin: 0;
+    font: 700 clamp(23px, 2.5vw, 30px)/1.17 var(--journey-serif);
+    color: var(--journey-ink);
+    overflow-wrap: anywhere;
+  }
+  & #journeyRouteBar[data-mode='preview'] .arrival-route-highlights {
+    color: var(--journey-muted);
+    font: 400 11px/1.45 var(--font-sans);
+    margin-top: 5px;
+  }
+  & #journeyRouteBar .journey-route-meta:not([hidden]) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0 7px;
+    color: var(--journey-muted);
+    font: 500 11px/1.45 var(--font-sans);
+  }
+  & #journeyRouteBar .journey-route-meta > .arrival-eta {
+    margin-top: 1px;
+    color: inherit;
+    font: inherit;
+  }
+  & #journeyRouteBar .journey-route-meta > .arrival-eta:not([hidden])::before {
+    content: '';
+    display: inline-block;
+    width: 3px;
+    height: 3px;
+    margin-inline-end: 7px;
+    vertical-align: middle;
+    border-radius: 50%;
+    background: currentColor;
+  }
+  & #journeyRouteBar[data-mode='preview'] .arrival-route-actions {
+    margin: 0;
+    padding: 3px 0 3px 12px;
+    border-inline-start: 1px dashed var(--journey-brass);
+    max-width: none;
+    min-width: 0;
+    gap: 5px;
+  }
+  & #journeyRouteBar[data-mode='preview'] #arrivalExplore:not([hidden]) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    width: 100%;
+    min-height: 46px;
+    border: 1px solid #7d202c;
+    border-radius: 8px;
+    background: #942331;
+    color: #fffbef;
+    font: 700 13px/1.35 var(--font-sans);
+    box-shadow: 0 2px 0 #691b23;
+    text-align: start;
+  }
+  & #journeyRouteBar[data-mode='preview'] #arrivalExplore::after {
+    content: '';
+    flex: 0 0 16px;
+    height: 16px;
+    background: currentColor;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 8h11m-5-5 5 5-5 5'/%3E%3C/svg%3E") center / contain no-repeat;
+  }
+  & #journeyRouteBar[data-mode='preview'] #arrivalExplore:hover { background: #771b28; }
+  & #journeyRouteBar[data-mode='preview'] #arrivalExplore:focus-visible {
+    outline: 2px solid var(--journey-ink);
+    outline-offset: 2px;
+  }
+
+  & .bottom-dock:has(#mapViewOptions[open]) { z-index: 36; }
+  & #mapViewOptions { position: static; }
+  & #mapViewOptions .control-options {
+    inset: auto 0 calc(100% + 8px) auto;
+    width: min(258px, var(--map-space-width, 100vw), calc(100vw - 20px));
+    padding: 7px;
+    gap: 3px;
+    background: var(--journey-paper);
+    color: var(--journey-ink);
+    border: 1px solid var(--journey-brass);
+    border-radius: 12px;
+    box-shadow: 0 9px 24px #152d2b38;
+    overscroll-behavior: contain;
+  }
+  & #mapViewOptions .control-options .map-view-action {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    min-height: 42px;
+    padding: 8px 9px;
+    border: 1px solid transparent;
+    border-radius: 7px;
+    background: transparent;
+    color: var(--journey-ink);
+    font: 600 12px/1.4 var(--font-sans);
+    box-shadow: none;
+  }
+  & #mapViewOptions .map-view-action svg { width: 19px; height: 19px; flex: none; color: var(--journey-brass); }
+  & #mapViewOptions #btnTogglePitch::after {
+    content: '';
+    position: static;
+    width: 15px;
+    height: 15px;
+    margin-inline-start: auto;
+    flex: none;
+    border-radius: 50%;
+    border: 1px solid var(--journey-brass);
+    background: transparent;
+  }
+  & #mapViewOptions #btnTogglePitch[aria-pressed='true']::after {
+    background: var(--journey-ink);
+    border-color: var(--journey-ink);
+    box-shadow: inset 0 0 0 3px var(--journey-paper);
+  }
+  & #mapViewOptions .map-view-extra { border-top: 1px solid var(--journey-rule); }
+  & #mapViewOptions .map-view-extra > summary { min-height: 36px; padding-inline: 9px; font-weight: 500; color: var(--journey-muted); }
+  & #mapViewAdvanced {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5px;
+    padding: 2px 3px 4px;
+  }
+  & #mapViewAdvanced .dock-btn {
+    min-height: 37px;
+    padding: 5px 6px;
+    justify-content: center;
+    text-align: center;
+    font-size: 10px;
+  }
+  & #mapViewAdvanced .regional-wave-option { grid-column: 1 / -1; padding: 6px 4px; color: var(--journey-muted); }
+  & #naturalIslandsButton {
+    width: 100%;
+    min-height: 36px;
+    padding: 6px 9px;
+    border: 1px solid transparent;
+    border-radius: 7px;
+    background: transparent;
+    color: var(--journey-ink);
+    text-align: start;
+    justify-content: flex-start;
+    font: 600 11px/1.4 var(--font-sans);
+    box-shadow: none;
+  }
+  & #naturalIslandsButton::after { content: '↗' / ''; margin-inline-start: .5em; }
+
+  & #headerSettings .control-options {
+    width: min(310px, calc(100vw - 24px));
+    padding: 8px;
+    gap: 2px;
+    border-radius: 13px;
+    border-color: var(--journey-brass);
+    background: var(--journey-paper);
+    box-shadow: 0 9px 24px #152d2b38;
+    color: var(--journey-ink);
+  }
+  & #headerSettings .settings-header {
+    min-height: 48px;
+    margin: 0 0 3px;
+    padding: 2px 7px 7px;
+    gap: 9px;
+    border-color: var(--journey-rule);
+  }
+  & #headerSettings .settings-title { color: var(--journey-ink); font: 700 20px/1.2 var(--journey-serif); }
+  & #headerSettings .settings-header-mark {
+    width: 31px;
+    height: 31px;
+    border: 0;
+    border-radius: 7px;
+    color: var(--journey-red);
+    background: var(--journey-tint);
+  }
+  & #headerSettings .control-options > .settings-option {
+    grid-template-columns: 20px minmax(0, 1fr);
+    grid-template-rows: auto;
+    gap: 2px 10px;
+    align-items: center;
+    min-height: 42px;
+    padding: 6px 53px 6px 8px;
+    border-radius: 7px;
+  }
+  & #headerSettings .settings-option .settings-icon,
+  & #headerSettings #mapSources > summary .settings-icon {
+    grid-row: 1;
+    width: 20px;
+    height: 20px;
+    border: 0;
+    background: transparent;
+    color: var(--journey-brass);
+  }
+  & #headerSettings .settings-option-hint[hidden] { display: none; }
+  & #headerSettings .settings-option::after { width: 14px; height: 14px; }
+  & #headerSettings .settings-offline,
+  & #headerSettings #mapSources {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--journey-ink);
+  }
+  & #headerSettings .settings-offline { margin-top: 3px; padding-top: 3px; border-top: 1px solid var(--journey-rule); border-radius: 0; }
+  & #headerSettings #mapSources > summary, & #headerSettings .settings-offline > summary { padding-inline: 8px; gap: 10px; }
+  & #headerSettings .settings-offline > summary .settings-icon { width: 20px; height: 20px; border: 0; background: none; color: var(--journey-brass); border-radius: 0; }
+  & #headerSettings #mapSources .map-source-chevron { margin-inline-start: auto; }
+  & #headerSettings .settings-offline-body {
+    margin: 0 5px 5px;
+    padding: 8px;
+    border-radius: 7px;
+    background: var(--journey-tint);
+  }
+  & #headerSettings .settings-offline-body #offlinePrepareStatus:first-of-type { margin-bottom: 0; }
+  & #headerSettings .settings-offline-body:has(#btnPrepareOffline:disabled:not([aria-busy='true'])) :is(#btnPrepareOffline, #offlinePrepareSize) { display: none; }
+  & #headerSettings .settings-offline-body:has(#btnPrepareOffline:disabled:not([aria-busy='true'])) #offlinePrepareStatus { margin-top: 0; }
+
+  & :is(#mapViewOptions .map-view-extra, #headerSettings .settings-offline, #headerSettings #mapSources) > summary {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 40px;
+    border-radius: 7px;
+    color: var(--journey-ink);
+    cursor: pointer;
+    list-style: none;
+    font: 600 12px/1.4 var(--font-sans);
+  }
+  & :is(#mapViewOptions .map-view-extra, #headerSettings .settings-offline) > summary::after {
+    content: '';
+    flex: 0 0 6px;
+    height: 6px;
+    border: solid currentColor;
+    border-width: 0 1.5px 1.5px 0;
+    transform: rotate(45deg);
+    margin: -3px 5px 0 auto;
+  }
+  & :is(#mapViewOptions .map-view-extra, #headerSettings .settings-offline)[open] > summary::after { transform: rotate(225deg); margin-top: 3px; }
+  & :is(#mapViewOptions .map-view-extra, #headerSettings .settings-offline, #headerSettings #mapSources) > summary::-webkit-details-marker { display: none; }
+  & :is(#mapViewOptions .map-view-action, #naturalIslandsButton, #mapViewOptions .map-view-extra > summary, #headerSettings .settings-offline > summary, #headerSettings #mapSources > summary):hover {
+    background: var(--journey-tint);
+    color: var(--journey-ink);
+  }
+  & :is(#mapViewOptions, #headerSettings, #islandDiscoverSlot) :is(button, summary):focus-visible {
+    outline: 2px solid var(--journey-ink);
+    outline-offset: -2px;
+  }
+}
+
+html[data-theme='dark'] body[data-arrival-preview]:has(#introScreen.intro-hidden) #mapScene {
+  --journey-paper: #22392f;
+  --journey-tint: #2e4639;
+  --journey-ink: #faf0d6;
+  --journey-muted: #d6c9ad;
+  --journey-rule: #66745c;
+  --journey-brass: #d4b47a;
+  --journey-red: #ffc4ae;
+}
+
+@media (max-width: 767px) {
+  body[data-arrival-preview]:has(#introScreen.intro-hidden) #mapScene #journeyRouteBar[data-mode='preview'] {
+    padding: 9px 11px;
+    & .journey-route-main { grid-template-columns: 34px minmax(0, 1fr); gap: 6px 9px; }
+    & .journey-route-emblem { width: 34px; height: 34px; }
+    & .journey-route-emblem svg { width: 21px; height: 21px; }
+    & .arrival-route-actions { grid-column: 1 / -1; flex-direction: row; border: 0; padding: 0; }
+    & #arrivalExplore:not([hidden]) { min-height: 42px; }
+    & .journey-instant { width: auto; flex-shrink: 0; }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  body[data-arrival-preview]:has(#introScreen.intro-hidden) #mapScene .top-header .header-actions > #btnRandomTicket { transition: none; }
+}
+body.reduced-motion[data-arrival-preview] #mapScene .top-header .header-actions > #btnRandomTicket { transition: none; }

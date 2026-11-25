@@ -22,7 +22,7 @@ const fail = msg => { problems.push(msg); console.log('✗ ' + msg); };
 const ok = msg => console.log('✓ ' + msg);
 
 // ---------------------------------------------------------------- static checks
-const sandbox = { window: {}, document: { addEventListener() {}, dispatchEvent() {}, querySelectorAll: () => [], documentElement: {} }, location: { search: '' }, localStorage: { getItem: () => null, setItem() {} }, URLSearchParams, CustomEvent: function () {} };
+const sandbox = { window: {}, document: { addEventListener() {}, dispatchEvent() {}, querySelectorAll: () => [], documentElement: { hasAttribute: name => html.match(/<html\b[^>]*>/i)[0].includes(name) } }, location: { search: '' }, localStorage: { getItem: () => null, setItem() {} }, URLSearchParams, CustomEvent: function () {} };
 sandbox.window = sandbox;
 vm.createContext(sandbox);
 const dictionaryAssets = ['i18n-5.js', 'i18n-ui-5.js', 'i18n-arrival-5.js'];
@@ -56,7 +56,13 @@ missingEn.length ? fail(`${missingEn.length} keys used in code have no English: 
 // Labels attached to data (topic., activityKind., pawn.) are English-only by design: their Vietnamese is the data.
 // …and so are keys read with T(key, fallback) (the Vietnamese fallback sits in the code) and the home prompts
 // (homeq., registered from memory-reference-5.js at run time).
-const mismatch = I.missing().filter(k => !markupKeys.has(k) && !withFallback.has(k) && !/^(topic|activityKind|pawn|homeq)\./.test(k));
+// The standalone arrival demo also supplies Vietnamese markup fallbacks for this shared dictionary.
+const fallbackKeys = new Set(markupKeys);
+const arrivalDemo = read('map-surroundings-preview-5-arrival-demo.html');
+for (const m of arrivalDemo.matchAll(/\sdata-i18n(?:-label|-title|-placeholder|-alt)?="([^"]+)"/g)) {
+  m[1].split('|').filter(Boolean).forEach(k => fallbackKeys.add(k));
+}
+const mismatch = I.missing().filter(k => !fallbackKeys.has(k) && !withFallback.has(k) && !/^(topic|activityKind|pawn|homeq)\./.test(k));
 mismatch.length ? fail(`${mismatch.length} dictionary keys exist in only one language: ${mismatch.slice(0, 8).join(', ')}`) : ok('every dictionary key that is not markup has both languages');
 
 // ---------------------------------------------------------------- walk (browser)

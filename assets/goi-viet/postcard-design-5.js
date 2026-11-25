@@ -3,6 +3,8 @@
 /* The editable journal and the exported PNG read the same session and opt-ins. */
 (() => {
   'use strict';
+  const groupPlay = document.documentElement.hasAttribute('data-group-play');
+  const memoryLimit = 5;
   const T = (key, fallback, vars) => { const I = window.GoiVietI18n; if (!I) return fallback; const value = I.t(key, vars); return value === key ? fallback : value; };
   function paint() {
     const canvas = document.getElementById('postcardExportCanvas'); if (!canvas) return;
@@ -17,7 +19,8 @@
     text(T('png.kicker','GÓI VIỆT · KÝ ỨC GIA ĐÌNH'),58,66,12,gold,600);
     text(T('png.title','Lưu bút một chuyến đi'),58,116,38,ink,700,'display');
     const date=new Date().toLocaleDateString(window.GoiVietI18n?.lang()==='en'?'en-GB':'vi-VN');
-    text(T('png.players',`${state.playerCount} người cùng chơi   ·   ${date}`,{n:state.playerCount,date}),60,146,14,muted);
+    const dateLine = groupPlay ? date : T('png.players',`${state.playerCount} người cùng chơi   ·   ${date}`,{n:state.playerCount,date});
+    text(dateLine,60,146,14,muted);
     const logo=postcardArtwork.logo;
     // Preview 3: the ivory-ribbon logo needs more room than the solid red mark to stay legible.
     if(logo){const scale=Math.min(220/logo.naturalWidth,92/logo.naturalHeight);g.drawImage(logo,W-282,44,logo.naturalWidth*scale,logo.naturalHeight*scale);}
@@ -40,10 +43,11 @@
       lines(T('png.emptyHint','Chơi thẻ hoặc đọc sách để lưu dấu hành trình.'),x1+22,y+122,col-44,14,muted,3);
     }else for(const [i,stamp] of stamps.entries()){
       text(String(i+1).padStart(2,'0'),x1+20,y,12,gold,600);
-      g.font=canvasFont(14,600);g.fillStyle=ink;drawPostcardTextLines(g,`${stamp.placeName} · ${stamp.player}`,x1+48,y,col-68,20,1);
+      const station = groupPlay ? stamp.placeName : `${stamp.placeName} · ${stamp.player}`;
+      g.font=canvasFont(14,600);g.fillStyle=ink;drawPostcardTextLines(g,station,x1+48,y,col-68,20,1);
       lines(stamp.activity||stamp.topic||'',x1+48,y+21,col-68,12,muted,1);y+=48;
     }
-    const memories=state.mentionedPlaces.filter(m=>m.includeInPostcard).slice(0,5);
+    const memories=state.mentionedPlaces.filter(m=>m.includeInPostcard).slice(0,memoryLimit);
     if(!memories.length){
       text(T('png.memoryTitle1','Một điều đáng nhớ,'),x2+22,top+104,24,ink,400,'display');
       text(T('png.memoryTitle2','một câu chuyện để dành.'),x2+22,top+137,24,ink,400,'display');
@@ -52,7 +56,9 @@
     }else{
       let y=top+69;
       for(const memory of memories){
-        g.font=canvasFont(15,600);g.fillStyle=red;drawPostcardTextLines(g,`${memory.name} · ${memory.player}`,x2+20,y,col-40,21,1);
+        const author = groupPlay ? memory.author : memory.player;
+        const caption = author ? `${memory.name} · ${author}` : memory.name;
+        g.font=canvasFont(15,600);g.fillStyle=red;drawPostcardTextLines(g,caption,x2+20,y,col-40,21,1);
         lines(`“${memory.note||''}”`,x2+20,y+23,col-40,13,muted,2);y+=64;
       }
     }
@@ -61,5 +67,5 @@
     text(T('png.footer','Cùng đi qua những miền đất. Cùng giữ lại những điều thương.'),58,H-65,15,ink,400,'display');
     text(T('png.note','Hành trình văn hóa minh họa · Kỷ niệm do gia đình chọn lưu'),58,H-38,10,muted);
   }
-  window.GoiVietPostcardDesign=Object.freeze({paint});
+  window.GoiVietPostcardDesign=Object.freeze({paint,memoryLimit});
 })();

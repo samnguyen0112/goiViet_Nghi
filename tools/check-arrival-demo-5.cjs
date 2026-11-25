@@ -457,7 +457,7 @@ async function verifySize(viewport) {
       assert.match(await page.locator('#arrivalSheet .arrival-reached').innerText(), /Đã đến ga/i);
       await page.locator('.gv-lang-toggle-header [data-set-lang="en"]').click();
       await enCheck(page);
-      await wait(page, () => !document.getElementById('turnHandoffToast').classList.contains('show') && !document.getElementById('mapStationArrivalBanner').classList.contains('show'));
+      await wait(page, () => !document.getElementById('turnHandoffToast')?.classList.contains('show') && !document.getElementById('mapStationArrivalBanner').classList.contains('show'));
       await shot(page, size + '-13-english');
       await page.keyboard.press('Escape'); await page.locator('#previewPanelOpen').click();
       await page.locator('#tabScopeAll').click();
@@ -618,9 +618,20 @@ async function verifyRound3(viewport) {
       const regions=await evaluate(page,()=>ALL_PLAYABLE_PLACES.map(p=>({id:p.id,region:GoiVietArrivalDemo.region(p)})));assert(regions.every(p=>p.region));
       await shot(page,size+'-r3-K-region-groups');await page.locator('#provSearchInput').fill('danang');assert.equal(await page.locator('.arrival-region-group').count(),0);assert.equal(await page.locator('#demoPlaceList [data-station-action="select"]').first().getAttribute('data-place'),'dn');await page.keyboard.press('Escape');return regions;
     });
-    await test(page,size,'L','Turn handoff describes the prepared destination in VI and EN',async()=>{
-      await visit('hanoi','hn');await pickFromList(page,'hue','hue');await page.locator('.turn-banner .small-wood-btn').click();assert.match(await page.locator('#turnHandoffToast').innerText(),/sẵn sàng tới.*Huế/);
-      await page.locator('.gv-lang-toggle-header [data-set-lang="en"]').click();assert.match(await page.locator('#turnHandoffToast').innerText(),/train is ready for/);await page.locator('.gv-lang-toggle-header [data-set-lang="vi"]').click();await shot(page,size+'-r3-L-turn-ready');
+    await test(page,size,'L',integrated ? 'Group can depart directly in VI and EN' : 'Turn handoff describes the prepared destination in VI and EN',async()=>{
+      await visit('hanoi','hn');await pickFromList(page,'hue','hue');
+      if (integrated) {
+        assert.equal(await page.locator('.turn-banner, #turnHandoffToast').count(), 0);
+        assert.match(await page.locator('#arrivalExplore').innerText(), /Khám phá/);
+      } else {
+        await page.locator('.turn-banner .small-wood-btn').click();
+        assert.match(await page.locator('#turnHandoffToast').innerText(), /sẵn sàng tới.*Huế/);
+      }
+      await page.locator('.gv-lang-toggle-header [data-set-lang="en"]').click();
+      if (integrated) assert.match(await page.locator('#arrivalExplore').innerText(), /Explore/);
+      else assert.match(await page.locator('#turnHandoffToast').innerText(), /train is ready for/);
+      await page.locator('.gv-lang-toggle-header [data-set-lang="vi"]').click();
+      await shot(page,size+'-r3-L-ready');
     });
     await test(page,size,'B','Actual passing-text changes do not dirty fixed-size label obstacles',async()=>{
       await reduce(false);await pickFromList(page,'saigon','hcm');
@@ -669,13 +680,13 @@ async function verifyRound3(viewport) {
       await page.locator('.gv-lang-toggle-header [data-set-lang="en"]').click();assert.match(await page.locator('.journey-status').innerText(),/At the Hoàng Sa Islands/);assert.equal(await page.locator('.arrival-reached').innerText(),'Reached the islands');await page.locator('.gv-lang-toggle-header [data-set-lang="vi"]').click();await pickFromList(page,'truong sa','truong-sa');assert.match(await page.locator('.arrival-eta').innerText(),/^Khoảng \d+ giây$/);assert(!/\d[.,]\d/.test(await page.locator('.arrival-eta').innerText()));
     });
     await test(page,size,'H','Completing a card earns a seal and updates header and both journal counters',async()=>{
-      await visit('hanoi','hn');const before=await evaluate(page,()=>state.totalCardsCompleted);await page.locator('#deck-open-hn').click();await drawCard(page);await page.locator('#btnDontKnowReveal').click();await page.locator('#conversationConnectionContent[aria-hidden="false"]').waitFor();await page.locator('#btnCompleteCardTurn').click();await wait(page,()=>!document.getElementById('deckModal').classList.contains('open'));await wait(page,()=>document.querySelector('.arrival-seal-status').textContent==='Đã đóng ấn ga');assert.equal(await evaluate(page,()=>state.totalCardsCompleted),before+1);assert.match(await page.locator('#cardProgressLabel').getAttribute('aria-label'),/Chơi xong lá bài/);await shot(page,size+'-r3-H-sealed');await page.locator('#previewPanelOpen').click();if(!await page.locator('#arrivalSealedCount').isVisible())await page.locator('#stationJournalToggle').click();assert.match(await page.locator('#arrivalVisitedCount').innerText(),/Đã đặt chân \d+\/36/);assert.match(await page.locator('#arrivalSealedCount').innerText(),/Đã đóng ấn 1/);await page.keyboard.press('Escape');
+      await visit('hanoi','hn');const before=await evaluate(page,()=>state.totalCardsCompleted);await page.locator('#deck-open-hn').click();await drawCard(page);await page.locator('#btnDontKnowReveal').click();await page.locator('#conversationConnectionContent[aria-hidden="false"]').waitFor();await page.locator('#btnCompleteCardTurn').click();await wait(page,()=>!document.getElementById('deckModal').classList.contains('open'));await wait(page,()=>document.querySelector('.arrival-seal-status').textContent==='Đã đóng ấn ga');assert.equal(await evaluate(page,()=>state.totalCardsCompleted),before+1);assert.match(await page.locator('#cardProgressLabel').getAttribute('aria-label'),integrated ? /Chơi 3 lá bài/ : /Chơi xong lá bài/);await shot(page,size+'-r3-H-sealed');await page.locator('#previewPanelOpen').click();if(!await page.locator('#arrivalSealedCount').isVisible())await page.locator('#stationJournalToggle').click();assert.match(await page.locator('#arrivalVisitedCount').innerText(),/Đã đặt chân \d+\/36/);assert.match(await page.locator('#arrivalSealedCount').innerText(),/Đã đóng ấn 1/);await page.keyboard.press('Escape');
     });
     await test(page,size,'I','Unreadied books explain Coming soon; existing books keep Draft label',async()=>{
       await visit('danang','dn');assert.equal(await page.locator('#book-open-dn small').innerText(),'Sắp có · Góp chuyện quê bạn');await visit('hanoi','hn');assert.equal(await page.locator('#book-open-hn small').innerText(),'Bản nháp');
     });
     await test(page,size,'J','Projector type scale, safe layout and compact station controls',async()=>{
-      await layout(page,'hn');const info=await evaluate(page,()=>{const s=document.getElementById('arrivalSheet'),f=sel=>parseFloat(getComputedStyle(s.querySelector(sel)).fontSize);return {width:s.getBoundingClientRect().width,body:f('.arrival-summary'),small:f('.arrival-turn'),label:f('dt'),caption:f('.gv-station-photo-credit summary')};});if(viewport.width>=1600){assert(info.width>=480&&info.width<=520);assert(info.body>=14&&info.small>=12&&info.label>=12&&info.caption>=12);}
+      await layout(page,'hn');const info=await evaluate(page,()=>{const s=document.getElementById('arrivalSheet'),f=sel=>{const el=s.querySelector(sel);return el ? parseFloat(getComputedStyle(el).fontSize) : null;};return {width:s.getBoundingClientRect().width,body:f('.arrival-summary'),small:f('.arrival-turn'),label:f('dt'),caption:f('.gv-station-photo-credit summary')};});if(viewport.width>=1600){assert(info.width>=480&&info.width<=520);assert(info.body>=14&&(integrated ? info.small===null : info.small>=12)&&info.label>=12&&info.caption>=12);}
       assert(await page.locator('.journey-choose').isVisible());assert(!await page.locator('#arrivalOpenInfo').isVisible());const gaps=await evaluate(page,()=>{const el=document.querySelector('.journey-status'),r=document.createRange();r.selectNodeContents(el);return el.getBoundingClientRect().width-r.getBoundingClientRect().width});assert(gaps<24,'Blank route-info width '+gaps);await page.locator('#arrivalSheet .arrival-close').click();assert(await page.locator('#arrivalOpenInfo').isVisible());assert(await page.locator('.journey-choose').isVisible());await page.locator('.journey-choose').click();assert(await page.locator('#stationPanel').isVisible());await page.keyboard.press('Escape');await shot(page,size+'-r3-J-station-strip');return {...info,gaps};
     });
   } finally {await bounded(page.context().close(),12000,'round3 context.close');}

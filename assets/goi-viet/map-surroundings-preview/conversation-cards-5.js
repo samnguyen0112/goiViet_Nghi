@@ -58,6 +58,7 @@
       emblem.setAttribute('aria-hidden', 'true');
       core.append(emblem, label('conversation-card-title', T('cards.title')), label('conversation-card-sub', place.short || place.name));
       button.append(core, label('conversation-card-footer', T(visible.length ? 'cards.tap' : 'cards.empty')));
+      window.GoiVietCardCovers?.decorate(button, place, topicName(card.topic), card.topic);
       button.addEventListener('click', () => draw(button));
       deck.append(button);
     });
@@ -138,14 +139,19 @@
     later(commit, 2850);
   }
 
-  function prepareConnection() {
-    openedConnection = null;
+  function prepareConnection(unlocked = false) {
     const card = state.activeCard;
+    openedConnection = unlocked ? card?.id : null;
     if (!card) return;
-    byId('cardBackTurnTag').textContent = T('js.deck.turnOf', { name: getCurrentPlayerName() });
-    const kind = card.activityCategories?.[state.activeActivityIdx] || card.activityCategory;
-    byId('activityCategoryTag').textContent = kind ? (typeof activityKindLabel === 'function' ? activityKindLabel(kind) : kind) : T('js.deck.activityFallback');
-    byId('activityMainText').textContent = card.activities[state.activeActivityIdx] || card.activities[0];
+    const turnTag = byId('cardBackTurnTag');
+    if (turnTag) turnTag.textContent = T('js.deck.turnOf', { name: getCurrentPlayerName() });
+    // P5-06: showCardActivity (page) puts a Canva card's challenge first.
+    if (typeof showCardActivity === 'function') showCardActivity(card);
+    else {
+      const kind = card.activityCategories?.[state.activeActivityIdx] || card.activityCategory;
+      byId('activityCategoryTag').textContent = kind ? (typeof activityKindLabel === 'function' ? activityKindLabel(kind) : kind) : T('js.deck.activityFallback');
+      byId('activityMainText').textContent = card.activities[state.activeActivityIdx] || card.activities[0];
+    }
     restoreMemoryInputsFromDraft();
   }
 
@@ -165,6 +171,7 @@
   }
 
   function focusFace(side) {
+    if (window.GoiVietCardTable?.focusFace(side)) return;
     const el = side === 'back' ? modal.querySelector('.activity-prompt-box') : byId('cardQuestionText');
     el.tabIndex = -1;
     el.focus({ preventScroll: true });

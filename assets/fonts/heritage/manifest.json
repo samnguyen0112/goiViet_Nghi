@@ -76,7 +76,72 @@
       "downloadedOn": "2026-10-11",
       "licenseRevision": "8b0a1d0f5983c89bc2b93f1b5fb55f9e252744b5",
       "cssUrl": "https://fonts.googleapis.com/css?family=Playfair+Display:700&subset=latin,vietnamese&display=swap"
+    },
+    {
+      "family": "Oswald",
+      "weight": 500,
+      "style": "normal",
+      "file": "Oswald-500.woff",
+      "url": "https://fonts.gstatic.com/s/oswald/v57/TK3_WkUHHAIjg75cFRf3bXL8LICs18NvsUliYw.woff",
+      "sha256": "574e4bda6fa22246110499caf363919efe15efca4303f38bdd5b48315d8d2980",
+      "role": "card-cover",
+      "active": true,
+      "downloadedOn": "2026-11-19",
+      "licenseRevision": "8b0a1d0f5983c89bc2b93f1b5fb55f9e252744b5",
+      "cssUrl": "https://fonts.googleapis.com/css?family=Oswald:500,600&subset=latin,vietnamese&display=swap"
+    },
+    {
+      "family": "Oswald",
+      "weight": 600,
+      "style": "normal",
+      "file": "Oswald-600.woff",
+      "url": "https://fonts.gstatic.com/s/oswald/v57/TK3_WkUHHAIjg75cFRf3bXL8LICs1y9osUliYw.woff",
+      "sha256": "2ad542810dc547c89397d596b3824d4962adac34bd2dc91086c045b58521bece",
+      "role": "card-cover",
+      "active": true,
+      "downloadedOn": "2026-11-19",
+      "licenseRevision": "8b0a1d0f5983c89bc2b93f1b5fb55f9e252744b5",
+      "cssUrl": "https://fonts.googleapis.com/css?family=Oswald:500,600&subset=latin,vietnamese&display=swap"
+    },
+    {
+      "family": "Dancing Script",
+      "weight": 700,
+      "style": "normal",
+      "file": "DancingScript-700.woff",
+      "url": "https://fonts.gstatic.com/s/dancingscript/v29/If2cXTr6YS-zF4S-kcSWSVi_sxjsohD9F50Ruu7B1i03Rep6.woff",
+      "sha256": "9650ef346d7fed80a0c2c8af0541e32f5eb0c741d686c05afd4bd9a9407e30fb",
+      "role": "card-cover",
+      "active": true,
+      "downloadedOn": "2026-11-19",
+      "licenseRevision": "7380f7cebbf2250460c23fd301b51bcbab162edf",
+      "cssUrl": "https://fonts.googleapis.com/css?family=Dancing+Script:700%7CBarlow+Semi+Condensed:500&subset=latin,vietnamese&display=swap"
+    },
+    {
+      "family": "Barlow Semi Condensed",
+      "weight": 500,
+      "style": "normal",
+      "file": "BarlowSemiCondensed-500.woff",
+      "url": "https://fonts.gstatic.com/s/barlowsemicondensed/v16/wlpigxjLBV1hqnzfr-F8sEYMB0Yybp0mudRfi6m_CGsj.woff",
+      "sha256": "b5946c9d50c6c8f1bbf3b83912b8b527784145878952a2b3c52c9c1dc3618024",
+      "role": "card-cover",
+      "active": true,
+      "downloadedOn": "2026-11-19",
+      "licenseRevision": "3218ae2acc5bce7ccd97c477965b5b4094241fb0",
+      "cssUrl": "https://fonts.googleapis.com/css?family=Dancing+Script:700%7CBarlow+Semi+Condensed:500&subset=latin,vietnamese&display=swap"
+    },
+    {
+      "family": "Playfair Display",
+      "weight": 500,
+      "style": "italic",
+      "file": "PlayfairDisplay-500-italic.woff",
+      "url": "https://fonts.gstatic.com/s/playfairdisplay/v40/nuFRD-vYSZviVYUb_rj3ij__anPXDTnCjmHKM4nYO7KN_pqTXt7A_w.woff",
+      "sha256": "c29340745368983d9fcd397e7b7a815d8de011e1cbea1a281bb448011acb8297",
+      "role": "home tagline (preview-5)",
+      "active": true,
+      "downloadedOn": "2026-11-22",
+      "licenseRevision": "f4f3b47f2c7e88edeb26d0127d314f75be2b1bb3",
+      "cssUrl": "https://fonts.googleapis.com/css?family=Playfair+Display:500i&subset=latin,vietnamese&display=swap"
     }
   ],
-  "selectionUpdatedOn": "2026-10-11"
+  "selectionUpdatedOn": "2026-11-22"
 }

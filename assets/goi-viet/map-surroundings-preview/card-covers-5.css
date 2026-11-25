@@ -1,0 +1,127 @@
+/* P5-06 (2026-11-19): Canva covers on the fan cards of the 15 decks the group designed (card-covers-5.js).
+   Layout follows the Canva template on a 630 x 880 stage; --u is one design unit. */
+/* Free (OFL) stand-ins for the Canva fonts, latin + vietnamese, listed in assets/fonts/heritage/manifest.json:
+   Oswald for Street Sign Sans (place and kicker), Dancing Script for BaystarScript (label),
+   Barlow Semi Condensed for Cake Sans (quote). The Canva fonts are paid or personal-use only. */
+@font-face {
+  font-family: 'Goi Viet Cover Script';
+  src: url('../../fonts/heritage/DancingScript-700.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Goi Viet Cover Body';
+  src: url('../../fonts/heritage/BarlowSemiCondensed-500.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Goi Viet Cover Condensed';
+  src: url('../../fonts/heritage/Oswald-500.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Goi Viet Cover Condensed';
+  src: url('../../fonts/heritage/Oswald-600.woff') format('woff');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+.gv-cover-defs { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+#deckModal .fanned-card.has-canva-cover {
+  padding: 0;
+  background: #861b1b url('../card-covers-5/paper-red.webp') 0 0 / 50% auto repeat;
+}
+#deckModal .fanned-card.has-canva-cover::before { display: none; }
+#deckModal .has-canva-cover .conversation-card-core { display: none; }
+
+#deckModal .gv-cover { position: absolute; inset: 0; display: flex; align-items: center; pointer-events: none; }
+#deckModal .gv-cover-stage { position: relative; flex: none; width: 100%; aspect-ratio: 630 / 880; container-type: inline-size; }
+#deckModal .gv-cover-art { position: absolute; inset: 0; width: 100%; height: 100%; display: block; overflow: visible; }
+.gv-cover-line { fill: none; stroke: #fff; stroke-width: 1.15; vector-effect: non-scaling-stroke; }
+
+/* Words: centred on the red middle of the collage (x = 293 u), each placed by its vertical centre. */
+#deckModal .gv-cover-stage > span {
+  --u: calc(100cqw / 630);
+  position: absolute;
+  left: calc(293 * var(--u));
+  top: calc(var(--y) * var(--u));
+  transform: translate(-50%, -50%) scaleX(var(--condense, 1));
+  margin: 0;
+  white-space: nowrap;
+  text-align: center;
+  line-height: 1;
+}
+#deckModal .gv-cover-kicker {
+  --y: 333;
+  font: 500 calc(35 * var(--u)) / 1 'Goi Viet Cover Condensed', 'Be Vietnam Pro', sans-serif;
+  letter-spacing: .02em;
+  text-transform: uppercase;
+  color: #fcf8db;
+  text-shadow: 0 calc(1.5 * var(--u)) 0 #4a050580;
+}
+#deckModal .gv-cover-label {
+  --y: 403;
+  font: 700 calc(92 * var(--fit, 1) * var(--u)) / 1.1 'Goi Viet Cover Script', 'Be Vietnam Pro', cursive;
+  color: #fff;
+  text-shadow: 0 calc(2 * var(--u)) calc(4 * var(--u)) #3b000080;
+}
+#deckModal .gv-cover-place {
+  --y: 494;
+  font: 600 calc(66 * var(--fit, 1) * var(--u)) / 1 'Goi Viet Cover Condensed', 'Be Vietnam Pro', sans-serif;
+  letter-spacing: .015em;
+  text-transform: uppercase;
+  color: #fcf8db;
+  text-shadow: 0 calc(2 * var(--u)) 0 #4a050580;
+}
+#deckModal .gv-cover-quote {
+  --y: 566;
+  width: calc(380 * var(--u));
+  font: 500 calc(21 * var(--u)) / 1.3 'Goi Viet Cover Body', 'Be Vietnam Pro', system-ui, sans-serif;
+  white-space: normal !important;
+  text-wrap: balance;
+  color: #fff;
+}
+
+/* Preview-5 keeps the topic visible when the fan is closed. */
+#deckModal .conversation-card-badge { align-self: flex-start; margin-left: -6px; letter-spacing: .5px; }
+#deckModal .conversation-card-title { text-transform: uppercase; }
+
+/* The label pill sits on the top-left photo. */
+#deckModal .has-canva-cover .conversation-card-badge {
+  position: absolute;
+  top: 7px;
+  left: 7px;
+  margin: 0;
+  z-index: 2;
+  background: #7d1610;
+  border-color: #ffdf8eb3;
+  box-shadow: 0 2px 6px #2a050580;
+}
+/* "Tap to draw" appears when a card is pointed at; touch screens and an empty deck always show it. */
+#deckModal .has-canva-cover .conversation-card-footer {
+  position: absolute;
+  left: 50%;
+  bottom: 7px;
+  z-index: 2;
+  transform: translateX(-50%);
+  padding: 2px 10px;
+  border-radius: 20px;
+  border: 1px solid #ffdf8e80;
+  background: #6f120ce6;
+  color: #fff6de;
+  font-size: 11px;
+  white-space: nowrap;
+  transition: opacity .2s ease;
+}
+@media (hover: hover) and (pointer: fine) {
+  #deckModal .has-canva-cover:not(:disabled) .conversation-card-footer { opacity: 0; }
+  #deckModal .has-canva-cover:hover .conversation-card-footer,
+  #deckModal .has-canva-cover:focus-visible .conversation-card-footer { opacity: 1; }
+}
+#deckModal .has-canva-cover:disabled .gv-cover { filter: saturate(.55) brightness(.8); }

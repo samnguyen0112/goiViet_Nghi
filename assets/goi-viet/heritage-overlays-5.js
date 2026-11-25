@@ -6,6 +6,7 @@
   'use strict';
   const settings = document.querySelector('#headerSettings .control-options');
   if (!settings) return;
+  const compact = document.body.hasAttribute('data-arrival-preview');
   const T = (key, fallback, vars) => { const I = window.GoiVietI18n; if (!I) return fallback; const value = I.t(key, vars); return value === key ? fallback : value; };
   const svg = paths => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + paths + '</svg>';
   const header = document.createElement('div'); header.className = 'settings-header';
@@ -14,7 +15,9 @@
   const heading = document.createElement('div');
   const title = document.createElement('p'); title.className = 'settings-title'; title.textContent = T('overlay.title', 'Tùy chọn hành trình');
   const subtitle = document.createElement('p'); subtitle.className = 'settings-subtitle'; subtitle.textContent = T('settings.subtitle', 'Âm thanh, giao diện và hiệu ứng.');
-  heading.append(title, subtitle); header.append(mark, heading); settings.prepend(header);
+  heading.append(title);
+  if (!compact) heading.append(subtitle);
+  header.append(mark, heading); settings.prepend(header);
   const options = [
     ['#btnSoundToggle', '<path d="m11 5-6 4H2v6h3l6 4V5Z"/><path d="M15 8a6 6 0 0 1 0 8m3-11a10 10 0 0 1 0 14"/>', 'settings.soundHint', 'Tiếng tàu và giai điệu dân gian.'],
     ['#btnTheme', '<path d="M20.9 13a9 9 0 1 1-9.9-9.9A7 7 0 0 0 20.9 13Z"/>', 'settings.darkHint', 'Sắc trầm dịu mắt khi khám phá.'],
@@ -44,6 +47,11 @@
     const deviceReduced = document.getElementById('btnReducedMotion').disabled;
     const message = deviceReduced ? T('settings.motionDevice', 'Đang theo cài đặt của thiết bị.') : T('settings.motionHint', 'Tiết chế hiệu ứng và chuyển cảnh.');
     if (motionHint.textContent !== message) motionHint.textContent = message;
+    if (compact) motionHint.hidden = !deviceReduced;
+  }
+  if (compact) {
+    settings.querySelector('#btnSoundToggle-hint').hidden = true;
+    settings.querySelector('#btnTheme-hint').hidden = true;
   }
   new MutationObserver(syncSwitches).observe(settings,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['disabled']});
   new MutationObserver(syncSwitches).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});

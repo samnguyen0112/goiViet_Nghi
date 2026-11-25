@@ -4,6 +4,7 @@
    Rendering only: no province geometry, camera, railway or input mutation. */
 (() => {
   'use strict';
+  const groupPlay = document.documentElement.hasAttribute('data-group-play');
   const intro=document.getElementById('introScreen');
   const active=()=>Boolean(intro?.classList.contains('intro-hidden'));
   const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
@@ -81,7 +82,14 @@
       positions.forEach(([x,y])=>blocked.push(rect(x,y-7,40,42)));
     }
     if(state.railRun?.curve&&!window.GoiVietJourneyPreview?.active()){const destination=P34_MAP[normalizePlaceId(state.selectedPlaceId)]?.center||ISLAND_MAP[state.selectedPlaceId]?.pt;
-      if(destination){const[x,y]=project3D(...destination,44,cam,width,height),place=CULTURAL_PLACE_MAP[normalizePlaceId(state.selectedPlaceId)]||CULTURAL_PLACES[0],pawn=getPlayerPawn(state.currentPlayerIndex);context.font=canvasFont(12,700);blocked.push(rect(x,y-32,measure(context,`${getCleanStationName(place)} • ${pawn.roleLabel}`)+38,34));blocked.push(rect(x,y,36,36));}
+      if (destination) {
+        const [x, y] = project3D(...destination, 44, cam, width, height);
+        const place = CULTURAL_PLACE_MAP[normalizePlaceId(state.selectedPlaceId)] || CULTURAL_PLACES[0];
+        const name = getCleanStationName(place);
+        const label = groupPlay ? name : `${name} • ${getPlayerPawn(state.currentPlayerIndex).roleLabel}`;
+        context.font = canvasFont(12, 700);
+        blocked.push(rect(x, y - 32, measure(context, label) + 38, 34), rect(x, y, 36, 36));
+      }
     }
     const now=performance.now(),cameraChanged=!lastCamera||['zoom','yaw','pitch','panX','panY'].some(k=>cam[k]!==lastCamera[k]);
     if(cameraChanged){lastMotion=now;lastCamera={...cam};settled=false;refineAfterRest();}
