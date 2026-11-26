@@ -168,7 +168,7 @@
   function cssMatrix(h){const m=h.map(v=>v/h[8]);return 'matrix3d('+[m[0],m[3],0,m[6],m[1],m[4],0,m[7],0,0,1,0,m[2],m[5],0,m[8]].join(',')+')';}
   function applyRasterTransform(camera,width,height){
     if(!cachedHomography)return false;
-    const source=window.GoiVietPixelBudget&&cachedViewport||{width,height,pad:rasterGuard};
+    const source=cachedViewport||{width,height,pad:rasterGuard};
     const shift=[1,0,-source.pad,0,1,-source.pad,0,0,1];
     bufferToScreen=multiply(multiply(homography(camera,width,height),invertMatrix(cachedHomography)),shift);screenToBuffer=invertMatrix(bufferToScreen);
     const css=cssMatrix(bufferToScreen);
@@ -311,30 +311,39 @@
     for(const country of source.countries){b.strokeStyle=dark?'rgba(207,192,143,.52)':'rgba(135,112,66,.66)';b.lineWidth=clamp(c.zoom*.82,.55,1.1);b.stroke(yield* backdropPath(country.borders,job,true));yield;}
     return job;
   }
+  function holdGuard(width){return width<=768?32:160;}
   function startBackdrop(camera,width,height,dark,key){
     cancelBackdrop();lastBackdropAttempt=performance.now();backdropError=null;
-    const pad=rasterGuard,ratio=backdropRatio(width,height,pad);
+    const holdPhase1=Boolean(window.GoiVietMapPrewarm3?.holding());
+    const useHoldPad=holdPhase1&&(!cachedViewport||cachedViewport.pad<rasterGuard);
+    const pad=useHoldPad?holdGuard(width):rasterGuard,ratio=backdropRatio(width,height,pad);
     const canvas=stagingCanvas||document.createElement('canvas');stagingCanvas=null;
     canvas.width=Math.round((width+2*pad)*ratio);canvas.height=Math.round((height+2*pad)*ratio);canvas.style.width=width+2*pad+'px';canvas.style.height=height+2*pad+'px';
     const context=canvas.getContext('2d');context.setTransform(ratio,0,0,ratio,pad*ratio,pad*ratio);
-    const c={...camera},extent=viewportWorld(c,width,height,pad),margin=70/c.zoom;
+    const c={...camera},extent=viewportWorld(c,width,height,pad),margin=(useHoldPad?16:70)/c.zoom;
     if(extent){extent.left-=margin;extent.right+=margin;extent.top-=margin;extent.bottom+=margin;}
     const job={id:++backdropSerial,canvas,context,camera:c,width,height,dark,pad,key,source:geometry(),extent,project:projectionFor(c,width,height),origin:mapOrigin(),revision:textureRevision,level:c.zoom>1.7?0:c.zoom>.9?1:c.zoom>.45?2:3};backdropJob=job;
     window.GoiVietRasterTasks.run('backdrop',buildBackdrop(job),(result,missing)=>{
       if(backdropJob!==job)return;
       backdropJob=null;stagingCanvas=canvas;
       if(!active()||document.hidden||(state.theme==='dark')!==dark||cw!==width||ch!==height||mapOrigin().some((v,i)=>v!==job.origin[i]))return;
+      const stillHolding=Boolean(window.GoiVietMapPrewarm3?.holding()),retryDelay=stillHolding?32:180;
       // Do not replace a complete valid backdrop with a partially loaded one.
       // On first load/outside coverage the low-detail pass is a valid fallback.
       const covered=cachedCamera&&applyRasterTransform(state.cam,width,height);
-      if(missing&&covered){rasterDirty=true;deferBackdrop(180);return;}
+      if(missing&&covered){rasterDirty=true;deferBackdrop(retryDelay);return;}
       const old=background;canvas.id='regionalLandSeaCanvas';old.replaceWith(canvas);old.removeAttribute('id');background=canvas;back=context;stagingCanvas=old;
       cachedCamera=c;cachedViewport={width,height,pad,extent};cachedDark=dark;background.hidden=false;cachedHomography=homography(c,width,height);lastLand=job.land;lastWater=job.water;lastKey=key;lastWaveKey='';detailLevel=job.level;projectionPoints=job.points;backdropDraws++;
-      rasterDirty=missing||textureRevision!==job.revision;lastRasterRefine=performance.now();applyRasterTransform(state.cam,width,height);
-      if(!missing&&(underlay?.key!==key||c.zoom<=underlay.zoom))keepOverview(c,pad,key);
+      rasterDirty=missing||(!stillHolding&&textureRevision!==job.revision);lastRasterRefine=performance.now();applyRasterTransform(state.cam,width,height);
+      if(!missing&&(underlay?.key!==key||c.zoom<=underlay.zoom||pad>(underlay?.pad||0)))keepOverview(c,pad,key);
       coverageCanvas.hidden=true;requestMapRender();
-      if(rasterDirty)deferBackdrop(180);
+      if(rasterDirty)deferBackdrop(retryDelay);
     },error=>{backdropJob=null;backdropError=error.message;stagingCanvas=canvas;});
+  }
+  function expandAfterReveal(){
+    if(!active()||!cachedViewport||cachedViewport.pad>=rasterGuard)return;
+    rasterDirty=true;
+    deferBackdrop(520);
   }
   let coverageMesh=null,coverageSource=null;
   function prepareCoverage(source){
@@ -369,7 +378,7 @@
     if(ready.every(Boolean))readySources=ready;
     return ready;
   }
-  // Home-screen preparation (map-prewarm-3.js): run the backdrop steps against a canvas that draws nothing,
+  // Home-screen preparation (map-prewarm-5.js): run the backdrop steps against a canvas that draws nothing,
   // so the raster workers compute every sea and relief tile they use. The backdrop itself is drawn under the
   // curtain, once the real map area is known. 'tiles' = a whole pass found every tile cached while idle.
   let tileState='idle',tileKey='';
@@ -402,12 +411,13 @@
   }
   function paintBackdrop(camera,width,height,dark,now=performance.now()){
     frameUI=null;if(!active()){host.hidden=true;cancelBackdrop();return;}
-    islandLabels=[];host.hidden=false;const ui=visibleUI();
+    islandLabels=[];host.hidden=false;
+    const holdPhase1=Boolean(window.GoiVietMapPrewarm3?.holding());
     // Bound both front and staging surfaces to 32 MiB RGBA combined.
     rasterGuard=width<=768?160:260;
     // Keep the displayed front intact; startBackdrop commits its replacement atomically.
     if(!window.GoiVietPixelBudget)sizeCanvas(background,back,width,height,rasterGuard);
-    const waveView=window.GoiVietPixelBudget&&cachedViewport||{width,height,pad:rasterGuard};
+    const waveView=cachedViewport||{width,height,pad:holdPhase1?holdGuard(width):rasterGuard};
     sizeCanvas(waveCanvas,waves,waveView.width,waveView.height,waveView.pad);sizeCanvas(labelCanvas,labels,width,height);
     const source=geometry();if(!source)return;
     if(!window.GoiVietRasterTasks?.managed){background.hidden=true;drawCoverage(camera,width,height,dark);return;}
@@ -415,27 +425,37 @@
     const cameraKey=[width,height,...mapOrigin(),camera.zoom,camera.yaw,camera.pitch,camera.panX,camera.panY].join(':');
     if(cameraKey!==lastObservedCamera){lastObservedCamera=cameraKey;lastCameraChange=now;rasterDirty=true;}
     const moving=isDraggingMain||isTouchDragging||['zoom','yaw','pitch','panX','panY'].some(k=>Math.abs(camera[k]-camera['target'+k[0].toUpperCase()+k.slice(1)])>.001);
-    window.GoiVietRasterTasks.setView(camera,width,height,dark,viewportWorld(camera,width,height,rasterGuard+100),moving||now-lastCameraChange<180);
+    const viewPad=holdPhase1&&(!cachedViewport||cachedViewport.pad<rasterGuard)?holdGuard(width)+48:rasterGuard+100;
+    window.GoiVietRasterTasks.setView(camera,width,height,dark,viewportWorld(camera,width,height,viewPad),moving||now-lastCameraChange<180);
     const key=JSON.stringify([width,height,window.devicePixelRatio||1,dark,...mapOrigin(),...sourceReadiness()]);
     const covered=cachedCamera&&cachedDark===dark&&applyRasterTransform(camera,width,height),zoomRatio=cachedCamera?camera.zoom/cachedCamera.zoom:1;
-    const guardPoints=screenToBuffer&&[[-80,-80],[width+80,-80],[width+80,height+80],[-80,height+80]].map(([x,y])=>matrixPoint(screenToBuffer,x,y));
+    const guardPad=holdPhase1&&waveView.pad<rasterGuard?0:80;
+    const guardPoints=screenToBuffer&&[[-guardPad,-guardPad],[width+guardPad,-guardPad],[width+guardPad,height+guardPad],[-guardPad,height+guardPad]].map(([x,y])=>matrixPoint(screenToBuffer,x,y));
     const safe=covered&&guardPoints.every(p=>p[0]>=24&&p[1]>=24&&p[0]<=waveView.width+2*waveView.pad-24&&p[1]<=waveView.height+2*waveView.pad-24);
     const needsCoverage=!safe||zoomRatio<.74||zoomRatio>1.3||Math.abs(camera.pitch-(cachedCamera?.pitch||0))>.12||Math.abs(camera.yaw-(cachedCamera?.yaw||0))>.14;
-    const quiet=!moving&&!window.GoiVietJourneyPreview?.isMoving()&&now-lastCameraChange>=180;
+    const refineDelay=holdPhase1?32:180;
+    const quiet=!moving&&!window.GoiVietJourneyPreview?.isMoving()&&(holdPhase1||now-lastCameraChange>=180);
     // The displayed ground plane is already reprojected exactly. Do not submit
     // expensive background raster passes to the GPU while the camera moves;
     // the bounded coverage mesh fills newly exposed areas until refinement.
     if(backdropJob&&cachedCamera&&!quiet){cancelBackdrop();rasterDirty=true;deferBackdrop(190);}
     if(backdropJob&&(backdropJob.key!==key||Math.abs(Math.log(camera.zoom/backdropJob.camera.zoom))>.35))cancelBackdrop();
+    const rasterInfo=holdPhase1&&cachedCamera?window.GoiVietRasterTasks.inspect():null;
+    const waitingForTiles=Boolean(rasterInfo&&key===lastKey&&(rasterInfo.pending>0||rasterInfo.ready>0));
     if(!backdropJob&&(key!==lastKey||needsCoverage||rasterDirty&&quiet)){
-      if(cachedCamera&&!quiet)deferBackdrop(190);
-      else if(key!==lastKey||needsCoverage&&now-lastBackdropAttempt>80||quiet&&now-lastRasterRefine>=180)startBackdrop(camera,width,height,dark,key);
-      else deferBackdrop(Math.max(180-(now-lastCameraChange),180-(now-lastRasterRefine)));
-    }else if(rasterDirty&&!quiet)deferBackdrop(180);
+      if(waitingForTiles)deferBackdrop(32);
+      else if(cachedCamera&&!quiet)deferBackdrop(190);
+      else if(key!==lastKey||needsCoverage&&now-lastBackdropAttempt>80||quiet&&now-lastRasterRefine>=refineDelay)startBackdrop(camera,width,height,dark,key);
+      else deferBackdrop(Math.max(refineDelay-(now-lastCameraChange),refineDelay-(now-lastRasterRefine)));
+    }else if(rasterDirty&&!quiet)deferBackdrop(refineDelay);
     // Runs on every moving frame; write the canvas state only when it changes.
     if(background.hidden!==(cachedDark!==dark))background.hidden=cachedDark!==dark;
-    if(!covered)drawCoverage(camera,width,height,dark);else {if(!coverageCanvas.hidden)coverageCanvas.hidden=true;window.GoiVietWebGLCoverage3?.hide();}
+    if(!covered){if(!holdPhase1)drawCoverage(camera,width,height,dark);}else {if(!coverageCanvas.hidden)coverageCanvas.hidden=true;window.GoiVietWebGLCoverage3?.hide();}
     placeOverview(camera,width,height,key,!covered);
+    // While the opaque entry curtain is still waiting on Phase 1 backdrop, defer UI layout queries,
+    // labels, waves and crane overlap checks until the finished Phase 1 backdrop is committed.
+    if(holdPhase1&&(!covered||rasterDirty||backdropJob))return;
+    const ui=visibleUI();
     const labelKey=JSON.stringify([camera,width,height,dark,ui,document.fonts.status,window.GoiVietLabelPerformance?.fontRevision(),window.GoiVietI18n?.lang()]);
     if(labelKey!==lastLabelKey){lastLabelKey=labelKey;labels.clearRect(0,0,width,height);labels.save();placeCountryLabels(labels,camera,width,height,dark);labels.restore();}
     if(cachedCamera)drawWaves(cachedCamera,waveView.width,waveView.height,dark,now,waveView.pad);mountCrane();
@@ -588,14 +608,14 @@
     }
   });
   document.fonts.ready.then(()=>{lastKey='';requestMapRender(2);});
-  window.GoiVietRegionalPreview=Object.freeze({active,prepareTiles,paintBackdrop,paintLandmarks,paintIslandLabel,clampPan,constrainCamera,panBy,zoomAt,beginPinch,pinch,endPinch:()=>{pinchAnchor=null;},minimumZoom,panRanges,inverse,viewportWorld,isAnimating,
+  window.GoiVietRegionalPreview=Object.freeze({active,prepareTiles,expandAfterReveal,paintBackdrop,paintLandmarks,paintIslandLabel,clampPan,constrainCamera,panBy,zoomAt,beginPinch,pinch,endPinch:()=>{pinchAnchor=null;},minimumZoom,panRanges,inverse,viewportWorld,isAnimating,
     waterAtScreen:(x,y)=>{if(!cachedCamera||!lastWater||!screenToBuffer)return false;const p=matrixPoint(screenToBuffer,x,y),ratio=back.getTransform().a;return back.isPointInPath(lastWater,p[0]*ratio,p[1]*ratio,'evenodd');},
     waterAtBuffer:(x,y)=>Boolean(lastWater&&back.isPointInPath(lastWater,x,y,'evenodd')),
-    backgroundPoint:(x,y)=>{if(!cachedCamera||!bufferToScreen)return null;const v=window.GoiVietPixelBudget&&cachedViewport||{width:cw,height:ch,pad:rasterGuard},p=window.GoiVietPixelBudget?matrixPoint(cachedHomography,x,y):project3D(x,y,0,cachedCamera,v.width,v.height);return matrixPoint(bufferToScreen,p[0]+v.pad,p[1]+v.pad);},
+    backgroundPoint:(x,y)=>{if(!cachedCamera||!bufferToScreen)return null;const v=cachedViewport||{width:cw,height:ch,pad:rasterGuard},p=window.GoiVietPixelBudget?matrixPoint(cachedHomography,x,y):project3D(x,y,0,cachedCamera,v.width,v.height);return matrixPoint(bufferToScreen,p[0]+v.pad,p[1]+v.pad);},
     labelObstacles:()=>active()?[...objectBoxes,...countryLabels.map(l=>l.box),...islandLabels.map(l=>l.box)]:[],
-    inspect:()=>({active:active(),minimumZoom:minimumZoom(),panRanges:panRanges(),geometryLoaded:!!geometry(),geometryError,geometryStats:geometry()?.stats,projectionPoints,detailLevel,countryLabels:countryLabels.map(l=>({...l})),islandLabels:islandLabels.map(l=>({...l})),landmarks:objectBoxes.map(l=>({...l})),waveCount,waveMotion,backdropDraws,waveDraws,cameraConstraints,art:[...images].map(([id,item])=>({id,ready:item.ready,failed:item.failed})),stack:{background:0,mountains:1,mapCanvas:2,decorativeFrame:3},backgroundSize:[background.width,background.height],backdropPending:!!backdropJob,backdropDirty:rasterDirty,backdropCancels,backdropCommits:backdropDraws,backdropError,coverageFallback:!coverageCanvas.hidden,overviewZoom:underlay?.zoom??null,overviewVisible:!overviewCanvas.hidden,backdropBytes:background.width*background.height*4+((stagingCanvas||backdropJob?.canvas)?.width||0)*((stagingCanvas||backdropJob?.canvas)?.height||0)*4,refinePending:!!rasterRefineTimer})
+    inspect:()=>({active:active(),minimumZoom:minimumZoom(),panRanges:panRanges(),geometryLoaded:!!geometry(),geometryError,geometryStats:geometry()?.stats,projectionPoints,detailLevel,countryLabels:countryLabels.map(l=>({...l})),islandLabels:islandLabels.map(l=>({...l})),landmarks:objectBoxes.map(l=>({...l})),waveCount,waveMotion,backdropDraws,waveDraws,cameraConstraints,art:[...images].map(([id,item])=>({id,ready:item.ready,failed:item.failed})),stack:{background:0,mountains:1,mapCanvas:2,decorativeFrame:3},backgroundSize:[background.width,background.height],backdropPad:cachedViewport?.pad??null,backdropPending:!!backdropJob,backdropDirty:rasterDirty,backdropCancels,backdropCommits:backdropDraws,backdropError,coverageFallback:!coverageCanvas.hidden,overviewZoom:underlay?.zoom??null,overviewVisible:!overviewCanvas.hidden,backdropBytes:background.width*background.height*4+((stagingCanvas||backdropJob?.canvas)?.width||0)*((stagingCanvas||backdropJob?.canvas)?.height||0)*4,refinePending:!!rasterRefineTimer})
   });
-  window.GoiVietRasterTasks?.onUpdate(()=>{rasterDirty=true;textureRevision++;});
+  window.GoiVietRasterTasks?.onUpdate(names=>{if(!names||names.has('sea')||names.has('regional')){rasterDirty=true;textureRevision++;}});
   document.addEventListener('visibilitychange',()=>{if(document.hidden)cancelBackdrop();});
   sync();
   if(new URL(location.href).searchParams.get('view')==='map'){

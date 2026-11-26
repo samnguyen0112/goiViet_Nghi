@@ -8,6 +8,8 @@
 
   const C=window.GoiVietNaturalCore,intro=document.getElementById('introScreen'),active=()=>intro.classList.contains('intro-hidden')||Boolean(window.GoiVietMapPrewarm3?.preparing()),seaTiles=window.GoiVietRasterTasks?.createCache?.()||new Map(),reefTiles=new Map();
   let seaRasterReady=false;const pendingSea=new Map(),seaPlaceholders=new Map();
+  let sharedSeaPlaceholders=null;
+  function fastSeaPlaceholder(dark){if(!sharedSeaPlaceholders)sharedSeaPlaceholders={};const k=dark?'d':'l';if(!sharedSeaPlaceholders[k]){const c=document.createElement('canvas');c.width=c.height=2;const g=c.getContext('2d'),rgb=seaColor(-500,dark);g.fillStyle='rgb('+rgb.join(',')+')';g.fillRect(0,0,2,2);sharedSeaPlaceholders[k]=c;}return sharedSeaPlaceholders[k];}
   let fine=null,finePromise=null,fineError=null,fineFallbackReady=false,offshorePaintPromise=null;
   let bathy=null,islands=null,promise=null,error=null,seaDraws=0,reefDraws=0,islandDraws=0,hitRegions=[],dialog=null,detailGroup='phu-quoc',detailFeature=-1,detailReef=-1,detailZoom=1,detailPan=[0,0],detailBase=1,detailFrames=0;
   const provinceIslandRings=new WeakMap();
@@ -64,6 +66,7 @@
     const key=[tx,ty,dark].join(':');if(seaTiles.has(key)){if(window.GoiVietRasterTasks?.managed&&seaTiles.touch)return seaTiles.touch(key);const image=seaTiles.get(key);if(window.GoiVietRasterTasks?.managed){seaTiles.delete(key);seaTiles.set(key,image);}return image;}
     if(seaRasterReady&&(!window.GoiVietRasterTasks.inspect().failed||window.GoiVietRasterTasks.managed)){
       if(!pendingSea.has(key)){pendingSea.set(key,window.GoiVietRasterTasks.build('sea',key,{tx,ty,dark}).then(image=>{pendingSea.delete(key);seaPlaceholders.delete(key);if(window.GoiVietRasterTasks?.managed)window.GoiVietRasterTasks.cache(seaTiles,key,image,32*1024*1024);else{seaTiles.set(key,image);while(seaTiles.size>640)seaTiles.delete(seaTiles.keys().next().value);}}).catch(()=>pendingSea.delete(key)));}
+      if(window.GoiVietMapPrewarm3?.holding()||window.GoiVietMapPrewarm3?.preparing())return fastSeaPlaceholder(dark);
       if(!seaPlaceholders.has(key)){const canvas=document.createElement('canvas');canvas.width=canvas.height=8;const ctx=canvas.getContext('2d'),pixels=ctx.createImageData(8,8);for(let y=0;y<8;y++)for(let x=0;x<8;x++){const value=sampleDepth(tx*192-4+(x+.5)*25,ty*192-4+(y+.5)*25)??-500,color=seaColor(value,dark),n=(y*8+x)*4;pixels.data[n]=color[0];pixels.data[n+1]=color[1];pixels.data[n+2]=color[2];pixels.data[n+3]=255;}ctx.putImageData(pixels,0,0);seaPlaceholders.set(key,canvas);}if(window.GoiVietRasterTasks.managed)while(seaPlaceholders.size>128)seaPlaceholders.delete(seaPlaceholders.keys().next().value);return seaPlaceholders.get(key);
     }
     const result=seaPixels({tx,ty,dark}),image=document.createElement('canvas');image.width=result.width;image.height=result.height;

@@ -6,25 +6,34 @@
 (() => {
   'use strict';
   const definitions = new Map(), jobs = new Map(), pending = new Map();
-  const work = new Map(), ready = [], listeners = new Set(), levels = new Map();
-  const BUDGET_MS = 3, HOLD_BUDGET_MS = 12, MAX_JOBS = 128, MAX_READY_BYTES = 4 * 1024 * 1024;
+  const work = new Map(), ready = [], listeners = new Set(), levels = new Map(), dirtyNames = new Set();
+  const BUDGET_MS = 3, HOLD_BUDGET_MS = 12, MAX_JOBS = 128, HOLD_MAX_JOBS = 512, MAX_READY_BYTES = 4 * 1024 * 1024;
   // GD6: the wide slice only helps when the terrain draws on the GPU. Without WebGL the Canvas 2D path already saturates the main thread
   // (measured: map entry 7.8 s vs 4.4 s with the old 3 ms / 8 ms pacing), so there the original pacing is kept.
   const holding = () => Boolean(window.GoiVietMapPrewarm3?.holding() && window.GoiVietWebGLTerrain3?.usable?.());
-  let worker = null, failed = false, fallbackFlight = null, timer = 0, notification = 0;
-  let serial = 0, completed = 0, cancelled = 0, generation = 0, readyBytes = 0;
+  let worker = null, failed = false, fallbackFlight = null, timer = 0, notification = 0, lastHoldRender = 0;
+  let serial = 0, completed = 0, cancelled = 0, generation = 0, readyBytes = 0, bitmapCompletions = 0, putImageDataCompletions = 0;
   let view = null, lastMotion = 0, maxSliceMs = 0, maxPending = 0, fallbackRows = 0, currentTask = null;
   const abort = () => Object.assign(new Error('Raster request superseded'), {name: 'AbortError'});
   const detailOpen = () => document.getElementById('naturalIslandModal')?.classList.contains('open');
-  // The home screen counts as an open modal, except while it prepares the map (map-prewarm-3.js).
+  // The home screen counts as an open modal, except while it prepares the map (map-prewarm-5.js).
   const paused = () => document.hidden || Boolean(!window.GoiVietMapPrewarm3?.preparing() && typeof getTopOpenModalElement === 'function' && getTopOpenModalElement() && !detailOpen());
-  function notify() {
+  function notify(name) {
+    if (name) dirtyNames.add(name);
     if (notification) return;
     notification = setTimeout(() => {
       notification = 0;
-      for (const fn of listeners) fn();
-      if (!paused()) requestMapRender();
-    }, 120);
+      const names = new Set(dirtyNames);
+      dirtyNames.clear();
+      for (const fn of listeners) fn(names);
+      if (!paused()) {
+        const now = performance.now();
+        if (!holding() || jobs.size === 0 || now - lastHoldRender >= 160) {
+          lastHoldRender = now;
+          requestMapRender();
+        }
+      }
+    }, holding() ? 32 : 120);
   }
   function workerMain() {
     const kernels = new Map();
@@ -32,6 +41,16 @@
       try {
         if (m.type === 'define') { kernels.set(m.name, new Function('data', m.factory)(m.data)); return; }
         const pixels = kernels.get(m.name)(m.args);
+        if (typeof createImageBitmap === 'function' && typeof ImageData === 'function') {
+          createImageBitmap(new ImageData(new Uint8ClampedArray(pixels.buffer), pixels.width, pixels.height)).then(
+            bitmap => self.postMessage({id: m.id, width: pixels.width, height: pixels.height, bitmap}, [bitmap]),
+            () => {
+              try { self.postMessage({id: m.id, ...pixels}, [pixels.buffer]); }
+              catch (e) { self.postMessage({id: m.id, error: e.message}); }
+            }
+          );
+          return;
+        }
         self.postMessage({id: m.id, ...pixels}, [pixels.buffer]);
       } catch (e) { self.postMessage({id: m.id, error: e.message}); }
     };
@@ -47,7 +66,7 @@
     if (fallbackFlight === job) fallbackFlight = null;
     jobs.delete(job.id); pending.delete(job.key);
     if (error) { cancelled++; job.reject(error); }
-    else { completed++; job.resolve(image); notify(); }
+    else { completed++; job.resolve(image); notify(job.name); }
   }
   function priority(job) {
     if (!view || !job.bounds) return 0;
@@ -89,10 +108,11 @@
         w.onmessage = ({data: m}) => {
           load.set(w, Math.max(0, (load.get(w) || 0)-1));
           const job = jobs.get(m.id);
-          if (!job) { pump(); return; }
+          if (!job) { m.bitmap?.close?.(); pump(); return; }
           if (m.error) { finish(job, new Error(m.error)); failWorker(); return; }
-          if (!valid(job)) finish(job, abort());
-          else { job.status = 'ready'; ready.push({job, pixels: m}); readyBytes += m.buffer.byteLength; }
+          if (!valid(job)) { m.bitmap?.close?.(); finish(job, abort()); }
+          else if (m.bitmap) { bitmapCompletions++; finish(job, null, m.bitmap); }
+          else { const bytes = m.buffer.byteLength; job.status = 'ready'; ready.push({job, pixels: m, bytes}); readyBytes += bytes; }
           wake(); pump();
         };
         for (const [name, d] of definitions) w.postMessage({type: 'define', name, factory: d.factory, data: d.data});
@@ -115,7 +135,9 @@
     }
   }
   function ingest(job, pixels) {
-    if (!valid(job)) { finish(job, abort()); return; }
+    if (!valid(job)) { pixels.bitmap?.close?.(); finish(job, abort()); return; }
+    if (pixels.bitmap) { bitmapCompletions++; finish(job, null, pixels.bitmap); return; }
+    putImageDataCompletions++;
     const image = document.createElement('canvas'); image.width = pixels.width; image.height = pixels.height;
     image.getContext('2d').putImageData(new ImageData(new Uint8ClampedArray(pixels.buffer), pixels.width, pixels.height), 0, 0);
     finish(job, null, image);
@@ -128,8 +150,9 @@
     try {
       // Ingest at most eight completions per slice (each is a ~0.15 ms putImageData) within the budget.
       for (let count = 0; ready.length && count < (hold ? 32 : 8) && performance.now()-started < budget; count++) {
-        const item = ready.shift(); readyBytes -= item.pixels.buffer.byteLength;
+        const item = ready.shift(); readyBytes -= item.bytes ?? item.pixels.buffer.byteLength;
         if (jobs.has(item.job.id)) ingest(item.job, item.pixels);
+        else item.pixels.bitmap?.close?.();
       }
       const entry = detailOpen() ? null : work.entries().next().value;
       if (entry) {
@@ -183,7 +206,8 @@
     const idKey = name+':'+key;
     if (pending.has(idKey)) return pending.get(idKey);
     if (!definitions.has(name)) return Promise.reject(new Error('Unknown raster kernel: '+name));
-    if (jobs.size >= MAX_JOBS) return Promise.reject(new Error('Raster queue full; retry next draw'));
+    const maxJobs = window.GoiVietMapPrewarm3?.holding() ? HOLD_MAX_JOBS : MAX_JOBS;
+    if (jobs.size >= maxJobs) return Promise.reject(new Error('Raster queue full; retry next draw'));
     const size = name === 'sea' || args.id === 'context' ? 192 : 48;
     const bounds = Number.isFinite(args.tx) ? {left: args.tx*size, top: args.ty*size, right: (args.tx+1)*size, bottom: (args.ty+1)*size} : null;
     const job = {id: ++serial, key: idKey, name, args, bounds, size, status: 'queued', revision: definitions.get(name).revision, generation};
@@ -274,6 +298,7 @@
     cancel: key => { work.get(key)?.iterator.return?.(); work.delete(key); },
     onUpdate: fn => { listeners.add(fn); return () => listeners.delete(fn); },
     inspect: () => ({available: Boolean(worker) && !failed, failed, fallback: failed, pending: jobs.size, completed, cancelled,
+      bitmapCompletions, putImageDataCompletions,
       generation, maxPending, updating: Boolean(notification), workers: workers.length, inFlight: [...load.values()].reduce((sum, n) => sum+n, 0), ready: ready.length, readyBytes, auxiliaryTasks: work.size,
       budgetMs: BUDGET_MS, maxSliceMs, fallbackRows, lastMotion})
   });

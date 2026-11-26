@@ -198,6 +198,7 @@ async function main() {
           await page.keyboard.press('Escape');assert.equal((await inspect()).phase,'letter');
           assert(await mark.evaluate(el=>el===document.activeElement),`${id} letter ${i+1}: focus returns to the postmark`);
           await act('skip');
+          await page.waitForTimeout(320);
         }
       }
       ok('Postmarks name each letter’s real place and open its own story; envelope and Trường Sa starters follow one sending direction');
