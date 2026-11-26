@@ -10,13 +10,15 @@
     const canvas = document.getElementById('postcardExportCanvas'); if (!canvas) return;
     canvas.width = canvas.width;
     const g = canvas.getContext('2d'), W = canvas.width, H = canvas.height;
-    const ink='#194b40', muted='#64715e', gold='#b2945a', red='#a7372d';
+    // T-13: gold stays for the frame line; gold text and muted text are darker so small type reaches 4.5:1
+    // on the cream paper (goldText 5.3:1, muted 5.63:1 on #f5efdf). The paper is cream in both themes.
+    const ink='#194b40', muted='#556250', gold='#b2945a', goldText='#7c5d26', red='#a7372d';
     const box=(x,y,w,h,r,fill,stroke)=>{g.beginPath();g.roundRect(x,y,w,h,r);if(fill){g.fillStyle=fill;g.fill();}if(stroke){g.strokeStyle=stroke;g.lineWidth=1;g.stroke();}};
     const text=(value,x,y,size=16,color=ink,weight=400,family='sans')=>{g.fillStyle=color;g.font=canvasFont(size,weight,family);g.fillText(value,x,y);};
     const lines=(value,x,y,width,size=15,color=muted,count=2)=>{g.fillStyle=color;g.font=canvasFont(size,400);return drawPostcardTextLines(g,value,x,y,width,size*1.5,count);};
     g.fillStyle='#fff9ec';g.fillRect(0,0,W,H);
     box(18,18,W-36,H-36,20,null,gold);box(25,25,W-50,H-50,15,null,'#e5d8ba');
-    text(T('png.kicker','GÓI VIỆT · KÝ ỨC GIA ĐÌNH'),58,66,12,gold,600);
+    text(T('png.kicker','GÓI VIỆT · KÝ ỨC GIA ĐÌNH'),58,66,12,goldText,600);
     text(T('png.title','Lưu bút một chuyến đi'),58,116,38,ink,700,'display');
     const date=new Date().toLocaleDateString(window.GoiVietI18n?.lang()==='en'?'en-GB':'vi-VN');
     const dateLine = groupPlay ? date : T('png.players',`${state.playerCount} người cùng chơi   ·   ${date}`,{n:state.playerCount,date});
@@ -29,8 +31,8 @@
     g.strokeStyle='#d7c49d';g.beginPath();g.moveTo(58,173);g.lineTo(W-58,173);g.stroke();
     const x1=58,x2=558,col=464,top=194,bottom=H-100;
     box(x1,top,col,bottom-top,12,'#f5efdf',null);box(x2,top,col,bottom-top,12,'#f9f3e5',null);
-    text('01',x1+20,top+30,13,gold,600);text(T('png.visited','Những ga đã ghé'),x1+53,top+31,21,ink,700,'display');
-    text('02',x2+20,top+30,13,gold,600);text(T('png.family','Chuyện nhà mình'),x2+53,top+31,21,ink,700,'display');
+    text('01',x1+20,top+30,13,goldText,600);text(T('png.visited','Những ga đã ghé'),x1+53,top+31,21,ink,700,'display');
+    text('02',x2+20,top+30,13,goldText,600);text(T('png.family','Chuyện nhà mình'),x2+53,top+31,21,ink,700,'display');
     const explored=[...new Set(state.storyOpenedPlaceIds.concat(state.activityCompletedPlaceIds).map(normalizePlaceId))];
     const names=explored.slice(0,6).map(id=>CULTURAL_PLACE_MAP[id]?.short||CULTURAL_PLACE_MAP[id]?.name||id);
     const placeLines=lines(names.length?names.join('  ·  '):T('png.noStations','Chuyến đi đang chờ dấu ấn đầu tiên.'),x1+20,top+65,col-40,14,muted,2);
@@ -42,7 +44,7 @@
       text(T('png.emptyTitle','Mỗi ga dừng, một miền thương nhớ.'),x1+22,y+90,18,ink,400,'display');
       lines(T('png.emptyHint','Chơi thẻ hoặc đọc sách để lưu dấu hành trình.'),x1+22,y+122,col-44,14,muted,3);
     }else for(const [i,stamp] of stamps.entries()){
-      text(String(i+1).padStart(2,'0'),x1+20,y,12,gold,600);
+      text(String(i+1).padStart(2,'0'),x1+20,y,12,goldText,600);
       const station = groupPlay ? stamp.placeName : `${stamp.placeName} · ${stamp.player}`;
       g.font=canvasFont(14,600);g.fillStyle=ink;drawPostcardTextLines(g,station,x1+48,y,col-68,20,1);
       lines(stamp.activity||stamp.topic||'',x1+48,y+21,col-68,12,muted,1);y+=48;
