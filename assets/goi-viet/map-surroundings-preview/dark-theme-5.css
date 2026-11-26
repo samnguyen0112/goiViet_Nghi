@@ -1,4 +1,4 @@
-/* Preview-5 only dark-theme overrides for T-01, T-02, T-03.
+/* Preview-5 only dark-theme overrides for T-01, T-02, T-03 and T-07 … T-17.
    Every rule begins with html[data-theme="dark"] so light theme is pixel-identical
    and shared stylesheets remain untouched for index.html and previews 2/3/4. */
 
@@ -400,3 +400,121 @@ html[data-theme="dark"] body[data-regional-preview] #bambooRollModal.fortune-rit
   outline-color: rgba(242, 169, 150, 0.52);
   color: #f2a996;
 }
+
+/* ============================================================================
+   Round 2 (T-07 … T-17, BAO-CAO-THEME-TOI.md). Same rule as round 1: every selector
+   starts with html[data-theme="dark"], so the light theme is unchanged and the shared
+   stylesheets (heritage-command-bar.css, heritage-frame.css, arrival-journal.css,
+   island-controls.css, natural.css, island-chart.css, heritage-overlays.css) stay as they are.
+   Contrast figures are measured on the composited dark backgrounds.
+   ============================================================================ */
+
+/* T-07: map header logo. The dark red wordmark sinks into the #30483e header. */
+html[data-theme="dark"] body[data-regional-preview]:has(#introScreen.intro-hidden) #mapScene .top-header .map-brand-logo {
+  filter: brightness(1.3) saturate(.95) drop-shadow(0 0 1px #f6e7c4) drop-shadow(0 0 5px rgba(255, 236, 200, .32));
+}
+
+/* T-08: the daytime frame painting around the night map. Dimmed in place, no new image. */
+html[data-theme="dark"] body[data-regional-preview]:has(#introScreen.intro-hidden) #mapScene > .heritage-frame .hf-original-art {
+  filter: brightness(.55) contrast(1.08) saturate(.8);
+}
+
+/* T-09: completed milestone stamp. arrival-journal.css:130 recolours every stamp to #ddcba5,
+   which left the check mark at 2.79:1 on the gold. White on a deeper gold: 6.33:1. */
+html[data-theme="dark"] body[data-regional-preview]:has(#introScreen.intro-hidden) #mapScene .top-header .heritage-progress-stamp.is-stamped {
+  background: #7c5928;
+  border-color: #c9a96b;
+  color: #ffffff;
+}
+
+/* T-10: search field and journal stop buttons: #526354 was 2.08:1 on #20332c. Only these controls,
+   the station-rule hairlines keep their colour. #7d917e: 3.97:1 on #20332c, 3.39:1 on #293e35. */
+html[data-theme="dark"] body[data-regional-preview]:has(#introScreen.intro-hidden) #mapScene #stationPanel :is(.prov-search-input, .gv-station-journal-stop) {
+  border-color: #7d917e;
+}
+
+/* T-11: header and island buttons below 3:1, and two header buttons without hover feedback. */
+html[data-theme="dark"] body[data-regional-preview]:has(#introScreen.intro-hidden) #mapScene .left-helper .island-shortcut {
+  border-color: #a59469; /* 3.38:1 on #34463b */
+}
+html[data-theme="dark"] body[data-regional-preview]:has(#introScreen.intro-hidden) #mapScene .top-header #headerSettings > summary {
+  border-color: #a89970; /* 3.58:1 */
+}
+html[data-theme="dark"] body[data-regional-preview]:has(#introScreen.intro-hidden) #mapScene .top-header #headerSettings > summary:hover,
+html[data-theme="dark"] body[data-regional-preview]:has(#introScreen.intro-hidden) #mapScene .top-header #headerSettings[open] > summary {
+  border-color: #c4a56a; /* 4.29:1 outside, 3.65:1 on the #3d5141 hover fill */
+}
+html[data-theme="dark"] body[data-arrival-demo][data-regional-preview]:has(#introScreen.intro-hidden) #mapScene .top-header #previewPanelOpen {
+  border-color: #a9976c; /* 3.52:1 */
+}
+html[data-theme="dark"] body[data-arrival-demo][data-regional-preview]:has(#introScreen.intro-hidden) #mapScene .top-header #previewPanelOpen:hover {
+  background: #354e42;
+  border-color: #c4a56a;
+}
+html[data-theme="dark"] body[data-arrival-demo][data-regional-preview]:has(#introScreen.intro-hidden) #mapScene .top-header .header-actions > .craft-btn-green:hover {
+  background: #5b3f39;
+  border-color: #d4ad7c;
+}
+
+/* T-12: book reader navigation, table of contents and the Hải Phòng "coming soon" buttons. */
+html[data-theme="dark"] #bookModal .gvb-nav[data-cover] .gvb-nav-btn:last-child {
+  border-color: #89c7a1; /* 5.5:1 on #2a4336 */
+  background: #266558;
+}
+html[data-theme="dark"] #bookModal .gvb-nav[data-cover] .gvb-nav-btn:last-child:hover { background: #2e7062; }
+html[data-theme="dark"] #bookModal :is(.gvb-chapter, .gvb-chapter:hover, .gvb-chapter[aria-current]) {
+  border-color: #8ba28b; /* 3.91:1 on #2a4336 */
+}
+html[data-theme="dark"] #bookModal .gvb-toc-item { border-color: #8ba28b; } /* 4.7:1 on #20362c */
+html[data-theme="dark"] #bookModal.gvb-open-call .gvb-btn { border-color: #a4906a; } /* 4.02:1 on #25382f */
+html[data-theme="dark"] #bookModal.gvb-open-call .gvb-btn.gvb-soon-fanpage { border-color: #e0a58c; } /* red fill: 5.89:1 */
+
+/* T-13 is in postcard-design-5.js (the exported PNG is the same cream paper in both themes). */
+
+/* T-14: deck. Answer letters, gentle note, review buttons and the unselected Canva tabs. */
+html[data-theme="dark"] #deckModal #cardFrontState .option-letter {
+  background: rgba(0, 0, 0, .28); /* #fffdf8: 7.08:1 selected, 7.15:1 correct */
+}
+html[data-theme="dark"] #deckModal #cardBackState .activity-prompt-box { background: #fffaf0e6; }
+html[data-theme="dark"] #deckModal #cardBackState .activity-gentle-note { color: #3d4c3e; } /* 8.3:1 */
+html[data-theme="dark"] #deckModal #answerExplanationBox .card-review-button { border-color: #8f6c30; } /* 4.55:1 on #fff8e6 */
+html[data-theme="dark"] #deckModal #answerExplanationBox #btnFlipToBack { border-color: #75202c; } /* 9.91:1 */
+html[data-theme="dark"] #deckModal #cardFrontState .canva-role:not([aria-checked="true"]) {
+  background: #3b4d3f;
+  color: #f0e2bf; /* 7.04:1 */
+  box-shadow: inset 0 0 0 1px #8ba28b; /* tab outline without changing its size */
+}
+html[data-theme="dark"] #deckModal #cardFrontState .canva-role:not([aria-checked="true"]):hover { background: #465b4a; }
+
+/* T-15: bright patches on the station sheet and the pure white QR margin. */
+html[data-theme="dark"] body[data-arrival-demo][data-regional-preview]:has(#introScreen.intro-hidden) #mapScene #arrivalSheet .arrival-stamp {
+  background: #2d3f35f0;
+  border-color: #f3b3a6;
+  outline-color: #f3b3a6;
+  color: #f3b3a6; /* 6.37:1 */
+  box-shadow: 0 1px 3px #0006;
+}
+html[data-theme="dark"] body[data-regional-preview]:has(#introScreen.intro-hidden) #mapScene #arrivalSheet .gv-station-art-cue {
+  background: #20332ce6;
+  color: #f6eed9; /* 11.38:1 */
+}
+html[data-theme="dark"] body[data-regional-preview]:has(#introScreen.intro-hidden) #mapScene #arrivalSheet .gv-station-art:hover .gv-station-art-cue { background: #2d443a; }
+/* fanpage-qr.svg paints its own white quiet zone, so the ivory pad alone is 3 px wide: tone the whole image
+   down a little. The modules stay near black, so the code still scans (measured module/margin ratio in the report). */
+html[data-theme="dark"] #bookModal .gvb-soon-qr img { background: #efe5ce; filter: sepia(.18) brightness(.93); }
+
+/* T-16: Hoàng Sa / Trường Sa chart: dark fallback behind the canvas and a pad for the scale. */
+html[data-theme="dark"] body[data-regional-preview] .natural-detail-map { background: #16404c; }
+html[data-theme="dark"] .island-chart-enabled .island-chart-scale {
+  padding: 3px 7px;
+  border-radius: 4px;
+  background: #174c54b3; /* #fff0cf: 6.03:1 over the fallback, 4.66:1 over a pale shoal */
+}
+html[data-theme="dark"] .island-chart-enabled .island-chart-minimap { border-color: #d4d5aad9; }
+
+/* T-17: disabled buttons (exempt, made clearer) and the PNG download button outline. */
+/* The shared disabled-button rule sets border-color: var(--gv3-disabled-border) !important, so the variable is
+   reset on the button itself instead of adding another !important. #76876f: 3.1:1 on #233c30. */
+html[data-theme="dark"] #mapScene #headerSettings .control-options > .settings-option:disabled { --gv3-disabled-border: #76876f; }
+html[data-theme="dark"] #bookModal .gvb-btn:disabled { opacity: .52; }
+html[data-theme="dark"] #postcardModal #btnDownloadPostcardPng { border-color: #d8b77c; } /* 6.17:1 on #203d35 */
