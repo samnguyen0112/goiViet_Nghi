@@ -1,0 +1,402 @@
+/* Preview-5 only dark-theme overrides for T-01, T-02, T-03.
+   Every rule begins with html[data-theme="dark"] so light theme is pixel-identical
+   and shared stylesheets remain untouched for index.html and previews 2/3/4. */
+
+/* ============================================================================
+   T-01: Opening Gate (#homeOpeningGate) & Music Panel (.gv-home-music-panel)
+   ============================================================================ */
+html[data-theme="dark"] #introScreen[data-intro-stage="welcome"],
+html[data-theme="dark"] body[data-preview-version="3"] #introScreen[data-intro-stage="welcome"] {
+  background: #152720;
+  --focus-ring: #ffeaba;
+}
+
+html[data-theme="dark"] body[data-home-theme="classic"] #introWelcomeStage,
+html[data-theme="dark"] #introWelcomeStage .gv-home-film {
+  background: #152720;
+}
+
+html[data-theme="dark"] #introWelcomeStage .gv-home-opening-gate,
+html[data-theme="dark"] body[data-preview-version="3"] #introWelcomeStage #homeOpeningGate {
+  background: radial-gradient(circle at 50% 44%, #20372d 0%, #152720 62%, #0f1e18 100%);
+  color: #f7f0de;
+  --focus-ring: #ffeaba;
+}
+
+html[data-theme="dark"] body[data-preview-version="3"] #homeOpeningGate .gv-gate-logo {
+  filter: brightness(1.12) contrast(1.04) drop-shadow(0 0 26px rgba(255, 234, 186, 0.24)) drop-shadow(0 6px 14px rgba(0, 0, 0, 0.42));
+}
+
+html[data-theme="dark"] body[data-preview-version="3"] #homeOpeningGate .gv-gate-tagline {
+  color: #ebd9b4;
+}
+
+html[data-theme="dark"] body[data-preview-version="3"] #homeOpeningGate #homeOpeningHint {
+  color: #ccd6c1;
+}
+
+html[data-theme="dark"] body[data-preview-version="3"] #homeOpeningGate .gv-gate-action {
+  background: #a3323d;
+  border-color: #d6a96a;
+  color: #fff6e2;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.38), inset 0 1px 0 rgba(255, 248, 225, 0.2);
+}
+
+@media (hover: hover) {
+  html[data-theme="dark"] body[data-preview-version="3"] #homeOpeningGate .gv-gate-action:not(:disabled):hover {
+    background: #b63b47;
+    border-color: #f0bc65;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.46), inset 0 1px 0 rgba(255, 248, 225, 0.24);
+  }
+}
+
+html[data-theme="dark"] body[data-preview-version="3"] #homeOpeningGate .gv-gate-action:focus-visible {
+  outline: 3px solid #ffeaba !important;
+  outline-offset: 4px !important;
+}
+
+html[data-theme="dark"] body[data-preview-version="3"] #introScreen[data-home-opening="preparing"] #homeOpeningGate .gv-gate-action {
+  background: #6e3638;
+  border-color: #9e7a5e;
+  color: #f7f0de;
+}
+
+/* Shared top-right intro tools bar (used in both 01-gate & 02-intro-invitation) */
+html[data-theme="dark"] body[data-preview-version="3"] #introWelcomeStage .gv-home-opening-tools {
+  --focus-ring: #ffeaba;
+  color: #f2e8d0;
+  padding: 2px 12px;
+  border: 1px solid rgba(214, 178, 111, 0.58);
+  border-radius: 999px;
+  background: rgba(21, 39, 32, 0.88);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.38);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+html[data-theme="dark"] body[data-preview-version="3"] #introWelcomeStage .gv-home-opening-tools > button,
+html[data-theme="dark"] body[data-preview-version="3"] #introWelcomeStage .gv-home-opening-tools > details > summary {
+  color: #f2e8d0;
+  text-shadow: none;
+}
+
+html[data-theme="dark"] body[data-preview-version="3"] #introWelcomeStage .gv-home-opening-tools > button:hover,
+html[data-theme="dark"] body[data-preview-version="3"] #introWelcomeStage .gv-home-opening-tools > details > summary:hover,
+html[data-theme="dark"] body[data-preview-version="3"] #introWelcomeStage .gv-home-opening-tools > details[open] > summary {
+  color: #ffeaba;
+}
+
+html[data-theme="dark"] .gv-lang-toggle-home {
+  --lang-ink: #d9e0cc;
+  --lang-hover: #ffeaba;
+  --lang-selected-ink: #ffeaba;
+}
+
+/* Gate music settings panel (01b-gate-music) */
+html[data-theme="dark"] .gv-home-music-panel {
+  --focus-ring: #ffeaba;
+  background: #20362c;
+  border-color: #9e8a5c;
+  color: #f7f0de;
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.5);
+}
+
+html[data-theme="dark"] .gv-home-music-label {
+  color: #f7f0de;
+}
+
+html[data-theme="dark"] .gv-home-music-file-button {
+  background: #2b6a56;
+  border: 1px solid #89c7a1;
+  color: #fffaf0;
+}
+
+html[data-theme="dark"] .gv-home-music-file-button:hover {
+  background: #337c65;
+}
+
+html[data-theme="dark"] #homeMusicName {
+  color: #d2d9c6;
+}
+
+html[data-theme="dark"] .gv-home-music-volume label,
+html[data-theme="dark"] .gv-home-music-offset label,
+html[data-theme="dark"] .gv-home-music-continue {
+  color: #e6e2cf;
+}
+
+html[data-theme="dark"] .gv-home-music-volume output {
+  background: #2a4336;
+  border: 1px solid #6e8670;
+  color: #ffeaba;
+}
+
+html[data-theme="dark"] .gv-home-music-volume input[type="range"],
+html[data-theme="dark"] .gv-home-music-continue input[type="checkbox"] {
+  accent-color: #f0bc65;
+}
+
+html[data-theme="dark"] .gv-home-music-number {
+  background: #172a22;
+  border-color: #8ba28b;
+}
+
+html[data-theme="dark"] .gv-home-music-number input {
+  color: #f7f0de;
+}
+
+html[data-theme="dark"] .gv-home-music-number span {
+  color: #cbd5c2;
+}
+
+html[data-theme="dark"] .gv-home-music-actions button {
+  background: #2a4336;
+  border-color: #8ba28b;
+  color: #f7f0de;
+}
+
+html[data-theme="dark"] .gv-home-music-actions button:not(:disabled):hover {
+  background: #355243;
+  border-color: #c6a564;
+}
+
+html[data-theme="dark"] .gv-home-music-actions button:disabled {
+  background: #1b2f26;
+  border-color: #5b7160;
+  color: #a8b7a5;
+}
+
+html[data-theme="dark"] .gv-home-music-note {
+  color: #c7d1be;
+  border-top-color: #466050;
+}
+
+/* ============================================================================
+   T-02: Intro & Invitation Card (#homepageContent) + Station Ribbon
+   ============================================================================ */
+html[data-theme="dark"] body[data-preview-version="3"][data-regional-preview] #introWelcomeStage #homepageContent {
+  --inv-paper: #1e332a;
+  --inv-ink: #f7f0de;
+  --inv-body: #d6decb;
+  --inv-gold: #d6b26f;
+  --inv-frame-gold: #c9a662;
+  --inv-frame-rule: rgba(214, 178, 111, 0.52);
+  --focus-ring: #ffeaba;
+  background-color: #1e332a;
+  background-image:
+    radial-gradient(circle at 50% 0%, rgba(240, 188, 101, 0.1), transparent 58%),
+    linear-gradient(160deg, #22392f 0%, #1a2e25 100%);
+  color: #f7f0de;
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.46), 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+html[data-theme="dark"] body[data-preview-version="3"][data-regional-preview] #introWelcomeStage #homepageContent .gv-invitation-ornament {
+  filter: brightness(0.54) contrast(1.14) saturate(0.84);
+  opacity: 0.72;
+}
+
+html[data-theme="dark"] body[data-preview-version="3"][data-regional-preview] #introWelcomeStage #homepageContent .gv-home-kicker {
+  background: transparent;
+  border-color: transparent;
+  color: #ffd1b5;
+}
+
+html[data-theme="dark"] body[data-preview-version="3"][data-regional-preview] #introWelcomeStage #homepageContent .gv-invitation-train {
+  border-radius: 6px;
+  border: 1px solid rgba(214, 178, 111, 0.55);
+  filter: brightness(0.92) saturate(0.95);
+}
+
+html[data-theme="dark"] body[data-preview-version="3"][data-regional-preview] #introWelcomeStage #homepageContent #homepageHeading {
+  color: #f7f0de;
+}
+
+html[data-theme="dark"] body[data-preview-version="3"][data-regional-preview] #introWelcomeStage #homepageContent .gv-home-description {
+  color: #d6decb;
+}
+
+html[data-theme="dark"] body[data-preview-version="3"][data-regional-preview] #introWelcomeStage #homepageContent .gv-home-features {
+  background: #263e34;
+  border-color: rgba(214, 178, 111, 0.72);
+}
+
+html[data-theme="dark"] body[data-preview-version="3"][data-regional-preview] #introWelcomeStage #homepageContent .gv-home-features li {
+  background: transparent;
+  border-color: transparent;
+  color: #f7f0de;
+}
+
+html[data-theme="dark"] body[data-preview-version="3"][data-regional-preview] #introWelcomeStage #homepageContent .gv-invitation-feature-copy strong {
+  color: #f7f0de;
+}
+
+html[data-theme="dark"] body[data-preview-version="3"][data-regional-preview] #introWelcomeStage #homepageContent .gv-invitation-feature-copy small {
+  color: #cfd8c4;
+}
+
+html[data-theme="dark"] body[data-preview-version="3"][data-regional-preview] #introWelcomeStage #homepageContent .gv-invitation-feature-icon {
+  border-radius: 7px;
+  border: 1px solid rgba(214, 178, 111, 0.55);
+  filter: brightness(0.9) saturate(0.95);
+}
+
+html[data-theme="dark"] body[data-preview-version="3"][data-regional-preview] #introWelcomeStage #homepageContent #btnQuickStartWelcome {
+  background: linear-gradient(180deg, #b83735 0%, #962626 100%);
+  border-color: #d6a96a;
+  color: #fff8e6;
+}
+
+html[data-theme="dark"] body[data-preview-version="3"][data-regional-preview] #introWelcomeStage #homepageContent #btnHomeExploreMemory {
+  background: #274035;
+  border-color: #c9a662;
+  color: #f7f0de;
+}
+
+html[data-theme="dark"] body[data-preview-version="3"][data-regional-preview] #introWelcomeStage #homepageContent #btnHomeExploreMemory:hover {
+  background: #315042;
+  border-color: #e5be75;
+}
+
+/* Station mist & three regional station buttons on 02-intro-invitation */
+html[data-theme="dark"] body[data-home-theme="classic"] #introWelcomeStage .gv-home-stations {
+  --focus-ring: #ffeaba;
+}
+
+html[data-theme="dark"] body[data-home-theme="classic"] #introWelcomeStage .gv-home-station-mist {
+  inset: -24px -5% -26px;
+  background-color: #172a22;
+  background-image: none;
+  background-blend-mode: normal;
+  opacity: 0.94;
+}
+
+html[data-theme="dark"] body[data-home-theme="classic"] #introWelcomeStage .gv-home-station {
+  --station-ink: #ffb4a8;
+  --station-pin: #ff9c8f;
+  color: var(--station-ink);
+  text-shadow: 0 1px 4px rgba(8, 18, 14, 0.85);
+}
+
+html[data-theme="dark"] body[data-home-theme="classic"] #introWelcomeStage #btnHomeStationCentral {
+  --station-ink: #f3ce78;
+  --station-pin: #f3ce78;
+}
+
+html[data-theme="dark"] body[data-home-theme="classic"] #introWelcomeStage #btnHomeStationSouth {
+  --station-ink: #8fded6;
+  --station-pin: #8fded6;
+}
+
+html[data-theme="dark"] body[data-home-theme="classic"] #introWelcomeStage .gv-home-station:not(:last-child)::after {
+  background: linear-gradient(transparent, rgba(214, 178, 111, 0.65) 25%, rgba(214, 178, 111, 0.65) 75%, transparent);
+}
+
+html[data-theme="dark"] body[data-home-theme="classic"] #introWelcomeStage .gv-home-station > svg {
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
+}
+
+html[data-theme="dark"] body[data-home-theme="classic"] #introWelcomeStage .gv-home-station-arrow {
+  opacity: 0.92;
+}
+
+html[data-theme="dark"] body[data-home-theme="classic"] #introWelcomeStage .gv-home-station:hover {
+  filter: brightness(1.12);
+}
+
+/* ============================================================================
+   T-03: Bamboo Fortune Ritual Modal (#bambooRollModal.fortune-ritual)
+   ============================================================================ */
+html[data-theme="dark"] body[data-regional-preview] #bambooRollModal.fortune-ritual {
+  --ritual-paper: #1e332a;
+  --ritual-warm: #294337;
+  --ritual-ink: #f7f0de;
+  --ritual-muted: #d2d9c6;
+  --ritual-red: #f2a996;
+  --ritual-gold: #cfa962;
+  --ritual-trim: #8ba28b;
+  --focus-ring: #ffeaba;
+  background: rgba(11, 24, 21, 0.78);
+}
+
+html[data-theme="dark"] body[data-regional-preview] #bambooRollModal.fortune-ritual .modal-sheet {
+  background-color: var(--ritual-paper);
+  background-image: none;
+  box-shadow: 0 24px 90px rgba(0, 0, 0, 0.62), inset 0 0 0 4px var(--ritual-paper), inset 0 0 0 5px #5c7561;
+}
+
+html[data-theme="dark"] body[data-regional-preview] #bambooRollModal.fortune-ritual .ritual-brand {
+  filter: brightness(1.45) contrast(1.06) drop-shadow(0 0 10px rgba(255, 245, 220, 0.34));
+}
+
+html[data-theme="dark"] body[data-regional-preview] #bambooRollModal.fortune-ritual .ritual-close:hover {
+  color: #ffeaba;
+  background: var(--ritual-warm);
+  border-color: var(--ritual-gold);
+}
+
+html[data-theme="dark"] body[data-regional-preview] #bambooRollModal.fortune-ritual .ritual-stage {
+  border-color: #9e8a5c;
+}
+
+html[data-theme="dark"] body[data-regional-preview] #bambooRollModal.fortune-ritual .ritual-scope button[aria-pressed="true"] {
+  border-color: var(--ritual-red);
+  background: rgba(242, 169, 150, 0.14);
+  box-shadow: inset 0 0 0 1px var(--ritual-red);
+  color: #ffd4c7;
+}
+
+html[data-theme="dark"] body[data-regional-preview] #bambooRollModal.fortune-ritual .ritual-scope button[aria-pressed="true"] strong {
+  color: #ffe1d6;
+}
+
+html[data-theme="dark"] body[data-regional-preview] #bambooRollModal.fortune-ritual .ritual-scope button:hover:not(:disabled) {
+  background: var(--ritual-warm);
+  border-color: var(--ritual-gold);
+}
+
+html[data-theme="dark"] body[data-regional-preview] #bambooRollModal.fortune-ritual .ritual-primary {
+  border-color: #d6a96a;
+  background: linear-gradient(120deg, #b53f30, #962a24);
+  color: #fff6e2;
+  box-shadow: inset 0 0 0 3px #a43429, inset 0 0 0 4px rgba(241, 199, 138, 0.4), 0 3px 0 #4d1914;
+}
+
+html[data-theme="dark"] body[data-regional-preview] #bambooRollModal.fortune-ritual .ritual-primary::before,
+html[data-theme="dark"] body[data-regional-preview] #bambooRollModal.fortune-ritual .ritual-primary::after {
+  border-color: #d6a96a;
+  background: var(--ritual-paper);
+}
+
+html[data-theme="dark"] body[data-regional-preview] #bambooRollModal.fortune-ritual .ritual-primary:hover:not(:disabled) {
+  background: linear-gradient(120deg, #c24837, #a5312a);
+}
+
+html[data-theme="dark"] body[data-regional-preview] #bambooRollModal.fortune-ritual .ritual-primary:disabled {
+  background: #6f4038;
+  border-color: #8f6b58;
+  color: #f3e4d0;
+  box-shadow: inset 0 0 0 3px #6f4038, inset 0 0 0 4px rgba(241, 199, 138, 0.25);
+}
+
+html[data-theme="dark"] body[data-regional-preview] #bambooRollModal.fortune-ritual .ritual-steps .is-active > span {
+  background: rgba(242, 169, 150, 0.14);
+  color: #ffd4c7;
+}
+
+html[data-theme="dark"] body[data-regional-preview] #bambooRollModal.fortune-ritual .ritual-steps .is-complete > span {
+  background: #cfa962;
+  border-color: #cfa962;
+  color: #162821;
+}
+
+html[data-theme="dark"] body[data-regional-preview] #bambooRollModal.fortune-ritual .ritual-ticket-top {
+  background: #13251e;
+  color: #f8dfaa;
+  border-bottom: 1px solid #4c6654;
+}
+
+html[data-theme="dark"] body[data-regional-preview] #bambooRollModal.fortune-ritual .ritual-ticket-seal {
+  border-color: rgba(242, 169, 150, 0.78);
+  outline-color: rgba(242, 169, 150, 0.52);
+  color: #f2a996;
+}

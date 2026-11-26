@@ -63,7 +63,7 @@
   flex: none;
   padding: 3px 10px;
   border-radius: 99px;
-  background: var(--son-red);
+  background: var(--son-red-fill);
   color: #fff;
   font: 700 12px/1.4 var(--font-sans);
   letter-spacing: .04em;
@@ -82,7 +82,7 @@
 .gvb-btn:hover:not(:disabled) { background: var(--paper-bg); }
 .gvb-btn:disabled { opacity: .38; cursor: default; }
 .gvb-modal :is(button, a, output):focus-visible { outline: 3px solid var(--son-red); outline-offset: 2px; }
-.gvb-btn-primary { background: var(--son-red); border-color: var(--son-red); color: #fff; }
+.gvb-btn-primary { background: var(--son-red-fill); border-color: var(--son-red-fill); color: #fff; }
 .gvb-btn-primary:hover:not(:disabled) { background: #85202c; }
 .gvb-btn-close { font-weight: 700; }
 

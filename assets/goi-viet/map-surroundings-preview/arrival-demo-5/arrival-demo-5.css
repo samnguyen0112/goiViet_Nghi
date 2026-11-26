@@ -309,6 +309,7 @@ html[data-theme='dark'] body[data-arrival-demo][data-regional-preview]:has(#intr
     --station-red-hover: #84202c;
   }
   & #arrivalSheet :is(.arrival-reached, .arrival-ticket, [data-arrival-action='other']) { color: #f3c6a4; }
+  & #arrivalSheet .arrival-close:hover { color: #f6eed9; }
   & #arrivalSheet .gv-station-read { border-color: #70846c; }
   & :is(#arrivalStartHint, #previewPanelOpen, #arrivalPinTip, #journeyRouteBar) { color: #f6edcf; background-color: #26362e; border-color: #a48d5b; background-image: none; box-shadow: 0 4px 18px #0004; }
   & .arrival-start-chips button { color: #f6edcf; background: #3c5241; border-color: #a48d5b; }
