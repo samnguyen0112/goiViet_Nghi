@@ -22,6 +22,7 @@ def main():
         'raster-scheduler.js',
         'raster-scheduler-3.js',
         'raster-scheduler-4.js',
+        'regional-renderer-4.js',
     }
     for directory, extensions in [
         ('assets/goi-viet/map-surroundings-preview/natural', {'.js', '.webp', '.svg'}),

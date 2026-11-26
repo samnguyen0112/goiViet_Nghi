@@ -76,6 +76,8 @@
     event?.preventDefault(); event?.stopImmediatePropagation();
     if (exiting || !isOpen()) return;
     exiting = true;
+    artworkVisible = false;
+    window.GoiVietHomeIntro?.setArtworkVisible?.(false);
     const revision = ++exitRevision;
     const status = $('memoryMapStatus');
     $('memoryOpenMap').setAttribute('aria-disabled', 'true');
@@ -86,12 +88,12 @@
       if (revision !== exitRevision) return;
       try {
         if (typeof window.closeIntroModal !== 'function') throw new Error('Map entry is unavailable');
-        // closeIntroModal configures the overview and paints renderMainScene synchronously
-        // before hiding the intro. Its existing renderer fallback remains authoritative.
-        window.closeIntroModal();
+        // closeIntroModal configures the overview and keeps Canvas 2D fallback authoritative;
+        // on the WebGL curtain path, map-prewarm-5 holds the curtain until GPU terrain is ready.
+        window.closeIntroModal({ curtainHold: true });
         if (isOpen()) throw new Error('Map entry did not finish');
         const reveal = () => { if (revision !== exitRevision) return; curtain.classList.remove('is-waiting'); curtain.classList.add('is-revealing'); status.textContent = ''; done(); };
-        // The curtain stays until the map is complete (map-prewarm-3.js), and says so if that takes a while.
+        // The curtain stays until the map is complete (map-prewarm-5.js), and says so if that takes a while.
         const prewarm = window.GoiVietMapPrewarm3;
         if (prewarm) prewarm.hold(reveal, () => { if (revision !== exitRevision) return; curtain.classList.add('is-waiting'); status.textContent = T('homeq.preparingMap', 'Đang chuẩn bị bản đồ…'); });
         else reveal();
@@ -106,7 +108,7 @@
     curtain.classList.remove('is-revealing'); curtain.classList.add('is-covering');
     later(finish, 440);
     // A failed transition may never leave a visual screen over the application; a curtain waiting
-    // for the map is released by map-prewarm-3.js.
+    // for the map is released by map-prewarm-5.js.
     later(() => { if (revision === exitRevision && !window.GoiVietMapPrewarm3?.holding() && !curtain.classList.contains('is-revealing')) clearCurtain(); }, 2000);
   }
   function updateSceneVisibility() {
@@ -114,7 +116,7 @@
     const pageVisible = isOpen() && !document.hidden;
     const active = pageVisible && intro.scrollTop + intro.clientHeight > chapter.offsetTop && intro.scrollTop < chapter.offsetTop + chapter.offsetHeight;
     chapter.classList.toggle('is-active', active);
-    const heroVisible = pageVisible && intro.scrollTop < $('introWelcomeStage').offsetHeight - 40;
+    const heroVisible = !exiting && pageVisible && intro.scrollTop < $('introWelcomeStage').offsetHeight - 40;
     if (artworkVisible !== heroVisible) {
       artworkVisible = heroVisible;
       window.GoiVietHomeIntro?.setArtworkVisible?.(heroVisible);

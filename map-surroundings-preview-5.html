@@ -4162,15 +4162,15 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 <script src="assets/goi-viet/map-surroundings-preview/pixel-budget.js?v=60fps-20261018"></script>
 <script src="assets/goi-viet/map-surroundings-preview/render-performance.js?v=60fps-20261018" defer></script>
 <script src="assets/goi-viet/map-surroundings-preview/natural/raster-tasks.js?v=1" defer></script>
-<script src="assets/goi-viet/map-surroundings-preview/natural/raster-scheduler-5.js?v=20261104-gd6-hold-2" defer></script>
+<script src="assets/goi-viet/map-surroundings-preview/natural/raster-scheduler-5.js?v=20261126-a01-1" defer></script>
 <script src="assets/goi-viet/map-surroundings-preview/natural/terrain-renderer-5.js?v=20261111-i18n-2" defer></script>
-<script src="assets/goi-viet/map-surroundings-preview/natural/regional-renderer-4.js?v=20261028-cache-1" defer></script>
+<script src="assets/goi-viet/map-surroundings-preview/natural/regional-renderer-5.js?v=20261126-a01-1" defer></script>
 <script src="assets/goi-viet/map-surroundings-preview/natural/archipelago-renderer-5.js?v=20261113-voyage-1" defer></script>
 <script src="assets/goi-viet/map-surroundings-preview/natural/island-chart-5.js?v=20261113-voyage-1" defer></script>
 <script src="assets/goi-viet/map-surroundings-preview/family-voyage-data-5.js?v=20261113-voyage-1" defer></script>
 <script src="assets/goi-viet/map-surroundings-preview/sea-postoffice-data-5.js?v=20261113-postoffice-4" defer></script>
 <script src="assets/goi-viet/map-surroundings-preview/family-voyage-5.js?v=20261116-group-play-1" defer></script>
-<script src="assets/goi-viet/map-surroundings-preview/natural/landscape-5.js?v=20261125-audit-2" defer></script>
+<script src="assets/goi-viet/map-surroundings-preview/natural/landscape-5.js?v=20261126-a01-1" defer></script>
 <link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/natural/natural.css?v=3">
 <link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/natural/island-chart.css?v=2">
 <link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/family-voyage-5.css?v=20261113-voyage-1">
@@ -4197,7 +4197,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 <script src="assets/goi-viet/map-surroundings-preview/landmark-assets.js?v=red-sails-20261015" defer></script>
 <link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/polish.css?v=2">
 <script src="assets/goi-viet/map-surroundings-preview/webgl-coverage-3.js?v=20261022-prewarm-1" defer></script>
-<script src="assets/goi-viet/map-surroundings-preview/preview-5.js?v=20261121-audit-1&amp;ui=20261122-1" defer></script>
+<script src="assets/goi-viet/map-surroundings-preview/preview-5.js?v=20261126-a01-1" defer></script>
 <script src="assets/goi-viet/map-surroundings-preview/arrival-demo-5/polish-arrival-5.js?v=20261113-round3-1" defer></script>
 <link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/heritage-command-bar.css?v=20261015-3">
 <link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/arrival-journal.css?v=20261015-2">
@@ -4209,8 +4209,8 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 <link rel="stylesheet" href="assets/goi-viet/heritage-overlays.css?v=20261016-alignment">
 <link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/memory-reference-v2.css?v=20261022-prewarm-1">
 <link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/memory-native-v4.css?v=20261019-letter-polish-2">
-<script src="assets/goi-viet/map-surroundings-preview/memory-reference-5.js?v=20261111-i18n-2" defer></script>
-<script src="assets/goi-viet/map-surroundings-preview/map-prewarm-3.js?v=20261022-prewarm-1" defer></script>
+<script src="assets/goi-viet/map-surroundings-preview/memory-reference-5.js?v=20261126-a01-1" defer></script>
+<script src="assets/goi-viet/map-surroundings-preview/map-prewarm-5.js?v=20261126-a01-1" defer></script>
 <script src="assets/goi-viet/heritage-overlays-5.js?v=20261122-journey-ui-1" defer></script>
 <script src="assets/goi-viet/postcard-design-5.js?v=20261116-group-play-2" defer></script>
 <script src="assets/goi-viet/map-surroundings-preview/home-station-feedback-5.js?v=20261111-i18n-2" defer></script>
@@ -8573,7 +8573,7 @@ function openIntroModal() {
   pushModalFocus('introScreen');
 }
 
-function closeIntroModal() {
+function closeIntroModal(options) {
   const intro = document.getElementById('introScreen');
   if (!intro || intro.classList.contains('intro-hidden')) return;
   intro.classList.remove('intro-stage-leaving');
@@ -8589,8 +8589,15 @@ function closeIntroModal() {
   state.cam.zoom = state.cam.targetZoom;
   state.cam.panX = state.cam.targetPanX;
   state.cam.panY = state.cam.targetPanY;
-  // Paint the destination before exposing it; enter directly with no curtain.
-  renderMainScene(performance.now());
+  // A-01: on the WebGL curtain path, map-prewarm-5 holds the opaque curtain until GPU terrain
+  // is ready; skip the synchronous Canvas 2D fallback frame that would queue unused terrain:2d tiles.
+  // Direct entry and the Canvas fallback (no WebGL) keep the synchronous initial paint intact.
+  const terrain = window.GoiVietWebGLTerrain3;
+  if (options && options.curtainHold && window.GoiVietMapPrewarm3 && terrain?.usable() && !terrain.inspect().available) {
+    terrain.prepare([], state.cam, state.theme === 'dark');
+  }
+  const skipWebGLPrePaint = Boolean(options && options.curtainHold && window.GoiVietMapPrewarm3 && terrain?.usable() && terrain.inspect().available);
+  if (!skipWebGLPrePaint) renderMainScene(performance.now());
   intro.classList.add('intro-hidden');
   intro.classList.remove('open');
   const mapScene = document.getElementById('mapScene');
