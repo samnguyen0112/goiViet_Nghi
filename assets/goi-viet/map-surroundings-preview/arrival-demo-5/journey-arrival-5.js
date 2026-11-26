@@ -11,7 +11,7 @@
   let baseFrames=0,reusedFrames=0,arrival=null,lastArrival=null;
   const tr=(key,vars,fallback)=>window.GoiVietI18n?window.GoiVietI18n.t(key,vars):fallback;
   let routeOrigin, routeMeta;
-  let barLayoutDirty=true,barLayoutKey='';
+  let barLayoutDirty=true,barLayoutKey='',barPositionFrame=0,barVisibilityChanged=false,pendingFocus=false,lastAdjustDockKey='';
   const barLayoutTargets=[],barLayoutTransitions=new Map();
   let lastReduced=state.reducedMotion;
   const name=id=>window.GoiVietArrivalDemo?.stationName(id)||(CULTURAL_PLACE_MAP[id]?.short||CULTURAL_PLACE_MAP[id]?.name||window.GoiVietContent?.geo(N.node(id)?.name)||N.node(id)?.name||id||'').replace(/^TP\.\s*/,'').normalize('NFC');
@@ -101,6 +101,7 @@
   }
   function focus(){
     const route=trip?.route||plan;if(!route)return;
+    if(bar&&!bar.hidden&&!bar.dataset.position){pendingFocus=true;scheduleBarPosition(false);return;}
     const points=route.legs.length?route.legs.flatMap(l=>l.curve.pts.map(p=>[p.wx,p.wy])):[route.end],xs=points.map(p=>p[0]),ys=points.map(p=>p[1]),middle=[(Math.min(...xs)+Math.max(...xs))/2,(Math.min(...ys)+Math.max(...ys))/2];
     // Reserve only the compact journey bar; arrivalSheet participates in mapScreenArea separately.
     const camera={...state.cam,yaw:0,pitch:.24,zoom:1.5,panX:MAP_CENTER_X-middle[0],panY:MAP_CENTER_Y-middle[1]},base=mapScreenArea||{left:12,right:cw-12,top:100,bottom:ch-110},br=bar&&!bar.hidden?bar.getBoundingClientRect():null,reservedBottom=br?br.top-12:base.bottom,area={...base,bottom:Math.min(base.bottom,reservedBottom)};
@@ -148,13 +149,32 @@
     const width=Math.max(220,Math.min(desired,area.right-area.left-20,innerWidth-20)),left=clamp((area.left+area.right-width)/2,10,innerWidth-width-10);
     const key=[Math.round(left),Math.round(innerHeight-top+8),Math.round(width)].join(':');if(bar.dataset.position===key)return;bar.dataset.position=key;bar.style.left=Math.round(left)+'px';bar.style.bottom=Math.round(innerHeight-top+8)+'px';bar.style.width=Math.round(width)+'px';requestAnimationFrame(()=>{adjustControlLayout();invalidate();requestMapRender(2);});
   }
+  function scheduleBarPosition(visibilityChanged){
+    if(visibilityChanged)barVisibilityChanged=true;
+    if(barPositionFrame)return;
+    barPositionFrame=requestAnimationFrame(()=>{
+      barPositionFrame=0;
+      const visChanged=barVisibilityChanged;
+      barVisibilityChanged=false;
+      if(visChanged){syncMapControlLayout();window.GoiVietMapFrame?.syncSafeArea();}
+      positionBar();
+      if(pendingFocus){pendingFocus=false;focus();}
+    });
+  }
   function invalidateBarLayout(){barLayoutDirty=true;if(active())requestMapRender(2);}
   function affectsBarLayout(target){return target===document||target===window||target instanceof Element&&barLayoutTargets.some(el=>target===el||target.contains(el));}
-  function adjustControlLayout(){
-    barLayoutDirty=true;
+  function adjustControlLayout(dockRect){
+    if(dockRect){
+      const dockKey=Math.round(dockRect.left)+':'+Math.round(dockRect.top)+':'+Math.round(dockRect.width);
+      if(dockKey!==lastAdjustDockKey){lastAdjustDockKey=dockKey;barLayoutDirty=true;}
+    }
     if(!bar||bar.hidden||!mapCompass)return;
     const r=bar.getBoundingClientRect(),c=mapCompass;
-    const dock=document.querySelector('#mapScene .bottom-dock')?.getBoundingClientRect();
+    const dock=dockRect!==undefined?dockRect:document.querySelector('#mapScene .bottom-dock')?.getBoundingClientRect();
+    if(!dockRect&&dock){
+      const dockKey=Math.round(dock.left)+':'+Math.round(dock.top)+':'+Math.round(dock.width);
+      if(dockKey!==lastAdjustDockKey){lastAdjustDockKey=dockKey;barLayoutDirty=true;}
+    }
     if(dock?.top>innerHeight*.5){const x=Math.min(dock.left,r.left)-57,y=Math.min(dock.top+21,innerHeight-66);mapCompass=x-43>Math.max(8,mapScreenArea?.left||8)?{...c,x,y}:null;return;}
     if(c.x+45<r.left||c.x-45>r.right||c.y+62<r.top||c.y-38>r.bottom)return;
     const x=r.left-58;if(x-43>Math.max(8,mapScreenArea?.left||8))mapCompass={...c,x};else mapCompass=null;
@@ -202,8 +222,9 @@
       // The old arrival detail never owns an entry to a play mode in this demo.
       bar.querySelector('.journey-arrival-detail').hidden=true;
     }
-    syncProgress();positionBar();
-    if(had!==bar.hidden){invalidate();requestAnimationFrame(()=>{syncMapControlLayout();window.GoiVietMapFrame?.syncSafeArea();positionBar();});}
+    syncProgress();
+    if(had!==bar.hidden){barLayoutDirty=true;invalidate();scheduleBarPosition(true);}
+    else if(show){scheduleBarPosition(false);}
   }
   function screenKey(now){const c=state.cam;return JSON.stringify([cw,ch,c.zoom,c.yaw,c.pitch,c.panX,c.panY,c.targetZoom,c.targetYaw,c.targetPitch,c.targetPanX,c.targetPanY,state.theme,getMapSelectedPlaceId(),state.hoveredItem?.id,revision,window.GoiVietRegionalPreview?.isAnimating()?Math.floor(now/50):0,...getMapScreenOrigin(cw,ch)]);}
   function renderFrame(now){

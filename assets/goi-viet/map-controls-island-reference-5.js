@@ -43,15 +43,16 @@
     const settingsDisclosure=document.getElementById('headerSettings');
     settingsDisclosure.addEventListener('toggle',()=>{if(!settingsDisclosure.open)document.getElementById('mapSources').open=false;});
   }
-  function sync(canvasRect,dockRect) {
+  function sync(canvasRect,dockRect,headerRect) {
     if(!active()||!dockRect||!mapScreenArea)return;
     const center=(dockRect.left+dockRect.right)/2-canvasRect.left;
-    const header=document.querySelector('.top-header').getBoundingClientRect();
+    const header=headerRect||document.querySelector('.top-header').getBoundingClientRect();
     const tablet=cw>768&&cw<=1080;
     // The arrival flow keeps the dock at the bottom on tablets: follow where the dock actually is.
     const dockOnTop=tablet&&dockRect.top-canvasRect.top<ch/2;
     const menuSpace=dockOnTop?ch-(dockRect.bottom-canvasRect.top)-20:dockRect.top-header.bottom-20;
-    dock.style.setProperty('--gv-camera-menu-height',Math.max(60,menuSpace)+'px');
+    const nextMenuHeight=Math.max(60,menuSpace)+'px';
+    if(dock.style.getPropertyValue('--gv-camera-menu-height')!==nextMenuHeight)dock.style.setProperty('--gv-camera-menu-height',nextMenuHeight);
     if(dockOnTop){
       mapScreenArea.top=Math.max(header.bottom-canvasRect.top+16,dockRect.bottom-canvasRect.top+16);
       mapScreenArea.bottom=Math.max(mapScreenArea.top+80,ch-16);

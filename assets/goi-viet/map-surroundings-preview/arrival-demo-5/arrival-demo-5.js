@@ -112,9 +112,11 @@
   }
 
   function closeList(restore = false) {
-    window.GoiVietPreviewPolish?.setCollapsed(true, { focus: restore });
-    panel.hidden = true;
-    document.body.classList.add('preview-panel-collapsed');
+    const isOpen = !panel.hidden || !document.body.classList.contains('preview-panel-collapsed');
+    if (isOpen) window.GoiVietPreviewPolish?.setCollapsed(true, { focus: restore });
+    else if (restore) $('previewPanelOpen')?.focus({ preventScroll: true });
+    if (!panel.hidden) panel.hidden = true;
+    if (!document.body.classList.contains('preview-panel-collapsed')) document.body.classList.add('preview-panel-collapsed');
     syncList();
   }
 
@@ -162,7 +164,7 @@
     $('arrivalSealedList').innerHTML = [...earned].map(id => `<li><button type="button" class="gv-station-journal-stop" data-arrival-pick="${id}">${escapeHTML(name(id))}</button></li>`).join('');
   }
 
-  function refresh() {
+  function refresh({ fit = true } = {}) {
     refreshJournal();
     if (!sheetId) return;
     if (!sheet.hidden && isCoveredByModal()) {
@@ -248,7 +250,7 @@
         credit.querySelector('div').prepend(title);
       }
     }
-    fitSheet();
+    if (fit) fitSheet();
     sealFeedback();
   }
 
@@ -287,22 +289,21 @@
   function focusCurrent() {
     cancelAnimationFrame(focusFrame);
     const revision = ++focusRevision;
-    // syncSafeArea also runs on rAF; wait for it before centring the world point.
+    // syncSafeArea also runs on rAF; queue it first, then run syncHeaderOffset unconditionally before fit & centre.
     window.GoiVietMapFrame?.syncSafeArea();
     focusFrame = requestAnimationFrame(() => {
-      focusFrame = requestAnimationFrame(() => {
-        if (revision !== focusRevision || sheet.hidden) return;
-        syncHeaderOffset();
-        fitSheet();
-        const point = window.GoiVietJourneyNetwork.node(sheetId)?.point;
-        if (!point) return;
-        Object.assign(state.cam, {
-          targetYaw: 0, targetPitch: .24, targetZoom: Math.max(.75, Math.min(1.18, state.cam.targetZoom)),
-          targetPanX: MAP_CENTER_X - point[0], targetPanY: MAP_CENTER_Y - point[1]
-        });
-        window.GoiVietRegionalPreview?.constrainCamera();
-        requestMapRender();
+      focusFrame = 0;
+      if (revision !== focusRevision || sheet.hidden) return;
+      syncHeaderOffset();
+      fitSheet();
+      const point = window.GoiVietJourneyNetwork.node(sheetId)?.point;
+      if (!point) return;
+      Object.assign(state.cam, {
+        targetYaw: 0, targetPitch: .24, targetZoom: Math.max(.75, Math.min(1.18, state.cam.targetZoom)),
+        targetPanX: MAP_CENTER_X - point[0], targetPanY: MAP_CENTER_Y - point[1]
       });
+      window.GoiVietRegionalPreview?.constrainCamera();
+      requestMapRender();
     });
   }
 
@@ -312,12 +313,11 @@
     if (pendingArrival) cancelArrival();
     closeList(false);
     sheetId = id;
-    refresh();
+    refresh({ fit: false });
     sheet.hidden = false;
     sheet.classList.toggle('arrival-first-stamp', stampAnimate && !state.reducedMotion);
     if (stampAnimate) setTimeout(() => sheet.classList.remove('arrival-first-stamp'), 580);
     sheet.classList.toggle('arrival-no-motion', state.reducedMotion);
-    fitSheet();
     sheet.querySelectorAll('.gv-station-mode').forEach(el => el.classList.remove('arrival-mode-cue'));
     const target = focusMode ? $((focusMode === 'deck' ? 'deck-open-' : 'book-open-') + id) : $('arrivalStationTitle');
     if (focusMode) target?.classList.add('arrival-mode-cue');

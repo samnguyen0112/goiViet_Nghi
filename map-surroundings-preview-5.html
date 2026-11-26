@@ -4179,16 +4179,16 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 <script src="assets/goi-viet/map-surroundings-preview/journey-network-data.js?v=2" defer></script>
 <script src="assets/goi-viet/map-surroundings-preview/journey-network.js?v=2" defer></script>
 <script src="assets/goi-viet/map-surroundings-preview/arrival-demo-5/i18n-arrival-5.js?v=20261116-group-play-1" defer></script>
-<script src="assets/goi-viet/map-surroundings-preview/arrival-demo-5/journey-arrival-5.js?v=20261122-journey-ui-1" defer></script>
+<script src="assets/goi-viet/map-surroundings-preview/arrival-demo-5/journey-arrival-5.js?v=20261126-a04-1" defer></script>
 <script src="assets/goi-viet/map-surroundings-preview/journey-vehicles.js?v=phase5-20261018" defer></script>
 <script src="assets/goi-viet/map-surroundings-preview/vendor/earcut-3.0.2.js" defer></script>
 <script src="assets/goi-viet/map-surroundings-preview/webgl-terrain-renderer-3.js?v=20261022-prewarm-1" defer></script>
-<script src="assets/goi-viet/map-surroundings-preview/arrival-demo-5/label-performance-arrival-5.js?v=20261113-round3-1" defer></script>
+<script src="assets/goi-viet/map-surroundings-preview/arrival-demo-5/label-performance-arrival-5.js?v=20261126-a04-1" defer></script>
 <script src="assets/goi-viet/map-surroundings-preview/province-legibility-5.js?v=20261116-group-play-1" defer></script>
 <link rel="stylesheet" href="assets/goi-viet/map-decorative-frame-phase5.css?v=20261014-4">
-<script src="assets/goi-viet/map-surroundings-preview/heritage-frame.js?v=20261015-3" defer></script>
+<script src="assets/goi-viet/map-surroundings-preview/heritage-frame-5.js?v=20261126-a04-1" defer></script>
 <link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/island-controls.css?v=2">
-<script src="assets/goi-viet/map-controls-island-reference-5.js?v=20261113-tablet-dock-1" defer></script>
+<script src="assets/goi-viet/map-controls-island-reference-5.js?v=20261126-a04-1" defer></script>
 <link rel="stylesheet" href="assets/goi-viet/map-island-typography.css?v=20261014-1">
 <link rel="stylesheet" href="assets/goi-viet/homepage-content.css?v=20261023-crane-layer-1">
 <link rel="stylesheet" href="assets/goi-viet/homepage-opening.css">
@@ -4197,8 +4197,8 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 <script src="assets/goi-viet/map-surroundings-preview/landmark-assets.js?v=red-sails-20261015" defer></script>
 <link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/polish.css?v=2">
 <script src="assets/goi-viet/map-surroundings-preview/webgl-coverage-3.js?v=20261022-prewarm-1" defer></script>
-<script src="assets/goi-viet/map-surroundings-preview/preview-5.js?v=20261126-a01-1" defer></script>
-<script src="assets/goi-viet/map-surroundings-preview/arrival-demo-5/polish-arrival-5.js?v=20261113-round3-1" defer></script>
+<script src="assets/goi-viet/map-surroundings-preview/preview-5.js?v=20261126-a04-1" defer></script>
+<script src="assets/goi-viet/map-surroundings-preview/arrival-demo-5/polish-arrival-5.js?v=20261126-a04-1" defer></script>
 <link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/heritage-command-bar.css?v=20261015-3">
 <link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/arrival-journal.css?v=20261015-2">
 <script src="assets/goi-viet/map-surroundings-preview/heritage-command-bar-5.js?v=20261111-i18n-2" defer></script>
@@ -4252,7 +4252,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 <link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/legibility-5.css?v=20261113-legibility-1">
 <link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/journey-controls-5.css?v=20261122-journey-ui-1">
 <link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/dark-theme-5.css?v=20261126-dark-1">
-<script src="assets/goi-viet/map-surroundings-preview/arrival-demo-5/arrival-demo-5.js?v=20261125-audit-2" defer></script>
+<script src="assets/goi-viet/map-surroundings-preview/arrival-demo-5/arrival-demo-5.js?v=20261126-a04-2" defer></script>
 <style id="preview3-island-button-alignment">
   /* Keep the island toolbar aligned without changing the other previews. */
   #naturalIslandModal .natural-detail-controls {
@@ -8658,26 +8658,31 @@ let mapCompass = null;
 let mapScreenArea = null;
 const MIN_MAP_ZOOM = 0.12;
 
-function syncMapControlLayout() {
+function syncMapControlLayout(cachedRects) {
   const canvasRect = mainCanvas.getBoundingClientRect();
   const dock = document.querySelector('.bottom-dock');
-  const dockRect = dock ? dock.getBoundingClientRect() : null;
-  const dockTop = dockRect && dockRect.height > 0 && Number.isFinite(dockRect.top)
-    ? dockRect.top - canvasRect.top : ch - 76;
+  const dockRect = cachedRects && cachedRects.dockRect !== undefined
+    ? cachedRects.dockRect
+    : (dock ? dock.getBoundingClientRect() : null);
   const header = document.querySelector('.top-header');
+  const headerRect = cachedRects && cachedRects.headerRect !== undefined
+    ? cachedRects.headerRect
+    : (header ? header.getBoundingClientRect() : null);
   const helper = document.querySelector('.left-helper');
-  const headerRect = header ? header.getBoundingClientRect() : null;
   const helperRect = helper ? helper.getBoundingClientRect() : null;
-  const occupiedBottom = Math.max(
-    headerRect && headerRect.height > 0 ? headerRect.bottom - canvasRect.top : 0,
-    helperRect && helperRect.height > 0 ? helperRect.bottom - canvasRect.top : 0
-  );
-  const y = dockTop - 72;
   const panel = document.querySelector('#arrivalSheet:not([hidden])') || document.querySelector('.SidePanel');
   const panelRect = panel ? panel.getBoundingClientRect() : null;
   const switcher = document.querySelector('.mobile-view-switcher');
   const switcherRect = switcher ? switcher.getBoundingClientRect() : null;
   const panelVisible = panelRect && panelRect.width > 0 && !panel.inert && getComputedStyle(panel).visibility !== 'hidden' && (panel.id === 'arrivalSheet' || !document.body.classList.contains('preview-panel-collapsed'));
+
+  const dockTop = dockRect && dockRect.height > 0 && Number.isFinite(dockRect.top)
+    ? dockRect.top - canvasRect.top : ch - 76;
+  const occupiedBottom = Math.max(
+    headerRect && headerRect.height > 0 ? headerRect.bottom - canvasRect.top : 0,
+    helperRect && helperRect.height > 0 ? helperRect.bottom - canvasRect.top : 0
+  );
+  const y = dockTop - 72;
   const left = cw > 1080 && panelVisible && helperRect && helperRect.height > 0 ? helperRect.right + 16 : 14;
   const right = cw > 768 && panelVisible ? Math.min(cw - 14, panelRect.left - 16) : cw - 14;
   const top = headerRect && headerRect.height > 0 ? headerRect.bottom - canvasRect.top + 16 : 86;
@@ -8688,13 +8693,16 @@ function syncMapControlLayout() {
   // If controls consume the vertical space, the recenter button remains available.
   mapCompass = cw > 900 && y - 34 >= occupiedBottom + 12 ? { x: 76, y, radius: 36 } : null;
   window.GoiVietHeritageFrame?.constrainMapArea(mapScreenArea);
+
   const rootStyle = document.documentElement.style;
   const centerValue = (mapScreenArea.left + mapScreenArea.right) / 2 + 'px';
   const widthValue = mapScreenArea.right - mapScreenArea.left + 'px';
-  if (rootStyle.getPropertyValue('--map-center-x') !== centerValue) rootStyle.setProperty('--map-center-x', centerValue);
+  const centerChanged = rootStyle.getPropertyValue('--map-center-x') !== centerValue;
+  if (centerChanged) rootStyle.setProperty('--map-center-x', centerValue);
   if (rootStyle.getPropertyValue('--map-space-width') !== widthValue) rootStyle.setProperty('--map-space-width', widthValue);
-  window.GoiVietMapControlPlacement?.sync(canvasRect, dock ? dock.getBoundingClientRect() : dockRect);
-  window.GoiVietJourneyPreview?.adjustControlLayout?.();
+  const finalDockRect = centerChanged && dock ? dock.getBoundingClientRect() : dockRect;
+  window.GoiVietMapControlPlacement?.sync(canvasRect, finalDockRect, headerRect);
+  window.GoiVietJourneyPreview?.adjustControlLayout?.(finalDockRect);
 
   requestMapRender(2);
 }
@@ -8705,19 +8713,26 @@ function isCompassHit(x, y) {
 
 function syncHeaderOffset() {
   const headerEl = document.querySelector('.top-header');
-  if (headerEl) {
-    const rect = headerEl.getBoundingClientRect();
-    document.documentElement.style.setProperty('--header-offset', Math.ceil(rect.bottom + 12) + 'px');
-  }
   const dock = document.querySelector('.bottom-dock');
-  if (dock) {
-    document.documentElement.style.setProperty('--dock-offset', Math.ceil(window.innerHeight - dock.getBoundingClientRect().top + 8) + 'px');
+  const headerRect = headerEl ? headerEl.getBoundingClientRect() : null;
+  const dockRect = dock ? dock.getBoundingClientRect() : null;
+  const rootStyle = document.documentElement.style;
+  let offsetsChanged = false;
+  if (headerRect) {
+    const nextHeader = Math.ceil(headerRect.bottom + 12) + 'px';
+    if (rootStyle.getPropertyValue('--header-offset') !== nextHeader) {
+      rootStyle.setProperty('--header-offset', nextHeader);
+      offsetsChanged = true;
+    }
   }
-  syncMapControlLayout();
-  if (mapScreenArea) {
-    document.documentElement.style.setProperty('--map-center-x', (mapScreenArea.left + mapScreenArea.right) / 2 + 'px');
-    document.documentElement.style.setProperty('--map-space-width', mapScreenArea.right - mapScreenArea.left + 'px');
+  if (dockRect) {
+    const nextDock = Math.ceil(window.innerHeight - dockRect.top + 8) + 'px';
+    if (rootStyle.getPropertyValue('--dock-offset') !== nextDock) {
+      rootStyle.setProperty('--dock-offset', nextDock);
+      offsetsChanged = true;
+    }
   }
+  syncMapControlLayout(offsetsChanged ? null : { headerRect, dockRect });
 }
 
 function updateTrainSmokePosition() {
@@ -9088,16 +9103,16 @@ function renderMainScene(now) {
         const [cx, cy] = project3D(isl.pt[0], isl.pt[1], 16, c, cw, ch);
         renderedHitDemoPins.push({ place: CULTURAL_PLACE_MAP[isl.id], sx: cx, sy: cy, hitR: 52 });
       }
-      ctx.font = canvasFont(isArch ? 13 : 11, 700, 'heading');
-      ctx.textAlign = 'center';
-      const halo = isDark ? 'rgba(20,16,12,0.94)' : 'rgba(248,242,228,0.96)';
-      const fill = isArch ? (isDark ? '#FFDF8E' : '#B83826') : (isDark ? '#F7EFE2' : '#231912');
-      const label = geoName(isArch ? isl.name.replace(/\s*\([^)]*\)\s*$/, '').toUpperCase() : isl.short);
-      const halfLabelWidth = ctx.measureText(label).width / 2 + 6;
-      const leftEdge = mapScreenArea ? mapScreenArea.left : 8;
-      const rightEdge = mapScreenArea ? mapScreenArea.right : cw - 8;
-      const labelX = Math.max(leftEdge + halfLabelWidth, Math.min(rightEdge - halfLabelWidth, ix));
       if (!window.GoiVietRegionalPreview?.paintIslandLabel(ctx, isl, c, cw, ch, isArch)) {
+        ctx.font = canvasFont(isArch ? 13 : 11, 700, 'heading');
+        ctx.textAlign = 'center';
+        const halo = isDark ? 'rgba(20,16,12,0.94)' : 'rgba(248,242,228,0.96)';
+        const fill = isArch ? (isDark ? '#FFDF8E' : '#B83826') : (isDark ? '#F7EFE2' : '#231912');
+        const label = geoName(isArch ? isl.name.replace(/\s*\([^)]*\)\s*$/, '').toUpperCase() : isl.short);
+        const halfLabelWidth = ctx.measureText(label).width / 2 + 6;
+        const leftEdge = mapScreenArea ? mapScreenArea.left : 8;
+        const rightEdge = mapScreenArea ? mapScreenArea.right : cw - 8;
+        const labelX = Math.max(leftEdge + halfLabelWidth, Math.min(rightEdge - halfLabelWidth, ix));
         drawHaloText(ctx, label, labelX, iy, fill, halo, 4);
       }
     }

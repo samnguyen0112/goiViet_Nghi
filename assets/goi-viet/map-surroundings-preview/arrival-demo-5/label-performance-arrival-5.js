@@ -62,7 +62,7 @@
     return boxes.filter(b=>!opaque||b.opacity>.1).map(b=>({left:b.left-padding,right:b.right+padding,top:b.top-padding,bottom:b.bottom+padding}));
   }
   function measure(context,text){
-    const key=JSON.stringify([context.font,context.fontKerning,context.fontStretch,context.fontVariantCaps,context.letterSpacing,context.wordSpacing,context.textRendering,context.direction,String(text)]);
+    const key=context.font+'\0'+context.fontKerning+'\0'+context.fontStretch+'\0'+context.fontVariantCaps+'\0'+context.letterSpacing+'\0'+context.wordSpacing+'\0'+context.textRendering+'\0'+context.direction+'\0'+text;
     if(metrics.has(key)){hits++;return metrics.get(key);}
     const width=context.measureText(text).width;misses++;
     if(metrics.size>=2048)metrics.delete(metrics.keys().next().value);
