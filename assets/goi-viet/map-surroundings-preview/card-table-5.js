@@ -9,6 +9,7 @@
   const scrollBody = byId('deckScrollBody');
   if (!front || !seal || !sealHint || !scrollBody) return;
   const viewport = byId('drawnCardViewport');
+  const flipper = byId('card3DFlipper');
   const explanation = byId('answerExplanationBox');
   const narrow = matchMedia('(max-width: 860px)');
   const quizSealHintKey = sealHint.dataset.i18n;
@@ -124,38 +125,74 @@
   }
 
   let fitFrame = 0;
+  let appliedScale = 1;
+  function setTableScale(value) {
+    if (value === appliedScale) return;
+    appliedScale = value;
+    viewport.style.setProperty('--card-table-scale', value);
+  }
   function fitTable() {
     fitFrame = 0;
     if (!viewport.getClientRects().length) return;
-    const setScale = value => viewport.style.setProperty('--card-table-scale', value);
+    const roundScale = value => Math.floor(value * 1000) / 1000;
     const fits = () => scrollBody.scrollHeight <= scrollBody.clientHeight;
-    viewport.removeAttribute('data-reading-explanation');
-    setScale(1);
-    if (fits() && !narrow.matches && innerWidth >= 1500) {
+    if (viewport.hasAttribute('data-reading-explanation')) {
+      viewport.removeAttribute('data-reading-explanation');
+    }
+    setTableScale(1);
+    const clientH = scrollBody.clientHeight;
+    const scrollH = scrollBody.scrollHeight;
+    const flipperRectH = flipper ? flipper.getBoundingClientRect().height : 0;
+    const bodyStyle = getComputedStyle(scrollBody);
+    const bodyPadY = (parseFloat(bodyStyle.paddingTop) || 0) + (parseFloat(bodyStyle.paddingBottom) || 0);
+    const stage = scrollBody.firstElementChild;
+    const stageH = stage ? stage.getBoundingClientRect().height + bodyPadY : scrollH;
+    const contentH = scrollH > clientH ? scrollH : stageH;
+    const fixedH = Math.max(0, contentH - flipperRectH);
+    const sheet = scrollBody.closest('.modal-sheet');
+    const sheetMaxH = sheet ? parseFloat(getComputedStyle(sheet).maxHeight) : NaN;
+    const maxClientH = Number.isFinite(sheetMaxH) && sheet
+      ? Math.max(clientH, sheetMaxH - (sheet.getBoundingClientRect().height - clientH))
+      : clientH;
+
+    if (scrollH <= clientH && !narrow.matches && innerWidth >= 1500) {
       // P5-06 UI audit: on large screens (projector, 1920×1080) the two cards grow, up to 1.22×, while they still fit.
-      let low = 1, high = 1.22;
-      for (let step = 0; step < 5; step++) {
-        const scale = (low + high) / 2;
-        setScale(scale);
-        if (fits()) low = scale;
-        else high = scale;
+      const available = maxClientH - fixedH;
+      const target = flipperRectH > 0 ? Math.min(1.22, Math.max(1, roundScale(available / flipperRectH))) : 1;
+      setTableScale(target);
+      if (target > 1 && available < flipperRectH * 1.22 + 32 && !fits()) {
+        const overflow = scrollBody.scrollHeight - scrollBody.clientHeight;
+        setTableScale(Math.max(1, roundScale(target - overflow / Math.max(1, flipperRectH))));
       }
-      setScale(low);
-    } else if (!fits()) {
+    } else if (scrollH > clientH) {
       // Prefer full-size text and leave a scroll fallback for long optional forms or extreme zoom.
-      let low = 0.84, high = 1;
-      if (narrow.matches && viewport.dataset.face === 'front' &&
-          explanation.classList.contains('visible') && !front.hasAttribute('data-review-question')) {
-        setScale(low);
-        if (!fits()) viewport.setAttribute('data-reading-explanation', '');
+      const low = 0.84;
+      const canCompactExplanation = narrow.matches && viewport.dataset.face === 'front' &&
+        explanation.classList.contains('visible') && !front.hasAttribute('data-review-question');
+      if (canCompactExplanation && flipperRectH > 0 && fixedH + flipperRectH * low > clientH) {
+        viewport.setAttribute('data-reading-explanation', '');
+        const cScrollH = scrollBody.scrollHeight;
+        const cClientH = scrollBody.clientHeight;
+        const cFlipperH = flipper ? flipper.getBoundingClientRect().height : 0;
+        const cFixedH = Math.max(0, cScrollH - cFlipperH);
+        const target = cScrollH <= cClientH ? 1
+          : (cFlipperH > 0 ? Math.max(low, Math.min(1, roundScale((cClientH - cFixedH) / cFlipperH))) : low);
+        setTableScale(target);
+      } else {
+        const available = clientH - fixedH;
+        const target = flipperRectH > 0 ? Math.max(low, Math.min(0.995, roundScale(available / flipperRectH))) : low;
+        setTableScale(target);
+        if (narrow.matches && target > low && flipper) {
+          const reflowedH = flipper.offsetHeight;
+          if (reflowedH > 0 && reflowedH < flipperRectH - 4) {
+            const refined = Math.max(target, Math.min(0.995, roundScale(available / reflowedH)));
+            if (refined > target) {
+              setTableScale(refined);
+              if (!fits()) setTableScale(target);
+            }
+          }
+        }
       }
-      for (let step = 0; step < 5; step++) {
-        const scale = (low + high) / 2;
-        setScale(scale);
-        if (fits()) low = scale;
-        else high = scale;
-      }
-      setScale(low);
     }
     fitRaisedCover();
   }
@@ -259,6 +296,7 @@
     peek.classList.toggle('is-plain', !art);
     peek.replaceChildren(art || plainCover(label, place));
     if (peek.dataset.cardId !== card.id) {
+      setTableScale(1);
       front.removeAttribute('data-review-question');
       showFace(state.activeCardSide);
     }

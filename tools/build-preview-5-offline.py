@@ -17,14 +17,23 @@ def main():
     parser.add_argument('--check', action='store_true', help='fail if the generated manifest is stale; write nothing')
     args = parser.parse_args()
     pending = [ROOT / 'map-surroundings-preview-5.html']
-    # Computed URLs: runtime assets only, excluding working originals/references.
+    # Computed URLs: runtime assets only, excluding working originals/references and legacy schedulers (B-02).
+    excluded_natural = {
+        'raster-scheduler.js',
+        'raster-scheduler-3.js',
+        'raster-scheduler-4.js',
+    }
     for directory, extensions in [
         ('assets/goi-viet/map-surroundings-preview/natural', {'.js', '.webp', '.svg'}),
         ('assets/goi-viet/map-surroundings-preview/landmarks', {'.svg'}),
         ('assets/goi-viet/books-5/postcards', {'.webp'}),
         ('assets/goi-viet/card-covers-5', {'.webp'}),  # P5-06: Canva covers, file names built in card-covers-5.js
     ]:
-        pending.extend(f for f in (ROOT / directory).rglob('*') if f.is_file() and f.suffix in extensions)
+        pending.extend(
+            f for f in (ROOT / directory).rglob('*')
+            if f.is_file() and f.suffix in extensions
+            and not (directory.endswith('/natural') and f.name in excluded_natural)
+        )
     catalog = ROOT / 'assets/goi-viet/station-photos-5/catalog.json'
     pending.append(catalog)
     pending.extend(ROOT / photo['src'] for photo in json.loads(catalog.read_text(encoding='utf-8'))['photos'] if photo.get('src'))
