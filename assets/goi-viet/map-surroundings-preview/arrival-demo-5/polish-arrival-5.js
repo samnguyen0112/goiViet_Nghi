@@ -34,9 +34,9 @@
   }
   let collapsed=true,frame=0,lastSelected='',applying=false;
   function syncAccessibility(){const hidden=collapsed;if(panel.inert!==hidden)panel.inert=hidden;if(panel.getAttribute('aria-hidden')!==String(hidden))panel.setAttribute('aria-hidden',String(hidden));for(const toggle of [close,open])if(toggle.getAttribute('aria-expanded')!==String(!hidden))toggle.setAttribute('aria-expanded',String(!hidden));window.GoiVietArrivalDemo?.syncList();}
-  function animateLayout(){syncHeaderOffset();cancelAnimationFrame(frame);frame=requestAnimationFrame(()=>{frame=0;syncHeaderOffset();window.GoiVietMapFrame?.syncSafeArea();});}
+  function animateLayout(){if(frame)return;frame=requestAnimationFrame(()=>{frame=0;syncHeaderOffset();window.GoiVietMapFrame?.syncSafeArea();});}
   panel.addEventListener('transitionend',event=>{if(event.target===panel&&event.propertyName==='transform')animateLayout();});
-  function setCollapsed(value, {focus=true}={}){collapsed=Boolean(value);if(!collapsed)window.GoiVietArrivalDemo?.closeSheet({restore:false,announce:false});document.body.classList.toggle('preview-panel-collapsed',collapsed);panel.hidden=collapsed;syncAccessibility();layout();if(!collapsed)scroll.scrollTop=0;if(focus)(collapsed?open:document.getElementById('provSearchInput')).focus({preventScroll:true});animateLayout();}
+  function setCollapsed(value, {focus=true}={}){const next=Boolean(value);if(collapsed===next&&panel.hidden===next&&document.body.classList.contains('preview-panel-collapsed')===next){if(focus)(collapsed?open:document.getElementById('provSearchInput')).focus({preventScroll:true});return;}collapsed=next;if(!collapsed)window.GoiVietArrivalDemo?.closeSheet({restore:false,announce:false});document.body.classList.toggle('preview-panel-collapsed',collapsed);panel.hidden=collapsed;syncAccessibility();layout();if(!collapsed)scroll.scrollTop=0;if(focus)(collapsed?open:document.getElementById('provSearchInput')).focus({preventScroll:true});animateLayout();}
   close.addEventListener('click',()=>setCollapsed(true));open.addEventListener('click',()=>setCollapsed(!collapsed));
   function layout() {
     const mobile = innerWidth <= 768;

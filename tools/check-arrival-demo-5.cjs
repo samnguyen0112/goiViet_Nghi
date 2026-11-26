@@ -654,8 +654,18 @@ async function verifyRound3(viewport) {
     });
     await test(page,size,'F','Arrival banner precedes sheet; skips reveal immediately',async()=>{
       await reduce(true);await visit('hanoi','hn');await reduce(false);await pickFromList(page,'hue','hue');
-      await evaluate(page,()=>{window.__arriveSR=[];window.__arriveObserver=new MutationObserver(()=>{const text=document.getElementById('srAnnouncer').textContent;if(text.startsWith('Đã đến ga'))window.__arriveSR.push(text)});window.__arriveObserver.observe(document.getElementById('srAnnouncer'),{childList:true,subtree:true,characterData:true});});
-      await page.locator('#arrivalExplore').click();await wait(page,()=>GoiVietJourneyPreview.inspect().currentId==='hue'&&!GoiVietJourneyPreview.inspect().running);const start=Date.now();
+      await evaluate(page,()=>{
+        window.__arriveSR=[];
+        window.__arriveObserver=new MutationObserver(()=>{const text=document.getElementById('srAnnouncer').textContent;if(text.startsWith('Đã đến ga'))window.__arriveSR.push(text)});
+        window.__arriveObserver.observe(document.getElementById('srAnnouncer'),{childList:true,subtree:true,characterData:true});
+        window.__arriveTiming={bannerAt:null,sheetAt:null};
+        const banner=document.getElementById('mapStationArrivalBanner'),sheet=document.getElementById('arrivalSheet');
+        window.__arriveBannerObserver=new MutationObserver(()=>{if(window.__arriveTiming.bannerAt===null&&banner.classList.contains('show'))window.__arriveTiming.bannerAt=performance.now();});
+        window.__arriveBannerObserver.observe(banner,{attributes:true,attributeFilter:['class']});
+        window.__arriveSheetObserver=new MutationObserver(()=>{if(window.__arriveTiming.sheetAt===null&&!sheet.hidden&&sheet.dataset.place==='hue')window.__arriveTiming.sheetAt=performance.now();});
+        window.__arriveSheetObserver.observe(sheet,{attributes:true,attributeFilter:['hidden','data-place']});
+      });
+      await page.locator('#arrivalExplore').click();await wait(page,()=>GoiVietJourneyPreview.inspect().currentId==='hue'&&!GoiVietJourneyPreview.inspect().running);
       assert(await page.locator('#mapStationArrivalBanner').isVisible());assert(!await page.locator('#arrivalSheet').isVisible());verse=await page.locator('#mapArrivalVerse').innerText();assert.equal(verse.split('\n').length,2);
       const clearPins = await evaluate(page, () => {
         const banner = document.getElementById('mapStationArrivalBanner').getBoundingClientRect();
@@ -670,7 +680,12 @@ async function verifyRound3(viewport) {
       assert(clearPins, 'Arrival banner must leave both Hà Nội and Huế pins clear');
       await page.waitForTimeout(200);
       await shot(page,size+'-r3-F-banner');
-      await wait(page,()=>GoiVietArrivalDemo.isSheetOpen(),null,1600);const delay=Date.now()-start;assert(delay<=1600);assert.equal(await evaluate(page,()=>document.activeElement.id),'arrivalStationTitle');firstStamp=await page.locator('.arrival-stamp').evaluate(el=>getComputedStyle(el).animationName!=='none');assert(!await page.locator('#mapStationArrivalBanner').isVisible());assert.equal(await page.locator('#mapStationArrivalBanner').getAttribute('aria-hidden'),'true');await page.waitForTimeout(100);const announces=await evaluate(page,()=>{window.__arriveObserver.disconnect();return window.__arriveSR;});assert.equal(announces.length,1,JSON.stringify(announces));
+      await wait(page,()=>GoiVietArrivalDemo.isSheetOpen(),null,3000);
+      const timing=await evaluate(page,()=>{window.__arriveBannerObserver?.disconnect();window.__arriveSheetObserver?.disconnect();return window.__arriveTiming;});
+      assert(Number.isFinite(timing?.bannerAt)&&Number.isFinite(timing?.sheetAt),'Missing arrival timing marks: '+JSON.stringify(timing));
+      const delay=Math.round((timing.sheetAt-timing.bannerAt)*10)/10;
+      assert(delay>0&&delay<=1600,`Unexpected arrival banner→sheet delay ${delay} ms (${JSON.stringify(timing)})`);
+      assert.equal(await evaluate(page,()=>document.activeElement.id),'arrivalStationTitle');firstStamp=await page.locator('.arrival-stamp').evaluate(el=>getComputedStyle(el).animationName!=='none');assert(!await page.locator('#mapStationArrivalBanner').isVisible());assert.equal(await page.locator('#mapStationArrivalBanner').getAttribute('aria-hidden'),'true');await page.waitForTimeout(100);const announces=await evaluate(page,()=>{window.__arriveObserver.disconnect();return window.__arriveSR;});assert.equal(announces.length,1,JSON.stringify(announces));
       await pickFromList(page,'hanoi','hn');await page.locator('#arrivalExplore').click();await page.locator('.journey-instant').click();assert(await page.locator('#arrivalSheet').isVisible());assert(!await page.locator('#mapStationArrivalBanner').isVisible());
       await pickFromList(page,'hanoi','hn');await page.locator('#arrivalExplore').click();assert(await page.locator('#arrivalSheet').isVisible());return {delay,safe:clearPins,firstStamp};
     });
