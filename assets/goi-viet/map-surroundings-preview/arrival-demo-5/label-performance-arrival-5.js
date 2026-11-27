@@ -12,6 +12,7 @@
   function changed(records){
     const touchesUI=records.some(r=>{
       const target=r.type==='characterData'?r.target.parentElement:r.target;
+      if(!target)return false;
       // The progress fill transforms inside a fixed bar; it never moves its
       // UI obstacle. Keep the static map reusable while vehicles are moving.
       if(r.attributeName==='style'&&target.matches?.('.journey-progress-fill'))return false;

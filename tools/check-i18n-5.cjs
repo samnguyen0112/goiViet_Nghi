@@ -157,8 +157,14 @@ async function walk() {
   await e.waitForSelector('#arrivalSheet[data-place="hue"]:not([hidden])', { timeout: 60000 }); await step('arrival');
   await e.click('#deck-open-hue'); await e.waitForSelector('#deckModal.open'); await e.waitForTimeout(500); await step('deck');
   await drawCard(e); await e.waitForTimeout(800); await step('card front');
-  await e.click('#btnAskFamilyHint'); await e.waitForTimeout(300); await step('family hint');
-  await e.click('#btnDontKnowReveal'); await e.waitForTimeout(600); await step('card back');
+  if (await e.locator('#cardFrontState.is-canva-card').count()) {
+    const canvaHint = e.locator('#canvaCardBottom .canva-hint > summary');
+    if (await canvaHint.count()) { await canvaHint.click(); await e.waitForTimeout(300); await step('canva hint'); }
+    await e.click('#canvaCardBottom .canva-open'); await e.waitForTimeout(600); await step('card back');
+  } else {
+    await e.click('#btnAskFamilyHint'); await e.waitForTimeout(300); await step('family hint');
+    await e.click('#btnDontKnowReveal'); await e.waitForTimeout(600); await step('card back');
+  }
   await e.click('#memoryDetailsDrawer summary'); await e.fill('#memoryPlaceInput', 'Huế'); await e.click('#btnSaveMemoryPlace'); await e.waitForTimeout(300); await step('memory saved');
   await e.click('#btnCompleteCardTurn'); await e.waitForSelector('#deckModal.open', { state: 'hidden' }); await e.waitForTimeout(500); await step('turn done');
   await e.keyboard.press('Escape');
