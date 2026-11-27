@@ -63,7 +63,7 @@
 #deckModal #cardFrontState :is(#btnRevealAnswer, .canva-open) { grid-column: 1 / -1; min-height: 38px; border: 0; border-radius: 9px; background: linear-gradient(#ffe9a8, #f2c867); color: #5a1010; font-size: 13.5px; font-weight: 700; box-shadow: 0 3px 0 #b88a2c; }
 #deckModal #cardFrontState :is(#btnRevealAnswer, .canva-open):not(:disabled):hover { filter: brightness(1.04); transform: translateY(-1px); }
 #deckModal #cardFrontState.is-canva-card .question-text { margin-block: auto; padding: 9px 0; font-size: clamp(17px, 2.7dvh, 22px); }
-#deckModal #cardFrontState #answerExplanationBox { margin-top: 7px !important; padding: 8px 10px; background: #fff8e6; border-left-color: #c9a15a; }
+#deckModal #cardFrontState #answerExplanationBox { margin-top: 7px !important; padding: 8px 10px; background: #fff8e6; border-left-color: #c9a15a; --focus-ring: #9e2835; }
 #deckModal #cardFrontState #answerExplanationBox > div:last-child { padding-top: 4px !important; border-top: 0 !important; }
 #deckModal #cardFrontState #answerExplanationBox .btn-primary { min-height: 30px; padding: 5px 9px; }
 #deckModal #cardFrontState:has(#answerExplanationBox.visible) > :is(#cardHintBox, div:has(> #cardSelectHint)) { display: none !important; }
@@ -192,7 +192,6 @@
 #deckModal #btnRecordAnotherMemory { margin-top: 8px; }
 
 /* Dark theme: the table darkens; the two cards stay printed cards (paper keeps its light-theme ink). */
-html[data-theme=dark] #deckModal #cardFrontState #answerExplanationBox { --focus-ring: #9e2835; }
 html[data-theme=dark] #deckModal #cardBackState { --paper-bg: #f7f0de; --paper-elevated: #fffcf4; --paper-warm: #efe6ce; --wood-border: #d8d0b5; --wood-border-strong: #938362; --ink-primary: #293b32; --ink-secondary: #4b5b4c; --ink-muted: #596b5c; --son-red: #9e2835; --com-green: #2b6e48; color: #293b32; }
 html[data-theme=dark] #deckModal #cardBackState .conversation-seal { background: linear-gradient(#fdf6e0f5, #f4e4bbfa); }
 html[data-theme=dark] #deckModal #drawnCardViewport { background: radial-gradient(ellipse at 50% 30%, #2f4a3c 0%, #1c3027 70%, #132219 100%); box-shadow: inset 0 0 0 1px #4b6552; }

@@ -79,12 +79,24 @@
     const b=entry.bounds,pad=entry.type==='land'?Math.max(.18,Math.min(.8,Math.max(b.right-b.left,b.bottom-b.top)*.45)):.1;
     return {left:b.left-pad,right:b.right+pad,top:b.top-pad,bottom:b.bottom+pad};
   }
+  function hudBoxes(context,cx,cy,w,h){
+    const pad=4,boxes=[],cr=context.canvas?.getBoundingClientRect?.()||{left:0,top:0};
+    const boxOf=el=>{if(!el)return null;const r=el.getBoundingClientRect();return r.width>0&&r.height>0?{left:r.left-cr.left-pad,top:r.top-cr.top-pad,right:r.right-cr.left+pad,bottom:r.bottom-cr.top+pad}:null;};
+    const north=boxOf(hud?.querySelector('.island-chart-north'))||{left:6,top:5,right:48,bottom:72};
+    const rawScale=boxOf(hud?.querySelector('.island-chart-scale'));
+    const scale=rawScale&&rawScale.right-rawScale.left>=40?rawScale:{left:12,top:h-52,right:128,bottom:h-20};
+    const rawPos=boxOf(hud?.querySelector('.island-chart-position'));
+    const estPosW=Math.ceil(context.measureText(coordinate([cx,cy])).width)+20;
+    const pos={left:rawPos&&rawPos.right-rawPos.left>40?Math.min(rawPos.left,w-12-estPosW-pad):w-12-estPosW-pad,top:rawPos?Math.min(rawPos.top,h-28):h-28,right:w,bottom:h};
+    boxes.push(north,scale,pos);return boxes;
+  }
   function before(context,camera,w,h,group){
     if(!archipelagos.has(group.id))return;
     const step=[.005,.01,.02,.05,.1,.25,.5,1,2,5].find(v=>v*60*camera.zoom>100)||5,project=C.projector(camera,w,h),cx=MAP_CENTER_X-camera.panX,cy=MAP_CENTER_Y-camera.panY,left=cx-w/2/camera.zoom,right=cx+w/2/camera.zoom,top=cy-h/2/camera.zoom,bottom=cy+h/2/camera.zoom;
     context.save();context.strokeStyle='rgba(226,239,221,.13)';context.lineWidth=.6;context.fillStyle='rgba(246,240,216,.74)';context.font='10px "Be Vietnam Pro",sans-serif';context.textAlign='left';
-    for(let lon=Math.ceil((101.5+left/60)/step)*step;lon<=101.5+right/60;lon+=step){const x=project((lon-101.5)*60,cy)[0];context.beginPath();context.moveTo(x,0);context.lineTo(x,h);context.stroke();context.fillText(lon.toFixed(step<.1?2:1)+T('chart.lon','°Đ'),x+4,h-8);}
-    for(let lat=Math.ceil((23.8-bottom/62.5)/step)*step;lat<=23.8-top/62.5;lat+=step){const y=project(cx,(23.8-lat)*62.5)[1];context.beginPath();context.moveTo(0,y);context.lineTo(w,y);context.stroke();if(y>25&&y<h-30)context.fillText(lat.toFixed(step<.1?2:1)+T('chart.lat','°B'),5,y-4);}
+    const blocked=hudBoxes(context,cx,cy,w,h);
+    for(let lon=Math.ceil((101.5+left/60)/step)*step;lon<=101.5+right/60;lon+=step){const x=project((lon-101.5)*60,cy)[0];context.beginPath();context.moveTo(x,0);context.lineTo(x,h);context.stroke();const lbl=lon.toFixed(step<.1?2:1)+T('chart.lon','°Đ'),box={left:x+4,top:h-18,right:x+4+context.measureText(lbl).width,bottom:h-4};if(box.left>=4&&box.right<=w-4&&!blocked.some(b=>C.overlaps(b,box)))context.fillText(lbl,x+4,h-8);}
+    for(let lat=Math.ceil((23.8-bottom/62.5)/step)*step;lat<=23.8-top/62.5;lat+=step){const y=project(cx,(23.8-lat)*62.5)[1];context.beginPath();context.moveTo(0,y);context.lineTo(w,y);context.stroke();const lbl=lat.toFixed(step<.1?2:1)+T('chart.lat','°B'),box={left:5,top:y-14,right:5+context.measureText(lbl).width,bottom:y};if(box.top>=4&&box.bottom<=h-24&&!blocked.some(b=>C.overlaps(b,box)))context.fillText(lbl,5,y-4);}
     context.restore();
   }
   function after(context,group,camera,w,h,dark){
