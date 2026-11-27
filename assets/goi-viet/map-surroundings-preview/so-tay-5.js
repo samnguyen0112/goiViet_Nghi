@@ -1,10 +1,13 @@
-/* P5-07 (2026-11-26): Sổ tay hành khách, the passenger handbook between the memory chapter and the map (preview-5 only).
-   #memoryOpenGuide at the end of the memory chapter opens it. "Lên tàu" and "Vào thẳng bản đồ" take the chapter's own
-   way into the map (GoiVietMemoryChapter.enterMap: curtain, then map-prewarm-5 holds it until the map is ready). While
-   the handbook is open the home screen stays open underneath (only hidden from view), so the map keeps being prepared.
-   The five stops practise the real flow with the page's own data and words: a small map drawn from DATA (34 provinces,
-   Hoàng Sa, Trường Sa) with the three sample stations and their boards, the station's four cards (Canva covers, real
-   questions, answers and activities), the lotus seal, a practice postcard, then the other buttons of the map.
+/* P5-07 (2026-11-26, v2 2026-11-27): Sổ tay hành khách, the passenger handbook between the memory chapter and the map
+   (preview-5 only). #memoryOpenGuide at the end of the memory chapter opens it. "Lên tàu" and "Vào thẳng bản đồ" take
+   the chapter's own way into the map (GoiVietMemoryChapter.enterMap: curtain, then map-prewarm-5 holds it until the map
+   is ready). While the handbook is open the home screen stays open underneath (only hidden from view), so the map keeps
+   being prepared.
+   Each stop has one instruction column (a short list of things to do, ticked as they are done, the next one ringed in
+   gold on the stage) and one large stage that practises the real flow with the page's own data and words: a map drawn
+   from DATA and the map's own regional geography, rivers and landmark art (34 provinces, Hoàng Sa, Trường Sa, the
+   neighbours, the North–South railway and the three sample stations with their boards), the station's four cards
+   (Canva covers, real questions, answers and activities), the lotus seal, a practice postcard, then the map's buttons.
    Nothing here writes to the journey, the deck, the memories, the progress or the browser's storage.
    Text: sotay.* in i18n-ui-5.js and the page's own keys. Styles: so-tay-5.css. */
 (() => {
@@ -13,6 +16,9 @@
   const intro = document.getElementById('introScreen');
   const opener = document.getElementById('memoryOpenGuide');
   if (!dialog || !intro || !opener) return;
+  const SCRIPT_URL = (document.currentScript && document.currentScript.src) || location.href;
+  // The same file and version preview-5.js loads for the map, so the browser and the offline copy share one entry.
+  const GEO_URL = new URL('regional-geometry.js?v=seamless-20261015', SCRIPT_URL).href;
 
   const I = window.GoiVietI18n;
   const T = (key, vars) => (I ? I.t(key, vars) : key);
@@ -30,8 +36,14 @@
     [109.3, 13.09], [109.18, 12.25], [108.95, 11.6], [108.0, 10.98], [106.82, 10.95], [106.68, 10.78]];
   const RAIL_STATION = { hn: 0, hue: 8, hcm: RAIL.length - 1 };
   const MAP_LABELS = { hs: 'sotay.map.hs', ts: 'sotay.map.ts' };
-  const STOP_NAMES = ['sotay.rail.1', 'sotay.rail.2', 'sotay.rail.3', 'sotay.rail.4', 'sotay.rail.5'];
+  const COUNTRY_LABELS = { laos: 'sotay.map.laos', cambodia: 'sotay.map.cambodia', thailand: 'sotay.map.thailand' };
+  // Laos's own anchor sits on the narrow strip by the Vietnamese border; its label goes to the north of the country.
+  const COUNTRY_AT = { laos: [102.6, 19.7] };
   const STOP_NUMBERS = ['sotay.step.1', 'sotay.step.2', 'sotay.step.3', 'sotay.step.4', 'sotay.step.5'];
+  // Landmark art of the map (landmark-assets.js) beside each station, and the red-sailed boat: world box [x, y, w, h]
+  // relative to the station point (or absolute for the boat).
+  const ART = { hn: [16, -86, 54, 72], hue: [-126, -74, 110, 66], hcm: [-104, -82, 84, 70] };
+  const BOAT = [628, 236, 78, 80];
 
   const timers = new Set();
   const later = (fn, ms) => { const id = setTimeout(() => { timers.delete(id); fn(); }, ms); timers.add(id); return id; };
@@ -40,10 +52,12 @@
 
   const S = {
     open: false, step: 0, tried: [false, false, false, false], trigger: null, saved: [], boarding: false, built: false,
-    picked: null, at: null, travelling: false, place: 'hn', fanPlace: null, drawing: false,
-    cardIdx: null, answer: null, eliminated: null, revealed: false, asDontKnow: false,
+    picked: null, at: null, travelling: false, place: 'hn', fanPlace: null, drawing: false, boardCards: false,
+    cardIdx: null, answer: null, eliminated: null, revealed: false, asDontKnow: false, toSeal: false,
     unsealed: false, actIdx: 0, finished: null, timerEnd: 0, timerId: 0, saves: 0, memory: null,
-    rideRaf: 0, tour: 0, vb: null, railLen: 0, stationLen: {}, mapPaths: '', say: [], sayId: 0, boardFail: 0
+    rideRaf: 0, tour: 0, vb: null, content: null, railLen: 0, stationLen: {}, stationAt: {}, mapPaths: '',
+    trainPt: null, fitRaf: 0, geo: null, geoPromise: null, rivers: false, targetKey: '',
+    say: [], sayId: 0, boardFail: 0
   };
 
   // ---------------------------------------------------------------- data from the page
@@ -77,124 +91,317 @@
     }, 80);
   }
 
-  // ---------------------------------------------------------------- the small map (stop 1)
+  // ---------------------------------------------------------------- the map (stop 1)
   const svgEl = (tag, attrs, parent) => {
     const node = document.createElementNS(NS, tag);
     for (const name in attrs) node.setAttribute(name, attrs[name]);
     if (parent) parent.append(node);
     return node;
   };
-  const ringPath = rings => rings.filter(r => r && r.length > 2)
-    .map(r => 'M' + r.map(p => (+p[0]).toFixed(1) + ',' + (+p[1]).toFixed(1)).join('L') + 'Z').join('');
-  function smoothPath(points) {
-    const f = v => v.toFixed(1);
-    let d = `M${f(points[0][0])},${f(points[0][1])}`;
+  const f1 = v => (+v).toFixed(1);
+  const ringPath = rings => rings.filter(r => r && r.length > 2).map(r => 'M' + r.map(p => f1(p[0]) + ',' + f1(p[1])).join('L') + 'Z').join('');
+  // Drops points closer than `step` world units to the last kept one (the map is drawn far smaller than the source).
+  const thin = (points, step) => {
+    const out = [];
+    let lx = Infinity, ly = Infinity;
+    points.forEach((p, i) => {
+      if (i === points.length - 1 || Math.abs(p[0] - lx) + Math.abs(p[1] - ly) >= step) { out.push(p); lx = p[0]; ly = p[1]; }
+    });
+    return out;
+  };
+  const boxOf = points => {
+    let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+    for (const p of points) { if (p[0] < x0) x0 = p[0]; if (p[0] > x1) x1 = p[0]; if (p[1] < y0) y0 = p[1]; if (p[1] > y1) y1 = p[1]; }
+    return [x0, y0, x1, y1];
+  };
+  const meets = (b, e) => !(b[2] < e[0] || b[0] > e[2] || b[3] < e[1] || b[1] > e[3]);
+  const toWorld = (lon, lat) => (typeof lonLatToWorld === 'function' ? lonLatToWorld(lon, lat) : [(lon - 101.5) * 60, (23.8 - lat) * 62.5]);
+  // A smooth curve through every point (Catmull-Rom as cubic Béziers): the move, then one segment per pair of points.
+  function smoothSegments(points) {
+    const parts = [`M${f1(points[0][0])},${f1(points[0][1])}`];
     for (let i = 0; i < points.length - 1; i++) {
       const p0 = points[i - 1] || points[i], p1 = points[i], p2 = points[i + 1], p3 = points[i + 2] || p2;
       const c1 = [p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6];
       const c2 = [p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6];
-      d += `C${f(c1[0])},${f(c1[1])} ${f(c2[0])},${f(c2[1])} ${f(p2[0])},${f(p2[1])}`;
+      parts.push(`C${f1(c1[0])},${f1(c1[1])} ${f1(c2[0])},${f1(c2[1])} ${f1(p2[0])},${f1(p2[1])}`);
     }
-    return d;
+    return parts;
   }
   const stationPoint = (D, id) => {
     const p = D.provinces34.find(q => q.id === id);
     return p && (p.adminPt || p.center);
   };
-  const pct = (value, start, size) => ((value - start) / size * 100).toFixed(3) + '%';
+  const artUrl = id => {
+    const art = window.GoiVietRegionalArt && window.GoiVietRegionalArt[id];
+    return art ? 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(art) : '';
+  };
 
   function buildMap() {
     const D = geoData();
     const svg = $('.st-map');
     if (!D || !svg) { $('.st-stage-map').classList.add('is-nomap'); return; }
+    svg.textContent = '';
     let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
     const grow = (x, y) => { if (x < minX) minX = x; if (x > maxX) maxX = x; if (y < minY) minY = y; if (y > maxY) maxY = y; };
-    const land = svgEl('g', { class: 'st-land' });
-    const paths = [];
-    for (const p of D.provinces34) {
-      const rings = p.polyRings || [];
-      rings.forEach(r => r.forEach(pt => grow(pt[0], pt[1])));
-      const d = ringPath(rings);
-      paths.push(d);
-      svgEl('path', { d, class: 'st-prov', 'data-id': p.id }, land);
-    }
-    S.mapPaths = paths.join('');
-    // Hoàng Sa and Trường Sa: every island and reef the map draws, and a dashed outline around each archipelago.
-    const isles = svgEl('g', { class: 'st-isles' });
-    const labels = svgEl('g', { class: 'st-map-labels' });
+    for (const p of D.provinces34) (p.polyRings || []).forEach(r => r.forEach(pt => grow(pt[0], pt[1])));
+    const isleBoxes = {};
     for (const id of ['hoang-sa', 'truong-sa']) {
       const a = (D.islands || []).find(i => i.id === id);
       if (!a || !a.subIslands3D) continue;
-      let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+      const box = boxOf(a.subIslands3D.map(s => [s.cx, s.cy]));
+      isleBoxes[id] = box;
+      grow(box[0] - 18, box[1] - 16); grow(box[2] + 18, box[3] + 16);
+    }
+    // What must stay in view; the rest of the stage is filled with more sea and land around it (fitView).
+    S.content = { x: minX - 30, y: minY - 26, w: maxX - minX + 70, h: maxY - minY + 56 };
+    const C = S.content;
+    S.ext = [C.x - 640, C.y - 420, C.x + C.w + 1100, C.y + C.h + 420];
+
+    svg.innerHTML = '<defs>'
+      + '<linearGradient id="stLandFill" gradientUnits="userSpaceOnUse" x1="0" y1="' + f1(C.y) + '" x2="0" y2="' + f1(C.y + C.h) + '">'
+      + '<stop offset="0" class="st-land-stop-a"/><stop offset=".55" class="st-land-stop-b"/><stop offset="1" class="st-land-stop-c"/></linearGradient>'
+      + '<filter id="stLandShade" x="-15%" y="-15%" width="130%" height="130%"><feGaussianBlur stdDeviation="7"/></filter>'
+      + '<pattern id="stWaves" width="64" height="40" patternUnits="userSpaceOnUse"><path d="M4 12q5-5 10 0t10 0M36 32q5-5 10 0t10 0" class="st-wave"/></pattern>'
+      + '</defs>';
+    const layer = name => svgEl('g', { class: 'st-l-' + name }, svg);
+    const L = {};
+    for (const name of ['sea', 'coast', 'neighbors', 'lakes', 'shade', 'land', 'rivers', 'borders', 'outline', 'isles', 'rail', 'labels']) L[name] = layer(name);
+    S.layers = L;
+    // Sea: chart waves and a 2° graticule.
+    const E = S.ext;
+    svgEl('rect', { x: f1(E[0]), y: f1(E[1]), width: f1(E[2] - E[0]), height: f1(E[3] - E[1]), fill: 'url(#stWaves)', class: 'st-waves' }, L.sea);
+    let grid = '';
+    for (let lon = 96; lon <= 134; lon += 2) { const a = toWorld(lon, 30), b = toWorld(lon, 0); grid += `M${f1(a[0])},${f1(a[1])}L${f1(b[0])},${f1(b[1])}`; }
+    for (let lat = 0; lat <= 30; lat += 2) { const a = toWorld(94, lat), b = toWorld(136, lat); grid += `M${f1(a[0])},${f1(a[1])}L${f1(b[0])},${f1(b[1])}`; }
+    svgEl('path', { d: grid, class: 'st-grid' }, L.sea);
+    // Vietnam: 34 provinces over a soft shadow.
+    const paths = [];
+    for (const p of D.provinces34) {
+      const d = ringPath(p.polyRings || []);
+      paths.push(d);
+      svgEl('path', { d, class: 'st-prov', 'data-id': p.id }, L.land);
+    }
+    S.mapPaths = paths.join('');
+    svgEl('path', { d: S.mapPaths, class: 'st-land-shade', filter: 'url(#stLandShade)', transform: 'translate(5 9)' }, L.shade);
+    // Hoàng Sa and Trường Sa: every island and reef the map draws, and a dashed outline around each archipelago.
+    for (const id of ['hoang-sa', 'truong-sa']) {
+      const a = (D.islands || []).find(i => i.id === id);
+      const box = isleBoxes[id];
+      if (!a || !box) continue;
       for (const s of a.subIslands3D) {
-        if (s.reefRing && s.reefRing.length > 2) svgEl('path', { d: ringPath([s.reefRing]), class: 'st-reef' }, isles);
-        if (s.landRing && s.landRing.length > 2) svgEl('path', { d: ringPath([s.landRing]), class: 'st-isle' }, isles);
-        else svgEl('circle', { cx: s.cx, cy: s.cy, r: 3.2, class: 'st-isle' }, isles);
-        x0 = Math.min(x0, s.cx); x1 = Math.max(x1, s.cx); y0 = Math.min(y0, s.cy); y1 = Math.max(y1, s.cy);
+        if (s.reefRing && s.reefRing.length > 2) svgEl('path', { d: ringPath([s.reefRing]), class: 'st-reef' }, L.isles);
+        if (s.landRing && s.landRing.length > 2) svgEl('path', { d: ringPath([s.landRing]), class: 'st-isle' }, L.isles);
+        else svgEl('circle', { cx: s.cx, cy: s.cy, r: 3.2, class: 'st-isle' }, L.isles);
       }
-      svgEl('ellipse', { cx: (x0 + x1) / 2, cy: (y0 + y1) / 2, rx: (x1 - x0) / 2 + 18, ry: (y1 - y0) / 2 + 16, class: 'st-archipelago' }, isles);
-      grow(x0 - 18, y0 - 16); grow(x1 + 18, y1 + 16);
-      const box = { x0, x1, y0, y1 };
+      const [x0, y0, x1, y1] = box;
+      svgEl('ellipse', { cx: (x0 + x1) / 2, cy: (y0 + y1) / 2, rx: (x1 - x0) / 2 + 20, ry: (y1 - y0) / 2 + 18, class: 'st-archipelago' }, L.isles);
       const key = id === 'hoang-sa' ? 'hs' : 'ts';
       const text = svgEl('text', id === 'hoang-sa'
-        ? { x: (x0 + x1) / 2, y: y1 + 44, 'text-anchor': 'middle', class: 'st-isle-label', 'data-key': key }
-        : { x: x0 - 26, y: (y0 + y1) / 2 + 4, 'text-anchor': 'end', class: 'st-isle-label', 'data-key': key }, labels);
+        ? { x: (x0 + x1) / 2, y: y1 + 52, 'text-anchor': 'middle', class: 'st-isle-label', 'data-key': key }
+        : { x: x0 - 30, y: (y0 + y1) / 2 - 4, 'text-anchor': 'end', class: 'st-isle-label', 'data-key': key }, L.labels);
       svgEl('tspan', { x: text.getAttribute('x'), dy: 0, class: 'st-isle-label-1' }, text);
-      svgEl('tspan', { x: text.getAttribute('x'), dy: '1.25em', class: 'st-isle-label-2' }, text);
-      S[key + 'Box'] = box;
+      svgEl('tspan', { x: text.getAttribute('x'), dy: '1.2em', class: 'st-isle-label-2' }, text);
+      S[key + 'Box'] = { x0, x1, y0, y1 };
     }
-    const sea = svgEl('text', { x: 560, y: 690, 'text-anchor': 'middle', class: 'st-sea-label' }, labels);
-    svgEl('tspan', { x: 560, dy: 0, class: 'st-sea-label-1' }, sea);
-    svgEl('tspan', { x: 560, dy: '1.3em', class: 'st-sea-label-2' }, sea);
-    // The rail through the three stations.
-    const points = RAIL.map(([lon, lat]) => (typeof lonLatToWorld === 'function' ? lonLatToWorld(lon, lat) : null)).filter(Boolean);
-    let rail = null;
-    if (points.length === RAIL.length) {
-      for (const id of STATIONS) { const at = stationPoint(D, id); if (at) points[RAIL_STATION[id]] = at; }
-      const d = smoothPath(points);
-      svgEl('path', { d, class: 'st-rail-under' }, land);
-      rail = svgEl('path', { d, class: 'st-rail-line' }, land);
+    const sea = svgEl('text', { x: 612, y: 712, 'text-anchor': 'middle', class: 'st-sea-label' }, L.labels);
+    svgEl('tspan', { x: 612, dy: 0, class: 'st-sea-label-1' }, sea);
+    svgEl('tspan', { x: 612, dy: '1.25em', class: 'st-sea-label-2' }, sea);
+    // Compass rose in the gulf south-west of Cà Mau.
+    const rose = svgEl('g', { class: 'st-rose', transform: `translate(${f1(C.x + 74)} ${f1(C.y + C.h - 86)})` }, L.labels);
+    rose.innerHTML = '<circle r="40" class="st-rose-ring"/><circle r="31" class="st-rose-inner"/>'
+      + '<path d="M0-36L7 0 0 36-7 0Z" class="st-rose-ns"/><path d="M0-36L7 0H-7Z" class="st-rose-north"/>'
+      + '<path d="M-36 0 0-6 36 0 0 6Z" class="st-rose-ew"/><circle r="4" class="st-rose-pin"/>'
+      + '<text y="-46" text-anchor="middle" class="st-rose-letter"></text>';
+    // The rail through the three stations: dark bed and cream sleepers.
+    const points = RAIL.map(([lon, lat]) => toWorld(lon, lat));
+    for (const id of STATIONS) { const at = stationPoint(D, id); if (at) { points[RAIL_STATION[id]] = at; S.stationAt[id] = at; } }
+    const parts = smoothSegments(points);
+    const d = parts.join('');
+    svgEl('path', { d, class: 'st-rail-bed' }, L.rail);
+    const rail = svgEl('path', { d, class: 'st-rail-line' }, L.rail);
+    S.vb = { x: C.x, y: C.y, w: C.w, h: C.h };
+    S.rail = rail;
+    S.railLen = rail.getTotalLength();
+    // Length along the rail at each station: the curve passes through every point, so a station's length is the length
+    // of the same curve cut at its point (one measure each, instead of sampling the whole rail).
+    const cut = svgEl('path', { d: parts[0] }, null);
+    for (const id of STATIONS) {
+      const k = RAIL_STATION[id];
+      if (!S.stationAt[id]) continue;
+      if (k === 0) { S.stationLen[id] = 0; continue; }
+      if (k === points.length - 1) { S.stationLen[id] = S.railLen; continue; }
+      cut.setAttribute('d', parts.slice(0, k + 1).join(''));
+      L.rail.append(cut);
+      S.stationLen[id] = cut.getTotalLength();
+      cut.remove();
     }
-    const vb = { x: minX - 22, y: minY - 18, w: maxX - minX + 44, h: maxY - minY + 40 };
-    S.vb = vb;
-    svg.setAttribute('viewBox', `${vb.x.toFixed(1)} ${vb.y.toFixed(1)} ${vb.w.toFixed(1)} ${vb.h.toFixed(1)}`);
-    svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
-    svg.append(land, isles, labels);
-    $('.st-map-wrap').style.setProperty('--st-map-ratio', (vb.w / vb.h).toFixed(4));
-    if (rail) {
-      S.rail = rail;
-      S.railLen = rail.getTotalLength();
-      // Length along the rail at each station: the closest of 600 samples.
-      for (const id of STATIONS) {
-        const at = stationPoint(D, id);
-        if (!at) continue;
-        let best = 0, bestD = Infinity;
-        for (let i = 0; i <= 600; i++) {
-          const len = S.railLen * i / 600, p = rail.getPointAtLength(len), dd = (p.x - at[0]) ** 2 + (p.y - at[1]) ** 2;
-          if (dd < bestD) { bestD = dd; best = len; }
-        }
-        S.stationLen[id] = best;
-      }
+    // Landmark art and the boat: decorative images over the drawing.
+    const artLayer = $('.st-map-art');
+    artLayer.textContent = '';
+    for (const id of [...STATIONS, 'sailboat']) {
+      const src = artUrl(id);
+      if (!src) continue;
+      const img = document.createElement('img');
+      img.src = src;
+      img.alt = '';
+      img.decoding = 'async';
+      img.className = 'st-art' + (id === 'sailboat' ? ' st-boat' : '');
+      img.dataset.art = id;
+      artLayer.append(img);
     }
     // Station pins: HTML buttons over the drawing, so they get the page's focus ring and are easy to tap.
     const pins = $('.st-map-pins');
     pins.textContent = '';
     for (const id of STATIONS) {
-      const at = stationPoint(D, id);
-      if (!at) continue;
+      if (!S.stationAt[id]) continue;
       const pin = document.createElement('button');
       pin.type = 'button';
       pin.className = 'st-pin';
       pin.dataset.station = id;
       pin.dataset.side = id === 'hn' ? 'left' : 'right';
-      pin.style.setProperty('--x', pct(at[0], vb.x, vb.w));
-      pin.style.setProperty('--y', pct(at[1], vb.y, vb.h));
       pin.setAttribute('aria-pressed', 'false');
-      pin.innerHTML = '<span class="st-pin-ring" aria-hidden="true"></span><span class="st-pin-dot" aria-hidden="true"></span><span class="st-pin-label"></span>';
+      pin.innerHTML = '<span class="st-pin-ring" aria-hidden="true"></span><span class="st-pin-dot" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 4.6l2.1 4.6 5 .5-3.8 3.4 1.1 4.9L12 15.5l-4.4 2.5 1.1-4.9L4.9 9.7l5-.5z"/></svg></span><span class="st-pin-label"></span>';
       pin.addEventListener('click', event => pick(id, false, event.detail === 0));
       pins.append(pin);
     }
+    const train = $('.st-map-train');
+    if (!train.firstChild) { const loco = $('.st-rail-train svg'); if (loco) train.append(loco.cloneNode(true)); }
     mapTexts();
+    if (window.ResizeObserver) new ResizeObserver(() => { cancelAnimationFrame(S.fitRaf); S.fitRaf = requestAnimationFrame(fitView); }).observe($('.st-map-wrap'));
+    fitView();
+  }
+
+  // The regional geography of the map (neighbours, coastlines, borders) and its rivers arrive after the first paint.
+  function loadGeometry() {
+    if (window.GoiVietRegionalGeometry) return Promise.resolve(window.GoiVietRegionalGeometry);
+    if (S.geoPromise) return S.geoPromise;
+    S.geoPromise = new Promise(resolve => {
+      const done = () => resolve(window.GoiVietRegionalGeometry || null);
+      const loading = Array.from(document.scripts).find(s => s.src && s.src.includes('regional-geometry.js'));
+      if (loading) {
+        loading.addEventListener('load', done, { once: true });
+        loading.addEventListener('error', done, { once: true });
+        setTimeout(done, 12000);
+        return;
+      }
+      const script = document.createElement('script');
+      script.src = GEO_URL;
+      script.onload = done;
+      script.onerror = done;
+      document.head.append(script);
+    });
+    return S.geoPromise;
+  }
+  function drawGeography(G) {
+    if (!G || S.geo || !S.layers) return;
+    S.geo = G;
+    const L = S.layers, E = S.ext;
+    let land = '';
+    for (const poly of G.land || []) {
+      if (!poly || !poly[0] || !meets(boxOf(poly[0]), E)) continue;
+      for (const ring of poly) {
+        const b = boxOf(ring);
+        if (b[2] - b[0] < 3 && b[3] - b[1] < 3) continue;
+        const r = thin(ring, 2.4);
+        if (r.length > 3) land += 'M' + r.map(p => f1(p[0]) + ',' + f1(p[1])).join('L') + 'Z';
+      }
+    }
+    svgEl('path', { d: land, class: 'st-coast-glow' }, L.coast);
+    svgEl('path', { d: land, class: 'st-coast-foam' }, L.coast);
+    svgEl('path', { d: land, class: 'st-neighbor', 'fill-rule': 'evenodd' }, L.neighbors);
+    let borders = '';
+    for (const line of G.borders || []) {
+      if (!line || line.length < 2 || !meets(boxOf(line), E)) continue;
+      borders += 'M' + thin(line, 2).map(p => f1(p[0]) + ',' + f1(p[1])).join('L');
+    }
+    svgEl('path', { d: borders, class: 'st-border' }, L.borders);
+    let outer = '';
+    for (const poly of G.vietnamOuter || []) outer += ringPath((Array.isArray(poly[0][0]) ? poly : [poly]).map(r => thin(r, 1.6)));
+    if (outer) svgEl('path', { d: outer, class: 'st-outline' }, L.outline);
+    for (const c of G.countries || []) {
+      const key = COUNTRY_LABELS[c.id];
+      if (!key || !Array.isArray(c.anchor)) continue;
+      const at = COUNTRY_AT[c.id] ? toWorld(...COUNTRY_AT[c.id]) : c.anchor;
+      svgEl('text', { x: f1(at[0]), y: f1(at[1]), 'text-anchor': 'middle', class: 'st-country', 'data-key': key }, L.labels);
+    }
+    mapTexts();
+    const core = window.GoiVietNaturalCore;
+    if (core && typeof core.load === 'function') core.load('hydrology-data.js', 'GoiVietHydrologyData').then(drawRivers, () => {});
+  }
+  function drawRivers(H) {
+    if (!H || S.rivers || !S.layers) return;
+    S.rivers = true;
+    const L = S.layers, E = S.ext;
+    const by = { 1: '', 2: '', 3: '' };
+    for (const r of H.rivers || []) {
+      if (r.rank > 6 || r.kind === 'Lake Centerline' || !Array.isArray(r.bounds) || !meets(r.bounds, E)) continue;
+      const pts = thin(r.points || [], 2);
+      if (pts.length < 2) continue;
+      by[r.rank <= 2 ? 1 : r.rank <= 4 ? 2 : 3] += 'M' + pts.map(p => f1(p[0]) + ',' + f1(p[1])).join('L');
+    }
+    for (const k of [3, 2, 1]) if (by[k]) svgEl('path', { d: by[k], class: 'st-river st-river-' + k }, L.rivers);
+    let lakes = '';
+    for (const lake of H.lakes || []) {
+      if (lake.rank > 5 || !Array.isArray(lake.bounds) || !meets(lake.bounds, E)) continue;
+      lakes += ringPath((lake.rings || []).map(r => thin(r, 1.6)));
+    }
+    if (lakes) svgEl('path', { d: lakes, class: 'st-lake', 'fill-rule': 'evenodd' }, L.lakes);
+  }
+
+  // Fits the drawing to the stage: what must stay in view keeps its shape, more sea and land fill the rest. On wide
+  // stages the station board floats over the eastern sea, so Vietnam and both archipelagos stay left of it.
+  function fitView() {
+    const wrap = $('.st-map-wrap'), svg = $('.st-map'), C = S.content;
+    if (!wrap || !svg || !C) return;
+    const W = wrap.clientWidth, H = wrap.clientHeight;
+    if (!W || !H) return;
+    const side = $('.st-map-side');
+    const floating = side && getComputedStyle(side).position === 'absolute';
+    const free = floating ? Math.max(.5, 1 - (side.offsetWidth + 28) / W) : 1;
+    const A = W / H;
+    let vb;
+    if (A >= C.w / C.h) {
+      const w = C.h * A, extra = w - C.w;
+      const west = floating ? Math.max(0, Math.min(extra * .22, free * w - C.w)) : extra / 2;
+      vb = { x: C.x - west, y: C.y, w, h: C.h };
+    } else {
+      const h = C.w / A;
+      vb = { x: C.x, y: C.y - (h - C.h) / 2, w: C.w, h };
+    }
+    S.vb = vb;
+    S.size = { W, H };
+    svg.setAttribute('viewBox', `${f1(vb.x)} ${f1(vb.y)} ${f1(vb.w)} ${f1(vb.h)}`);
+    const pct = (v, start, size) => ((v - start) / size * 100).toFixed(3) + '%';
+    for (const pin of $$('.st-pin')) {
+      const at = S.stationAt[pin.dataset.station];
+      if (!at) continue;
+      pin.style.left = pct(at[0], vb.x, vb.w);
+      pin.style.top = pct(at[1], vb.y, vb.h);
+    }
+    for (const img of $$('.st-art')) {
+      const id = img.dataset.art;
+      const at = id === 'sailboat' ? [0, 0] : S.stationAt[id];
+      const box = id === 'sailboat' ? BOAT : ART[id];
+      if (!at || !box) continue;
+      img.style.left = pct(at[0] + box[0], vb.x, vb.w);
+      img.style.top = pct(at[1] + box[1], vb.y, vb.h);
+      img.style.width = (box[2] / vb.w * 100).toFixed(3) + '%';
+      img.style.height = (box[3] / vb.h * 100).toFixed(3) + '%';
+    }
+    placeTrain();
+  }
+
+  function placeTrain() {
+    const train = $('.st-map-train');
+    if (!S.trainPt || !S.vb || !S.size || !train) return;
+    const { W, H } = S.size, vb = S.vb;
+    train.style.setProperty('--tx', ((S.trainPt.x - vb.x) / vb.w * W).toFixed(1) + 'px');
+    train.style.setProperty('--ty', ((S.trainPt.y - vb.y) / vb.h * H).toFixed(1) + 'px');
+  }
+  function trainTo(len) {
+    if (!S.rail) return;
+    S.trainPt = S.rail.getPointAtLength(Math.max(0, Math.min(S.railLen, len)));
+    placeTrain();
   }
 
   function mapTexts() {
@@ -205,30 +412,25 @@
     for (const text of svg.querySelectorAll('.st-isle-label')) lines(text, T(MAP_LABELS[text.dataset.key]));
     const sea = svg.querySelector('.st-sea-label');
     if (sea) lines(sea, T('sotay.map.sea'));
+    for (const text of svg.querySelectorAll('.st-country')) text.textContent = T(text.dataset.key);
+    const north = svg.querySelector('.st-rose-letter');
+    if (north) north.textContent = T('sotay.map.north');
     for (const pin of $$('.st-pin')) {
-      const name = placeName(pin.dataset.station);
+      const name = T('sotay.s1.pin', { place: placeName(pin.dataset.station) });
       pin.querySelector('.st-pin-label').textContent = name;
-      pin.setAttribute('aria-label', T('sotay.s1.pin', { place: name }));
+      pin.setAttribute('aria-label', name);
     }
-  }
-
-  function trainTo(len) {
-    const train = $('.st-map-train');
-    if (!S.rail || !S.vb || !train) return;
-    const p = S.rail.getPointAtLength(Math.max(0, Math.min(S.railLen, len)));
-    train.style.left = pct(p.x, S.vb.x, S.vb.w);
-    train.style.top = pct(p.y, S.vb.y, S.vb.h);
-    S.trainLen = len;
   }
 
   function ride(from, to, done) {
     const train = $('.st-map-train');
     if (!S.rail || from == null || to == null) { done(); return; }
+    train.classList.toggle('is-reverse', to < from);
     train.classList.add('is-shown');
     cancelAnimationFrame(S.rideRaf);
     if (!motion()) { trainTo(to); done(); return; }
     trainTo(from);
-    const duration = Math.min(2300, Math.max(900, Math.abs(to - from) * 2.6));
+    const duration = Math.min(2400, Math.max(1000, Math.abs(to - from) * 2.6));
     const start = performance.now();
     const step = now => {
       const k = Math.min(1, (now - start) / duration);
@@ -253,12 +455,15 @@
     const here = $('.st-here');
     here.dataset.suggested = suggested ? 'true' : 'false';
     hereTexts();
-    here.hidden = false;
-    restart(here, 'is-popping');
-    if (id === S.at) showBoard(id);
-    else $('.st-board').hidden = true;
+    if (id === S.at) { here.hidden = true; showBoard(id); }
+    else {
+      $('.st-board').hidden = true;
+      here.hidden = false;
+      restart(here, 'is-popping');
+    }
     announce(T('sotay.s1.srPick', { place: placeName(id) }));
-    if (fromKeyboard) $('[data-st-explore]').focus();
+    tasks();
+    if (fromKeyboard && !here.hidden) $('[data-st-explore]').focus();
   }
   function hereTexts() {
     const here = $('.st-here');
@@ -283,22 +488,27 @@
     if (dest === S.at) { showBoard(dest); return; }
     S.travelling = true;
     $('.st-board').hidden = true;
-    $('[data-st-explore]').setAttribute('aria-disabled', 'true');
+    $('.st-here').hidden = true;
     const origin = S.at || (dest === 'hue' ? 'hn' : 'hue');
     const arriving = $('.st-arriving');
+    arriving.hidden = false;
+    restart(arriving, 'is-popping');
     const arrive = () => {
       S.at = dest;
       $('.st-map-train').classList.remove('is-moving');
       const open = () => {
         arriving.hidden = true;
         S.travelling = false;
-        $('[data-st-explore]').removeAttribute('aria-disabled');
         showBoard(dest);
         announce(T('sotay.s1.srArrive', { place: placeName(dest) }));
         punch(0);
+        tasks();
+        const cards = $('.st-mode-cards');
+        if (cards && dialog.contains(document.activeElement) && document.activeElement.closest('.st-map-side, .st-map-pins')) cards.focus({ preventScroll: true });
       };
-      if (motion()) { arriving.hidden = false; restart(arriving, 'is-popping'); later(open, 950); } else open();
+      if (motion()) later(open, 520); else open();
     };
+    tasks();
     ride(S.stationLen[origin], S.stationLen[dest], arrive);
   }
 
@@ -308,6 +518,8 @@
     S.place = id;
     boardTexts();
     $('.st-board-note').hidden = true;
+    $('[data-st-book]').setAttribute('aria-expanded', 'false');
+    $('.st-here').hidden = true;
     board.hidden = false;
     restart(board, 'is-popping');
     if (S.fanPlace && S.fanPlace !== id) resetDeck();
@@ -326,10 +538,11 @@
   // ---------------------------------------------------------------- the deck (stop 2)
   function resetDeck() {
     S.fanPlace = null;
-    S.cardIdx = null; S.answer = null; S.eliminated = null; S.revealed = false; S.asDontKnow = false;
+    S.cardIdx = null; S.answer = null; S.eliminated = null; S.revealed = false; S.asDontKnow = false; S.toSeal = false;
     S.unsealed = false; S.actIdx = 0; S.finished = null;
     $('.st-front').hidden = true;
     $('.st-deck').hidden = false;
+    tasks();
   }
   function renderFan() {
     const fan = $('.st-fan');
@@ -401,7 +614,7 @@
   }
 
   function showFront(i) {
-    S.cardIdx = i; S.answer = null; S.eliminated = null; S.revealed = false; S.asDontKnow = false;
+    S.cardIdx = i; S.answer = null; S.eliminated = null; S.revealed = false; S.asDontKnow = false; S.toSeal = false;
     S.unsealed = false; S.actIdx = 0; S.finished = null;
     $('.st-deck').hidden = true;
     const front = $('.st-front');
@@ -410,6 +623,7 @@
     restart(front, 'is-flipping');
     const card = currentCard();
     punch(1);
+    tasks();
     announce(T('sotay.s2.srDrawn', { topic: label('topic', card && card.topic), question: $('.st-question').textContent }));
     const first = $('.st-option[tabindex="0"]') || $('[data-st-goto="2"]', front);
     if (first) first.focus({ preventScroll: true });
@@ -419,6 +633,8 @@
     const card = currentCard();
     if (!card) return;
     const open = canva(card);
+    const front = $('.st-front');
+    front.classList.toggle('is-open-question', open);
     $('.st-front-topic').textContent = `${label('topic', card.topic)} • ${placeName(S.place)}`;
     $('.st-question').textContent = open ? window.GoiVietCanvaCards.question(card) || card.question : card.question;
     const list = $('.st-options');
@@ -453,6 +669,7 @@
     const result = $('.st-result');
     if (open) {
       result.hidden = false;
+      result.dataset.tone = 'open';
       result.querySelector('.st-result-head').textContent = T('sotay.s2.open');
       result.querySelector('.st-result-text').textContent = '';
       result.querySelector('.st-result-text').hidden = true;
@@ -486,6 +703,7 @@
     S.answer = i;
     $('.st-front-error').hidden = true;
     syncOptions();
+    tasks();
   }
   function optionKeys(event, i) {
     const keys = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 };
@@ -508,6 +726,7 @@
     error.textContent = T('sotay.s2.hintRemoved', { letter: letter(S.eliminated) });
     error.hidden = false;
     renderFront();
+    tasks();
     ($('.st-option[tabindex="0"]') || $('[data-st-check]')).focus();
   }
   function check(asDontKnow) {
@@ -525,6 +744,7 @@
     S.asDontKnow = Boolean(asDontKnow);
     renderFront();
     restart($('.st-result'), 'is-popping');
+    tasks();
     announce(`${$('.st-result-head').textContent} ${card.explanation || ''}`);
     $('[data-st-goto="2"]', $('.st-front')).focus();
   }
@@ -563,6 +783,7 @@
       S.unsealed = true;
       renderBack();
       punch(2);
+      tasks();
       announce(T('sotay.s3.srOpen', { activity: $('.st-activity-text').textContent }));
       $('.st-activity-text').focus({ preventScroll: true });
     };
@@ -611,6 +832,7 @@
     stopTimer();
     renderBack();
     restart($('.st-postmark'), 'is-stamping');
+    tasks();
     announce(T('sotay.s3.srDone'));
     later(() => { if (S.open && S.step === 2) goTo(3); }, motion() ? 760 : 0);
   }
@@ -665,14 +887,16 @@
     S.saves = Math.min(5, S.saves + 1);
     renderPostcard(true);
     punch(3);
+    tasks();
     announce(T('sotay.s4.srSaved'));
   }
 
   // ---------------------------------------------------------------- the last stop
   function buildScreen() {
     const svg = $('.st-screen-map');
-    if (!svg || svg.childElementCount || !S.mapPaths || !S.vb) return;
-    svg.setAttribute('viewBox', `${S.vb.x.toFixed(1)} ${S.vb.y.toFixed(1)} ${S.vb.w.toFixed(1)} ${S.vb.h.toFixed(1)}`);
+    if (!svg || svg.childElementCount || !S.mapPaths || !S.content) return;
+    const C = S.content;
+    svg.setAttribute('viewBox', `${f1(C.x)} ${f1(C.y)} ${f1(C.w)} ${f1(C.h)}`);
     svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
     svgEl('path', { d: S.mapPaths, class: 'st-screen-land' }, svg);
     for (const box of [S.hsBox, S.tsBox].filter(Boolean)) {
@@ -680,7 +904,7 @@
     }
   }
   function setHot(n) {
-    $$('.st-stage-kit [data-st-mark]').forEach(el => el.classList.toggle('is-hot', n != null && el.dataset.stMark === String(n)));
+    $$('.st-step-last [data-st-mark]').forEach(el => el.classList.toggle('is-hot', n != null && el.dataset.stMark === String(n)));
   }
   function stopTour() { clearInterval(S.tour); S.tour = 0; }
   function startTour() {
@@ -701,38 +925,74 @@
   }
   function readyText() {
     const n = S.tried.filter(Boolean).length;
-    $('.st-ready').textContent = n === 4 ? T('sotay.s5.ready') : T('sotay.s5.partial', { n });
-    $('.st-ready').classList.toggle('is-full', n === 4);
+    const ready = $('.st-ready');
+    ready.textContent = n === 4 ? T('sotay.s5.ready') : T('sotay.s5.partial', { n });
+    ready.classList.toggle('is-full', n === 4);
   }
 
-  // ---------------------------------------------------------------- ticket, rail and stops
-  function ticketTexts() {
-    const n = S.tried.filter(Boolean).length;
-    $('.st-ticket-count').textContent = T('sotay.ticket.count', { n });
-    $$('[data-st-hole]').forEach(hole => {
-      const i = +hole.dataset.stHole;
-      hole.classList.toggle('is-punched', S.tried[i]);
-      hole.title = T('sotay.ticket.hole', { n: i + 1, title: T(STOP_NAMES[i]), state: T(S.tried[i] ? 'sotay.ticket.punched' : 'sotay.ticket.open') });
+  // ---------------------------------------------------------------- things to do, rail and stops
+  // Each stop lists what to try, in order: the first one not done yet is "now", and its control on the stage gets a
+  // gold ring (three pulses, then it stays). When everything is done, the ring moves to "Tiếp".
+  const TASKS = [
+    [{ id: 'pick', done: () => Boolean(S.picked), target: () => $$('.st-pin') },
+      { id: 'explore', done: () => Boolean(S.at), target: () => [$('[data-st-explore]')] },
+      { id: 'cards', done: () => S.boardCards, target: () => [$('.st-mode-cards')] }],
+    [{ id: 'draw', done: () => S.cardIdx != null, target: () => [$('[data-st-shuffle]')] },
+      { id: 'answer', kind: 'closed', done: () => S.answer != null || S.revealed, target: () => [$('.st-options')] },
+      { id: 'check', kind: 'closed', done: () => S.revealed, target: () => [$('[data-st-check]')] },
+      { id: 'talk', kind: 'open', done: () => S.toSeal, target: () => [$('.st-front [data-st-goto="2"]')] }],
+    [{ id: 'seal', done: () => S.unsealed, target: () => [$('.st-wax')] },
+      { id: 'finish', done: () => Boolean(S.finished), target: () => [$('[data-st-finish="done"]')] }],
+    [{ id: 'place', done: () => Boolean(S.memory) || Boolean($('#soTayPlace').value.trim()), target: () => [$('#soTayPlace')] },
+      { id: 'note', done: () => Boolean(S.memory) || Boolean($('#soTayNote').value.trim()), target: () => [$('#soTayNote')] },
+      { id: 'save', done: () => Boolean(S.memory), target: () => [$('.st-memory [type="submit"]')] }],
+    []
+  ];
+  function tasks() {
+    if (!S.built) return;
+    const n = S.step;
+    const section = $(`.st-step[data-st-step="${n}"]`);
+    const open = n === 1 && S.cardIdx != null && canva(currentCard());
+    let now = null, shown = 0;
+    for (const t of TASKS[n]) {
+      const li = $(`[data-st-task="${t.id}"]`, section);
+      if (!li) continue;
+      const on = !t.kind || (t.kind === 'open') === open;
+      li.hidden = !on;
+      if (!on) continue;
+      shown += 1;
+      const done = t.done();
+      const state = done ? 'done' : now ? 'todo' : 'now';
+      if (!done && !now) now = t;
+      li.dataset.state = state;
+      if (state === 'now') li.setAttribute('aria-current', 'step'); else li.removeAttribute('aria-current');
+      li.querySelector('.st-task-state').textContent = state === 'done' ? ', ' + T('sotay.task.done') : state === 'now' ? ', ' + T('sotay.task.now') : '';
+    }
+    // When everything is done, the ring moves on: to the card's own way to the seal at stop 2, else to Tiếp.
+    const onward = n === 1 && !$('.st-front').hidden ? $('.st-front [data-st-goto="2"]') : $('.st-next');
+    const targets = now ? now.target().filter(el => el && !el.hidden && !el.closest('[hidden]')) : shown ? [onward] : [];
+    const key = n + ':' + (now ? now.id : 'next') + ':' + targets.length;
+    for (const el of $$('.st-target')) if (!targets.includes(el)) el.classList.remove('st-target');
+    for (const el of targets) {
+      if (key !== S.targetKey && motion()) { el.classList.remove('st-target'); void el.offsetWidth; }
+      el.classList.add('st-target');
+    }
+    S.targetKey = key;
+  }
+
+  function railTexts() {
+    $$('.st-stop').forEach((stop, i) => {
+      const state = stop.querySelector('.st-stop-state');
+      if (state) state.textContent = i < LAST && S.tried[i] ? ', ' + T('sotay.rail.done') : '';
     });
-    $$('.st-tried').forEach(stamp => { stamp.textContent = T('sotay.stamp.tried'); });
-    $('.st-ticket-stamp').textContent = T('sotay.stamp.boarded');
   }
   function punch(n) {
     if (S.tried[n]) return;
     S.tried[n] = true;
-    const section = $(`.st-step[data-st-step="${n}"]`);
-    section.classList.add('is-tried');
-    const stage = section.querySelector('.st-stage');
-    if (stage && !stage.querySelector('.st-tried')) {
-      const stamp = document.createElement('span');
-      stamp.className = 'st-tried';
-      stamp.setAttribute('aria-hidden', 'true');
-      stage.append(stamp);
-      restart(stamp, 'is-stamping');
-    }
-    ticketTexts();
-    restart($(`[data-st-hole="${n}"]`), 'is-popping');
+    $(`.st-step[data-st-step="${n}"]`).classList.add('is-tried');
+    railTexts();
     railState();
+    restart($(`.st-stop[data-st-goto="${n}"] .st-stop-dot`), 'is-popping');
     if (S.step === LAST) readyText();
     announce(T('sotay.sr.punch', { n: n + 1 }));
   }
@@ -754,6 +1014,8 @@
     prev.classList.toggle('is-hidden', S.step === 0);
     prev.tabIndex = S.step === 0 ? -1 : 0;
     prev.setAttribute('aria-hidden', String(S.step === 0));
+    $('.st-keys').hidden = S.step === LAST;
+    $('.st-ready').hidden = S.step !== LAST;
   }
 
   function goTo(n, { focus = true, say = !focus } = {}) {
@@ -772,12 +1034,15 @@
     }
     if (prev === 2 && n !== 2) stopTimer();
     if (n !== LAST) { stopTour(); setHot(null); }
+    if (n === 0) requestAnimationFrame(fitView);
     if (n === 1) ensureFan();
     if (n === 2) renderBack();
     if (n === 3) enterMemory();
     if (n === LAST) enterKit();
     railState();
     navTexts();
+    S.targetKey = '';
+    tasks();
     const heading = document.getElementById(section.getAttribute('aria-labelledby'));
     if (focus && heading) heading.focus({ preventScroll: true });
     else if (heading && say) announce(T('sotay.sr.step', { label: T(STOP_NUMBERS[n]), title: heading.textContent }));
@@ -793,9 +1058,10 @@
     if (S.cardIdx != null) { renderFront(); renderBack(); }
     if (S.step === 3 || S.memory) renderPostcard(false);
     timerLabel();
-    ticketTexts();
+    railTexts();
     navTexts();
-    if (S.step === LAST) readyText();
+    readyText();
+    tasks();
     const error = $('.st-front-error');
     if (!error.hidden && error.dataset.tone === 'warn') error.textContent = T('sotay.s2.pickFirst');
     if (!error.hidden && error.dataset.tone === 'info' && S.eliminated != null) error.textContent = T('sotay.s2.hintRemoved', { letter: letter(S.eliminated) });
@@ -808,7 +1074,7 @@
     $('.st-question').tabIndex = -1;
     $('.st-activity-text').tabIndex = -1;
     $('[data-st-book]').setAttribute('aria-expanded', 'false');
-    ticketTexts();
+    railTexts();
   }
 
   // ---------------------------------------------------------------- open, close, board
@@ -833,6 +1099,10 @@
     requestAnimationFrame(() => requestAnimationFrame(() => { if (S.open) dialog.classList.add('is-open'); }));
     // Once the sheet covers the page, stop painting the chapter under it (the home screen itself stays open).
     later(() => { if (S.open) document.body.classList.add('st-covering'); }, motion() ? 380 : 0);
+    // The map's own geography: usually already loaded by the map's preparation, then drawn in the next frame (while the
+    // sheet fades in); otherwise loaded after the sheet has settled, so opening stays smooth.
+    if (!S.geo && window.GoiVietRegionalGeometry) requestAnimationFrame(() => drawGeography(window.GoiVietRegionalGeometry));
+    else if (!S.geo) later(() => { loadGeometry().then(drawGeography); }, motion() ? 520 : 0);
     const heading = document.getElementById($(`.st-step[data-st-step="${S.step}"]`).getAttribute('aria-labelledby'));
     requestAnimationFrame(() => { if (S.open && heading) heading.focus({ preventScroll: true }); });
   }
@@ -854,10 +1124,13 @@
     $('.st-fan').classList.remove('is-gathering', 'is-shuffling');
     $$('.st-fan-card').forEach(card => card.classList.remove('is-picked'));
     if (S.travelling) {
+      // The train arrives at once; the board opens when the handbook is opened again.
       S.travelling = false;
-      $('[data-st-explore]').removeAttribute('aria-disabled');
+      S.at = S.picked;
+      if (S.at != null && S.stationLen[S.at] != null) trainTo(S.stationLen[S.at]);
       $('.st-map-train').classList.remove('is-moving');
       $('.st-arriving').hidden = true;
+      if (S.at) { showBoard(S.at); punch(0); }
     }
   }
   function close({ restoreFocus = true } = {}) {
@@ -922,7 +1195,12 @@
   dialog.addEventListener('click', event => {
     const target = event.target.closest('button');
     if (!target || !dialog.contains(target) || target.getAttribute('aria-disabled') === 'true') return;
-    if (target.matches('[data-st-goto]')) { goTo(+target.dataset.stGoto); return; }
+    if (target.matches('[data-st-goto]')) {
+      if (target.matches('.st-mode-cards')) S.boardCards = true;
+      if (target.closest('.st-front')) S.toSeal = true;
+      goTo(+target.dataset.stGoto);
+      return;
+    }
     const action = target.dataset.stAction;
     if (action === 'close') { close(); return; }
     if (action === 'map') { board({ skip: true }); return; }
@@ -948,10 +1226,12 @@
   });
   $('.st-memory').addEventListener('submit', saveMemory);
   $('#soTayPlace').addEventListener('input', () => {
+    tasks();
     if (!$('#soTayPlace').value.trim()) return;
     $('#soTayPlaceError').hidden = true;
     $('#soTayPlace').removeAttribute('aria-invalid');
   });
+  $('#soTayNote').addEventListener('input', tasks);
   dialog.addEventListener('keydown', event => {
     if (!S.open) return;
     if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); close(); return; }
@@ -971,7 +1251,7 @@
     event.stopPropagation();
     goTo(S.step + (event.key === 'ArrowRight' ? 1 : -1));
   });
-  const kit = $('.st-stage-kit');
+  const kit = $('.st-step-last');
   kit.addEventListener('pointerover', event => {
     const item = event.target.closest('[data-st-mark]');
     if (!item) return;
@@ -993,6 +1273,8 @@
     inspect: () => ({ open: S.open, step: S.step, tried: S.tried.slice(), boarding: S.boarding, at: S.at, picked: S.picked,
       place: S.place, card: currentCard() ? currentCard().id : null, cardDrawn: S.cardIdx != null, answer: S.answer,
       revealed: S.revealed, unsealed: S.unsealed, finished: S.finished, saves: S.saves, timer: Boolean(S.timerEnd),
-      map: Boolean(S.vb), stations: Object.keys(S.stationLen) })
+      map: Boolean(S.vb), stations: Object.keys(S.stationLen), geography: Boolean(S.geo), rivers: S.rivers,
+      tasks: $$(`.st-step[data-st-step="${S.step}"] [data-st-task]:not([hidden])`).map(li => li.dataset.stTask + ':' + li.dataset.state),
+      target: $$('.st-target').map(el => el.dataset.stTask || el.dataset.station || el.className.split(' ')[0]) })
   });
 })();

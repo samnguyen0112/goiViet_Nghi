@@ -1,8 +1,9 @@
 // P5-07: checks the passenger handbook (Sổ tay hành khách) of map-surroundings-preview-5.html in real Chrome.
 //   node tools/check-so-tay-5.cjs            serves the project from a local port of its own (read-only)
 // Report: verification/so-tay-5/checks.json (+ screenshots). Exit code 1 when a check fails.
-// Covers: opening from the end of the memory chapter, the five stops with the page's real data, the boarding ticket,
-// keyboard (← → Esc, Tab stays inside), the map kept preparing underneath, nothing written to the journey or storage,
+// Covers: opening from the end of the memory chapter, the five stops with the page's real data, the list of things to
+// do with its gold ring on the next control, the map drawn from DATA and the map's own regional geography, rivers and
+// landmark art, text sizes for a projector (no text under 14 px on 1366 × 768), keyboard (← → Esc, Tab stays inside), the map kept preparing underneath, nothing written to the journey or storage,
 // "Lên tàu" / "Vào thẳng bản đồ" / the chapter shortcut into the map, VI ↔ EN, dark theme, reduced motion and
 // three window sizes (1366 × 768, 1920 × 1080, 390 × 844) without horizontal overflow.
 const fs = require('node:fs');
@@ -84,11 +85,39 @@ async function check(name, fn) {
     for (const el of dialog.querySelectorAll('.st-sheet *')) {
       const r = el.getBoundingClientRect();
       if (!r.width || !r.height || getComputedStyle(el).visibility === 'hidden') continue;
-      if (el.closest('.st-fan, .st-backdrop, .st-rail-train, .st-map-train')) continue;
+      // The map clips its own pins, labels and art; the fan and the rail engine move on purpose.
+      if (el.closest('.st-fan, .st-backdrop, .st-rail-train, .st-map-wrap')) continue;
       if (r.left < -1 || r.right > width + 1) out.push(`${el.className || el.tagName} ${Math.round(r.left)}..${Math.round(r.right)}`);
     }
-    return { width, scroll: dialog.scrollWidth, client: dialog.clientWidth, out: out.slice(0, 8) };
+    // The column of things to do and the station board scroll only as a last resort: on a desktop window they fit.
+    const clipped = [...dialog.querySelectorAll('.st-step:not([hidden]) .st-copy, .st-board:not([hidden])')]
+      .filter(el => el.scrollHeight > el.clientHeight + 2).map(el => el.className.split(' ')[0] + ' ' + el.scrollHeight + '>' + el.clientHeight);
+    return { width, scroll: dialog.scrollWidth, client: dialog.clientWidth, out: out.slice(0, 8), clipped };
   });
+  // Text sizes on the sheet (the drawing's own labels and the card cover artwork aside).
+  const textSizes = page => page.evaluate(() => {
+    const dialog = document.getElementById('soTayDialog');
+    const sizes = [];
+    const walker = document.createTreeWalker(dialog.querySelector('.st-sheet'), NodeFilter.SHOW_TEXT);
+    let node;
+    while ((node = walker.nextNode())) {
+      const el = node.parentElement;
+      if (!node.nodeValue.trim() || !el || el.closest('svg, .st-sr, .gv-cover, [hidden]')) continue;
+      const r = el.getBoundingClientRect(), cs = getComputedStyle(el);
+      if (!r.width || !r.height || cs.visibility === 'hidden' || cs.display === 'none') continue;
+      sizes.push([Math.round(parseFloat(cs.fontSize) * 10) / 10, (el.className || el.tagName) + ': ' + node.nodeValue.trim().slice(0, 24)]);
+    }
+    sizes.sort((a, b) => a[0] - b[0]);
+    const size = sel => { const el = dialog.querySelector(sel); return el ? Math.round(parseFloat(getComputedStyle(el).fontSize) * 10) / 10 : null; };
+    return { base: size('.st-sheet'), smallest: sizes.slice(0, 3), title: size('.st-step:not([hidden]) .st-step-title'), lead: size('.st-step:not([hidden]) .st-step-lead') };
+  });
+  const tasks = page => page.evaluate(() => window.GoiVietSoTay.inspect().tasks);
+  // Measures wait until the stop has finished sliding in (a busy page can hold the first frames of that animation).
+  const settled = page => page.waitForFunction(() => {
+    const step = document.querySelector('#soTayDialog .st-step:not([hidden])');
+    return Boolean(step) && [step.querySelector('.st-copy'), step.querySelector('.st-stage')].every(el => !el || el.getAnimations().every(a => a.playState !== 'running'));
+  }, null, { timeout: 5000 });
+  const ringed = (page, sel) => page.evaluate(s => [...document.querySelectorAll(s)].every(el => el.classList.contains('st-target')), sel);
 
   try {
     // ------------------------------------------------------------ main walk, 1366 × 768, Vietnamese
@@ -146,8 +175,20 @@ async function check(name, fn) {
       assert.deepEqual([...seen], [true]);
     });
 
-    await check('Ga 1: bản đồ từ dữ liệu trang (34 tỉnh, Hoàng Sa, Trường Sa) và 3 ga mẫu', async () => {
+    await check('Ga 1: bản đồ từ dữ liệu trang (34 tỉnh, Hoàng Sa, Trường Sa), địa lý vùng, sông, danh thắng và 3 ga mẫu', async () => {
+      await page.waitForFunction(() => window.GoiVietSoTay.inspect().geography && window.GoiVietSoTay.inspect().rivers, null, { timeout: 30000 });
       const info = await page.evaluate(() => ({
+        neighbors: document.querySelector('#soTayDialog .st-neighbor').getAttribute('d').length,
+        borders: document.querySelector('#soTayDialog .st-border').getAttribute('d').length,
+        outline: Boolean(document.querySelector('#soTayDialog .st-outline')),
+        rivers: document.querySelectorAll('#soTayDialog .st-river').length,
+        lakes: Boolean(document.querySelector('#soTayDialog .st-lake')),
+        countries: [...document.querySelectorAll('#soTayDialog .st-country')].map(t => t.textContent),
+        art: [...document.querySelectorAll('#soTayDialog .st-art')].map(i => i.dataset.art),
+        rose: document.querySelector('#soTayDialog .st-rose-letter').textContent,
+        tasks: window.GoiVietSoTay.inspect().tasks,
+        pinsRinged: [...document.querySelectorAll('#soTayDialog .st-pin')].every(p => p.classList.contains('st-target')),
+        viewBox: document.querySelector('#soTayDialog .st-map').getAttribute('viewBox'),
         provinces: document.querySelectorAll('#soTayDialog .st-prov').length,
         data: DATA.provinces34.length,
         archipelagos: document.querySelectorAll('#soTayDialog .st-archipelago').length,
@@ -161,15 +202,25 @@ async function check(name, fn) {
       assert.equal(info.archipelagos, 2);
       assert.ok(info.islands >= 10, 'islands drawn');
       assert.deepEqual(info.labels, ['Quần đảoHoàng Sa', 'Quần đảoTrường Sa']);
-      assert.deepEqual(info.pins, ['hn:Hà Nội', 'hue:Huế', 'hcm:TP.HCM']);
+      assert.deepEqual(info.pins, ['hn:Ga Hà Nội', 'hue:Ga Huế', 'hcm:Ga TP.HCM']);
       assert.ok(info.rail);
+      assert.ok(info.neighbors > 5000 && info.borders > 500 && info.outline, 'regional geography drawn');
+      assert.ok(info.rivers >= 2 && info.lakes, 'rivers and lakes drawn');
+      assert.deepEqual(info.countries, ['LÀO', 'CAMPUCHIA', 'THÁI LAN']);
+      assert.deepEqual(info.art, ['hn', 'hue', 'hcm', 'sailboat']);
+      assert.equal(info.rose, 'B');
+      assert.deepEqual(info.tasks, ['pick:now', 'explore:todo', 'cards:todo']);
+      assert.equal(info.pinsRinged, true, 'the three stations are ringed first');
+      delete info.neighbors; delete info.borders;
       return info;
     });
 
     await check('Ga 1: chọn Hà Nội, Khám phá, tàu tới và bảng ga đúng dữ liệu', async () => {
       await page.click('.st-pin[data-station="hn"]');
       assert.equal(await page.locator('.st-here-place').textContent(), 'Hà Nội');
-      assert.equal(await page.locator('.st-here-kicker').textContent(), 'Bạn đang ở đây');
+      assert.equal(await page.locator('.st-here-kicker').textContent(), 'Điểm đến đã chọn');
+      assert.deepEqual(await tasks(page), ['pick:done', 'explore:now', 'cards:todo']);
+      assert.equal(await ringed(page, '[data-st-explore]'), true);
       await page.click('[data-st-explore]');
       await page.waitForFunction(() => !document.querySelector('#soTayDialog .st-board').hidden, null, { timeout: 8000 });
       const info = await page.evaluate(() => ({
@@ -178,13 +229,17 @@ async function check(name, fn) {
         summary: document.querySelector('.st-board-summary').textContent,
         facts: [...document.querySelectorAll('[data-st-fact]')].map(d => d.textContent),
         expected: [ALL_DECKS_MAP.hn.region, ALL_DECKS_MAP.hn.summary, ALL_DECKS_MAP.hn.highlights.landmark, ALL_DECKS_MAP.hn.highlights.heritage, ALL_DECKS_MAP.hn.highlights.cuisine],
-        ticket: document.querySelector('.st-ticket-count').textContent,
-        stamp: Boolean(document.querySelector('.st-step[data-st-step="0"] .st-tried'))
+        railDone: document.querySelector('.st-stop[data-st-goto="0"]').classList.contains('is-done'),
+        railState: document.querySelector('.st-stop[data-st-goto="0"] .st-stop-state').textContent,
+        tasks: window.GoiVietSoTay.inspect().tasks,
+        cardsRinged: document.querySelector('.st-mode-cards').classList.contains('st-target')
       }));
       assert.equal(info.name, 'Hà Nội');
       assert.deepEqual([info.region, info.summary, ...info.facts], info.expected);
-      assert.equal(info.ticket, 'Đã soát 1/4');
-      assert.ok(info.stamp);
+      assert.equal(info.railDone, true);
+      assert.equal(info.railState, ', đã thử');
+      assert.deepEqual(info.tasks, ['pick:done', 'explore:done', 'cards:now']);
+      assert.equal(info.cardsRinged, true);
       assert.deepEqual((await sotay(page)).tried, [true, false, false, false]);
       await page.screenshot({ path: path.join(OUT, '1366-02-board.png') });
       return info;
@@ -194,7 +249,7 @@ async function check(name, fn) {
       await page.click('[data-st-ticket]');
       await page.waitForFunction(() => window.GoiVietSoTay.inspect().picked !== 'hn', null, { timeout: 3000 });
       const kicker = await page.locator('.st-here-kicker').textContent();
-      assert.equal(kicker, 'Điểm dừng gợi ý');
+      assert.equal(kicker, 'Quẻ vé gợi ý');
       await page.click('.st-pin[data-station="hn"]');
       await page.click('[data-st-book]');
       assert.equal(await page.locator('#soTayBookNote').isVisible(), true);
@@ -212,6 +267,8 @@ async function check(name, fn) {
       }));
       assert.deepEqual(fan.cards, fan.topics.map(t => 'Lá ' + t));
       assert.equal(fan.covers, 4);
+      assert.deepEqual(await tasks(page), ['draw:now', 'answer:todo', 'check:todo']);
+      assert.equal(await ringed(page, '[data-st-shuffle]'), true);
       await page.click('[data-st-shuffle]');
       await page.waitForFunction(() => window.GoiVietSoTay.inspect().cardDrawn, null, { timeout: 5000 });
       const drawn = await page.evaluate(() => {
@@ -252,6 +309,8 @@ async function check(name, fn) {
       assert.equal(info.text, info.explanation);
       assert.equal(info.correct, 0);
       assert.equal(info.wrong, 1);
+      assert.deepEqual(await tasks(page), ['draw:done', 'answer:done', 'check:done']);
+      assert.equal(await ringed(page, '.st-front [data-st-goto="2"]'), true, 'the ring moves to the way to the seal');
       await page.screenshot({ path: path.join(OUT, '1366-03-card.png') });
       return info;
     });
@@ -259,6 +318,8 @@ async function check(name, fn) {
     await check('Ga 3: dấu Hoa Sen mở hoạt động thật, đổi hoạt động, hẹn giờ', async () => {
       await page.click('.st-front [data-st-goto="2"]');
       assert.equal(await page.locator('.st-wax').isVisible(), true);
+      assert.deepEqual(await tasks(page), ['seal:now', 'finish:todo']);
+      assert.equal(await ringed(page, '.st-wax'), true);
       await page.click('[data-st-unseal]');
       await page.waitForFunction(() => window.GoiVietSoTay.inspect().unsealed, null, { timeout: 3000 });
       const first = await page.evaluate(() => ({ kind: document.querySelector('.st-activity-kind').textContent, text: document.querySelector('.st-activity-text').textContent, raw: ALL_DECKS_MAP.hn.cards[0].activities }));
@@ -282,6 +343,7 @@ async function check(name, fn) {
       assert.equal(info.finished, 'done');
       assert.equal(info.timer, false);
       assert.equal(await page.locator('#soTayPlace').inputValue(), 'Hà Nội');
+      assert.deepEqual(await tasks(page), ['place:done', 'note:now', 'save:todo']);
       return info;
     });
 
@@ -307,6 +369,8 @@ async function check(name, fn) {
       assert.equal(info.count, 'Kỷ niệm đã ghi: 1');
       assert.equal(info.error, true);
       assert.deepEqual((await sotay(page)).tried, [true, true, true, true]);
+      assert.deepEqual(await tasks(page), ['place:done', 'note:done', 'save:done']);
+      assert.equal(await ringed(page, '.st-next'), true);
       return info;
     });
 
@@ -317,13 +381,15 @@ async function check(name, fn) {
         marks: document.querySelectorAll('.st-screen [data-st-mark]').length,
         ready: document.querySelector('.st-ready').textContent,
         next: document.querySelector('.st-next-label').textContent,
-        ticket: document.querySelector('.st-ticket-count').textContent
+        done: document.querySelectorAll('.st-stop.is-done').length,
+        keys: document.querySelector('.st-keys').hidden
       }));
       assert.equal(info.items, 7);
       assert.equal(info.marks, 7);
       assert.equal(info.ready, 'Vé đã soát đủ bốn ga. Mời lên tàu!');
       assert.equal(info.next, 'Lên tàu');
-      assert.equal(info.ticket, 'Đã soát 4/4');
+      assert.equal(info.done, 4);
+      assert.equal(info.keys, true, 'the ready line takes the keys hint place');
       await page.locator('#soTayS5Title').focus();
       await page.keyboard.press('ArrowLeft');
       assert.equal((await sotay(page)).step, 3);
@@ -333,15 +399,32 @@ async function check(name, fn) {
       return info;
     });
 
-    await check('Không bố cục tràn ngang ở cả 5 ga (1366 × 768)', async () => {
+    await check('Không tràn ngang, không cột nào phải cuộn ở cả 5 ga (1366 × 768)', async () => {
       const result = [];
       for (let n = 0; n <= 4; n++) {
         await page.evaluate(i => window.GoiVietSoTay.goTo(i), n);
         await wait(650);
+        await settled(page);
         const o = await overflow(page);
         assert.deepEqual(o.out, [], `stop ${n + 1}`);
         assert.ok(o.scroll <= o.client + 1, `stop ${n + 1} scrolls sideways`);
+        assert.deepEqual(o.clipped, [], `stop ${n + 1} needs scrolling`);
         result.push(o);
+      }
+      return result;
+    });
+
+    await check('Cỡ chữ cho máy chiếu: 1366 × 768 không chữ nào dưới 14 px, chữ dẫn ≥ 19 px, tiêu đề ≥ 40 px', async () => {
+      const result = [];
+      for (let n = 0; n <= 4; n++) {
+        await page.evaluate(i => window.GoiVietSoTay.goTo(i), n);
+        await wait(500);
+        const t = await textSizes(page);
+        assert.ok(t.smallest[0][0] >= 14, `stop ${n + 1}: ${JSON.stringify(t.smallest[0])}`);
+        // The last stop has a longer list; its title and lead are a little smaller.
+        assert.ok(t.lead >= (n === 4 ? 17 : 19), `stop ${n + 1} lead ${t.lead}`);
+        assert.ok(t.title >= (n === 4 ? 31 : 40), `stop ${n + 1} title ${t.title}`);
+        result.push(t);
       }
       return result;
     });
@@ -373,7 +456,7 @@ async function check(name, fn) {
       return JSON.parse(after);
     });
 
-    await check('Lên tàu: dấu soát vé, màn che, vào bản đồ một lần', async () => {
+    await check('Lên tàu: đầu máy rời ga, màn che, vào bản đồ một lần', async () => {
       await page.evaluate(() => { window.__entries = 0; const original = window.closeIntroModal; window.closeIntroModal = (...args) => { window.__entries++; return original(...args); }; });
       const started = Date.now();
       await page.click('.st-next');
@@ -434,6 +517,11 @@ async function check(name, fn) {
       await p.screenshot({ path: path.join(OUT, '1920-en-board.png') });
       const o = await overflow(p);
       assert.deepEqual(o.out, []);
+      assert.deepEqual(o.clipped, []);
+      const sizes = await textSizes(p);
+      assert.ok(sizes.base >= 25 && sizes.lead >= 27 && sizes.smallest[0][0] >= 19.5, JSON.stringify(sizes));
+      const countries = await p.evaluate(() => [...document.querySelectorAll('#soTayDialog .st-country')].map(t => t.textContent));
+      assert.deepEqual(countries, ['LAOS', 'CAMBODIA', 'THAILAND']);
       // No Vietnamese interface string of the handbook is left on any stop in English (place names and card
       // content keep their Vietnamese names by design, so only the sotay.* interface strings are compared).
       const source = fs.readFileSync(path.join(ROOT, 'assets/goi-viet/map-surroundings-preview/i18n-ui-5.js'), 'utf8');
@@ -503,6 +591,7 @@ async function check(name, fn) {
       for (let n = 0; n <= 4; n++) {
         await p.evaluate(i => window.GoiVietSoTay.goTo(i), n);
         await wait(650);
+        await settled(p);
         const o = await overflow(p);
         assert.deepEqual(o.out, [], `stop ${n + 1}`);
         result.push(o);

@@ -2,6 +2,8 @@
 
 Ngày: 27/11/2026. Nhánh `p5-06-so-tay`, tách từ `main` tại `29bf515`. Chỉ thay đổi preview-5 (`map-surroundings-preview-5.html` và các tệp hậu tố `-5`). Không sửa `index.html`, các preview trước, `card-testing.html` hay tệp dùng chung của các bản khác.
 
+> **Bản 2 (cùng ngày, nhánh `p5-07-so-tay-v2`)** thay đổi bố cục, cỡ chữ, đầu máy, bản đồ ga 1 và cách dẫn từng bước. Xem mục [Bản 2](#bản-2--dễ-đọc-trên-máy-chiếu-làm-lần-lượt-bản-đồ-thật) ở cuối. Phần mô tả giai đoạn 1 bên dưới giữ nguyên để đối chiếu; chỗ nào bản 2 thay thì theo mục Bản 2.
+
 ## Mục tiêu
 
 Người xem đi theo luồng "Xem cách chơi" trước đây chỉ gặp chương kể chuyện "Có những điều chỉ cần gợi, là nhớ", không thấy chức năng nào được giải thích. Đợt này thêm **Sổ tay hành khách** ngay sau chương ký ức, trước bản đồ. Người xem chơi thử một lượt qua bốn ga nhỏ rồi lên tàu.
@@ -97,6 +99,132 @@ Các bộ kiểm có sẵn chạy lại:
 Máy này đặt `core.autocrlf=true`. Sau lần chuyển sang `main` và pull, 278 tệp văn bản trong thư mục làm việc mang CRLF, trong khi repo lưu LF. Gói ngoại tuyến được băm theo byte thật trên đĩa (đúng cách làm của các đợt trước), và worker so SHA-256 từng tệp khi cài. Vì vậy lần dựng này đổi mã băm của 21 tệp mà đợt này không sửa nội dung; chúng chỉ đổi kiểu xuống dòng trên đĩa. `python tools/build-preview-5-offline.py --check` đạt trên máy này.
 
 Rủi ro còn lại, không thuộc phạm vi đợt này: nếu trang được phục vụ từ một bản sao có kiểu xuống dòng khác (ví dụ tải từ GitHub với LF, hoặc clone ở máy khác), mã băm sẽ lệch và bước "Chuẩn bị chạy không mạng" báo lỗi. Hướng xử lý có thể là thêm `.gitattributes` cố định `eol=lf` cho tệp văn bản rồi dựng lại gói, hoặc luôn dựng lại gói ngay trên máy trình chiếu.
+
+## Bản 2 — dễ đọc trên máy chiếu, làm lần lượt, bản đồ thật
+
+Nhánh `p5-07-so-tay-v2`, tách từ `main` tại `727171a` (đã gồm giai đoạn 1 và `.gitattributes eol=lf`). Vẫn chỉ thay đổi preview-5.
+
+Phản hồi sau giai đoạn 1:
+
+- Hình "đoàn tàu" trên thanh ga trông như ô tô.
+- Chữ, biểu tượng và hình ảnh còn nhỏ so với màn hình.
+- Cần một bố cục và cách hướng dẫn từng bước dễ nhìn, đơn giản mà vẫn ấn tượng.
+- Bản đồ trong sổ tay phải thật sự đẹp.
+
+### Đo trước khi sửa
+
+Đo bằng Chrome thật trên cả 5 ga, ở 4 khổ màn hình:
+
+| Khổ | Cỡ chữ gốc | Chữ trung vị | Chữ nhỏ nhất | Số chữ dưới 14 px |
+| --- | --- | --- | --- | --- |
+| 1280 × 720, 1366 × 768, 1536 × 864 | 14 px (chạm mức sàn) | 11,2–11,8 px | 9,2–9,5 px (5,9 px ở con dấu bưu thiếp) | 33/37 đến 51/56 |
+| 1920 × 1080 | 16,5 px | 13,2–13,8 px | 10,9–11,2 px | 21/37 đến 40/56 |
+
+Giả định một phòng học có màn chiếu 100 inch (cao khoảng 1,25 m), người ngồi xa nhất cách khoảng 8 m. Với giả định đó:
+
+- Chữ thân 14 px ở 1366 × 768 chỉ chiếm khoảng 6,8 phút cung trong tầm nhìn.
+- Chữ trung vị chỉ khoảng 5,5 phút cung.
+- [Extron](https://www.extron.com/article/videowallfontsize) khuyên tối thiểu 10 phút cung, an toàn là 15–20.
+
+Hình tàu trên thanh ga cũng nhỏ: 36 × 17 px.
+
+### Thay đổi
+
+**Bố cục hai vùng.** Mỗi ga có một cột hướng dẫn bên trái (khoảng 31%) và một sân khấu lớn bên phải.
+
+- Đầu trang gom về một hàng: tên sổ tay, thanh 5 ga, VI/EN, "Vào thẳng bản đồ" và nút đóng.
+- Đã bỏ:
+  - 4 chip thông tin.
+  - Dòng mở đầu. Dòng này vẫn giữ làm mô tả cho trình đọc màn hình.
+  - Số lớn "01".
+  - Dấu "Đã thử" trên bàn.
+- Vé lên tàu được gộp vào thanh ga: ga nào đã thử có dấu ✓, trình đọc màn hình đọc thêm "đã thử".
+- Chân trang còn "Quay lại", phím tắt và "Tiếp". Ở ga cuối, chỗ phím tắt nhường cho dòng "Vé đã soát n/4 ga".
+
+**Thang chữ theo chiều cao màn hình.** Cỡ gốc của khung là `clamp(14px, min(2.4vh, 1.36vw), 28px)`. Nhờ vậy, máy chiếu ở độ phân giải nào chữ cũng giữ cùng tỉ lệ với màn. Số đo thật sau khi sửa:
+
+| | 1366 × 768 | 1920 × 1080 |
+| --- | --- | --- |
+| Cỡ gốc | 18,4 px | 25,9 px |
+| Tiêu đề ga | 40,6 px | khoảng 57 px |
+| Câu dẫn | 19,5 px | 27,5 px |
+| Chữ nhỏ nhất trên khung | 14,4 px | khoảng 20 px |
+
+Ở 8 m, chữ thân đạt khoảng 10 phút cung và tiêu đề khoảng 20 phút cung. Các nút cao khoảng 2,5em.
+
+**Làm lần lượt.** Mỗi ga có 2–3 việc cần làm, đánh số:
+
+- Việc đã xong có dấu ✓ xanh.
+- Việc đang làm tô đỏ nhạt. Nút tương ứng trên sân khấu có viền vàng nhấp nháy 3 lần rồi đứng yên, theo WCAG 2.2.2: không có chuyển động tự chạy quá 5 giây.
+- Làm xong cả ga thì viền vàng chuyển sang nút đi tiếp.
+
+| Ga | Việc 1 | Việc 2 | Việc 3 |
+| --- | --- | --- | --- |
+| 1 · Chọn ga | Chạm một ga (viền cả 3 ghim) | Bấm Khám phá | Bấm Chơi thẻ trên bảng ga |
+| 2 · Rút bài | Chạm một lá hoặc Xáo & Rút | Chọn một đáp án | Bấm Kiểm tra, đọc lời giải, rồi viền chuyển sang "Mở dấu Hoa Sen" |
+| 2 · lá hỏi mở (Canva) | Rút một lá | Cả nhóm cùng kể, rồi mở dấu Hoa Sen | — |
+| 3 · Hoa Sen | Chạm dấu Hoa Sen | Làm hoạt động, rồi bấm Xong lá này | — |
+| 4 · Kỷ niệm | Ghi tên địa danh | Viết một dòng kỷ niệm | Bấm Lưu kỷ niệm |
+
+Ga cuối thay danh sách việc bằng 7 nút của bản đồ, mỗi nút một dòng ngắn đặt ở cột trái. Sơ đồ màn hình bản đồ chiếm cả sân khấu.
+
+**Bản đồ ga 1** dùng đúng nguồn của bản đồ chính và phủ kín sân khấu. Tỉ lệ khung nhìn tính lại theo kích thước sân khấu. Việt Nam, Hoàng Sa và Trường Sa luôn nằm trọn bên trái bảng ga.
+
+- Lớp nền:
+  - Biển xanh ngọc có sóng kiểu hải đồ và lưới kinh vĩ 2°.
+  - Viền nước nông quanh bờ.
+  - Đất các nước láng giềng màu giấy dó, kèm biên giới, nhãn Lào, Campuchia, Thái Lan và hồ Tonlé Sap. Nguồn là `regional-geometry.js`, dùng đúng tệp và phiên bản `preview-5.js` nạp cho bản đồ.
+- Lớp Việt Nam:
+  - 34 tỉnh tô xanh chuyển sắc, có bóng đổ và đường bờ biển sẫm.
+  - Sông lớn lấy từ `hydrology-data.js`, nạp qua `GoiVietNaturalCore.load`.
+- Đảo: các quần đảo Hoàng Sa và Trường Sa có đủ đảo và rạn, viền nét đứt và nhãn.
+- Đường sắt Bắc–Nam có nền sẫm và tà vẹt màu kem.
+- Minh họa của bản đồ chính (`landmark-assets.js`):
+  - Tháp Rùa cạnh ga Hà Nội.
+  - Ngọ Môn cạnh ga Huế.
+  - Chợ Bến Thành cạnh ga TP.HCM.
+  - Thuyền buồm đỏ trên Biển Đông.
+- La bàn có chữ B (Bắc).
+- Ghim ga là đĩa đỏ có sao vàng, nhãn "Ga Hà Nội".
+- Bảng ga nổi trên vùng biển phía đông. Các nút "Chơi thẻ" và "Đọc sách" xếp dọc.
+- Tàu nhỏ dừng ngay cạnh ga, nên sao và tên ga vẫn nhìn thấy.
+
+**Đầu máy.** Thanh ga, tàu trên bản đồ và biểu tượng ga cuối dùng chung đầu máy hơi nước đỏ son – vàng đồng của trang chủ: ống khói, mũi gạt, ngôi sao, làn hơi. Đầu máy quay đầu theo chiều chạy và cao gấp đôi bản cũ. Khi bấm "Lên tàu", đầu máy chạy khỏi thanh ga.
+
+**Hiệu năng lúc mở.** Bản đầu tìm vị trí 3 ga trên đường ray bằng 1.800 lần gọi `getPointAtLength`, tốn khoảng 200 ms (theo hồ sơ CPU). Bản này đo đúng độ dài đường cong cắt tại từng ga, chỉ 2 phép đo. Lần mở đầu tiên đo trên 10 trang mới, ở 1366 × 768:
+
+- `open()` có trung vị 59 ms, cao nhất 87 ms. Trước khi sửa là 258–306 ms trên 2 lần lấy hồ sơ.
+- Không có tác vụ dài nào khác do sổ tay gây ra.
+- Dữ liệu địa lý vùng đã được phần chuẩn bị bản đồ nạp sẵn trong cả 20 lần đo (10 lần mở sau 3 giây, 10 lần mở ngay).
+
+### Tệp của bản 2
+
+| Tệp | Thay đổi |
+| --- | --- |
+| [map-surroundings-preview-5.html](../../map-surroundings-preview-5.html) | Viết lại markup `#soTayDialog`: đầu trang một hàng, danh sách việc, lớp minh họa bản đồ, chân trang mới; đổi `?v=` của 2 tệp sổ tay |
+| [so-tay-5.js](../../assets/goi-viet/map-surroundings-preview/so-tay-5.js) | Bản đồ nhiều lớp và khớp khung, nạp địa lý và sông, danh sách việc kèm viền vàng, đầu máy, tính độ dài ga |
+| [so-tay-5.css](../../assets/goi-viet/map-surroundings-preview/so-tay-5.css) | Thang chữ theo vh, bố cục hai vùng, bảng màu bản đồ sáng và tối, viền vàng, khổ 4:3 và màn hẹp |
+| [i18n-ui-5.js](../../assets/goi-viet/map-surroundings-preview/i18n-ui-5.js) | Khóa `sotay.*` mới (việc cần làm, nhãn nước, la bàn); bỏ khóa chip, vé, "Thử ngay", ô chờ; rút gọn chữ ga cuối |
+| [check-so-tay-5.cjs](../../tools/check-so-tay-5.cjs) | Kiểm thêm: lớp địa lý, sông, danh thắng; danh sách việc và viền vàng từng bước; cỡ chữ cho máy chiếu; cột không phải cuộn |
+| [offline-manifest-5.js](../../assets/goi-viet/map-surroundings-preview/offline-manifest-5.js) | Dựng lại (646 tài nguyên) |
+
+### Kiểm tra bản 2
+
+Chạy trên Windows 11, Chrome thật, ngày 27/11/2026.
+
+| Bộ kiểm | Kết quả |
+| --- | --- |
+| `node tools/check-so-tay-5.cjs` | **25/25 đạt** (thêm mục cỡ chữ; mục bản đồ kiểm thêm địa lý vùng, sông, hồ, nhãn nước, minh họa, la bàn; mọi ga kiểm danh sách việc và viền vàng; cột chữ và bảng ga không phải cuộn ở 1366 × 768). Ảnh trong `verification/so-tay-5/` |
+| `node tools/check-arrival-demo-5.cjs --preview-5` | 61/61 đạt, kể cả ca hiệu năng C (1366 và 1920: không có tác vụ dài, khung hình trung vị 16,7 ms) |
+| `node tools/check-family-voyage-5.cjs` | Đạt (11 nhóm) |
+| `node tools/check-station-panel-5.cjs` | Đạt |
+| `node tools/verify-preview5-conversation-cards.cjs` | Đạt |
+| `node tools/check-books-5.cjs` | Đạt (cảnh báo có sẵn `example.org`) |
+| `node tools/check-i18n-5.cjs` | Đạt (346 khóa markup có EN; 271 khóa trong mã có VI/EN) |
+| `python tools/build-preview-5-offline.py --check` | Đạt (646 tài nguyên). Trên Windows, trình dựng ghi chính tệp manifest với CRLF; đã chuyển về LF để khớp `.gitattributes` |
+| `git diff --check` | Đạt |
+
+Ngoài bộ kiểm, đã xem ảnh từng ga ở 1280 × 720, 1366 × 768, 1536 × 864, 1920 × 1080 (VI, theme sáng), 1366 × 768 (EN, theme tối) và 390 × 844.
 
 ## Chưa làm (giai đoạn sau)
 
