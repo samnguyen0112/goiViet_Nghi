@@ -921,6 +921,146 @@
     I.add(dict);
   }
 
+  // ---- P5-07: passenger handbook (so-tay-5.js, markup #soTayDialog), between the memory chapter and the map.
+  // Markup keys keep their Vietnamese in the HTML word for word; the keys the script writes have both languages.
+  {
+    const labels = {
+      // end of the memory chapter
+      'sotay.open.kicker': ['Trước khi lên tàu', 'Before you board'],
+      'sotay.open.title': ['Xem sổ tay hành khách', 'Read the passenger handbook'],
+      'sotay.open.label': ['Xem sổ tay hành khách: chơi thử bốn bước trước khi vào bản đồ', 'Read the passenger handbook: try four steps before the map'],
+      'sotay.skipToMap': ['Vào thẳng bản đồ', 'Go straight to the map'],
+      // frame
+      'sotay.kicker': ['Trước khi lên tàu', 'Before you board'],
+      'sotay.title': ['Sổ tay hành khách', 'Passenger handbook'],
+      'sotay.lead': ['Chơi thử một lượt qua bốn ga nhỏ, rồi lên tàu.', 'Try one round across four small stops, then board the train.'],
+      'sotay.close': ['Đóng sổ tay', 'Close the handbook'],
+      'sotay.facts': ['Trò chơi trong một dòng', 'The game at a glance'],
+      'sotay.fact.stations': ['34 tỉnh thành · 2 quần đảo', '34 provinces · 2 archipelagos'],
+      'sotay.fact.cards': ['144 lá bài trò chuyện', '144 conversation cards'],
+      'sotay.fact.score': ['Không chấm điểm', 'No scores'],
+      'sotay.fact.lang': ['Tiếng Việt · English', 'Tiếng Việt · English'],
+      'sotay.rail': ['Các ga của sổ tay', 'Handbook stops'],
+      'sotay.rail.1': ['Chọn ga', 'Pick a station'],
+      'sotay.rail.2': ['Rút bài', 'Draw a card'],
+      'sotay.rail.3': ['Hoa Sen', 'Lotus seal'],
+      'sotay.rail.4': ['Kỷ niệm', 'Memory'],
+      'sotay.rail.5': ['Lên tàu', 'Board'],
+      'sotay.step.1': ['Ga 1 / 4', 'Stop 1 / 4'],
+      'sotay.step.2': ['Ga 2 / 4', 'Stop 2 / 4'],
+      'sotay.step.3': ['Ga 3 / 4', 'Stop 3 / 4'],
+      'sotay.step.4': ['Ga 4 / 4', 'Stop 4 / 4'],
+      'sotay.step.5': ['Ga cuối', 'Last stop'],
+      'sotay.prev': ['Quay lại', 'Back'],
+      'sotay.next': ['Tiếp', 'Next'],
+      'sotay.board': ['Lên tàu', 'All aboard'],
+      'sotay.keys': ['Phím ← → để chuyển ga · Esc để đóng', 'Keys ← → change stop · Esc closes'],
+      'sotay.ticket': ['Vé lên tàu', 'Boarding ticket'],
+      'sotay.ticket.count': ['Đã soát {n}/4', '{n}/4 punched'],
+      'sotay.ticket.hole': ['Ga {n}: {title} · {state}', 'Stop {n}: {title} · {state}'],
+      'sotay.ticket.punched': ['đã soát', 'punched'],
+      'sotay.ticket.open': ['chưa soát', 'not yet'],
+      'sotay.stamp.tried': ['Đã thử', 'Tried'],
+      'sotay.stamp.boarded': ['Đã soát vé', 'Ticket checked'],
+      'sotay.sr.step': ['{label}. {title}', '{label}. {title}'],
+      'sotay.sr.punch': ['Vé đã soát ga {n}.', 'Stop {n} punched on your ticket.'],
+      'sotay.sr.boarding': ['Đang lên tàu, mở bản đồ ký ức…', 'Boarding, opening the memory map…'],
+      // stop 1
+      'sotay.s1.title': ['Chọn một ga', 'Pick a station'],
+      'sotay.s1.lead': ['Chạm một ga trên bản đồ rồi bấm Khám phá. Đoàn tàu chạy tới, bảng ga mở ra.', 'Tap a station on the map, then press Explore. The train pulls in and the station board opens.'],
+      'sotay.s1.tip': ['Chưa biết đi đâu? Nút Rút vé gieo một quẻ thơ lục bát dẫn tới ga mới.', 'Not sure where to go? Draw a ticket casts a lục bát verse that leads to a new station.'],
+      'sotay.s1.try': ['Thử ngay: chạm một ga', 'Try it: tap a station'],
+      'sotay.s1.ticket': ['Rút vé', 'Draw a ticket'],
+      'sotay.s1.ticketLabel': ['Rút vé: gieo một ga trong 3 ga mẫu', 'Draw a ticket: let chance pick one of the 3 sample stations'],
+      'sotay.s1.here': ['Bạn đang ở đây', 'You are here'],
+      'sotay.s1.suggested': ['Điểm dừng gợi ý', 'Suggested stop'],
+      'sotay.s1.explore': ['Khám phá', 'Explore'],
+      'sotay.s1.arriving': ['Đoàn tàu đang vào ga', 'The train is pulling in'],
+      'sotay.s1.arrived': ['Đã đến ga', 'Arrived'],
+      'sotay.s1.landmark': ['Danh thắng', 'Landmark'],
+      'sotay.s1.heritage': ['Di sản', 'Heritage'],
+      'sotay.s1.flavor': ['Hương vị', 'Local flavor'],
+      'sotay.s1.cards': ['Chơi thẻ', 'Play cards'],
+      'sotay.s1.cardsLeft': ['Còn 4 lá', '4 cards left'],
+      'sotay.s1.book': ['Đọc sách', 'Read book'],
+      'sotay.s1.bookSoon': ['Sắp có · Góp chuyện quê bạn', 'Coming soon · Share your story'],
+      'sotay.s1.bookNote': ['Sách văn hóa của các ga đang được biên soạn. Trong lúc chờ, ga mời bạn góp chuyện quê qua fanpage Gói Việt.', 'The stations’ culture books are still being written. Meanwhile, each station invites you to share a hometown story on the Gói Việt Facebook page.'],
+      'sotay.s1.ghost': ['Bảng ga mở ở đây khi đoàn tàu vào ga.', 'The station board opens here when the train pulls in.'],
+      'sotay.s1.pin': ['Ga {place}', '{place} station'],
+      'sotay.s1.srPick': ['Đã chọn ga {place}. Bấm Khám phá để tới ga.', '{place} selected. Press Explore to reach the station.'],
+      'sotay.s1.srArrive': ['Đã đến ga {place}. Bảng ga đã mở.', 'Arrived at {place}. The station board is open.'],
+      'sotay.map.label': ['Bản đồ Việt Nam thu nhỏ: 34 tỉnh thành, quần đảo Hoàng Sa và quần đảo Trường Sa', 'Small map of Vietnam: 34 provinces and cities, the Hoàng Sa and Trường Sa archipelagos'],
+      // Map labels: a line break splits them over two lines of the drawing.
+      'sotay.map.hs': ['Quần đảo\nHoàng Sa', 'Hoàng Sa\n(Paracel Islands)'],
+      'sotay.map.ts': ['Quần đảo\nTrường Sa', 'Trường Sa\n(Spratly Islands)'],
+      'sotay.map.sea': ['Biển Đông', 'Biển Đông\n(East Sea)'],
+      // stop 2
+      'sotay.s2.title': ['Rút một lá bài', 'Draw a card'],
+      'sotay.s2.lead': ['Mỗi ga có bốn lá: Món ăn, Văn hóa, Địa danh, Nét đẹp. Chọn một lá, hoặc xáo và rút ngẫu nhiên.', 'Each station has four cards: Food, Culture, Landmarks and Local charm. Pick one, or shuffle and draw at random.'],
+      'sotay.s2.tip': ['Mặt trước là câu hỏi văn hóa, có gợi ý và lời giải thích ngắn. Câu hỏi và đáp án ở đây là lá bài thật của ga.', 'The front asks a culture question, with a hint and a short explanation. The questions here are the station’s real cards.'],
+      'sotay.s2.try': ['Thử ngay: chọn một lá hoặc xáo bài', 'Try it: pick a card or shuffle'],
+      'sotay.s2.fan': ['Bốn lá bài của ga {place}', 'The four cards of {place}'],
+      'sotay.s2.card': ['Lá {topic}', '{topic} card'],
+      'sotay.s2.check': ['Kiểm tra đáp án', 'Check the answer'],
+      'sotay.s2.pickFirst': ['Chọn một đáp án trước đã.', 'Choose an answer first.'],
+      'sotay.s2.hintRemoved': ['Đã lược bớt phương án {letter}.', 'Option {letter} has been ruled out.'],
+      'sotay.s2.again': ['Rút lá khác', 'Draw another card'],
+      'sotay.s2.toSeal': ['Mở dấu Hoa Sen', 'Open the lotus seal'],
+      'sotay.s2.open': ['Lá này hỏi mở: không có A/B/C, cả nhóm cùng kể.', 'This card asks an open question: no A/B/C, everyone shares.'],
+      'sotay.s2.srDrawn': ['Đã rút lá {topic}. {question}', 'Drew the {topic} card. {question}'],
+      // stop 3
+      'sotay.s3.title': ['Chạm dấu Hoa Sen', 'Tap the lotus seal'],
+      'sotay.s3.lead': ['Mặt sau là hoạt động gắn kết cho cả nhóm. Không cần trả lời đúng: chạm dấu Hoa Sen là mở.', 'The back holds an activity for the whole group. No right answer needed: tap the lotus seal to open it.'],
+      'sotay.s3.tip': ['Hoạt động tự nguyện, không chấm điểm. Có thể đổi hoạt động, bỏ qua, hoặc bật hẹn giờ 60 giây khi có người kể.', 'Activities are optional and never scored. Change the activity, skip it, or start the 60-second timer while someone tells a story.'],
+      'sotay.s3.try': ['Thử ngay: chạm dấu Hoa Sen', 'Try it: tap the lotus seal'],
+      'sotay.s3.seal': ['Hoa Sen', 'Lotus'],
+      'sotay.s3.timerLeft': ['Còn {s} giây', '{s}s left'],
+      'sotay.s3.srOpen': ['Đã mở hoạt động: {activity}', 'Activity opened: {activity}'],
+      'sotay.s3.srDone': ['Đã đóng dấu kỷ niệm cho lá này.', 'This card has its memory stamp.'],
+      // stop 4
+      'sotay.s4.title': ['Giữ lại kỷ niệm', 'Keep a memory'],
+      'sotay.s4.lead': ['Ghi một dòng kỷ niệm khi chơi thẻ. Mỗi lá xong được một dấu, đủ 3 lá là một mốc hành trình.', 'Write down a memory while you play. Every finished card earns a stamp; three cards make a journey milestone.'],
+      'sotay.s4.tip': ['Kỷ niệm chỉ lưu trong phiên này. Tải bưu thiếp PNG về máy để giữ lại; ảnh không gửi lên máy chủ.', 'Memories are kept for this session only. Download the PNG postcard to keep them; nothing is uploaded.'],
+      'sotay.s4.try': ['Thử ngay: ghi một dòng rồi lưu', 'Try it: write a line and save it'],
+      'sotay.s4.placeMissing': ['Ghi tên một địa danh trước khi lưu.', 'Enter a place before saving.'],
+      'sotay.s4.practice': ['Bản chơi thử: lời ghi ở đây không được lưu vào hành trình.', 'Practice run: what you write here is not added to your journey.'],
+      'sotay.s4.visited': ['Ga đã ghé', 'Station visited'],
+      'sotay.s4.memory': ['Kỷ niệm', 'Memory'],
+      'sotay.s4.noNote': ['(chưa ghi lời kỷ niệm)', '(no words written yet)'],
+      'sotay.s4.count': ['Kỷ niệm đã ghi: {n}', 'Memories saved: {n}'],
+      'sotay.s4.progress': ['Tiến độ mốc {done} / 3', 'Milestone {done} / 3'],
+      'sotay.s4.srSaved': ['Đã gắn kỷ niệm vào bưu thiếp chơi thử.', 'The memory is on the practice postcard.'],
+      // last stop
+      'sotay.s5.title': ['Hành lý mang theo', 'For the journey'],
+      'sotay.s5.lead': ['Những nút còn lại trên bản đồ. Khi cần thì mở, không cần nhớ hết.', 'The other buttons on the map. Open them when you need them; no need to memorise.'],
+      'sotay.s5.again': ['Muốn xem lại sổ tay: bấm logo Gói Việt để về trang chủ, chọn Xem cách chơi.', 'To read the handbook again: press the Gói Việt logo to go home, then choose How to play.'],
+      'sotay.s5.ready': ['Vé đã soát đủ bốn ga. Mời lên tàu!', 'All four stops are punched. All aboard!'],
+      'sotay.s5.partial': ['Vé đã soát {n}/4 ga. Bạn vẫn lên tàu được ngay.', '{n}/4 stops punched. You can still board right away.'],
+      'sotay.s5.screen': ['Sơ đồ màn hình bản đồ, đánh số theo danh sách bên cạnh', 'Sketch of the map screen, numbered like the list beside it'],
+      'sotay.s5.f1t': ['Tiến độ mốc', 'Milestone'],
+      'sotay.s5.f1': ['Chơi 3 lá bài để đạt một mốc hành trình.', 'Play 3 cards to reach a journey milestone.'],
+      'sotay.s5.f2t': ['Rút vé', 'Draw a ticket'],
+      'sotay.s5.f2': ['Lắc ống xăm tre, nhận một quẻ thơ dẫn tới ga mới: khắp 36 ga hoặc trong 3 ga mẫu.', 'Shake the bamboo tube for a verse that leads to a new station: across all 36, or among the 3 sample stations.'],
+      'sotay.s5.f3t': ['Bưu thiếp', 'Postcard'],
+      'sotay.s5.f3': ['Xem ga đã ghé, dấu và kỷ niệm. Tích chọn rồi lưu ảnh PNG về máy.', 'See your stations, stamps and memories. Tick what to include, then save the PNG.'],
+      'sotay.s5.f4t': ['Danh sách ga', 'Station list'],
+      'sotay.s5.f4': ['Tìm ga, danh thắng hoặc món ăn trong 36 ga, và mở Sổ hành trình.', 'Find a station, landmark or dish among all 36, and open the journey journal.'],
+      'sotay.s5.f5t': ['VI · EN · Tùy chọn', 'VI · EN · Options'],
+      'sotay.s5.f5': ['Đổi ngôn ngữ; bật âm thanh, nền tối, giảm chuyển động hoặc chuẩn bị chạy không mạng (khoảng 180 MB).', 'Switch language; turn on sound, the dark theme or reduced motion, or prepare offline use (about 180 MB).'],
+      'sotay.s5.f6t': ['Đi tới quần đảo', 'Go to the archipelagos'],
+      'sotay.s5.f6': ['Hoàng Sa và Trường Sa có Bưu điện biển đảo: cả nhà cùng mở thư, chọn, kể rồi đóng dấu gửi.', 'Hoàng Sa and Trường Sa have a sea post office: open a letter together, choose, tell, then stamp and send it.'],
+      'sotay.s5.f7t': ['Về giữa · Góc nhìn', 'Re-centre · View'],
+      'sotay.s5.f7': ['Kéo để di chuyển, + và − để phóng to, thu nhỏ; đổi góc nhìn nghiêng hoặc xoay 3D.', 'Drag to move, + and − to zoom; switch to a tilted view or rotate in 3D.'],
+      'sotay.s5.trip': ['Hành trình di sản', 'Heritage journey']
+    };
+    const dict = { vi: {}, en: {} };
+    for (const [key, [vi, en]] of Object.entries(labels)) {
+      dict.vi[key] = vi;
+      dict.en[key] = en;
+    }
+    I.add(dict);
+  }
+
   window.GoiVietI18nDom = Object.freeze({ apply: applyDom, sync: syncDocument });
   // The markup above this script is already parsed: localize it now so ?lang=en never shows Vietnamese first.
   applyDom(document);

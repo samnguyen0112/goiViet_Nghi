@@ -9,6 +9,7 @@ Kế hoạch và báo cáo xếp theo từng đợt, mỗi đợt một thư m�
 | [03-p5-song-ngu-va-sach](03-p5-song-ngu-va-sach/) | Song ngữ, hai chế độ tại ga và khung sách văn hóa (P5-00 → P5-05), 09–12/11/2026 | [Kế hoạch](03-p5-song-ngu-va-sach/plan.md) · [P5-00](03-p5-song-ngu-va-sach/BAO-CAO-P5-00.md) · [P5-01](03-p5-song-ngu-va-sach/BAO-CAO-P5-01.md) · [P5-02](03-p5-song-ngu-va-sach/BAO-CAO-P5-02.md) · [P5-03](03-p5-song-ngu-va-sach/BAO-CAO-P5-03.md) · [P5-05](03-p5-song-ngu-va-sach/BAO-CAO-P5-05.md) · [Ảnh ga và ngoại tuyến](03-p5-song-ngu-va-sach/BAO-CAO-ANH-GA-PREVIEW-5.md) |
 | [04-den-ga](04-den-ga/) | Luồng "Đến ga mới mở bảng", demo và tích hợp vào preview-5, 12–13/11/2026 | [Báo cáo](04-den-ga/BAO-CAO-DEMO-DEN-GA-5.md) |
 | [05-hai-trinh-gia-dinh](05-hai-trinh-gia-dinh/) | Hải trình gia đình và Bưu điện biển đảo, 13/11/2026 | [Báo cáo](05-hai-trinh-gia-dinh/BAO-CAO-HAI-TRINH-GIA-DINH-5.md) |
+| [07-so-tay-hanh-khach](07-so-tay-hanh-khach/) | Sổ tay hành khách giữa chương ký ức và bản đồ (P5-07, giai đoạn 1), 27/11/2026 | [Báo cáo](07-so-tay-hanh-khach/BAO-CAO-SO-TAY-5.md) |
 
 Đợt mới: tạo thư mục `docs/06-<tên-đợt>/`, đặt kế hoạch và các báo cáo của đợt đó vào cùng thư mục. Liên kết từ tài liệu tới tệp của dự án thì thêm `../../` ở đầu, ví dụ `../../assets/...` hoặc `../../verification/...`.
 
