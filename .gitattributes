@@ -1,0 +1,21 @@
+# Every working copy gets LF text files, whatever core.autocrlf says (Git for Windows sets it to true).
+# tools/build-preview-5-offline.py hashes the bytes on disk and preview-5-offline-worker.js checks those
+# hashes, so a CRLF checkout (new worktree, branch switch, pull) broke the offline manifest and the
+# byte-hash checks of the test suites. The repository already stores LF, so this changes no content.
+* text=auto eol=lf
+
+# Binary assets: never convert.
+*.webp binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.otf binary
+*.mp3 binary
+*.mp4 binary
+*.pdf binary
+*.zip binary
