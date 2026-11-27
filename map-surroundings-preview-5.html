@@ -4233,7 +4233,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 <link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/card-covers-5.css?v=20261121-covers-6">
 <script src="assets/goi-viet/map-surroundings-preview/card-covers-5.js?v=20261121-canva-2" defer></script>
 <link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/card-canva-5.css?v=20261121-canva-4">
-<script src="assets/goi-viet/map-surroundings-preview/card-canva-5.js?v=20261121-canva-5" defer></script>
+<script src="assets/goi-viet/map-surroundings-preview/card-canva-5.js?v=20261127-sotay-ab1" defer></script>
 <!-- P5-06: "Bàn chơi" look of a drawn card (two playing cards on a table; the cover lies under the question card). -->
 <link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/card-table-5.css?v=20261127-nhom1">
 <script src="assets/goi-viet/map-surroundings-preview/card-table-5.js?v=20261125-audit-3" defer></script>
@@ -4254,8 +4254,8 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 <link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/dark-theme-5.css?v=20261127-dark-2">
 <script src="assets/goi-viet/map-surroundings-preview/arrival-demo-5/arrival-demo-5.js?v=20261126-a04-2" defer></script>
 <!-- P5-07: Sổ tay hành khách (passenger handbook) between the memory chapter and the map; markup #soTayDialog. -->
-<link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/so-tay-5.css?v=20261127-sotay-2">
-<script src="assets/goi-viet/map-surroundings-preview/so-tay-5.js?v=20261127-sotay-2" defer></script>
+<link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/so-tay-5.css?v=20261127-sotay-ab1">
+<script src="assets/goi-viet/map-surroundings-preview/so-tay-5.js?v=20261127-sotay-ab1" defer></script>
 <style id="preview3-island-button-alignment">
   /* Keep the island toolbar aligned without changing the other previews. */
   #naturalIslandModal .natural-detail-controls {
@@ -4825,16 +4825,25 @@ body[data-preview-version="3"]:not([data-curtain-art]) .mc-transition>div{backgr
           </div>
           <article class="st-front" hidden aria-labelledby="soTayQuestion">
             <div class="st-front-main">
-              <p class="st-front-top"><span class="st-face-badge" data-i18n="ui.deck.mat-truoc-cau-hoi-van">Mặt trước • Câu hỏi văn hóa</span><span class="st-front-topic"></span></p>
+              <div class="st-front-top">
+                <span class="st-face-badge" data-i18n="ui.deck.mat-truoc-cau-hoi-van">Mặt trước • Câu hỏi văn hóa</span>
+                <span class="st-front-topic"></span>
+                <button type="button" class="st-cover-toggle" data-st-cover aria-expanded="false"><span class="st-cover-toggle-label" data-i18n="table.coverShow">Xem bìa lá bài</span></button>
+              </div>
+              <div class="st-canva-top" hidden>
+                <p class="st-canva-prompt" data-i18n="canva.rolePrompt">Người rút lá là người địa phương hay không? Chọn câu hỏi phù hợp.</p>
+                <div class="st-canva-roles" role="radiogroup" data-i18n-label="canva.rolePrompt" aria-label="Người rút lá là người địa phương hay không? Chọn câu hỏi phù hợp."></div>
+              </div>
               <h4 id="soTayQuestion" class="st-question"></h4>
               <div class="st-options" role="radiogroup" aria-labelledby="soTayQuestion"></div>
+              <div class="st-canva-extras" hidden></div>
             </div>
             <div class="st-front-side">
               <div class="st-front-actions">
                 <button type="button" class="st-btn st-btn-gold" data-st-check><span data-i18n="sotay.s2.check">Kiểm tra đáp án</span></button>
                 <button type="button" class="st-btn st-btn-ghost" data-st-hint><span data-i18n="ui.deck.hoi-nguoi-than">★ Xem gợi ý</span></button>
                 <button type="button" class="st-btn st-btn-ghost" data-st-reveal><span data-i18n="ui.deck.chua-biet-xem-giai-thich">Chưa biết, xem giải thích</span></button>
-                <p class="st-front-error" role="alert" hidden></p>
+                <p class="st-front-error" role="status" aria-live="polite" hidden></p>
               </div>
               <div class="st-result" hidden>
                 <p class="st-result-head"></p>
@@ -4844,6 +4853,10 @@ body[data-preview-version="3"]:not([data-curtain-art]) .mc-transition>div{backgr
                 <button type="button" class="st-btn st-btn-cream" data-st-goto="2"><span data-i18n="sotay.s2.toSeal">Mở dấu Hoa Sen</span><span aria-hidden="true">→</span></button>
                 <button type="button" class="st-link" data-st-again><span aria-hidden="true">↺</span><span data-i18n="sotay.s2.again">Rút lá khác</span></button>
               </div>
+            </div>
+            <div class="st-cover-overlay" hidden>
+              <button type="button" class="st-cover-card" data-st-cover-close></button>
+              <ol class="st-sr st-cover-desc" hidden></ol>
             </div>
           </article>
         </div>
@@ -4859,7 +4872,7 @@ body[data-preview-version="3"]:not([data-curtain-art]) .mc-transition>div{backgr
             <li class="st-task" data-st-task="seal"><span class="st-task-mark" aria-hidden="true"></span><span class="st-task-text" data-i18n="sotay.s3.t1">Chạm dấu Hoa Sen</span><span class="st-sr st-task-state"></span></li>
             <li class="st-task" data-st-task="finish"><span class="st-task-mark" aria-hidden="true"></span><span class="st-task-text" data-i18n="sotay.s3.t2">Cả nhóm làm hoạt động, rồi bấm Xong lá này</span><span class="st-sr st-task-state"></span></li>
           </ol>
-          <p class="st-step-tip" data-i18n="sotay.s3.tip">Tự nguyện, không chấm điểm: có thể đổi hoạt động, bỏ qua hoặc hẹn giờ 60 giây.</p>
+          <p class="st-step-tip" data-i18n="sotay.s3.tip">Tự nguyện, không chấm điểm: có thể đổi hoạt động, hẹn giờ 60 giây hoặc bấm “Ghi kỷ niệm” ngay ở góc dưới mặt sau lá bài.</p>
         </div>
         <div class="st-stage st-stage-back">
           <article class="st-back" aria-labelledby="soTayS3Title">
@@ -4879,8 +4892,10 @@ body[data-preview-version="3"]:not([data-curtain-art]) .mc-transition>div{backgr
               <div class="st-activity-tools">
                 <button type="button" class="st-btn st-btn-ghost" data-st-swap><span data-i18n="ui.deck.doi-hoat-dong">↻ Đổi hoạt động</span></button>
                 <button type="button" class="st-btn st-btn-ghost st-timer" data-st-timer aria-pressed="false"><span class="st-timer-ring" aria-hidden="true"></span><span class="st-timer-label">Hẹn giờ 60 giây</span></button>
+                <button type="button" class="st-btn st-btn-ghost st-record-btn" data-st-goto="3"><span aria-hidden="true">✎</span><span data-i18n="table.recordMemory">Ghi kỷ niệm</span></button>
                 <button type="button" class="st-btn st-btn-ghost" data-st-finish="skipped"><span data-i18n="ui.deck.bo-qua">Bỏ qua</span></button>
                 <button type="button" class="st-btn st-btn-red" data-st-finish="done"><span data-i18n="ui.deck.xong-den-luot-tiep-theo">Xong lá này</span></button>
+                <span class="st-activity-done" hidden></span>
               </div>
             </div>
           </article>
@@ -4931,30 +4946,30 @@ body[data-preview-version="3"]:not([data-curtain-art]) .mc-transition>div{backgr
           <h3 id="soTayS5Title" class="st-step-title" tabindex="-1" data-i18n="sotay.s5.title">Hành lý mang theo</h3>
           <p class="st-step-lead" data-i18n="sotay.s5.lead">Các nút khác trên bản đồ: khi cần thì mở, không cần nhớ hết.</p>
           <ol class="st-kit">
-            <li data-st-mark="1"><strong data-i18n="sotay.s5.f1t">Tiến độ mốc</strong><span data-i18n="sotay.s5.f1">Chơi 3 lá là đạt một mốc hành trình.</span></li>
-            <li data-st-mark="2"><strong data-i18n="sotay.s5.f2t">Rút vé</strong><span data-i18n="sotay.s5.f2">Lắc ống xăm, quẻ thơ dẫn tới ga mới.</span></li>
-            <li data-st-mark="3"><strong data-i18n="sotay.s5.f3t">Bưu thiếp</strong><span data-i18n="sotay.s5.f3">Ga đã ghé, dấu, kỷ niệm; lưu ảnh PNG.</span></li>
-            <li data-st-mark="4"><strong data-i18n="sotay.s5.f4t">Danh sách ga</strong><span data-i18n="sotay.s5.f4">Tìm ga, danh thắng, món ăn trong 36 ga.</span></li>
-            <li data-st-mark="5"><strong data-i18n="sotay.s5.f5t">VI · EN · Tùy chọn</strong><span data-i18n="sotay.s5.f5">Ngôn ngữ, âm thanh, nền tối, chạy không mạng.</span></li>
-            <li data-st-mark="6"><strong data-i18n="sotay.s5.f6t">Đi tới quần đảo</strong><span data-i18n="sotay.s5.f6">Bưu điện biển đảo ở Hoàng Sa, Trường Sa.</span></li>
-            <li data-st-mark="7"><strong data-i18n="sotay.s5.f7t">Về giữa · Góc nhìn</strong><span data-i18n="sotay.s5.f7">Kéo, phóng to, thu nhỏ, nghiêng hoặc xoay 3D.</span></li>
+            <li data-st-mark="1"><button type="button" class="st-kit-btn" aria-pressed="false"><strong data-i18n="sotay.s5.f1t">Tiến độ mốc</strong><span data-i18n="sotay.s5.f1">Chơi 3 lá là đạt một mốc hành trình.</span></button></li>
+            <li data-st-mark="2"><button type="button" class="st-kit-btn" aria-pressed="false"><strong data-i18n="sotay.s5.f2t">Rút vé</strong><span data-i18n="sotay.s5.f2">Lắc ống xăm, quẻ thơ dẫn tới ga mới.</span></button></li>
+            <li data-st-mark="3"><button type="button" class="st-kit-btn" aria-pressed="false"><strong data-i18n="sotay.s5.f3t">Bưu thiếp</strong><span data-i18n="sotay.s5.f3">Ga đã ghé, dấu, kỷ niệm; lưu ảnh PNG.</span></button></li>
+            <li data-st-mark="4"><button type="button" class="st-kit-btn" aria-pressed="false"><strong data-i18n="sotay.s5.f4t">Danh sách ga</strong><span data-i18n="sotay.s5.f4">Tìm ga, danh thắng, món ăn trong 36 ga.</span></button></li>
+            <li data-st-mark="5"><button type="button" class="st-kit-btn" aria-pressed="false"><strong data-i18n="sotay.s5.f5t">VI · EN · Tùy chọn</strong><span data-i18n="sotay.s5.f5">Ngôn ngữ, âm thanh, nền tối, chạy không mạng.</span></button></li>
+            <li data-st-mark="6"><button type="button" class="st-kit-btn" aria-pressed="false"><strong data-i18n="sotay.s5.f6t">Đi tới quần đảo</strong><span data-i18n="sotay.s5.f6">Hoàng Sa, Trường Sa: mở Bưu điện biển đảo đọc thư, gửi lời nhắn và xem hải đồ.</span></button></li>
+            <li data-st-mark="7"><button type="button" class="st-kit-btn" aria-pressed="false"><strong data-i18n="sotay.s5.f7t">Về giữa · Góc nhìn</strong><span data-i18n="sotay.s5.f7">Kéo, phóng to, thu nhỏ, nghiêng hoặc xoay 3D.</span></button></li>
           </ol>
         </div>
         <div class="st-stage st-stage-kit">
           <div class="st-screen" role="img" data-i18n-label="sotay.s5.screen" aria-label="Sơ đồ màn hình bản đồ, đánh số theo danh sách bên trái">
             <div class="st-screen-bar">
-              <span class="st-screen-logo"></span><span class="st-screen-trip" data-i18n="sotay.s5.trip">Hành trình di sản</span>
-              <span class="st-screen-pill st-screen-progress" data-st-mark="1"><b>1</b></span>
+              <img class="st-screen-logo" src="assets/goi-viet/brand/goi-viet-logo-512.webp" alt="" width="108" height="48" decoding="async"><span class="st-screen-trip" data-i18n="sotay.s5.trip">Hành trình di sản</span>
+              <span class="st-screen-pill st-screen-progress" data-st-mark="1"><i></i><i></i><i></i><b>1</b></span>
               <span class="st-screen-pill st-screen-red" data-st-mark="2"><b>2</b></span>
               <span class="st-screen-pill st-screen-green" data-st-mark="3"><b>3</b></span>
               <span class="st-screen-pill st-screen-icon" data-st-mark="4"><b>4</b></span>
-              <span class="st-screen-pill st-screen-lang" data-st-mark="5"><b>5</b></span>
+              <span class="st-screen-pill st-screen-lang" data-st-mark="5"><span class="st-screen-lang-pair"></span><span class="st-screen-help-dot" aria-hidden="true"></span><span class="st-screen-gear"></span><b>5</b></span>
             </div>
-            <div class="st-screen-islands" data-st-mark="6"><b>6</b></div>
+            <div class="st-screen-islands" data-st-mark="6"><span class="st-screen-isl-head"></span><span class="st-screen-isl-row"><i></i><i></i></span><span class="st-screen-isl-sub"></span><b>6</b></div>
             <svg class="st-screen-map" aria-hidden="true"></svg>
-            <div class="st-screen-dock" data-st-mark="7"><b>7</b></div>
+            <div class="st-screen-dock" data-st-mark="7"><i></i><i></i><i></i><b>7</b></div>
           </div>
-          <p class="st-stage-note" data-i18n="sotay.s5.again">Muốn xem lại sổ tay: bấm logo Gói Việt để về trang chủ, chọn Xem cách chơi.</p>
+          <p class="st-stage-note" data-i18n="sotay.s5.again">Muốn xem lại sổ tay bất cứ lúc nào: bấm nút “?” trên thanh trên cùng của bản đồ.</p>
         </div>
       </section>
     </div>
@@ -5034,6 +5049,7 @@ body[data-preview-version="3"]:not([data-curtain-art]) .mc-transition>div{backgr
         <span data-i18n="ui.map.buu-thiep">Bưu Thiếp</span>
       </button>
       <div class="gv-lang-toggle gv-lang-toggle-header" role="group" data-lang-group aria-label="Ngôn ngữ · Language"><button type="button" data-set-lang="vi" lang="vi" title="Tiếng Việt" aria-pressed="true" class="is-active">VI</button><button type="button" data-set-lang="en" lang="en" title="English" aria-pressed="false">EN</button></div>
+      <button id="btnMapGuide" type="button" class="st-map-guide-btn" aria-haspopup="dialog" aria-controls="soTayDialog" data-i18n-label="sotay.mapBtn" data-i18n-title="sotay.mapBtn" aria-label="Mở sổ tay hành khách" title="Mở sổ tay hành khách"><span aria-hidden="true">?</span></button>
       <details id="headerSettings" class="control-disclosure">
         <summary data-i18n="ui.settings.tuy-chon" class="craft-btn">Tùy chọn</summary>
         <div data-i18n-label="ui.settings.thiet-lap-va-huong-dan" class="control-options giay-do-surface" role="group" aria-label="Thiết lập và hướng dẫn">
@@ -5641,7 +5657,7 @@ body[data-preview-version="3"]:not([data-curtain-art]) .mc-transition>div{backgr
 
 <!-- P5-03: interface language, loaded before the main script so it can use GoiVietI18n.t() while starting up. -->
 <script src="assets/goi-viet/map-surroundings-preview/i18n-5.js?v=20261111-content-2"></script>
-<script src="assets/goi-viet/map-surroundings-preview/i18n-ui-5.js?v=20261122-journey-ui-1"></script>
+<script src="assets/goi-viet/map-surroundings-preview/i18n-ui-5.js?v=20261127-sotay-ab1"></script>
 <script src="assets/goi-viet/map-surroundings-preview/content-en-5.js?v=20261112-photo-titles-2"></script>
 <script>
 // ============================================================================

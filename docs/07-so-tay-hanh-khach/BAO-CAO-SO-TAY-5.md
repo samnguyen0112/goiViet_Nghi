@@ -2,7 +2,7 @@
 
 Ngày: 27/11/2026. Nhánh `p5-06-so-tay`, tách từ `main` tại `29bf515`. Chỉ thay đổi preview-5 (`map-surroundings-preview-5.html` và các tệp hậu tố `-5`). Không sửa `index.html`, các preview trước, `card-testing.html` hay tệp dùng chung của các bản khác.
 
-> **Bản 2 (cùng ngày, nhánh `p5-07-so-tay-v2`)** thay đổi bố cục, cỡ chữ, đầu máy, bản đồ ga 1 và cách dẫn từng bước. Xem mục [Bản 2](#bản-2--dễ-đọc-trên-máy-chiếu-làm-lần-lượt-bản-đồ-thật) ở cuối. Phần mô tả giai đoạn 1 bên dưới giữ nguyên để đối chiếu; chỗ nào bản 2 thay thì theo mục Bản 2.
+> **Bản 2 (cùng ngày, nhánh `p5-07-so-tay-v2`)** thay đổi bố cục, cỡ chữ, đầu máy, bản đồ ga 1 và cách dẫn từng bước. **Bản 3 (cùng ngày, nhánh `p5-08-so-tay-goi-ab`)** triển khai Gói A + B: thêm nút `?` mở lại sổ tay từ bản đồ, tab vai và xem bìa cho lá Canva, nút "Ghi kỷ niệm" ở mặt sau ga 3, sửa bố cục/trạng thái trên 5 ga và sơ đồ ga cuối. Xem mục [Bản 2](#bản-2--dễ-đọc-trên-máy-chiếu-làm-lần-lượt-bản-đồ-thật) và [Bản 3 — Gói A + B](#bản-3--gói-a--b) ở cuối. Phần mô tả giai đoạn 1 bên dưới giữ nguyên để đối chiếu; chỗ nào bản sau thay thì theo mục mới hơn.
 
 ## Mục tiêu
 
@@ -226,8 +226,61 @@ Chạy trên Windows 11, Chrome thật, ngày 27/11/2026.
 
 Ngoài bộ kiểm, đã xem ảnh từng ga ở 1280 × 720, 1366 × 768, 1536 × 864, 1920 × 1080 (VI, theme sáng), 1366 × 768 (EN, theme tối) và 390 × 844.
 
+## Bản 3 — Gói A + B
+
+Nhánh `p5-08-so-tay-goi-ab`, tách từ `main` tại `a572d82`. Chỉ sửa `map-surroundings-preview-5.html` và các tệp hậu tố `-5`; giữ nguyên chương ký ức, giữ cấu trúc tách mặt trước / mặt sau ở ga 2–3, chỉ sửa rõ Bưu điện biển đảo ở ga cuối và không làm các phần còn lại của Gói C ngoài việc cập nhật `tools/check-so-tay-5.cjs`.
+
+### Các mục Gói A + B đã làm
+
+**Gói A — Sửa bố cục, lá Canva, trạng thái và khả năng tiếp cận:**
+
+- **A1. Bảng ga khi mở "Đọc sách":** đặt `flex: 0 0 auto` cho các khối trong `.st-board`, nới nhẹ chiều cao `.st-map-side` và nén nhịp dọc khi `#soTayBookNote` mở. Đo trên 1280 × 720, 1366 × 768, 1536 × 864 và 1920 × 1080: tóm tắt không bị ép sập, bảng ga và cột việc cần làm đều không phải cuộn (đã đo).
+- **A2. Khổ 4:3 (1024 × 768) và hai quần đảo:** bỏ quy tắc ẩn chữ `.st-skip span:first-child` ở `@media (max-aspect-ratio: 4/3)` để nút "Vào thẳng bản đồ" giữ đủ nhãn hiển thị và tên truy cập; tính `fitView()` theo tỉ lệ phần trống `free * W / H` bên trái bảng ga và nới `S.content` bao nhãn quần đảo. Ở 1024 × 768, Hoàng Sa, Trường Sa và Biển Đông hiện đủ, không bị bảng ga che (đã đo).
+- **A3. Nhãn bản đồ VI/EN:** dời `LÀO`/`LAOS` ra vùng giấy trống (`[103.05, 19.55]`), thêm khóa `sotay.s1.pinHcm` (`TP.HCM` / `HCMC`) và đặt ghim `TP.HCM`/`HCMC` sang trái (`data-side="left"`) để không đè Trường Sa ở tiếng Anh và màn hẹp 390 px (đã đo).
+- **A4. Lá Canva ở ga 2:** bổ sung các hàm chỉ đọc `questionFor`, `hintFor`, `secretFor`, `coverDescriptionsFor` trong `card-canva-5.js`; thêm tab vai "Người địa phương" / "Người nơi khác" (dùng đúng dữ liệu và nhãn của bàn thẻ thật, không ghi đè vai phiên thật), nút "Xem bìa lá bài" / "Đặt bìa xuống" (chơi được lá `hue-c1`, bấm `Esc` chỉ đóng bìa), danh sách bí mật và gợi ý đáp án Canva; đổi `.st-front-error` từ `role="alert"` sang `role="status"` (đã tái hiện).
+- **A5. Mặt sau ga 3 và nút "Ghi kỷ niệm":** thêm dải mái ngói đỏ `.st-back::before` theo phong cách `card-table-5.css`; thêm nút `✎ Ghi kỷ niệm` (`table.recordMemory`) ngay cạnh hẹn giờ 60 giây nối sang ga 4 và nêu rõ vị trí nút trong `sotay.s3.tip`; dời `punch(2)` từ `unseal()` sang `finishCard()` để dấu thanh ga khớp với "Tiến độ mốc 1 / 3" ở ga 4; giữ người xem lại ga 3 khi đóng dấu `DẤU KỶ NIỆM`, ẩn 2 nút xong/bỏ qua thành nhãn `✓ Đã xong lá này` (không còn nút chết khi quay lại) và chuyển viền vàng sang "Tiếp"; dời `.st-postmark` khỏi vùng đè nhãn ở desktop và màn 390 px; tăng tương phản vòng hẹn giờ ở theme tối (đã đo).
+- **A6. Bưu thiếp ga 4:** bỏ khóa cứng `aspect-ratio: 3/2` của `.st-postcard` sang `min-height: 16.5em`, giữ chân bưu thiếp cố định (`flex: 0 0 auto`), kẹp tối đa 4 dòng cho `.st-postcard-note` và đổi `.st-handwriting` sang `display: inline` để không rơi dấu `·` và không cắt chân bưu thiếp khi nhập đủ 60 + 120 ký tự (đã đo).
+- **A7. Màn hẹp 390 × 844:** thu nhỏ `--st-card-w` và độ xòe quạt bài ga 2 để 4 lá nằm trọn trong sân khấu; chỉnh đầu máy ga 1 không sát mép trái; sửa sơ đồ ga 5 ẩn tên chuyến và chia lại 5 ô thanh trên để không tràn ngang và số 1–5 không đè nhau (đã đo).
+- **A8. Hủy hẹn giờ, bàn phím/chạm ga 5 và vòng tự chạy:** tách `actionTimers` và gọi `cancelPending()` trong `goTo()` để chuyển ga nhanh lúc xáo bài hay tàu đang chạy không kích hoạt lại thao tác của ga cũ (đã tái hiện); bọc 7 mục ga cuối trong `<button class="st-kit-btn">` để `Tab`/`Enter` và chạm đều soi được vị trí trên sơ đồ (đã tái hiện); rút chu kỳ vòng tự chạy ga cuối từ `1350 ms` xuống `650 ms` (`7 × 650 ms = 4,55 s < 5 s`, suy luận từ mã; ở chế độ giảm chuyển động số hoạt cảnh đang chạy là `0`, đã đo).
+- **A9. Dọn chữ và CSS:** đổi toàn bộ `font-weight: 800` sang `700` (khớp họ Be Vietnam Pro 400–700 sẵn có) và bỏ lớp `.st-nav` không dùng (đã đo: còn 0 dòng `800`, chữ nhỏ nhất ở 1366 × 768 là `14,4 px`).
+
+**Gói B — Mở lại từ bản đồ và khớp giao diện thật:**
+
+- **B1. Nút "?" trên bản đồ và chế độ `fromMap`:** thêm nút `#btnMapGuide` (`?`) trên thanh trên cùng của bản đồ (đủ `aria-label` và `title` VI/EN: "Mở sổ tay hành khách" / "Open the passenger handbook", Tab tới được, có viền focus, xếp ở hàng 3 cột giữa trên mobile 390 px, không tràn hay đè chữ ở 1280 × 720, 1366 × 768, 1920 × 1080 và 390 × 844, đã đo). Khi mở từ bản đồ, sổ tay chạy chế độ `fromMap`: không đụng `#introScreen`, khóa `inert` cho `#mapScene`, cả ba lối "Lên tàu", "Vào thẳng bản đồ" và `Esc` đều đóng sổ tay về bản đồ và trả focus về nút `?`, không ghi gì vào hành trình hay bộ nhớ trình duyệt (đã đo). Luồng mở cũ từ cuối chương ký ức giữ nguyên. Câu gợi ý ở ga cuối (`sotay.s5.again`, VI/EN) đổi từ *"bấm logo Gói Việt để về trang chủ, chọn Xem cách chơi"* sang hướng dẫn bấm nút `?` trên thanh trên cùng của bản đồ.
+- **B2. Sơ đồ ga cuối và Bưu điện biển đảo:** thay logo vẽ sẵn bằng `goi-viet-logo-512.webp` (kèm filter nền tối giống thanh bản đồ), đổi màu nút "Bưu thiếp" sang nền hồng giấy ấm (`#F6E8DF` / `#49332F`), tách nhóm `VI|EN`, `?` và `⚙`, sửa khung quần đảo thành 2 nút ngang kèm dải "Khám phá biển đảo"; sửa lời mục 6 (`sotay.s5.f6`, VI/EN) nêu rõ mở **Bưu điện biển đảo** ở Hoàng Sa, Trường Sa để đọc thư, gửi lời nhắn và xem hải đồ (chỉ ở ga cuối, không nhắc ở ga 1) (đã đo).
+
+### Tệp của bản 3
+
+| Tệp | Thay đổi |
+| --- | --- |
+| [map-surroundings-preview-5.html](../../map-surroundings-preview-5.html) | Thêm nút `#btnMapGuide` (`?`) trong `#mapScene .top-header .header-actions`; cập nhật markup ga 2 (tab vai Canva, nút xem bìa, vùng danh sách bí mật/gợi ý, `role="status"`), ga 3 (nút `Ghi kỷ niệm`, nhãn xong, lời `sotay.s3.tip`), ga 5 (nút `<button class="st-kit-btn">`, sơ đồ khớp bản thật, lời `sotay.s5.f6` và `sotay.s5.again`); đổi `?v=20261127-sotay-ab1` cho 4 tệp `-5` |
+| [card-canva-5.js](../../assets/goi-viet/map-surroundings-preview/card-canva-5.js) | Thêm hàm chỉ đọc `questionFor`, `hintFor`, `secretFor`, `coverDescriptionsFor` vào `window.GoiVietCanvaCards` |
+| [i18n-ui-5.js](../../assets/goi-viet/map-surroundings-preview/i18n-ui-5.js) | Thêm và cập nhật khóa VI/EN: `sotay.mapBtn`, `sotay.s1.pinHcm`, `sotay.s2.open`, `sotay.s2.coverAlt`, `sotay.s3.tip`, `sotay.s3.doneBadge`, `sotay.s3.skippedBadge`, `sotay.s3.srDone`, `sotay.s5.f6`, `sotay.s5.again` |
+| [so-tay-5.css](../../assets/goi-viet/map-surroundings-preview/so-tay-5.css) | Kiểu nút `#btnMapGuide` (sáng/tối, desktop và mobile hàng 3); sửa `.st-board` khi mở "Đọc sách", khổ 4:3, giao diện tab vai/xem bìa Canva, mái ngói đỏ và dấu ga 3, vòng hẹn giờ tối, bưu thiếp ga 4, sơ đồ ga 5 và mobile 390 px; đổi `800` → `700`, bỏ `.st-nav` |
+| [so-tay-5.js](../../assets/goi-viet/map-surroundings-preview/so-tay-5.js) | Chế độ `fromMap` cho nút `?`; tách và hủy timer hành động trong `goTo()`; sửa `fitView()`, tọa độ `LÀO` và ghim `TP.HCM`/`HCMC`; xử lý tab vai/xem bìa/danh sách bí mật/gợi ý Canva cục bộ; dời `punch(2)` sang `finishCard()` và bỏ tự nhảy ga; thêm bàn phím/chạm ga 5 và tour `650 ms`/bước |
+| [check-so-tay-5.cjs](../../tools/check-so-tay-5.cjs) | Mở rộng từ 25 lên 29 ca: kiểm "Đọc sách" không sập/không cuộn bảng ga, lá Canva `hue-c1` (tab vai, xem bìa, bí mật, không đổi vai thật), ga 3 `Ghi kỷ niệm`/đóng dấu tại chỗ/không đè dấu, kỷ niệm dài 60 + 120 ký tự, hủy timer chuyển ga nhanh, bàn phím/màu/chữ ga 5, nút `?` và chế độ `fromMap` (1280/1366/1920/390, VI/EN), khổ 4:3 `1024 × 768` và 4 lá bài 390 px |
+| [offline-manifest-5.js](../../assets/goi-viet/map-surroundings-preview/offline-manifest-5.js) | Dựng lại (645 tài nguyên, 180,18 MB; chuyển về byte LF) |
+
+### Kiểm tra bản 3
+
+Chạy trên Windows 11, Chrome thật (Playwright), máy chủ `tools/perf/server.cjs` cổng 8770, ngày 27/11/2026. Ảnh và log nghiệm thu lưu tại `verification/so-tay-goi-ab/`.
+
+| Bộ kiểm | Kết quả |
+| --- | --- |
+| `node tools/check-so-tay-5.cjs` | **29/29 đạt** (`29/29 checks passed`) (đã đo) |
+| `node tools/check-i18n-5.cjs` | Đạt (`PASS`: 349 khóa markup có EN; 273 khóa dùng trong mã có VI/EN) (đã đo) |
+| `node tools/check-i18n-5.cjs --walk` | Đạt (`PASS`: vòng VI → EN → VI giữ nguyên trang, 0 chuỗi VI thừa từ tệp của preview-5) (đã đo) |
+| `node tools/check-arrival-demo-5.cjs --preview-5` | **61/61 đạt** (`61/61 functional cases passed; 0 failures`), kể cả Ca C ở 1366 và 1920 (Ca C cố định 3 lượt, chỉ dùng làm kiểm tra hồi quy, không dùng để kết luận hiệu năng) (đã đo) |
+| `node tools/check-station-panel-5.cjs` | Đạt (`PASS: preview-5 station panel, 6 sizes, journey, cards, memory, postcard, draft books, 32 community invitations and dark mode.`) (đã đo) |
+| `node tools/check-family-voyage-5.cjs` | Đạt (`PASS: 11 groups`) (đã đo) |
+| `node tools/verify-preview5-conversation-cards.cjs` | Đạt (`PASS: conversation cards on preview-5, 6 viewport sizes, animation and complete play cycle.`) (đã đo) |
+| `node tools/check-books-5.cjs` | Đạt (`✓ Không có lỗi`, chỉ báo cảnh báo có sẵn của tập nháp) (đã đo) |
+| `python tools/build-preview-5-offline.py --check` | Đạt (`PASS: offline manifest is up to date; no files written.`, 645 tài nguyên, LF) (đã đo) |
+| `git diff --check` và `git ls-files --eol` | Đạt; toàn bộ 7 tệp sửa đều `i/lf w/lf` (đã đo) |
+
 ## Chưa làm (giai đoạn sau)
 
-- Giai đoạn 2: nút "?" trên bản đồ để mở lại sổ tay; gợi ý đúng lúc ở lần đầu mở bộ thẻ và lần đầu tới quần đảo.
-- Giai đoạn 3 (nếu cần cho buổi thuyết trình): chế độ tự chạy có nút dừng.
-- Chưa thử với người xem thật; chưa nghiệm thu riêng Firefox/Safari. Các phép kiểm dùng Chrome trên Windows.
+- Không làm lối tắt ở đầu chương ký ức, không dựng bàn 2 lá song song ở ga 2–3, không nhắc Bưu điện biển đảo ở ga 1 và không làm các mục đánh bóng còn lại của Gói C (ngoài cập nhật `tools/check-so-tay-5.cjs`) theo phạm vi đã chốt.
+- Gợi ý đúng lúc ở lần đầu mở bộ thẻ và lần đầu tới quần đảo.
+- Chế độ tự chạy có nút dừng cho buổi thuyết trình (nếu cần).
+- Chưa tự đo benchmark hiệu năng `n ≥ 10` riêng cho Bản 3; chưa thử với người xem thật hoặc nghiệm thu riêng Firefox/Safari (các phép kiểm dùng Chrome trên Windows).

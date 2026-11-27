@@ -217,8 +217,12 @@
   const roleOf = card => roles.get(card.id) || 'local';
   const entry = (card, role = roleOf(card)) => CARDS[card.id][role];
 
-  function question(card) { return has(card) ? pick(entry(card).q) : null; }
-  const coverDescriptions = card => (has(card) && pick(entry(card).coverDescriptions)) || [];
+  function questionFor(card, role = roleOf(card)) { return has(card) && entry(card, role) ? pick(entry(card, role).q) : null; }
+  function question(card) { return questionFor(card); }
+  function hintFor(card, role = roleOf(card)) { return has(card) && entry(card, role)?.hint ? pick(entry(card, role).hint) : ''; }
+  function secretFor(card, role = roleOf(card)) { return has(card) && entry(card, role)?.secret ? pick(entry(card, role).secret) : null; }
+  const coverDescriptionsFor = (card, role = roleOf(card)) => (has(card) && entry(card, role)?.coverDescriptions && pick(entry(card, role).coverDescriptions)) || [];
+  const coverDescriptions = card => coverDescriptionsFor(card);
   // The Canva challenge for the chosen side, or null (then the card's own activities are used).
   function activityFor(card, role = roleOf(card)) {
     if (!has(card) || !entry(card, role).act) return null;
@@ -328,5 +332,5 @@
   document.addEventListener('goiviet:langchange', () => {
     if (typeof state !== 'undefined' && state.activeCard && has(state.activeCard)) render(state.activeCard);
   });
-  window.GoiVietCanvaCards = { has, render, question, activity, activityFor, coverDescriptions, role: roleOf, cards: Object.keys(CARDS) };
+  window.GoiVietCanvaCards = { has, render, question, questionFor, hintFor, secretFor, activity, activityFor, coverDescriptions, coverDescriptionsFor, role: roleOf, cards: Object.keys(CARDS) };
 })();

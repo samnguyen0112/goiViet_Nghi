@@ -15,6 +15,7 @@
   const dialog = document.getElementById('soTayDialog');
   const intro = document.getElementById('introScreen');
   const opener = document.getElementById('memoryOpenGuide');
+  const mapOpener = document.getElementById('btnMapGuide');
   if (!dialog || !intro || !opener) return;
   const SCRIPT_URL = (document.currentScript && document.currentScript.src) || location.href;
   // The same file and version preview-5.js loads for the map, so the browser and the offline copy share one entry.
@@ -37,8 +38,8 @@
   const RAIL_STATION = { hn: 0, hue: 8, hcm: RAIL.length - 1 };
   const MAP_LABELS = { hs: 'sotay.map.hs', ts: 'sotay.map.ts' };
   const COUNTRY_LABELS = { laos: 'sotay.map.laos', cambodia: 'sotay.map.cambodia', thailand: 'sotay.map.thailand' };
-  // Laos's own anchor sits on the narrow strip by the Vietnamese border; its label goes to the north of the country.
-  const COUNTRY_AT = { laos: [102.6, 19.7] };
+  // Laos's own anchor sits on the narrow strip by the Vietnamese border; place its label on open inland parchment.
+  const COUNTRY_AT = { laos: [103.05, 19.55] };
   const STOP_NUMBERS = ['sotay.step.1', 'sotay.step.2', 'sotay.step.3', 'sotay.step.4', 'sotay.step.5'];
   // Landmark art of the map (landmark-assets.js) beside each station, and the red-sailed boat: world box [x, y, w, h]
   // relative to the station point (or absolute for the boat).
@@ -46,16 +47,20 @@
   const BOAT = [628, 236, 78, 80];
 
   const timers = new Set();
+  const actionTimers = new Set();
   const later = (fn, ms) => { const id = setTimeout(() => { timers.delete(id); fn(); }, ms); timers.add(id); return id; };
+  const laterAction = (fn, ms) => { const id = setTimeout(() => { actionTimers.delete(id); fn(); }, ms); actionTimers.add(id); return id; };
   const clearTimers = () => { timers.forEach(clearTimeout); timers.clear(); };
+  const clearActionTimers = () => { actionTimers.forEach(clearTimeout); actionTimers.clear(); };
   const restart = (el, className) => { if (!el || !motion()) return; el.classList.remove(className); void el.offsetWidth; el.classList.add(className); };
 
   const S = {
-    open: false, step: 0, tried: [false, false, false, false], trigger: null, saved: [], boarding: false, built: false,
+    open: false, fromMap: false, step: 0, tried: [false, false, false, false], trigger: null, saved: [], boarding: false, built: false,
     picked: null, at: null, travelling: false, place: 'hn', fanPlace: null, drawing: false, boardCards: false,
     cardIdx: null, answer: null, eliminated: null, revealed: false, asDontKnow: false, toSeal: false,
+    canvaRole: 'local', canvaSecretOpen: false, coverOpen: false,
     unsealed: false, actIdx: 0, finished: null, timerEnd: 0, timerId: 0, saves: 0, memory: null,
-    rideRaf: 0, tour: 0, vb: null, content: null, railLen: 0, stationLen: {}, stationAt: {}, mapPaths: '',
+    rideRaf: 0, tour: 0, lockedMark: null, vb: null, content: null, railLen: 0, stationLen: {}, stationAt: {}, mapPaths: '',
     trainPt: null, fitRaf: 0, geo: null, geoPromise: null, rivers: false, targetKey: '',
     say: [], sayId: 0, boardFail: 0
   };
@@ -68,6 +73,7 @@
     const chip = document.querySelector(`#arrivalStartHint [data-arrival-pick="${id}"]`);
     return (chip && chip.textContent.trim()) || NAMES[id] || id;
   };
+  const pinPlaceName = id => (id === 'hcm' ? T('sotay.s1.pinHcm') : placeName(id));
   const label = (prefix, vi) => {
     if (!vi) return '';
     const key = prefix + '.' + vi, value = T(key);
@@ -150,10 +156,10 @@
       if (!a || !a.subIslands3D) continue;
       const box = boxOf(a.subIslands3D.map(s => [s.cx, s.cy]));
       isleBoxes[id] = box;
-      grow(box[0] - 18, box[1] - 16); grow(box[2] + 18, box[3] + 16);
+      grow(box[0] - 24, box[1] - 18); grow(box[2] + 44, box[3] + 68);
     }
     // What must stay in view; the rest of the stage is filled with more sea and land around it (fitView).
-    S.content = { x: minX - 30, y: minY - 26, w: maxX - minX + 70, h: maxY - minY + 56 };
+    S.content = { x: minX - 30, y: minY - 26, w: maxX - minX + 74, h: maxY - minY + 56 };
     const C = S.content;
     S.ext = [C.x - 640, C.y - 420, C.x + C.w + 1100, C.y + C.h + 420];
 
@@ -258,7 +264,7 @@
       pin.type = 'button';
       pin.className = 'st-pin';
       pin.dataset.station = id;
-      pin.dataset.side = id === 'hn' ? 'left' : 'right';
+      pin.dataset.side = id === 'hue' ? 'right' : 'left';
       pin.setAttribute('aria-pressed', 'false');
       pin.innerHTML = '<span class="st-pin-ring" aria-hidden="true"></span><span class="st-pin-dot" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 4.6l2.1 4.6 5 .5-3.8 3.4 1.1 4.9L12 15.5l-4.4 2.5 1.1-4.9L4.9 9.7l5-.5z"/></svg></span><span class="st-pin-label"></span>';
       pin.addEventListener('click', event => pick(id, false, event.detail === 0));
@@ -357,16 +363,19 @@
     if (!W || !H) return;
     const side = $('.st-map-side');
     const floating = side && getComputedStyle(side).position === 'absolute';
-    const free = floating ? Math.max(.5, 1 - (side.offsetWidth + 28) / W) : 1;
+    const free = floating ? Math.max(.48, 1 - (side.offsetWidth + 32) / W) : 1;
     const A = W / H;
+    const Afree = (free * W) / H;
     let vb;
-    if (A >= C.w / C.h) {
-      const w = C.h * A, extra = w - C.w;
-      const west = floating ? Math.max(0, Math.min(extra * .22, free * w - C.w)) : extra / 2;
+    if (Afree >= C.w / C.h) {
+      const w = C.h * A;
+      const freeW = free * w;
+      const west = floating ? Math.max(0, Math.min((freeW - C.w) * .45, (w - C.w) * .22)) : (w - C.w) / 2;
       vb = { x: C.x - west, y: C.y, w, h: C.h };
     } else {
-      const h = C.w / A;
-      vb = { x: C.x, y: C.y - (h - C.h) / 2, w: C.w, h };
+      const w = C.w / free;
+      const h = w / A;
+      vb = { x: C.x, y: C.y - (h - C.h) / 2, w, h };
     }
     S.vb = vb;
     S.size = { W, H };
@@ -416,9 +425,9 @@
     const north = svg.querySelector('.st-rose-letter');
     if (north) north.textContent = T('sotay.map.north');
     for (const pin of $$('.st-pin')) {
-      const name = T('sotay.s1.pin', { place: placeName(pin.dataset.station) });
+      const name = T('sotay.s1.pin', { place: pinPlaceName(pin.dataset.station) });
       pin.querySelector('.st-pin-label').textContent = name;
-      pin.setAttribute('aria-label', name);
+      pin.setAttribute('aria-label', T('sotay.s1.pin', { place: placeName(pin.dataset.station) }));
     }
   }
 
@@ -479,7 +488,7 @@
     const id = options[Math.floor(Math.random() * options.length)] || STATIONS[0];
     if (!motion()) { pick(id, true); return; }
     chip.classList.add('is-shaking');
-    later(() => { chip.classList.remove('is-shaking'); pick(id, true); }, 650);
+    laterAction(() => { chip.classList.remove('is-shaking'); pick(id, true); }, 650);
   }
 
   function explore() {
@@ -506,7 +515,7 @@
         const cards = $('.st-mode-cards');
         if (cards && dialog.contains(document.activeElement) && document.activeElement.closest('.st-map-side, .st-map-pins')) cards.focus({ preventScroll: true });
       };
-      if (motion()) later(open, 520); else open();
+      if (motion()) laterAction(open, 520); else open();
     };
     tasks();
     ride(S.stationLen[origin], S.stationLen[dest], arrive);
@@ -539,9 +548,11 @@
   function resetDeck() {
     S.fanPlace = null;
     S.cardIdx = null; S.answer = null; S.eliminated = null; S.revealed = false; S.asDontKnow = false; S.toSeal = false;
+    S.canvaRole = 'local'; S.canvaSecretOpen = false; S.coverOpen = false;
     S.unsealed = false; S.actIdx = 0; S.finished = null;
     $('.st-front').hidden = true;
     $('.st-deck').hidden = false;
+    renderCoverPeek();
     tasks();
   }
   function renderFan() {
@@ -604,17 +615,18 @@
     if (!motion()) { finish(); return; }
     if (random) {
       fan.classList.add('is-gathering');
-      later(() => fan.classList.add('is-shuffling'), 340);
-      later(() => { fan.classList.remove('is-shuffling'); cards[i].classList.add('is-picked'); }, 1180);
-      later(finish, 1650);
+      laterAction(() => fan.classList.add('is-shuffling'), 340);
+      laterAction(() => { fan.classList.remove('is-shuffling'); cards[i].classList.add('is-picked'); }, 1180);
+      laterAction(finish, 1650);
     } else {
       cards[i].classList.add('is-picked');
-      later(finish, 460);
+      laterAction(finish, 460);
     }
   }
 
   function showFront(i) {
     S.cardIdx = i; S.answer = null; S.eliminated = null; S.revealed = false; S.asDontKnow = false; S.toSeal = false;
+    S.canvaRole = 'local'; S.canvaSecretOpen = false; S.coverOpen = false;
     S.unsealed = false; S.actIdx = 0; S.finished = null;
     $('.st-deck').hidden = true;
     const front = $('.st-front');
@@ -625,18 +637,139 @@
     punch(1);
     tasks();
     announce(T('sotay.s2.srDrawn', { topic: label('topic', card && card.topic), question: $('.st-question').textContent }));
-    const first = $('.st-option[tabindex="0"]') || $('[data-st-goto="2"]', front);
+    const first = $('.st-option[tabindex="0"]') || $('.st-canva-role[aria-checked="true"]') || $('[data-st-goto="2"]', front);
     if (first) first.focus({ preventScroll: true });
+  }
+
+  function setCanvaRole(role) {
+    if (role !== 'local' && role !== 'visitor') return;
+    if (S.canvaRole === role) return;
+    S.canvaRole = role;
+    S.canvaSecretOpen = false;
+    S.actIdx = 0;
+    renderFront();
+    if (S.unsealed) renderBack();
+    const tab = $(`.st-canva-role[data-st-role="${role}"]`);
+    if (tab) tab.focus({ preventScroll: true });
+  }
+
+  function renderCoverPeek() {
+    const overlay = $('.st-cover-overlay');
+    const toggle = $('[data-st-cover]');
+    if (!overlay || !toggle) return;
+    const card = currentCard();
+    const show = Boolean(S.coverOpen && card);
+    overlay.hidden = !show;
+    toggle.setAttribute('aria-expanded', String(show));
+    const labelEl = toggle.querySelector('.st-cover-toggle-label');
+    if (labelEl) labelEl.textContent = T(show ? 'table.coverBack' : 'table.coverShow');
+    if (!show) return;
+    const button = $('.st-cover-card', overlay);
+    const descList = $('.st-cover-desc', overlay);
+    const topic = label('topic', card.topic);
+    button.textContent = '';
+    button.setAttribute('aria-label', T('sotay.s2.coverAlt', { topic, place: placeName(S.place) }));
+    const art = window.GoiVietCardCovers && window.GoiVietCardCovers.art({ id: S.place }, topic);
+    if (art) button.append(art);
+    else {
+      const plain = document.createElement('span');
+      plain.className = 'st-fan-plain';
+      plain.setAttribute('aria-hidden', 'true');
+      plain.innerHTML = '<span class="st-fan-plain-topic"></span><span class="st-fan-plain-place"></span>';
+      plain.firstChild.textContent = topic;
+      plain.lastChild.textContent = placeName(S.place);
+      button.append(plain);
+    }
+    const descs = canva(card) && window.GoiVietCanvaCards.coverDescriptionsFor
+      ? window.GoiVietCanvaCards.coverDescriptionsFor(card, S.canvaRole) : [];
+    descList.textContent = '';
+    if (descs.length) {
+      descList.id = 'soTayCoverDesc';
+      descs.forEach(line => { const li = document.createElement('li'); li.textContent = line; descList.append(li); });
+      descList.hidden = false;
+      button.setAttribute('aria-describedby', descList.id);
+    } else {
+      descList.hidden = true;
+      button.removeAttribute('aria-describedby');
+    }
+  }
+
+  function toggleCover(open, { restoreFocus = true } = {}) {
+    S.coverOpen = Boolean(open);
+    renderCoverPeek();
+    if (S.coverOpen) $('.st-cover-card')?.focus({ preventScroll: true });
+    else if (restoreFocus) $('[data-st-cover]')?.focus({ preventScroll: true });
   }
 
   function renderFront() {
     const card = currentCard();
     if (!card) return;
     const open = canva(card);
+    const cv = window.GoiVietCanvaCards;
     const front = $('.st-front');
     front.classList.toggle('is-open-question', open);
     $('.st-front-topic').textContent = `${label('topic', card.topic)} • ${placeName(S.place)}`;
-    $('.st-question').textContent = open ? window.GoiVietCanvaCards.question(card) || card.question : card.question;
+    $('.st-question').textContent = open
+      ? (cv.questionFor ? cv.questionFor(card, S.canvaRole) : cv.question(card)) || card.question
+      : card.question;
+    // Canva role tabs (local vs visitor), sourced read-only from GoiVietCanvaCards without mutating real session roles.
+    const canvaTop = $('.st-canva-top');
+    const canvaRoles = $('.st-canva-roles');
+    const canvaExtras = $('.st-canva-extras');
+    canvaTop.hidden = !open;
+    canvaRoles.textContent = '';
+    canvaExtras.textContent = '';
+    if (open) {
+      for (const role of ['local', 'visitor']) {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'st-canva-role';
+        btn.dataset.stRole = role;
+        btn.setAttribute('role', 'radio');
+        const on = S.canvaRole === role;
+        btn.setAttribute('aria-checked', String(on));
+        btn.tabIndex = on ? 0 : -1;
+        btn.setAttribute('aria-label', T(role === 'local' ? 'canva.role.local' : 'canva.role.visitor'));
+        btn.textContent = T(role === 'local' ? 'canva.tab.local' : 'canva.tab.visitor');
+        btn.addEventListener('click', () => setCanvaRole(role));
+        btn.addEventListener('keydown', event => {
+          if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(event.key)) return;
+          event.preventDefault();
+          setCanvaRole(role === 'local' ? 'visitor' : 'local');
+        });
+        canvaRoles.append(btn);
+      }
+      const secret = cv.secretFor ? cv.secretFor(card, S.canvaRole) : null;
+      if (secret && secret.length) {
+        const box = document.createElement('div');
+        box.className = 'st-canva-secret';
+        const toggle = document.createElement('button');
+        toggle.type = 'button';
+        toggle.className = 'st-canva-secret-btn';
+        toggle.dataset.stSecret = 'true';
+        toggle.setAttribute('aria-expanded', String(S.canvaSecretOpen));
+        toggle.textContent = T(S.canvaSecretOpen ? 'canva.secretHide' : 'canva.secretShow');
+        const ol = document.createElement('ol');
+        ol.className = 'st-canva-secret-list';
+        ol.hidden = !S.canvaSecretOpen;
+        secret.forEach(item => { const li = document.createElement('li'); li.textContent = item; ol.append(li); });
+        box.append(toggle, ol);
+        canvaExtras.append(box);
+      }
+      const hintText = cv.hintFor ? cv.hintFor(card, S.canvaRole) : '';
+      if (hintText) {
+        const details = document.createElement('details');
+        details.className = 'st-canva-hint';
+        const summary = document.createElement('summary');
+        summary.textContent = T('canva.hint');
+        const p = document.createElement('p');
+        p.textContent = hintText;
+        details.append(summary, p);
+        canvaExtras.append(details);
+      }
+    }
+    canvaExtras.hidden = !open || !canvaExtras.childElementCount;
+    renderCoverPeek();
     const list = $('.st-options');
     list.textContent = '';
     list.hidden = open;
@@ -671,8 +804,10 @@
       result.hidden = false;
       result.dataset.tone = 'open';
       result.querySelector('.st-result-head').textContent = T('sotay.s2.open');
-      result.querySelector('.st-result-text').textContent = '';
-      result.querySelector('.st-result-text').hidden = true;
+      const noteText = result.querySelector('.st-result-text');
+      const hasChallenge = Boolean(cv.activityFor ? cv.activityFor(card, S.canvaRole) : cv.activity(card));
+      noteText.textContent = T(hasChallenge ? 'canva.openNote' : 'canva.openNoteOwn');
+      noteText.hidden = false;
     } else if (S.revealed) {
       const right = S.answer === card.correctIndex;
       result.hidden = false;
@@ -753,7 +888,7 @@
   function activities(card) {
     if (!card) return [{ kind: '', text: '' }];
     const list = [];
-    const challenge = canva(card) ? window.GoiVietCanvaCards.activity(card) : null;
+    const challenge = canva(card) ? window.GoiVietCanvaCards.activityFor(card, S.canvaRole) : null;
     if (challenge) list.push({ kind: challenge.kind, text: challenge.text });
     for (const raw of card.activities || []) {
       const m = /^【([^】]+)】\s*([\s\S]*)$/.exec(raw);
@@ -775,21 +910,27 @@
     kind.hidden = !act.kind;
     $('.st-activity-text').textContent = act.text;
     $('[data-st-swap]').hidden = acts.length < 2;
-    back.classList.toggle('is-stamped', Boolean(S.finished));
+    const done = Boolean(S.finished);
+    back.classList.toggle('is-stamped', done);
+    $$('[data-st-finish]').forEach(btn => { btn.hidden = done; btn.disabled = done; });
+    const doneBadge = $('.st-activity-done');
+    if (doneBadge) {
+      doneBadge.hidden = !done;
+      doneBadge.textContent = done ? '✓ ' + T(S.finished === 'done' ? 'sotay.s3.doneBadge' : 'sotay.s3.skippedBadge') : '';
+    }
   }
   function unseal() {
     if (S.unsealed) return;
     const go = () => {
       S.unsealed = true;
       renderBack();
-      punch(2);
       tasks();
       announce(T('sotay.s3.srOpen', { activity: $('.st-activity-text').textContent }));
       $('.st-activity-text').focus({ preventScroll: true });
     };
     if (!motion()) { go(); return; }
     $('.st-wax').classList.add('is-pressed');
-    later(() => { $('.st-wax').classList.remove('is-pressed'); go(); }, 380);
+    laterAction(() => { $('.st-wax').classList.remove('is-pressed'); go(); }, 380);
   }
   function swapActivity() {
     const acts = activities(currentCard());
@@ -832,9 +973,10 @@
     stopTimer();
     renderBack();
     restart($('.st-postmark'), 'is-stamping');
+    punch(2);
     tasks();
     announce(T('sotay.s3.srDone'));
-    later(() => { if (S.open && S.step === 2) goTo(3); }, motion() ? 760 : 0);
+    $('.st-next').focus({ preventScroll: true });
   }
 
   // ---------------------------------------------------------------- the practice postcard (stop 4)
@@ -904,19 +1046,26 @@
     }
   }
   function setHot(n) {
-    $$('.st-step-last [data-st-mark]').forEach(el => el.classList.toggle('is-hot', n != null && el.dataset.stMark === String(n)));
+    $$('.st-step-last [data-st-mark]').forEach(el => {
+      const on = n != null && el.dataset.stMark === String(n);
+      el.classList.toggle('is-hot', on);
+      const btn = el.querySelector('.st-kit-btn');
+      if (btn) btn.setAttribute('aria-pressed', String(on));
+    });
   }
   function stopTour() { clearInterval(S.tour); S.tour = 0; }
   function startTour() {
     stopTour();
+    S.lockedMark = null;
     if (!motion()) return;
     let n = 1;
     setHot(n);
+    // 7 × 650 ms = 4.55 s (< 5 s, WCAG 2.2.2).
     S.tour = setInterval(() => {
       n += 1;
       if (n > 7) { stopTour(); setHot(null); return; }
       setHot(n);
-    }, 1350);
+    }, 650);
   }
   function enterKit() {
     buildScreen();
@@ -1018,9 +1167,37 @@
     $('.st-ready').hidden = S.step !== LAST;
   }
 
+  function cancelPending({ finishTrip = true } = {}) {
+    clearActionTimers();
+    cancelAnimationFrame(S.rideRaf);
+    $('[data-st-ticket]')?.classList.remove('is-shaking');
+    $('.st-wax')?.classList.remove('is-pressed');
+    if (S.drawing) {
+      S.drawing = false;
+      $('.st-fan')?.classList.remove('is-gathering', 'is-shuffling');
+      $$('.st-fan-card').forEach(card => card.classList.remove('is-picked'));
+    }
+    if (S.travelling) {
+      S.travelling = false;
+      $('.st-map-train')?.classList.remove('is-moving');
+      const arriving = $('.st-arriving');
+      if (arriving) arriving.hidden = true;
+      if (finishTrip && S.picked) {
+        S.at = S.picked;
+        if (S.stationLen[S.at] != null) trainTo(S.stationLen[S.at]);
+        showBoard(S.at);
+        punch(0);
+      }
+    }
+  }
+
   function goTo(n, { focus = true, say = !focus } = {}) {
     n = Math.max(0, Math.min(LAST, n));
     const prev = S.step;
+    if (prev !== n) {
+      cancelPending({ finishTrip: true });
+      if (S.coverOpen) { S.coverOpen = false; renderCoverPeek(); }
+    }
     S.step = n;
     $$('.st-step').forEach((section, i) => {
       const on = i === n;
@@ -1033,7 +1210,7 @@
       restart(section, 'is-entering');
     }
     if (prev === 2 && n !== 2) stopTimer();
-    if (n !== LAST) { stopTour(); setHot(null); }
+    if (n !== LAST) { stopTour(); S.lockedMark = null; setHot(null); }
     if (n === 0) requestAnimationFrame(fitView);
     if (n === 1) ensureFan();
     if (n === 2) renderBack();
@@ -1078,27 +1255,33 @@
   }
 
   // ---------------------------------------------------------------- open, close, board
-  function open(trigger) {
-    if (S.open || intro.classList.contains('intro-hidden')) return;
-    const chapter = window.GoiVietMemoryChapter;
-    if (chapter && chapter.getState && chapter.getState().exiting) return;
+  function open(trigger, opts = {}) {
+    if (S.open) return;
+    const fromMap = opts.fromMap != null ? Boolean(opts.fromMap) : intro.classList.contains('intro-hidden');
+    if (!fromMap) {
+      if (intro.classList.contains('intro-hidden')) return;
+      const chapter = window.GoiVietMemoryChapter;
+      if (chapter && chapter.getState && chapter.getState().exiting) return;
+    }
     S.open = true;
+    S.fromMap = fromMap;
     S.boarding = false;
-    S.trigger = trigger || document.activeElement;
+    S.trigger = trigger || (fromMap ? mapOpener : document.activeElement);
     dialog.hidden = false;
     dialog.classList.remove('is-boarding', 'is-open');
+    dialog.classList.toggle('is-from-map', fromMap);
     build();
-    // Everything else on the page is inert while the handbook is open; the earlier values come back on close.
+    // Everything else on the page is inert while the handbook is open; when opened from the map, leave #introScreen untouched.
     S.saved = Array.from(document.body.children)
-      .filter(node => node !== dialog && node.id !== 'memoryMapTransition' && !/^(SCRIPT|STYLE|LINK|TEMPLATE)$/.test(node.tagName))
+      .filter(node => node !== dialog && node.id !== 'memoryMapTransition' && (!fromMap || node !== intro) && !/^(SCRIPT|STYLE|LINK|TEMPLATE)$/.test(node.tagName))
       .map(node => [node, node.inert]);
     S.saved.forEach(([node]) => { node.inert = true; });
     document.body.classList.add('st-open');
     refreshTexts();
     goTo(S.step, { focus: false, say: false });
     requestAnimationFrame(() => requestAnimationFrame(() => { if (S.open) dialog.classList.add('is-open'); }));
-    // Once the sheet covers the page, stop painting the chapter under it (the home screen itself stays open).
-    later(() => { if (S.open) document.body.classList.add('st-covering'); }, motion() ? 380 : 0);
+    // In chapter mode, once the sheet covers the page, stop painting the chapter under it (the home screen stays open).
+    if (!fromMap) later(() => { if (S.open && !S.fromMap) document.body.classList.add('st-covering'); }, motion() ? 380 : 0);
     // The map's own geography: usually already loaded by the map's preparation, then drawn in the next frame (while the
     // sheet fades in); otherwise loaded after the sheet has settled, so opening stays smooth.
     if (!S.geo && window.GoiVietRegionalGeometry) requestAnimationFrame(() => drawGeography(window.GoiVietRegionalGeometry));
@@ -1109,6 +1292,7 @@
   function release() {
     S.saved.forEach(([node, was]) => { node.inert = was; });
     S.saved = [];
+    if (S.fromMap) return;
     // Show the home screen again at once (without its 0.24 s visibility transition), so focus can return to it.
     document.body.classList.add('st-uncover');
     document.body.classList.remove('st-covering');
@@ -1118,44 +1302,40 @@
   function settle() {
     stopTimer();
     stopTour();
-    cancelAnimationFrame(S.rideRaf);
+    S.lockedMark = null;
+    if (S.coverOpen) { S.coverOpen = false; renderCoverPeek(); }
+    cancelPending({ finishTrip: true });
     clearTimers();
-    S.drawing = false;
-    $('.st-fan').classList.remove('is-gathering', 'is-shuffling');
-    $$('.st-fan-card').forEach(card => card.classList.remove('is-picked'));
-    if (S.travelling) {
-      // The train arrives at once; the board opens when the handbook is opened again.
-      S.travelling = false;
-      S.at = S.picked;
-      if (S.at != null && S.stationLen[S.at] != null) trainTo(S.stationLen[S.at]);
-      $('.st-map-train').classList.remove('is-moving');
-      $('.st-arriving').hidden = true;
-      if (S.at) { showBoard(S.at); punch(0); }
-    }
   }
   function close({ restoreFocus = true } = {}) {
     if (!S.open || S.boarding) return;
+    const wasFromMap = S.fromMap;
     S.open = false;
     settle();
     release();
-    dialog.classList.remove('is-open');
+    S.fromMap = false;
+    dialog.classList.remove('is-open', 'is-from-map');
     const hide = () => { if (!S.open) { dialog.hidden = true; document.body.classList.remove('st-open'); } };
     if (motion()) setTimeout(hide, 300); else hide();
     if (restoreFocus) {
-      const back = S.trigger && S.trigger.isConnected && !S.trigger.closest('#soTayDialog') ? S.trigger : opener;
-      back.focus({ preventScroll: true });
+      const fallback = wasFromMap ? mapOpener : opener;
+      const back = S.trigger && S.trigger.isConnected && !S.trigger.closest('#soTayDialog') ? S.trigger : fallback;
+      if (back) back.focus({ preventScroll: true });
     }
   }
   function finishBoarding() {
     clearTimeout(S.boardFail);
     S.open = false;
+    S.fromMap = false;
     S.boarding = false;
-    dialog.classList.remove('is-open', 'is-boarding');
+    S.step = 0;
+    dialog.classList.remove('is-open', 'is-boarding', 'is-from-map');
     dialog.hidden = true;
     document.body.classList.remove('st-open', 'st-covering');
   }
   function board({ skip = false } = {}) {
     if (!S.open || S.boarding) return;
+    if (S.fromMap) { close({ restoreFocus: true }); return; }
     const chapter = window.GoiVietMemoryChapter;
     if (!chapter || typeof chapter.enterMap !== 'function') {
       close({ restoreFocus: false });
@@ -1191,7 +1371,8 @@
   }
 
   // ---------------------------------------------------------------- events
-  opener.addEventListener('click', event => { event.preventDefault(); open(opener); });
+  opener.addEventListener('click', event => { event.preventDefault(); open(opener, { fromMap: false }); });
+  if (mapOpener) mapOpener.addEventListener('click', event => { event.preventDefault(); open(mapOpener, { fromMap: true }); });
   dialog.addEventListener('click', event => {
     const target = event.target.closest('button');
     if (!target || !dialog.contains(target) || target.getAttribute('aria-disabled') === 'true') return;
@@ -1215,6 +1396,14 @@
       return;
     }
     if (target.matches('[data-st-shuffle]')) { draw(0, true); return; }
+    if (target.matches('[data-st-cover]')) { toggleCover(!S.coverOpen); return; }
+    if (target.matches('[data-st-cover-close]')) { toggleCover(false); return; }
+    if (target.matches('[data-st-secret]')) {
+      S.canvaSecretOpen = !S.canvaSecretOpen;
+      renderFront();
+      $('[data-st-secret]')?.focus({ preventScroll: true });
+      return;
+    }
     if (target.matches('[data-st-hint]')) { giveHint(); return; }
     if (target.matches('[data-st-reveal]')) { check(true); return; }
     if (target.matches('[data-st-check]')) { check(false); return; }
@@ -1234,10 +1423,16 @@
   $('#soTayNote').addEventListener('input', tasks);
   dialog.addEventListener('keydown', event => {
     if (!S.open) return;
-    if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); close(); return; }
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      event.stopPropagation();
+      if (S.coverOpen) { toggleCover(false); return; }
+      close();
+      return;
+    }
     // Tab wraps inside the sheet (the rest of the page is inert as well).
     if (event.key === 'Tab') {
-      const focusable = $$('button, input, [tabindex="0"]').filter(el => !el.disabled && el.tabIndex >= 0 && el.offsetParent !== null && getComputedStyle(el).visibility !== 'hidden');
+      const focusable = $$('button, input, summary, [tabindex="0"]').filter(el => !el.disabled && el.tabIndex >= 0 && el.offsetParent !== null && getComputedStyle(el).visibility !== 'hidden');
       if (!focusable.length) return;
       const first = focusable[0], last = focusable[focusable.length - 1];
       if (event.shiftKey && (document.activeElement === first || !dialog.contains(document.activeElement))) { event.preventDefault(); last.focus(); }
@@ -1254,25 +1449,42 @@
   const kit = $('.st-step-last');
   kit.addEventListener('pointerover', event => {
     const item = event.target.closest('[data-st-mark]');
+    if (!item || S.lockedMark) return;
+    stopTour();
+    setHot(item.dataset.stMark);
+  });
+  kit.addEventListener('pointerleave', () => { if (!S.tour && !S.lockedMark) setHot(null); });
+  kit.addEventListener('focusin', event => {
+    const item = event.target.closest('[data-st-mark]');
     if (!item) return;
     stopTour();
     setHot(item.dataset.stMark);
   });
-  kit.addEventListener('pointerleave', () => { if (!S.tour) setHot(null); });
+  kit.addEventListener('focusout', event => {
+    if (!kit.contains(event.relatedTarget) && !S.tour && !S.lockedMark) setHot(null);
+  });
+  kit.addEventListener('click', event => {
+    const item = event.target.closest('[data-st-mark]');
+    if (!item) return;
+    stopTour();
+    const mark = item.dataset.stMark;
+    S.lockedMark = S.lockedMark === mark ? null : mark;
+    setHot(S.lockedMark);
+  });
   document.addEventListener('goiviet:langchange', refreshTexts);
-  // If the home screen is replayed or closed by other code while the sheet is open, the sheet goes with it.
+  // If the home screen is replayed or closed by other code while opened from the chapter, the sheet goes with it.
   new MutationObserver(() => {
-    if (!S.open || S.boarding) return;
+    if (!S.open || S.boarding || S.fromMap) return;
     if (intro.classList.contains('intro-hidden') || intro.dataset.memoryUnlocked !== 'true') close({ restoreFocus: false });
   }).observe(intro, { attributes: true, attributeFilter: ['class', 'data-memory-unlocked'] });
 
   window.GoiVietSoTay = Object.freeze({
-    open: () => open(opener),
+    open: () => open(intro.classList.contains('intro-hidden') ? mapOpener : opener),
     close: () => close(),
     goTo: n => { if (S.open) goTo(n); },
-    inspect: () => ({ open: S.open, step: S.step, tried: S.tried.slice(), boarding: S.boarding, at: S.at, picked: S.picked,
+    inspect: () => ({ open: S.open, fromMap: S.fromMap, step: S.step, tried: S.tried.slice(), boarding: S.boarding, at: S.at, picked: S.picked,
       place: S.place, card: currentCard() ? currentCard().id : null, cardDrawn: S.cardIdx != null, answer: S.answer,
-      revealed: S.revealed, unsealed: S.unsealed, finished: S.finished, saves: S.saves, timer: Boolean(S.timerEnd),
+      revealed: S.revealed, canvaRole: S.canvaRole, coverOpen: S.coverOpen, unsealed: S.unsealed, finished: S.finished, saves: S.saves, timer: Boolean(S.timerEnd),
       map: Boolean(S.vb), stations: Object.keys(S.stationLen), geography: Boolean(S.geo), rivers: S.rivers,
       tasks: $$(`.st-step[data-st-step="${S.step}"] [data-st-task]:not([hidden])`).map(li => li.dataset.stTask + ':' + li.dataset.state),
       target: $$('.st-target').map(el => el.dataset.stTask || el.dataset.station || el.className.split(' ')[0]) })
