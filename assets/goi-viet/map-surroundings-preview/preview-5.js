@@ -475,7 +475,7 @@
     {id:'hn',file:'landmark-hanoi-5.svg',width:34,height:46,geo:[105.8523,21.02786]},
     {id:'hue',file:'landmark-hue-5.svg',width:52,height:31,geo:[107.576,16.468]},
     {id:'hcm',file:'landmark-saigon-5.svg',width:44,height:37,geo:[106.698019,10.772521]},
-    {id:'sailboat',file:'sailboat.svg',width:114,height:117,point:[700,250]}
+    {id:'sailboat',file:'sailboat.svg',width:114,height:117,point:[860,244]}
   ];
   function loadArt() {
     for(const spec of landmarkSpecs){
@@ -514,7 +514,7 @@
       // Keep the landmark's geographical metadata separate from its map symbol.
       const point=spec.point||province.center;
       const z=spec.id==='sailboat'?0:getMapSelectedPlaceId()===spec.id?44:34;
-      let p=project3D(...point,z,camera,width,height),scale=spec.id==='sailboat'?clamp(p[3],.7,1.45):clamp(Math.sqrt(p[3]),.65,1.12);
+      let p=project3D(...point,z,camera,width,height),scale=spec.id==='sailboat'?clamp(p[3],.52,1.45):clamp(Math.sqrt(p[3]),.65,1.12);
       let box={left:p[0]-spec.width*scale/2,right:p[0]+spec.width*scale/2,top:p[1]-spec.height*scale,bottom:p[1]+3};
       const anchorScreen=[p[0],p[1]];let displacement=[0,0];
       if(mapCompass)blocked.push(rect(mapCompass.x,mapCompass.y+10,86,110));
@@ -553,7 +553,9 @@
     const lines=isArchipelago?archipelagoLines(island.id):[G(island.short)];
     const size=isArchipelago?Math.round(clamp(13*Math.sqrt(p[3]/.828),11.5,17)*4)/4:12;
     context.save();context.font=canvasFont(size,isArchipelago?600:500,'heading');
-    const textWidth=Math.max(isArchipelago?94:0,Math.max(...lines.map(line=>measureText(context,line)))+14);
+    const buttonEl=isArchipelago?document.getElementById('detailButton-'+island.id):null;
+    const buttonWidth=isArchipelago?(buttonEl?.offsetWidth||(buttonEl?Math.ceil(parseFloat(getComputedStyle(buttonEl).width)||0):0)||(width>960?120:94)):0;
+    const textWidth=Math.max(buttonWidth,Math.max(...lines.map(line=>measureText(context,line)))+14);
     const lineHeight=size*1.35,labelHeight=lines.length*lineHeight+6,buttonHeight=isArchipelago?(width<=768?44:30):0,boxHeight=labelHeight+(isArchipelago?buttonHeight+5:0);
     // Keep Con Dao's caption beside its real shoreline, in screen pixels.
     // A world-space offset made Con Dao's caption drift far south when zoomed in.
@@ -564,14 +566,18 @@
     // island cluster. Resolve crowding vertically, never by sliding onto land.
     const below=coast?Math.max(...coast)+9:y,above=coast?Math.min(...coast)-9:p[1]-radius;
     const candidates=isArchipelago?[[p[0],below+boxHeight/2],[p[0],p[1]+18+boxHeight/2],[p[0],above-boxHeight/2],[p[0],p[1]-18-boxHeight/2],[p[0],p[1]-radius-boxHeight/2-5],[p[0],below+boxHeight/2+18]]:[[p[0],y+boxHeight/2],[p[0]-textWidth*.6,y+boxHeight/2],[p[0]+textWidth*.6,y+boxHeight/2],[p[0],p[1]-radius-boxHeight/2-5]];
+    const fits=(box,ignoreSailboat)=>insideScreen(box,width,height)&&!blocked.some(b=>overlaps(box,b))&&!objectBoxes.some(b=>(!ignoreSailboat||b.id!=='sailboat')&&overlaps(box,b))&&!islandLabels.some(b=>overlaps(box,b.box));
     let placement=null;
-    for(const[x,cy]of candidates){const box=rect(x,cy,textWidth,boxHeight);if(insideScreen(box,width,height)&&!blocked.some(b=>overlaps(box,b))&&!objectBoxes.some(b=>overlaps(box,b))&&!islandLabels.some(b=>overlaps(box,b.box))){placement={x,y:cy,box};break;}}
+    for(const[x,cy]of candidates){const box=rect(x,cy,textWidth,boxHeight);if(fits(box,false)){placement={x,y:cy,box};break;}}
+    if(!placement&&isArchipelago&&(island.id==='hoang-sa'||island.id==='truong-sa')){
+      for(const[x,cy]of candidates){const box=rect(x,cy,textWidth,boxHeight);if(fits(box,true)){placement={x,y:cy,box};break;}}
+    }
     if(placement){
       context.textAlign='center';context.textBaseline='middle';context.lineJoin='round';context.lineWidth=3.4;
       context.strokeStyle=state.theme==='dark'?'rgba(19,49,49,.8)':'rgba(38,99,101,.65)';context.fillStyle=state.theme==='dark'?'#E9DEB4':'#F8EBC8';
       const labelY=placement.box.top+labelHeight/2;
       lines.forEach((line,i)=>{const y=labelY+(i-(lines.length-1)/2)*lineHeight;context.strokeText(line,placement.x,y);context.fillText(line,placement.x,y);});
-      if(isArchipelago)window.GoiVietArchipelagoArt?.positionButton(island.id,{left:placement.x-47,top:placement.box.top+labelHeight+4});
+      if(isArchipelago)window.GoiVietArchipelagoArt?.positionButton(island.id,{left:placement.x-buttonWidth/2,top:placement.box.top+labelHeight+4});
       islandLabels.push({id:island.id,text:lines.join(' '),point:[p[0],p[1]],box:placement.box,sourceBounds:bounds&&{...bounds}});
     }else if(isArchipelago)window.GoiVietArchipelagoArt?.positionButton(island.id,null);
     context.restore();return true;
