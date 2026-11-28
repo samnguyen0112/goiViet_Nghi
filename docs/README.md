@@ -10,6 +10,7 @@ Kế hoạch và báo cáo xếp theo từng đợt, mỗi đợt một thư m�
 | [04-den-ga](04-den-ga/) | Luồng "Đến ga mới mở bảng", demo và tích hợp vào preview-5, 12–13/11/2026 | [Báo cáo](04-den-ga/BAO-CAO-DEMO-DEN-GA-5.md) |
 | [05-hai-trinh-gia-dinh](05-hai-trinh-gia-dinh/) | Hải trình gia đình và Bưu điện biển đảo, 13/11/2026 | [Báo cáo](05-hai-trinh-gia-dinh/BAO-CAO-HAI-TRINH-GIA-DINH-5.md) |
 | [07-so-tay-hanh-khach](07-so-tay-hanh-khach/) | Sổ tay hành khách giữa chương ký ức và bản đồ (P5-07, giai đoạn 1 và bản 2: chữ cho máy chiếu, làm lần lượt, bản đồ thật), 27/11/2026 | [Báo cáo](07-so-tay-hanh-khach/BAO-CAO-SO-TAY-5.md) |
+| [08-nhan-quan-dao](08-nhan-quan-dao/) | Sửa nhãn và nút quần đảo Hoàng Sa, Trường Sa trên preview-5 (P5-09: thuyền buồm, đo bề rộng nút thật, khung toàn cảnh khi mở bảng ga), 28/11/2026 | [Báo cáo](08-nhan-quan-dao/BAO-CAO-NHAN-QUAN-DAO-5.md) |
 
 Đợt mới: tạo thư mục `docs/06-<tên-đợt>/`, đặt kế hoạch và các báo cáo của đợt đó vào cùng thư mục. Liên kết từ tài liệu tới tệp của dự án thì thêm `../../` ở đầu, ví dụ `../../assets/...` hoặc `../../verification/...`.
 

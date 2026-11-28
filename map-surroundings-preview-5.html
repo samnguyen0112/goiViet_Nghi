@@ -4197,7 +4197,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 <script src="assets/goi-viet/map-surroundings-preview/landmark-assets.js?v=red-sails-20261015" defer></script>
 <link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/polish.css?v=2">
 <script src="assets/goi-viet/map-surroundings-preview/webgl-coverage-3.js?v=20261022-prewarm-1" defer></script>
-<script src="assets/goi-viet/map-surroundings-preview/preview-5.js?v=20261126-a04-1" defer></script>
+<script src="assets/goi-viet/map-surroundings-preview/preview-5.js?v=20261128-ts-label-1" defer></script>
 <script src="assets/goi-viet/map-surroundings-preview/arrival-demo-5/polish-arrival-5.js?v=20261126-a04-1" defer></script>
 <link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/heritage-command-bar.css?v=20261015-3">
 <link rel="stylesheet" href="assets/goi-viet/map-surroundings-preview/arrival-journal.css?v=20261015-2">
@@ -8941,12 +8941,13 @@ function syncMapControlLayout(cachedRects) {
     helperRect && helperRect.height > 0 ? helperRect.bottom - canvasRect.top : 0
   );
   const y = dockTop - 72;
-  const left = cw > 1080 && panelVisible && helperRect && helperRect.height > 0 ? helperRect.right + 16 : 14;
-  const right = cw > 768 && panelVisible ? Math.min(cw - 14, panelRect.left - 16) : cw - 14;
+  const desktopPanel = cw > 768 && panelVisible;
+  const left = cw > 1080 && desktopPanel && helperRect && helperRect.height > 0 ? Math.max(14, helperRect.right - 56) : 14;
+  const right = desktopPanel ? Math.min(cw - 14, panelRect.left - 16) : cw - 14;
   const top = headerRect && headerRect.height > 0 ? headerRect.bottom - canvasRect.top + 16 : 86;
   let bottom = cw <= 768 && switcherRect && switcherRect.height > 0 ? switcherRect.top - canvasRect.top - 16 : dockTop - 16;
   if (cw < 768 && panelVisible) bottom = Math.min(bottom, panelRect.top - 12);
-  mapScreenArea = { left, right: Math.max(left + 80, right), top, bottom: Math.max(top + 80, bottom), width: cw, height: ch };
+  mapScreenArea = { left, right: Math.max(left + 80, right), top, bottom: Math.max(top + 80, bottom), width: cw, height: ch, panelOpen: desktopPanel };
   // Reserve the full circle, 14px caption and a gap above the dock.
   // If controls consume the vertical space, the recenter button remains available.
   mapCompass = cw > 900 && y - 34 >= occupiedBottom + 12 ? { x: 76, y, radius: 36 } : null;
@@ -9044,7 +9045,7 @@ function getBestOverviewZoom(viewW, viewH) {
   const availH = area ? area.bottom - area.top : Math.max(80, viewH - 220);
   const availW = area ? area.right - area.left : Math.max(80, viewW - (viewW > 768 ? 460 : 28));
   const zoomY = availH / 935;
-  const zoomX = availW / 860;
+  const zoomX = area?.panelOpen ? Math.min(availW / 860, Math.max(0, availW / 2 - 64) / 373) : availW / 860;
   const fitted = +Math.max(MIN_MAP_ZOOM, Math.min(0.88, Math.min(zoomX, zoomY) * 0.95)).toFixed(3);
   return window.GoiVietRegionalPreview?.active() ? Math.max(fitted, window.GoiVietRegionalPreview.minimumZoom({yaw:0, pitch:0.24, zoom:fitted, panX:0, panY:0})) : fitted;
 }
